@@ -11,7 +11,8 @@ git_show_branch() {
 export PS1="\e[7m\$(git_show_branch)\e[m\n\h \w $ "
 export PS1='\$SHLVL'":$SHLVL $PS1"
 
-# GS: git branch backups: back up git branch hashes
+# GS: git branch backups: back up git branch hashes before deleting branches, so you can always have their hashes
+# to go back to to checkout rather than having to dig through your `git reflog` forever.
 gs_git_branch_hash_bak () {
     DATE=`date +%Y%m%d-%H%Mhrs-%Ssec`
     FILE="./git_branch_hash_backups/git_branch_bak--${DATE}.txt"
