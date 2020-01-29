@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
 # toggle_touchpad.sh
 # - toggle the touchpad & touchscreen on and off, and enable/disable imwheel to fix scroll speed when using a mouse
 #   instead of the touchpad
@@ -19,6 +21,8 @@
 #    https://askubuntu.com/questions/844151/enable-disable-touchpad/1109515#1109515
 # 4. I add imwheel to my script to also fix Chrome mouse scroll wheel speed problem at the same time:
 #    https://askubuntu.com/questions/254367/permanently-fix-chrome-scroll-speed/991680#991680
+# 5. I put this script on Github, and posted a snapshot of it on this answer here: 
+#    https://askubuntu.com/questions/198572/how-do-i-disable-the-touchscreen-drivers/1206493#1206493 
 
 # `xinput` search strings for these devices
 # - Manually run `xinput` on your PC, look at the output, and adjust these search strings as necessary for your 
