@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=GS
+Comment=
+Exec=nemo /home/$USER
+Icon=nemo
+Path=
+Terminal=false
+StartupNotify=true
