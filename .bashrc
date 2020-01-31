@@ -140,8 +140,20 @@ git_show_branch() {
         echo "$__gsb_BRANCH"
     fi
 }
-export PS1="\e[7m\$(git_show_branch)\e[m\n\h \w $ "
-export PS1='\$SHLVL'":$SHLVL $PS1"
+# export PS1="\e[7m\$(git_show_branch)\e[m\n\h \w $ "
+# export PS1='\$SHLVL'":$SHLVL $PS1"
+
+# PS1="\e[7m\$(git_show_branch)\e[m\n\h \w $ "
+# PS1='\$SHLVL'":$SHLVL $PS1"
+
+#-----------
+PS1="\e[7m\$(git_show_branch)\e[m\n$PS1"
+PS1='\$SHLVL'":$SHLVL $PS1"
+#-----------
+
+# export PS1="\e[7m\$(git_show_branch)\e[m\n\h \w $ "
+# PS1='\$SHLVL'":${SHLVL}$(git_show_branch)$PS1"
+
 
 # GS: git branch backups: back up git branch hashes before deleting branches, so you can always have their hashes
 # to go back to to checkout rather than having to dig through your `git reflog` forever.
