@@ -145,9 +145,13 @@ export PS1='\$SHLVL'":$SHLVL $PS1"
 
 # GS: git branch backups: back up git branch hashes before deleting branches, so you can always have their hashes
 # to go back to to checkout rather than having to dig through your `git reflog` forever.
+# - Note that this currently requires that the GIT_BRANCH_HASH_BAK_DIR directory already exists. 
+# - TODO: fail more gracefully: make it check to see if this dir exists & prompt the user for permission to 
+#   auto-create it with `mkdir -p ${GIT_BRANCH_HASH_BAK_DIR}` if it does not.
+GIT_BRANCH_HASH_BAK_DIR="./git_branch_hash_backups"
 gs_git_branch_hash_bak () {
     DATE=`date +%Y%m%d-%H%Mhrs-%Ssec`
-    FILE="./git_branch_hash_backups/git_branch_bak--${DATE}.txt"
+    FILE="${GIT_BRANCH_HASH_BAK_DIR}/git_branch_bak--${DATE}.txt"
     BRANCH="$(git_show_branch)"
     DIR=$(pwd)
     echo -e "pwd = \"$DIR\"" > $FILE
@@ -155,8 +159,8 @@ gs_git_branch_hash_bak () {
     echo -e "\n=== \`git branch -vv\` ===\n" >> $FILE
     git branch -vv >> $FILE
 }
-alias gs_git_branch_hash_bak_echo='echo "This is a bash function in ~/.bashrc which backs up git branch names & short \
-hashes to your local ./git_branch_hash_backups dir."'
+alias gs_git_branch_hash_bak_echo='echo -e "This is a bash function in \"~/.bashrc\" which backs up git branch names \
+& short hashes to your local \"${GIT_BRANCH_HASH_BAK_DIR}\" dir."'
 
 
 
