@@ -140,20 +140,17 @@ git_show_branch() {
         echo "$__gsb_BRANCH"
     fi
 }
-# export PS1="\e[7m\$(git_show_branch)\e[m\n\h \w $ "
-# export PS1='\$SHLVL'":$SHLVL $PS1"
-
+# OLD:
+# - shows shell level, git branch (if in a dir with one), and `hostname present_dir $ ` only, rather than username too
+# - has no color
 # PS1="\e[7m\$(git_show_branch)\e[m\n\h \w $ "
 # PS1='\$SHLVL'":$SHLVL $PS1"
-
-#-----------
+# NEW:
+# - shows shell level, git branch (if in a dir with one), and `username@hostname:present_dir$ `; ie: it simply adds
+#   the shell level and git branch on a line above the default-Ubuntu-18-installation prompt
+# - has color, like a default Ubuntu 18 installation does too!
 PS1="\e[7m\$(git_show_branch)\e[m\n$PS1"
 PS1='\$SHLVL'":$SHLVL $PS1"
-#-----------
-
-# export PS1="\e[7m\$(git_show_branch)\e[m\n\h \w $ "
-# PS1='\$SHLVL'":${SHLVL}$(git_show_branch)$PS1"
-
 
 # GS: git branch backups: back up git branch hashes before deleting branches, so you can always have their hashes
 # to go back to to checkout rather than having to dig through your `git reflog` forever.
