@@ -1,0 +1,48 @@
+// This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+{
+    //For Sublime Text Project Format settings help see here: https://www.sublimetext.com/docs/3/projects.html 
+
+    "folders":
+    [
+
+    ],
+
+    "settings":
+    {
+
+        // Disables horizontal scrolling if enabled.
+        // May be set to true, false, or "auto", where it will be disabled for
+        // source code, and otherwise enabled.
+        "word_wrap": false,
+
+        // Set to a value other than 0 to force wrapping at that column rather than the
+        // window width
+        "wrap_width": 0,
+
+        // Columns in which to display vertical rulers
+        "rulers": 
+        [
+            // 72 is recommended by git for commit message content, and 50 for commit titles
+            72, 
+            50,
+            // 80, 100, and 120 are common character widths for general code writing
+            // - on modern displays, I like ot use 120 
+            // 80,
+            // 100,
+            // 120,
+        ], 
+
+        // The number of spaces a tab is considered equal to
+        "tab_size": 4,
+
+        // Set to true to insert spaces when tab is pressed
+        "translate_tabs_to_spaces": true,
+    },
+
+    "build_systems":
+    [
+
+    ]
+
+}

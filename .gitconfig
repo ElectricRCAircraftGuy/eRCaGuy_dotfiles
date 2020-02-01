@@ -1,0 +1,12 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+[user]
+	name = FIRSTNAME LASTNAME
+	email = MY_EMAIL@gmail.com
+[diff]
+    tool = meld
+[core]
+    editor = subl --project ~/.gitconfig.sublime-project --wait
+[alias]
+    # Source for this `git lg` "better git log" alias: https://coderwall.com/p/euwpig/a-better-git-log
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit

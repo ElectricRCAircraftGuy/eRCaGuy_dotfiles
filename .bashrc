@@ -1,3 +1,5 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
 # ======================================================================================================================
 # START OF THE STANDARD UBUNTU-18-INSTALLED .bashrc FILE
 # - some minor additions or changes from the original may exist, indicated by comments which begin with "# GS"
