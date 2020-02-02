@@ -20,3 +20,7 @@ temp/
 *.odt#
 *.ods#
 
+# Sublime Text workspace files
+# - you don't need to back these up, as they are auto-generated from a project file and specific to a local machine
+# - back up only the *.sublime-project files instead!
+*.sublime-workspace

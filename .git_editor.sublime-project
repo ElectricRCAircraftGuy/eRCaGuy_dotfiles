@@ -1,8 +1,9 @@
 // This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-{
-    //For Sublime Text Project Format settings help see here: https://www.sublimetext.com/docs/3/projects.html 
+// Git editor (such as the editor used for commit messages) settings
+// - For Sublime Text Project Format settings help see here: https://www.sublimetext.com/docs/3/projects.html 
 
+{
     "folders":
     [
 
@@ -10,7 +11,6 @@
 
     "settings":
     {
-
         // Disables horizontal scrolling if enabled.
         // May be set to true, false, or "auto", where it will be disabled for
         // source code, and otherwise enabled.
@@ -21,13 +21,15 @@
         "wrap_width": 0,
 
         // Columns in which to display vertical rulers
+        // - NB: the *first* value listed below is the one that text will be hard-wrapped to when you press Alt + Q or
+        //   go to Edit --> Wrap --> Wrap Paragraph at Ruler.
         "rulers": 
         [
             // 72 is recommended by git for commit message content, and 50 for commit titles
             72, 
             50,
             // 80, 100, and 120 are common character widths for general code writing
-            // - on modern displays, I like ot use 120 
+            // - on modern displays, I like to use 120 
             // 80,
             // 100,
             // 120,
@@ -44,5 +46,4 @@
     [
 
     ]
-
 }
