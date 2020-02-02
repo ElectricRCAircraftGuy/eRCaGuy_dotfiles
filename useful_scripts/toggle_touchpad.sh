@@ -5,6 +5,8 @@
 # toggle_touchpad.sh
 # - toggle the touchpad & touchscreen on and off, and enable/disable imwheel to fix scroll speed when using a mouse
 #   instead of the touchpad
+# - I recommend attaching this script to an Ubuntu ***keyboard shortcut such as Ctrl + Alt + P*** to toggle the touchpad
+#   and other devices on and off
 
 # Gabriel Staples
 # Started: 2 Apr. 2018 
