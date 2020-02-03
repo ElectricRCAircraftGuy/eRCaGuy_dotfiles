@@ -1,6 +1,10 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# Notes: 
+# INSTRUCTIONS:
+# Edit as desired, then copy this file to any git repository you desire. 
+# Ex: `cp .gitignore /path/to/my/git/repo/`
+
+# Gitignore File Formatting Notes: 
 # - add a / *after* a name to indicate a folder, and leave it off to indicate a file; ex: `folder/`, `file`
 # - Add a / *before* a name to indicate it is an absolute-style path starting at this repository's "root" directory, or in other words, the directory where the git repo's ".git" folder is located; ex: `/folder/`, `/file`
 #   - See: https://stackoverflow.com/questions/43555850/git-gitignore-to-ignore-only-folder-in-root-directory/43555863#43555863

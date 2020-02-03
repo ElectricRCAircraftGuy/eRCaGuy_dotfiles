@@ -3,6 +3,9 @@
 // Git editor (such as the editor used for commit messages) settings
 // - For Sublime Text Project Format settings help see here: https://www.sublimetext.com/docs/3/projects.html 
 
+// INSTRUCTIONS:
+// Edit as desired, then copy entire file to user Home dir: `cp .git_editor.sublime-project ~`
+
 {
     "folders":
     [

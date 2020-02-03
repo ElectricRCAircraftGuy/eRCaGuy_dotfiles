@@ -1,0 +1,12 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# This is a very basic example of what you might want to add to a local git repo's ".git/config" file.
+
+# INSTRUCTIONS:
+# Update name and email below, edit other fields as desired, then append to any repo's .git/config file:
+# Option 1) just manually copy and paste the text below into your repo's .git/config file.
+# Option 2) do it from the command-line: `cat .gitconfig_local >> /path/to/my/repo/.git/config`
+
+[user]
+	name = FIRSTNAME LASTNAME
+	email = MY_EMAIL@gmail.com

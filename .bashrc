@@ -1,5 +1,10 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+# INSTRUCTIONS: 
+# Edit as desired, then copy to ~/.bashrc
+# Option 1) doesn't exist yet, so copy whole thing over: `cp .bashrc ~`
+# Option 2) append contents to existing .bashrc file: `cat .bashrc >> ~/.bashrc`
+
 # ======================================================================================================================
 # START OF THE STANDARD UBUNTU-18-INSTALLED .bashrc FILE
 # - some minor additions or changes from the original may exist, indicated by comments which begin with "# GS"

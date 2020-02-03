@@ -1,6 +1,10 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# Also see: https://askubuntu.com/questions/254367/permanently-fix-chrome-scroll-speed/991680#991680
+# INSTRUCTIONS: 
+# Read the instructions at link below. Edit the two numbers at the top-right below to set the mouse scroll speed.
+# Copy this file to ~/.imwheelrc: `cp .imwheelrc ~`
+
+# Instructions & help: https://askubuntu.com/questions/254367/permanently-fix-chrome-scroll-speed/991680#991680
 
 ".*-chrome*"
 None,      Up,   Button4, 3
