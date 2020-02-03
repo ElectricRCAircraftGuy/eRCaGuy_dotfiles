@@ -2,7 +2,7 @@
 
 # INSTRUCTIONS:
 # Edit as desired, then copy this file to any git repository you desire. 
-# Ex: `cp .gitignore /path/to/my/git/repo/`
+# Ex: `cp -i .gitignore /path/to/my/git/repo/`
 
 # Gitignore File Formatting Notes: 
 # - add a / *after* a name to indicate a folder, and leave it off to indicate a file; ex: `folder/`, `file`

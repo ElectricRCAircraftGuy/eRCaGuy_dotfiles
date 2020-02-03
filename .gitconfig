@@ -2,7 +2,7 @@
 
 # INSTRUCTIONS:
 # Update name and email below, edit other fields as desired, then copy to ~/.gitconfig
-# Option 1) doesn't exist yet, so copy whole thing over: `cp .gitconfig ~`
+# Option 1) doesn't exist yet, so copy whole thing over: `cp -i .gitconfig ~`
 # Option 2) append contents to existing .gitconfig file: `cat .gitconfig >> ~/.gitconfig`
 
 [user]

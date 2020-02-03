@@ -2,7 +2,7 @@
 
 # INSTRUCTIONS: 
 # Read the instructions at link below. Edit the two numbers at the top-right below to set the mouse scroll speed.
-# Copy this file to ~/.imwheelrc: `cp .imwheelrc ~`
+# Copy this file to ~/.imwheelrc: `cp -i .imwheelrc ~`
 
 # Instructions & help: https://askubuntu.com/questions/254367/permanently-fix-chrome-scroll-speed/991680#991680
 

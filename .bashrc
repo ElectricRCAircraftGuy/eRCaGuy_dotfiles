@@ -2,7 +2,7 @@
 
 # INSTRUCTIONS: 
 # Edit as desired, then copy to ~/.bashrc
-# Option 1) doesn't exist yet, so copy whole thing over: `cp .bashrc ~`
+# Option 1) doesn't exist yet, so copy whole thing over: `cp -i .bashrc ~`
 # Option 2) append contents to existing .bashrc file: `cat .bashrc >> ~/.bashrc`
 
 # ======================================================================================================================

@@ -2,7 +2,7 @@
 
 # INSTRUCTIONS: 
 # Edit as desired, then copy to ~/.profile
-# - Option 1) doesn't exist yet, so copy whole thing over: `cp .profile ~`
+# - Option 1) doesn't exist yet, so copy whole thing over: `cp -i .profile ~`
 # - Option 2) append contents to existing .profile file: `cat .profile >> ~/.profile`
 # - Note that one important purpose of the ~/.profile file is to add a user's private ~/bin dir to the PATH variable;
 #   see: https://unix.stackexchange.com/questions/26047/how-to-correctly-add-a-path-to-path/26059#26059
