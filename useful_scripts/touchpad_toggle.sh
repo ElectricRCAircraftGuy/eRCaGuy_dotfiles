@@ -2,7 +2,7 @@
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# toggle_touchpad.sh
+# touchpad_toggle.sh
 # - toggle the touchpad & touchscreen on and off, and enable/disable imwheel to fix scroll speed when using a mouse
 #   instead of the touchpad
 # - I recommend attaching this script to an Ubuntu ***keyboard shortcut such as Ctrl + Alt + P*** to toggle the touchpad
