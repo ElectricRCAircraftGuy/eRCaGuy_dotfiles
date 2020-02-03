@@ -1,0 +1,19 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# A Show Desktop button to add to your launcher. This is the same as using the Windows + D shortcut which comes
+# default on Ubuntu!
+
+# INSTRUCTIONS:
+# 1. Install xdotool: `sudo apt install xdotool`
+# 2. Copy to "~/.local/share/applications/show-desktop.desktop":
+#    `cp -i show-desktop.desktop ~/.local/share/applications`
+# 3. Search for "show desktop" in application menu, then right click and select "add to favorites". 
+# 4. See more details & instructions here: 
+#    https://askubuntu.com/questions/903532/how-can-i-add-show-desktop-to-the-gnome-dash-or-ubuntu-dock/1109490#1109490
+# 5. That's it. Enjoy!
+
+[Desktop Entry]
+Type=Application
+Name=Show Desktop
+Icon=desktop
+Exec=xdotool key --clearmodifiers Super+d
