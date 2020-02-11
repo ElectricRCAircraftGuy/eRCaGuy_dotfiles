@@ -1,8 +1,8 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # INSTRUCTIONS:
-# See here for detailed instructions:
-#   1. In this project: "eRCaGuy_dotfiles/Templates/new_launcher.desktop" OR
+# See here for detailed desktop file installation instructions:
+#   1. In this project: "eRCaGuy_dotfiles/Desktop_launchers/readme_and_install_info.md" OR
 #   2. Online: https://askubuntu.com/questions/64222/how-can-i-create-launchers-on-my-desktop/1014261#1014261
 
 [Desktop Entry]
