@@ -33,6 +33,7 @@
 
 [Desktop Entry]
 Name=Arduino 1.8.5
+Name[en_US]=Arduino 1.8.5
 Comment=
 Exec='$HOME/Downloads/Install_Files/Arduino/arduino-1.8.5/arduino'
 Icon='$HOME/Downloads/Install_Files/Arduino/arduino-1.8.5/lib/arduino.png'

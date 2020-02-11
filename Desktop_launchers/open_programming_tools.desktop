@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Open Programming Tools
+Comment=
+Exec=/home/gabriel.staples/GS--pers/dev--pers/Linux_scripts/open_programming_tools.sh
+Icon=
+Path=
+Terminal=false
+StartupNotify=true

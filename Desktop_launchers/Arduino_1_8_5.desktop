@@ -1,0 +1,16 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# INSTRUCTIONS:
+# See here for detailed instructions:
+#   1. In this project: "eRCaGuy_dotfiles/Templates/new_launcher.desktop" OR
+#   2. Online: https://askubuntu.com/questions/64222/how-can-i-create-launchers-on-my-desktop/1014261#1014261
+
+[Desktop Entry]
+Name=Arduino 1.8.5
+Name[en_US]=Arduino 1.8.5
+Comment=
+Exec='$HOME/Downloads/Install_Files/Arduino/arduino-1.8.5/arduino'
+Icon='$HOME/Downloads/Install_Files/Arduino/arduino-1.8.5/lib/arduino.png'
+Terminal=false
+Type=Application
+StartupNotify=true
