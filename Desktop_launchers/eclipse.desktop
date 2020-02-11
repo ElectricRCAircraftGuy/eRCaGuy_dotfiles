@@ -15,11 +15,11 @@
 #   https://stackoverflow.com/questions/8980464/how-do-i-access-an-environment-variable-in-a-desktop-files-exec-line
 
 [Desktop Entry]
-Name=Arduino 1.8.5
-Name[en_US]=Arduino 1.8.5
+Name=Eclipse Cpp 2019-12
+Name[en_US]=Eclipse Cpp 2019-12
 Comment=
-Exec=/home/gabriel/Downloads/Install_Files/Arduino/arduino-1.8.5/arduino
-Icon=/home/gabriel/Downloads/Install_Files/Arduino/arduino-1.8.5/lib/arduino.png
+Exec=/home/gabriel/eclipse/cpp-2019-12/eclipse/eclipse
+Icon=/home/gabriel/eclipse/cpp-2019-12/eclipse/icon.xpm
 Terminal=false
 Type=Application
 StartupNotify=true

@@ -30,14 +30,14 @@
 #       both the Application Menu and the Desktop.
 #           desktop_file_uninstall my_launcher.desktop
 
-DESKTOP_FILE_PATH=$1 # relative OR absolute path--whatever the user inputs
-DESKTOP_FILE_PATH_ABS="$(realpath $DESKTOP_FILE_PATH)" # absolute path
-DESKTOP_FILENAME="basename $DESKTOP_FILE_PATH_ABS" # *.desktop file name
+DESKTOP_FILE_PATH="$1" # relative OR absolute path--whatever the user inputs
+DESKTOP_FILE_PATH_ABS="$(realpath "$DESKTOP_FILE_PATH")" # absolute path
+DESKTOP_FILENAME="$(basename "$DESKTOP_FILE_PATH_ABS")" # *.desktop file name
 
-echo "Installing desktop file."
+echo "Installing desktop file from \"$DESKTOP_FILE_PATH_ABS\"."
 
-# Ensure it's executable
-echo "Ensuring \"$DESKTOP_FILE_PATH_ABS\" is executable."
+# Ensure it is executable
+echo "Ensuring desktop file is executable."
 chmod +x "$DESKTOP_FILE_PATH_ABS"
 
 # Add to Desktop

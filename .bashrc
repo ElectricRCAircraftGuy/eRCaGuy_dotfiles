@@ -178,7 +178,9 @@ gs_git_branch_hash_bak () {
 alias gs_git_branch_hash_bak_echo='echo -e "This is a bash function in \"~/.bashrc\" which backs up git branch names \
 & short hashes to your local \"${GIT_BRANCH_HASH_BAK_DIR}\" dir."'
 
-
+SSH_TARGET="username.domain_name" # Edit this! Make the username and domain_name what they should be for you.
+alias gs_ssh="ssh $SSH_TARGET"
+alias gs_ssh_echo='echo "ssh $SSH_TARGET"'
 
 
 
