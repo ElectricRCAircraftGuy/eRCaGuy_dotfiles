@@ -1,6 +1,18 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# Manual Install of Desktop Files:
+There are 2 ways to install these *.desktop files, as described below.
+
+# 1. (Recommended) Automated Install/Uninstall of Desktop Files:
+
+Install new_launcher.desktop:
+
+    eRCaGuy_dotfiles/Desktop_launchers/desktop_file_install.sh new_launcher.desktop
+
+Uninstall new_launcher.desktop:
+
+    eRCaGuy_dotfiles/Desktop_launchers/desktop_file_uninstall.sh new_launcher.desktop
+
+# 2. Manual Install/Uninstall of Desktop Files:
 
 INSTRUCTIONS:
 - See here for detailed instructions:  
@@ -13,7 +25,7 @@ In short:
           cd /path/to/here
           cp -i new_launcher.desktop ~/Desktop_launchers
           chmod +x ~/Desktop_launchers/new_launcher.desktop
-3. Manually edit the file to update the Name, Exec path, and Icon below.
+3. Manually edit the file to update the "Name", "Exec" path, and "Icon".
 4.        gedit ~/Desktop_launchers/new_launcher.desktop  # open in gedit GUI editor, then edit & save
 5. Make a symbolic link to your .desktop launcher on the Desktop so you can launch it from there:
    Command Format: "ln -s /path/to/file /path/to/symlink_to_make"
@@ -26,7 +38,7 @@ In short:
      to work.
           sudo ln -s ~/Desktop_launchers/new_launcher.desktop /usr/share/applications/new_launcher.desktop
 5. Done!
-   Now if you ever need to update the desktop file, update it directly in only one place: 
+   Now if you ever need to update the desktop file, update it directly in only one place: at
    "~/Desktop_launchers/new_launcher.desktop", and the changes will automatically be recognized by the 
    symlinks on the Desktop and in "/usr/share/applications". If the Desktop icon doesn't update after 
    changing it, click on the Desktop then hit either 'F5' or 'Ctrl + R' to refresh the Desktop icons.
