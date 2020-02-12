@@ -182,8 +182,38 @@ SSH_TARGET="username.domain_name" # Edit this! Make the username and domain_name
 alias gs_ssh="ssh $SSH_TARGET"
 alias gs_ssh_echo='echo "ssh $SSH_TARGET"'
 
+# Set the title string at the top of your current terminal window or terminal window tab.
+# See: https://unix.stackexchange.com/questions/177572/how-to-rename-terminal-tab-title-in-gnome-terminal/566383#566383
+# and: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
+# - Example usage: 
+#   - A) Static title strings (title remains fixed): 
+#     - `set-title my tab 1` OR `set-title "my tab 1"`
+#     - `set-title $PWD` OR `set-title "$PWD"`
+#   - B) Dynamic title strings (title updates each time you enter any terminal command): you may use function calls or 
+#     variables within your title string and have them *dynamically* updated each time you enter a new command.
+#     Simply enter a command or access a global variable inside your title string. **Be sure to use _single quotes_ 
+#     around the title string for this to work!**: 
+#     - `set-title '$PWD'` - this updates the title to the Present Working Directory every time you `cd` to a new
+#        directory!
+#     - `set-title '$(date "+%m/%d/%Y - %k:%M:%S")'` - this updates the title to the new date and time every time
+#        it changes *and* you enter a new terminal command! The format looks like this: `02/06/2020 - 23:32:58`
+gs_set-title() {
+    # If the length of string stored in variable `PS1_BAK` is zero...
+    # - See `man test` to know that `-z` means "the length of STRING is zero"
+    if [[ -z "$PS1_BAK" ]]; then
+        # Back up your current Bash Prompt String 1 (`PS1`) into a global backup variable `PS1_BAK`
+        PS1_BAK=$PS1 
+    fi
 
-
+    # Set the title escape sequence string with this format: `\[\e]2;new title\a\]`
+    # - See: https://wiki.archlinux.org/index.php/Bash/Prompt_customization#Customizing_the_terminal_window_title
+    TITLE="\[\e]2;$@\a\]"
+    # Now append the escaped title string to the end of your original `PS1` string (`PS1_BAK`), and set your
+    # new `PS1` string to this new value
+    PS1=${PS1_BAK}${TITLE}
+}
+alias gs_set-title_echo='echo -e "This is a bash function in \"~/.bashrc\" which sets the title of your \
+currently-opened terminal tab'
 
 
 

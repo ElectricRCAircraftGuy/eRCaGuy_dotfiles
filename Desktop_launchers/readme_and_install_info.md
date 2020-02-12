@@ -45,3 +45,20 @@ In short:
 6. To remove the shortcuts simply delete the symlinks from the Desktop and from "/usr/share/applications" as follows:
           rm ~/Desktop/new_launcher.desktop
           sudo rm /usr/share/applications/new_launcher.desktop
+
+# Icon locations:
+
+On Ubuntu systems, apparently desktop file icons can be found in the following places.  
+See here: https://askubuntu.com/questions/476233/how-to-include-environment-variable-in-launcher-for-icon/476710#476710
+and here: https://askubuntu.com/questions/6009/where-are-icons-stored/6010#6010
+
+    $HOME/.icons
+    $HOME/.local/share/icons
+    /usr/local/share/icons
+    /usr/share/icons
+    /usr/share/pixmaps
+
+Example, the following setting for "Icon" in a .desktop file is valid, since the icon named "terminal" is found in one of the above locations:
+
+    Icon=terminal
+

@@ -1,10 +1,25 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# INSTRUCTIONS:
+# See here for detailed desktop file installation instructions:
+#   1. In this project: "eRCaGuy_dotfiles/Desktop_launchers/readme_and_install_info.md"
+#       eRCaGuy_dotfiles/Desktop_launchers/desktop_file_install.sh new_launcher.desktop     # Install
+#       eRCaGuy_dotfiles/Desktop_launchers/desktop_file_uninstall.sh new_launcher.desktop   # Uninstall
+#   2. Online: https://askubuntu.com/questions/64222/how-can-i-create-launchers-on-my-desktop/1014261#1014261
+#
+# Note: variables are NOT evaluated in standard .desktop file 'Exec' (Execution) & 'Icon' paths, so use explicit, 
+# absolute paths, as shown below.
+# - For more info, see here: 
+#   https://askubuntu.com/questions/476233/how-to-include-environment-variable-in-launcher-for-icon
+#   and here: 
+#   https://stackoverflow.com/questions/8980464/how-do-i-access-an-environment-variable-in-a-desktop-files-exec-line
+
 [Desktop Entry]
-Version=1.0
-Type=Application
 Name=Open Programming Tools
+Name[en_US]=Open Programming Tools
 Comment=
-Exec=/home/gabriel.staples/GS--pers/dev--pers/Linux_scripts/open_programming_tools.sh
-Icon=
-Path=
+Exec=/home/gabriel/dev/eRCaGuy_dotfiles/useful_scripts/open_programming_tools.sh
+Icon=terminal
 Terminal=false
+Type=Application
 StartupNotify=true
