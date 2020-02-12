@@ -5,7 +5,7 @@
 
 # INSTRUCTIONS:
 # 1. Install xdotool: `sudo apt install xdotool`
-# 2. Copy to "~/.local/share/applications/show-desktop.desktop":
+# 2. Copy this script to "~/.local/share/applications/show-desktop.desktop":
 #    `cp -i show-desktop.desktop ~/.local/share/applications`
 # 3. Search for "show desktop" in application menu, then right click and select "add to favorites". 
 # 4. See more details & instructions here: 
