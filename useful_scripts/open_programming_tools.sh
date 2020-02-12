@@ -33,6 +33,9 @@
 # `cat /usr/share/applications/launcher_of_interest.desktop`
 
 
+# **Use ampersands (&) after each command below to allow them to all open up in parallel to speed up 
+# the opening process!**
+
 # 1) Open up a terminal with multiple tabs
 # - Set all tab titles & cmds in ~/.bashrc
 
@@ -40,15 +43,16 @@
 export OPEN_DEFAULT_TABS=true
 # Open a new terminal window, which by default also sources your ~/.bashrc file again, 
 # thereby kicking off the process since you set the `OPEN_DEFAULT_TABS` variable just above.
-gnome-terminal 
+gnome-terminal&
 
 # 2) Open up other programs:
 
-nemo ~/dev& # Nemo file manager:
-# subl& # Sublime Text editor
-# # gnome-system-monitor& # nah, add to Ubuntu's system startup menu instead
-# libreoffice6.1 --writer&
-# google-chrome&
-# $HOME/Downloads/Install_Files/eclipse/eclipse&
+nemo "$HOME/dev"& # Nemo file manager
+subl& # Sublime Text editor
+# gnome-system-monitor& # nah, add to Ubuntu's system startup menu to open this at boot instead
+libreoffice --writer&
+google-chrome&
+$HOME/eclipse/cpp-2019-12/eclipse/eclipse&
+/usr/bin/slack&
 
 
