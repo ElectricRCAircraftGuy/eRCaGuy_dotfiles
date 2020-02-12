@@ -231,13 +231,18 @@ fi
 # - See: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
 # ----------------------------------------------
 
-DEFAULT_TABS_TITLE1="tab 1"
-DEFAULT_TABS_TITLE2="tab 2"
-DEFAULT_TABS_TITLE3="tab 3"
+# Tab titles
+DEFAULT_TABS_TITLE1="git"
+DEFAULT_TABS_TITLE2="bazel"
+DEFAULT_TABS_TITLE3="Python"
+DEFAULT_TABS_TITLE4="other"
 
-DEFAULT_TABS_CMD1="cd /etc"
-DEFAULT_TABS_CMD2="cd ~/Documents"
-DEFAULT_TABS_CMD3="cd '$HOME/temp/test folder'" # Use quotes like this if there are spaces in the path
+# Tab commands
+# Note: use quotes like this if there are spaces in the path: `DEFAULT_TABS_CMD3="cd '$HOME/temp/test folder'"`
+DEFAULT_TABS_CMD1="cd '$HOME/dev'"
+DEFAULT_TABS_CMD2="cd '$HOME/dev'"
+DEFAULT_TABS_CMD3="cd '$HOME/dev'"
+DEFAULT_TABS_CMD4="cd '$HOME/dev'"
 
 # Call this function to open up the following tabs, calling the desired command in each tab and setting
 # the title of each tab as desired. This is really helpful to get your programming environment set up
@@ -246,6 +251,7 @@ gs_open_default_tabs() {
     gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
     gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
     gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
+    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
 }
 
 # This chunk of code allows one to essentially call `open_default_tabs` from another script to open up all 

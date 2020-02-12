@@ -34,36 +34,21 @@
 
 
 # 1) Open up a terminal with multiple tabs
-# - Note that the `$SHELL` cmd at the end holds the terminal open!
-# - `gs_set-title` command is found in "eRCaGuy_dotfiles/.bashrc"
+# - Set all tab titles & cmds in ~/.bashrc
 
-title1="git"
-title2="bazel"
-title3="Python"
-title4="my project"
+# Export this variable so your ~/.bashrc file will see it and do the magic.
+export OPEN_DEFAULT_TABS=true
+# Open a new terminal window, which by default also sources your ~/.bashrc file again, 
+# thereby kicking off the process since you set the `OPEN_DEFAULT_TABS` variable just above.
+gnome-terminal 
 
-cmd1="cd ~/dev"
-cmd2="${cmd1}"
-cmd3="${cmd1}"
-cmd4="cd ~/dev/my_project"
+# 2) Open up other programs:
 
-gnome-terminal --tab --command="bash -c 'gs_set-title $title1; $cmd1; $SHELL'"\
-               --tab --command="bash -c 'gs_set-title $title2; $cmd2; $SHELL'"\
-               --tab --command="bash -c 'gs_set-title $title3; $cmd3; $SHELL'"\
-               --tab --command="bash -c 'gs_set-title $title4; $cmd4; $SHELL'"&
-
-# # 2) Open up programs:
-
-# nemo ~/dev& # Nemo file manager:
+nemo ~/dev& # Nemo file manager:
 # subl& # Sublime Text editor
 # # gnome-system-monitor& # nah, add to Ubuntu's system startup menu instead
 # libreoffice6.1 --writer&
 # google-chrome&
 # $HOME/Downloads/Install_Files/eclipse/eclipse&
-
-# # 3) Exit
-
-# exit 0
-# # $SHELL #keep terminal open when done
 
 
