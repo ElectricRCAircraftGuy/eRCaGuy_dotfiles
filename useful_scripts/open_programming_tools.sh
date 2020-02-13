@@ -44,6 +44,13 @@ export OPEN_DEFAULT_TABS=true
 # Open a new terminal window, which by default also sources your ~/.bashrc file again, 
 # thereby kicking off the process since you set the `OPEN_DEFAULT_TABS` variable just above.
 gnome-terminal&
+# Now reset and unexport the above variable so it will no longer be in force; note that it's possible only 
+# one of the below lines is *required*, but let's do both for good measure
+# - This solves the bug where right-clicking in the nemo file manager (which is opened below) and 
+#   going to "Open in Terminal" opens up a new terminal with all the default tabs (bug!), rather 
+#   than a terminal with only a new tab in the currently-opened directory.
+OPEN_DEFAULT_TABS=      # set this variable back to an empty string so it's no longer in force
+unset OPEN_DEFAULT_TABS # unexport it
 
 # 2) Open up other programs:
 
