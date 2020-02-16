@@ -178,9 +178,12 @@ gs_git_branch_hash_bak () {
 alias gs_git_branch_hash_bak_echo='echo -e "This is a bash function in \"~/.bashrc\" which backs up git branch names \
 & short hashes to your local \"${GIT_BRANCH_HASH_BAK_DIR}\" dir."'
 
-SSH_TARGET="username.domain_name" # Edit this! Make the username and domain_name what they should be for you.
-alias gs_ssh="ssh $SSH_TARGET"
-alias gs_ssh_echo='echo "ssh $SSH_TARGET"'
+# Edit this ssh command! Make the username, domain_name, & options what they should be for you.
+# Note: enable X11 window forwarding with `-X`; see here: 
+# https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely/12772#12772
+SSH_CMD="ssh -X username@domain_name" 
+alias gs_ssh="$SSH_CMD"
+alias gs_ssh_echo="echo '$SSH_CMD'"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # TERMINAL TABS & TITLE (START)
