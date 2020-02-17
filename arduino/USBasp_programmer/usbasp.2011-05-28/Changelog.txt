@@ -1,0 +1,53 @@
+usbasp.2011-05-28 (v1.4)
+------------------------
+- added TPI support for ATTiny4/5/6/10 (by Slawomir Fraś)
+- added support for controllers with flash >128kb (by Slawomir Fraś)
+- fixed resync after program enable signal to pulse RST (based on patch by Marco S)
+- updated usb driver to V-USB Release 2010-07-15
+
+
+usbasp.2009-02-28 (v1.3)
+------------------------
+- added support for software control of ISP speed (based on patch by Jurgis Brigmanis)
+- included new AVRUSB driver version (Release 2008-11-26)
+- added libusb 0.1.12.1 windows drivers (needed for WinAVR version 20080512 or greater)
+
+usbasp.2007-10-23 (v1.2)
+------------------------
+- red LED turns on before connecting to target device: this signal can be used to control external tri-state buffers (by Pawel Szramowski)
+
+usbasp.2007-07-23
+-----------------
+- changed licence to GNU GPL v2
+- included new AVRUSB driver version (Release 2007-07-07); AVRUSB licence was changed to GNU GPL v2
+- fixed long addressing for Mega128 (by BoskiDialer)
+
+usbasp.2006-12-29
+-----------------
+- fixed returnvalue in usbWriteFunction (by Jeroen Koeter)
+- changed clock.h: adaptation for newer MCUs like ATMega48 (by Hanns-Konrad Unger)
+- improved Makefile to select target (by Hanns-Konrad Unger)
+- circuit diagram: added zener diodes to USB data lines 
+
+usbasp.2006-09-16
+-----------------
+- add usb reset on startup
+- included new AVRUSB driver version (Release 2006-07-18)
+- changed VID and PID to OBDEV's shared IDs to meet new licence conditions
+- removed avrdude patch from this package. USBasp is supported in latest avrdude CVS version 
+
+usbasp.2005-11-14
+-----------------
+- fixed blocksize restriction (programming the Mega128 now works) 
+  by Thomas Pfeifer (TP)
+- update patch for avrdude-5.0
+
+usbasp.2005-07-03
+-----------------
+- set USB_CFG_SAMPLE_EXACT in usbconfig.h to reduce problems with long cables
+- corrected vendor string
+- added notes on setting fuse bits
+
+usbasp.2005-04-21
+-----------------
+- first public version

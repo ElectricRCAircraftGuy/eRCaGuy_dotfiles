@@ -1,0 +1,4 @@
+# USBasp - USB programmer for Atmel AVR controllers
+# Copy this file to /etc/udev/rules.d so
+
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", SYSFS{idVendor}=="16c0", SYSFS{idProduct}=="05dc", MODE="0666"
