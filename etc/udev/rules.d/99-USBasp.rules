@@ -1,2 +1,9 @@
-# Set Group for USBasp
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+#
+# Set group to "dialout" for USBasp programmer for programming Arduino/AVR microcontrollers via Arduino IDE or AVRdude
+# - very useful device for flashing bootloaders
+# References:
+# 1. USBasp website: https://www.fischl.de/usbasp/
+# 2. udev rule creation instructions: https://andreasrohner.at/posts/Electronics/How-to-fix-device-permissions-for-the-USBasp-programmer/
+
 SUBSYSTEM=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="05dc", GROUP="dialout"
