@@ -31,18 +31,18 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 1. /etc/udev/rules.d/ udev rules
 1. NoMachine remote login setup info
 1. Useful scripts (tree generated w/`tree eRCaGuy_dotfiles/useful_scripts`):
-```
-    useful_scripts/
-    ├── apt-cacher-server_proxy.sh
-    ├── apt-cacher-server_proxy_status.sh
-    ├── apt-cacher-server_proxy_toggle.sh
-    ├── desktop_file_install.sh -> ../Desktop_launchers/desktop_file_install.sh
-    ├── desktop_file_uninstall.sh -> ../Desktop_launchers/desktop_file_uninstall.sh
-    ├── install.sh
-    ├── open_programming_tools.sh = quick script to load all the tools I need to do software development each day
-    └── touchpad_toggle.sh = attached to Ctrl + Alt + P Ubuntu shortcut key to quickly toggle my touchpad & 
-                             touchscreen on & off, & fix mouse scroll wheel speed
-```
+
+        useful_scripts/
+        ├── apt-cacher-server_proxy.sh
+        ├── apt-cacher-server_proxy_status.sh
+        ├── apt-cacher-server_proxy_toggle.sh
+        ├── desktop_file_install.sh -> ../Desktop_launchers/desktop_file_install.sh
+        ├── desktop_file_uninstall.sh -> ../Desktop_launchers/desktop_file_uninstall.sh
+        ├── install.sh
+        ├── open_programming_tools.sh = quick script to load all the tools I need to do software development each day
+        └── touchpad_toggle.sh = attached to Ctrl + Alt + P Ubuntu shortcut key to quickly toggle my touchpad & 
+                                 touchscreen on & off, & fix mouse scroll wheel speed
+
 1. etc.
 
 # Usage & Installation:
