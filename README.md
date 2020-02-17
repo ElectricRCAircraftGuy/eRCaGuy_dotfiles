@@ -12,7 +12,7 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 1. .bashrc file which contains:
     1. `ls` aliases such as `ll`, `la`, & `l`
     1. Prompt String 1 (`PS1`) modifications to add terminal titles, current git branch name checked out [VERY USEFUL FEATURE!], bash shell level, etc
-        ![bash shell terminal prompt showing current git branch!](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/bashrc_sample_terminal_prompt.png)
+        1. ![bash shell terminal prompt showing current git branch!](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/bashrc_sample_terminal_prompt.png)
     1. ssh alias
     1. function to set terminal title
     1. ability to open up default tabs (with unique titles) for rapid launching of tabs in a terminal for development work
