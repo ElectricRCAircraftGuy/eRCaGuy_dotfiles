@@ -1,4 +1,4 @@
-# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+**This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles**
 
 # NoMachine Readme
 
@@ -21,6 +21,8 @@ READ THESE!
 
 Essentially, just add your public key to the "$HOME/.nx/config/authorized.crt" file on the server. If the file doesn't exist, create it. Set its permissions to 0600. Here's one example of commands to do that:
 
+**1) Run from _client_:**
+
 Generate a new private/public key pair from the *client*; run this from the client:
 
     ssh-keygen -t rsa -b 4096 -C "your personal comment or email"
@@ -29,9 +31,15 @@ Copy the *public* (.pub) key only from client to server; run this from the clien
 
     scp ~/.ssh/id_rsa.pub username@server_hostname_or_ip:~/.ssh/id_rsa_nxclient.pub
 
+**2) Run from _server_:**
+
 Add public key now on server to proper NoMachine file; run this from the server:
 
     cat ~/.ssh/id_rsa_nxclient.pub >> ~/.nx/config/authorized.crt
+
+And lastly set this file's permissions to 0600 to enable read/write on this file ONLY for the user (owner) of this file, for security:
+
+    chmod 0600 ~/.nx/config/authorized.crt
 
 ## To *disable* password-based login to server:
 
