@@ -109,6 +109,8 @@ if [ "$made_temp_commit" = "true" ]; then
     # Now re-stage any files that were previously staged
     # See: 1) https://stackoverflow.com/questions/4227994/how-do-i-use-the-lines-of-a-file-as-arguments-of-a-command/4229346#4229346
     # and  2) *****https://www.cyberciti.biz/faq/unix-howto-read-line-by-line-from-file/
+    # and  3) *****+ [my own ans I just made now]: 
+    #         https://stackoverflow.com/questions/4227994/how-do-i-use-the-lines-of-a-file-as-arguments-of-a-command/60276836#60276836
     if [ "$num_staged" -gt "0" ]; then
         echo "Re-staging (via 'git add') any files that were previously staged."
 
