@@ -16,18 +16,18 @@ Notes to self on how to accomplish this "sync_git_repo_to_server.sh" script.
 2. 
 
 # Write script to:
-1. `git status`, commit a "SYNC TO DESKTOP" commit if there are changes, 
-2. do `git push --force origin <local_branch_name>:gabriel.staples_SYNC_TO_DESKTOP` branch [--force causes the remote branch to LOSE DATA, which is ok here]
-    - this works too! `git push --force origin HEAD:gabriel.staples_SYNC_TO_DESKTOP` <=====
+1. `git status`, commit a "SYNC TO BUILD_MACHINE" commit if there are changes, 
+2. do `git push --force origin <local_branch_name>:gabriel.staples_SYNC_TO_BUILD_MACHINE` branch [--force causes the remote branch to LOSE DATA, which is ok here]
+    - this works too! `git push --force origin HEAD:gabriel.staples_SYNC_TO_BUILD_MACHINE` <=====
 3. use ssh commands to pull it on the remote server:
 See also: https://stackoverflow.com/questions/1125968/how-do-i-force-git-pull-to-overwrite-local-files/8888015#8888015
 
-    git checkout gabriel.staples_SYNC_TO_DESKTOP
-    git fetch origin gabriel.staples_SYNC_TO_DESKTOP
-    git reset --hard origin gabriel.staples_SYNC_TO_DESKTOP
+    git checkout gabriel.staples_SYNC_TO_BUILD_MACHINE
+    git fetch origin gabriel.staples_SYNC_TO_BUILD_MACHINE
+    git reset --hard origin gabriel.staples_SYNC_TO_BUILD_MACHINE
 
 then kick off the build manually on the remote server
-4. Last step is to `git reset` back to before doing the "SYNC TO DESKTOP" commit on the local pc. 
+4. Last step is to `git reset` back to before doing the "SYNC TO BUILD_MACHINE" commit on the local pc. 
 
 See how this goes. If it works well, document it on Stack Overflow here:
 https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh
@@ -61,12 +61,12 @@ See: https://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-ro
 
 Note to self 1:51am 17 Feb. 2020:
 
-On local repo:
+On local machine:
 Look for changes. Commit them to current local branch. Force Push them to remote SYNC branch. Uncommit them on local branch. Restore original state.
 Done.
 
 
-On remote repo:
+On remote machine:
 Look for changes. Commit them to a new branch forked off current branch. Call it current_branch_SYNC_BAK_20200217-2310hrs. Check out SYNC branch. Pull and hard reset. Done! We are ready to build now!
 
 
