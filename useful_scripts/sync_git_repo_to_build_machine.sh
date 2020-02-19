@@ -42,7 +42,7 @@
 # Option 1: set these variables inside your ~/.bashrc file on PC1 (comment out this next line if using Option 2)
 . ~/.bashrc
 # Option 2: set these variables right here (comment out these lines if using Option 1)
-
+# PC2_GIT_REPO_TARGET_DIR#####
 # --------------------
 
 # --------------------
@@ -52,19 +52,29 @@ MY_NAME="gabriel.staples" # No spaces allowed! Recommended to use all lower-case
 
 SYNC_BRANCH="${MY_NAME}_SYNC_TO_BUILD_MACHINE" # The remote git branch we use for file synchronization from PC1 to PC2
 
+# A function to obtain the temporary directory we will use, given a directory to a git repo.
+# Call syntax: `get_temp_dir "$REPO_ROOT_DIR`
+# Example: if REPO_ROOT_DIR="~/dev/myrepo", then this function will return (echo out) "~/dev/myrepo_temp" as 
+#   the temp directory
+get_temp_dir () {
+    REPO_ROOT_DIR="$1" # Ex: /home/gabriel/dev/eRCaGuy_dotfiles
+    BASENAME="$(basename $REPO_ROOT_DIR)" # Ex: eRCaGuy_dotfiles
+    DIRNAME="$(dirname $REPO_ROOT_DIR)" # Ex: /home/gabriel/dev
+    TEMP_DIR="${DIRNAME}/${BASENAME}_temp" # this is where temp files will be stored
+    echo "$TEMP_DIR"
+}
+
 # Check for changes--very similar to what a human is doing when calling `git status`.
 # This function determines if any local, uncommitted changes or untracked files exist.
 check_for_changes() {
     # Get git root dir (so you can do `git commit -A` from this dir in case you are in a lower dir--ie: cd to 
     # the root FIRST, then `git commit -A`, then cd back to where you were)
     # See: https://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-root-directory-in-one-command/957978#957978
-    DIR_REPO_ROOT="$(git rev-parse --show-toplevel)" # Ex: /home/gabriel/dev/eRCaGuy_dotfiles
-    # echo "DIR_REPO_ROOT = $DIR_REPO_ROOT" # debugging
+    REPO_ROOT_DIR="$(git rev-parse --show-toplevel)" # Ex: /home/gabriel/dev/eRCaGuy_dotfiles
+    # echo "REPO_ROOT_DIR = $REPO_ROOT_DIR" # debugging
 
-    # Make a temp dir one level up from DIR_REPO_ROOT, naming it "repo-name_temp"
-    BASENAME="$(basename $DIR_REPO_ROOT)" # Ex: eRCaGuy_dotfiles
-    DIRNAME="$(dirname $DIR_REPO_ROOT)" # Ex: /home/gabriel/dev
-    TEMP_DIR="${DIRNAME}/${BASENAME}_temp" # this is where temp files will be stored
+    # Make a temp dir one level up from REPO_ROOT_DIR, naming it "repo-name_temp"
+    TEMP_DIR="$(get_temp_dir $REPO_ROOT_DIR)"
     # echo "TEMP_DIR = $TEMP_DIR" # debugging
     mkdir -p "$TEMP_DIR"
 
@@ -103,12 +113,12 @@ check_for_changes() {
 } 
 
 # On local machine:
-# Look for changes. Commit them to current local branch. Force Push them to remote SYNC branch. 
+# Summary: Look for changes. Commit them to current local branch. Force Push them to remote SYNC branch. 
 # Uncommit them on local branch. Restore original state by re-staging any files that were previously staged.
 # Done.
 sync_pc1_to_remote_branch () {
     echo "===== Syncing PC1 to remote branch ====="
-    echo "Pushing current branch with all changes (including staged, unstaged, & untracked files)"
+    echo "Preparing to push current branch with all changes (including staged, unstaged, & untracked files)"
     echo "  to remote sync branch."
 
     check_for_changes
@@ -120,7 +130,7 @@ sync_pc1_to_remote_branch () {
         made_temp_commit=true
 
         echo "Making a temporary commit of all uncommitted changes."
-        cd "$DIR_REPO_ROOT"
+        cd "$REPO_ROOT_DIR"
         git add -A
         git commit -m "SYNC TO BUILD MACHINE"
     fi
@@ -129,7 +139,7 @@ sync_pc1_to_remote_branch () {
     echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
     echo "  (w/'ssh-add <my_github_key>') OR ELSE THIS WILL FAIL!"
     # TODO: figure out if origin is even available (ex: via a ping or something), and if not, error out right here!
-    # git push --force origin HEAD:$SYNC_BRANCH ############
+    git push --force origin HEAD:$SYNC_BRANCH # MAY NEED TO COMMENT OUT DURING TESTING
 
     # Uncommit the temporary commit we committed above
     if [ "$made_temp_commit" = "true" ]; then
@@ -156,20 +166,13 @@ sync_pc1_to_remote_branch () {
     echo "Done syncing PC1 to remote branch."
 }
 
-# On remote machine:
-# Look for changes. Commit them to a new branch forked off of current branch. Call it 
-# current_branch_SYNC_BAK_20200217-2310hrs. Check out $SYNC_BRANCH branch. Pull and hard reset. 
-# Done! We are ready to build now!
-sync_remote_branch_to_pc2 () {
-    echo "===== Syncing remote branch to PC2 ====="
-
-    # THE FOLLOWING ARE ALL RUN REMOTELY (OVER SSH) ON PC2 FROM PC1
-    #########
+# This is the main command to run on PC2 via ssh from PC1 in order to sync the remote branch to PC2!
+# Call syntax: `update_pc2 "$PC2_GIT_REPO_TARGET_DIR"`
+update_pc2 () {
+    PC2_GIT_REPO_TARGET_DIR="$1"
 
     cd "$PC2_GIT_REPO_TARGET_DIR"
     check_for_changes
-
-    ############ rsync this script over!
 
     # 1st, back up any uncommitted changes that may exist
 
@@ -206,8 +209,27 @@ sync_remote_branch_to_pc2 () {
     echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
     echo "  (w/'ssh-add <my_github_key>') OR ELSE THIS WILL FAIL!"
     # TODO: figure out if origin is even available (ex: via a ping or something), and if not, error out right here!
+    echo "  1st: git fetch origin \"$SYNC_BRANCH\""
     git fetch origin "$SYNC_BRANCH"
+    echo "  2nd: git reset --hard \"origin/$SYNC_BRANCH\""
     git reset --hard "origin/$SYNC_BRANCH"
+}
+
+# On remote machine:
+# Summary: Look for changes. Commit them to a new branch forked off of current branch. Call it 
+# current_branch_SYNC_BAK_20200217-2310hrs. Check out $SYNC_BRANCH branch. Pull and hard reset. 
+# Done! We are ready to build now!
+sync_remote_branch_to_pc2 () {
+    echo "===== Syncing remote branch to PC2 ====="
+
+    # rsync a copy of this script over!
+    # TODO
+
+    # THE FOLLOWING ARE ALL RUN REMOTELY (OVER SSH) ON PC2 FROM PC1
+    ######### TODO: MAKE THIS GET CALLED OVER SSH FROM PC1 TO PC2
+
+    update_pc2 "$PC2_GIT_REPO_TARGET_DIR"
+
 
     echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
 }
@@ -227,6 +249,12 @@ main () {
 }
 
 # Only run main if no input args are given
+# Calling syntax: `sync_git_repo_to_build_machine.sh`
 if [ "$#" -eq "0" ];  then
     main
+
+# Call only `update_pc2` function if desired
+# Calling syntax: `sync_git_repo_to_build_machine.sh update_pc2 <input_arg_to_update_pc2>`
+elif [ "$1" = "update_pc2" ];  then
+    update_pc2 "$2"
 fi
