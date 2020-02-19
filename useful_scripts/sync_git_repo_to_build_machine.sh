@@ -41,14 +41,37 @@
 # USER PARAMETERS, INCL. SSH PARAMETERS TO SYNC & SSH FROM PC1 TO PC2
 # Option 1: set these variables inside your ~/.bashrc file on PC1 (comment out this next line if using Option 2)
 . ~/.bashrc
+# . "$HOME/.bashrc"####
 MY_NAME="gabriel.staples" # No spaces allowed! Recommended to use all lower-case.
 # Option 2: set these variables right here (comment out these lines if using Option 1)
-# PC2_GIT_REPO_TARGET_DIR="$HOME/dev/eRCaGuy_dotfiles"
+# PC2_GIT_REPO_TARGET_DIR="$/home/gabriel/dev/eRCaGuy_dotfiles"
 # PC2_SSH_USERNAME="gabriel"
 # PC2_SSH_DOMAIN="my_domain"
 # --------------------
 
+# Debugging prints
+echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
+echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
+echo "PC2_SSH_DOMAIN = $PC2_SSH_DOMAIN"
+
 SYNC_BRANCH="${MY_NAME}_SYNC_TO_BUILD_MACHINE" # The remote git branch we use for file synchronization from PC1 to PC2
+
+get_path_to_this_script () {
+    # Find the directory where this script lies
+    # - See: https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself/246128#246128
+    SOURCE="${BASH_SOURCE[0]}"
+    while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+      DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+      SOURCE="$(readlink "$SOURCE")"
+      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    done
+    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+    echo "$SOURCE"
+}
+
+PATH_TO_THIS_SCRIPT="$(get_path_to_this_script)"
+echo "PATH_TO_THIS_SCRIPT = \"$PATH_TO_THIS_SCRIPT\""
 
 # A function to obtain the temporary directory we will use, given a directory to a git repo.
 # Call syntax: `get_temp_dir "$REPO_ROOT_DIR`
@@ -223,15 +246,25 @@ update_pc2 () {
 sync_remote_branch_to_pc2 () {
     echo "===== Syncing remote branch to PC2 ====="
 
-    # rsync a copy of this script over!
+    echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
+    PC2_GIT_REPO_TARGET_DIR="/home/gabriel.staples/GS--w/dev--w/repos/cruise"
+    echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
+    # rsync a copy of this script over to a temp dir
+    TEMP_DIR="$(get_temp_dir "$PC2_GIT_REPO_TARGET_DIR")"
+    echo "TEMP_DIR = \"$TEMP_DIR\""
+
+    # ssh $PC2_SSH_USERNAME@$PC2_SSH_DOMAIN "mkdir -p \"$TEMP_DIR\""
+    # rsync "$PATH_TO_THIS_SCRIPT" "$PC2_SSH_USERNAME@$PC2_SSH_DOMAIN:$TEMP_DIR/"
+
     # TODO--UPDATE--MAY NOT EVEN BE NECESSARY! I CAN JUST CALL `update_pc2()` remotely perhaps..not sure!
 
     # THE FOLLOWING ARE ALL RUN REMOTELY (OVER SSH) ON PC2 FROM PC1
     ######### TODO: MAKE THIS GET CALLED OVER SSH FROM PC1 TO PC2
 
-    update_pc2 "$PC2_GIT_REPO_TARGET_DIR"
+    # ssh -t $PC2_SSH_USERNAME@$PC2_SSH_DOMAIN  #"update_pc2 \"$PC2_GIT_REPO_TARGET_DIR\""
 
 
+    # update_pc2 "$PC2_GIT_REPO_TARGET_DIR"
     echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
 }
 
@@ -240,7 +273,7 @@ main () {
     DIR_START="$(pwd)"
     # echo "DIR_START = $DIR_START" # debugging
 
-    sync_pc1_to_remote_branch
+    # sync_pc1_to_remote_branch########
     sync_remote_branch_to_pc2
 
     # cd back to where we started
