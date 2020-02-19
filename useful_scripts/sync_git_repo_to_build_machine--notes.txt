@@ -57,6 +57,12 @@ See: https://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-ro
 
     git rev-parse --show-toplevel
 
+Get just the name of the currently-checked-out branch:
+See: https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git/12142066#12142066
+- will simply output "HEAD" if in a 'detached HEAD' state (ie: not on any branch)
+
+    git rev-parse --abbrev-ref HEAD
+
 ------
 
 Note to self 1:51am 17 Feb. 2020:
@@ -67,7 +73,7 @@ Done.
 
 
 On remote machine:
-Look for changes. Commit them to a new branch forked off current branch. Call it current_branch_SYNC_BAK_20200217-2310hrs. Check out SYNC branch. Pull and hard reset. Done! We are ready to build now!
+Look for changes. Commit them to a new branch forked off current branch. Call it current_branch_SYNC_BAK_20200217-2310hrs13sec. Check out SYNC branch. Pull and hard reset. Done! We are ready to build now!
 
 
 
