@@ -58,8 +58,8 @@ SYNC_BRANCH="${MY_NAME}_SYNC_TO_BUILD_MACHINE" # The remote git branch we use fo
 #   the temp directory
 get_temp_dir () {
     REPO_ROOT_DIR="$1" # Ex: /home/gabriel/dev/eRCaGuy_dotfiles
-    BASENAME="$(basename $REPO_ROOT_DIR)" # Ex: eRCaGuy_dotfiles
-    DIRNAME="$(dirname $REPO_ROOT_DIR)" # Ex: /home/gabriel/dev
+    BASENAME="$(basename "$REPO_ROOT_DIR")" # Ex: eRCaGuy_dotfiles
+    DIRNAME="$(dirname "$REPO_ROOT_DIR")" # Ex: /home/gabriel/dev
     TEMP_DIR="${DIRNAME}/${BASENAME}_temp" # this is where temp files will be stored
     echo "$TEMP_DIR"
 }
@@ -74,7 +74,7 @@ check_for_changes() {
     # echo "REPO_ROOT_DIR = $REPO_ROOT_DIR" # debugging
 
     # Make a temp dir one level up from REPO_ROOT_DIR, naming it "repo-name_temp"
-    TEMP_DIR="$(get_temp_dir $REPO_ROOT_DIR)"
+    TEMP_DIR="$(get_temp_dir "$REPO_ROOT_DIR")"
     # echo "TEMP_DIR = $TEMP_DIR" # debugging
     mkdir -p "$TEMP_DIR"
 
@@ -139,7 +139,7 @@ sync_pc1_to_remote_branch () {
     echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
     echo "  (w/'ssh-add <my_github_key>') OR ELSE THIS WILL FAIL!"
     # TODO: figure out if origin is even available (ex: via a ping or something), and if not, error out right here!
-    git push --force origin HEAD:$SYNC_BRANCH # MAY NEED TO COMMENT OUT DURING TESTING
+    git push --force origin "HEAD:$SYNC_BRANCH" # MAY NEED TO COMMENT OUT DURING TESTING
 
     # Uncommit the temporary commit we committed above
     if [ "$made_temp_commit" = "true" ]; then
@@ -188,7 +188,7 @@ update_pc2 () {
         # - Will simply output "HEAD" if in a 'detached HEAD' state (ie: not on any branch)
         current_branch_name=$(git rev-parse --abbrev-ref HEAD)
 
-        timestamp=$(date "+%Y%m%d-%H%Mhrs-%Ssec")
+        timestamp="$(date "+%Y%m%d-%H%Mhrs-%Ssec")"
         new_branch_name="${current_branch_name}_SYNC_BAK_${timestamp}"
 
         echo "Creating branch \"$new_branch_name\" to store all uncommitted changes."
@@ -223,7 +223,7 @@ sync_remote_branch_to_pc2 () {
     echo "===== Syncing remote branch to PC2 ====="
 
     # rsync a copy of this script over!
-    # TODO
+    # TODO--UPDATE--MAY NOT EVEN BE NECESSARY! I CAN JUST CALL `update_pc2()` remotely perhaps..not sure!
 
     # THE FOLLOWING ARE ALL RUN REMOTELY (OVER SSH) ON PC2 FROM PC1
     ######### TODO: MAKE THIS GET CALLED OVER SSH FROM PC1 TO PC2
