@@ -73,7 +73,8 @@ Done.
 
 
 On remote machine:
-Look for changes. Commit them to a new branch forked off current branch. Call it current_branch_SYNC_BAK_20200217-2310hrs13sec. Check out SYNC branch. Pull and hard reset. Done! We are ready to build now!
+Look for changes. Commit them to a new branch forked off current branch. Call it current_branch_SYNC_BAK_20200217-2310hrs13sec. 
+Check out SYNC branch. Pull and hard reset. Done! We are ready to build now!
 
 
 
