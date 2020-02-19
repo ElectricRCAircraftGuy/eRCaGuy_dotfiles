@@ -38,16 +38,14 @@
 #   1. https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh
 
 # --------------------
-# SSH PARAMETERS TO SYNC & SSH FROM PC1 TO PC2
+# USER PARAMETERS, INCL. SSH PARAMETERS TO SYNC & SSH FROM PC1 TO PC2
 # Option 1: set these variables inside your ~/.bashrc file on PC1 (comment out this next line if using Option 2)
 . ~/.bashrc
-# Option 2: set these variables right here (comment out these lines if using Option 1)
-# PC2_GIT_REPO_TARGET_DIR#####
-# --------------------
-
-# --------------------
-# OTHER USER PARAMETERS:
 MY_NAME="gabriel.staples" # No spaces allowed! Recommended to use all lower-case.
+# Option 2: set these variables right here (comment out these lines if using Option 1)
+# PC2_GIT_REPO_TARGET_DIR="$HOME/dev/eRCaGuy_dotfiles"
+# PC2_SSH_USERNAME="gabriel"
+# PC2_SSH_DOMAIN="my_domain"
 # --------------------
 
 SYNC_BRANCH="${MY_NAME}_SYNC_TO_BUILD_MACHINE" # The remote git branch we use for file synchronization from PC1 to PC2
@@ -64,9 +62,10 @@ get_temp_dir () {
     echo "$TEMP_DIR"
 }
 
-# Check for changes--very similar to what a human is doing when calling `git status`.
+# Create a temporary directory to store the results, & check the git repo for changes--very similar to 
+# what a human is doing when calling `git status`.
 # This function determines if any local, uncommitted changes or untracked files exist.
-check_for_changes() {
+create_temp_and_check_for_changes() {
     # Get git root dir (so you can do `git commit -A` from this dir in case you are in a lower dir--ie: cd to 
     # the root FIRST, then `git commit -A`, then cd back to where you were)
     # See: https://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-root-directory-in-one-command/957978#957978
@@ -121,7 +120,7 @@ sync_pc1_to_remote_branch () {
     echo "Preparing to push current branch with all changes (including staged, unstaged, & untracked files)"
     echo "  to remote sync branch."
 
-    check_for_changes
+    create_temp_and_check_for_changes
 
     # Commit uncommitted changes (if any exist) into a temporary commit we will uncommit later
     made_temp_commit=false
@@ -172,7 +171,7 @@ update_pc2 () {
     PC2_GIT_REPO_TARGET_DIR="$1"
 
     cd "$PC2_GIT_REPO_TARGET_DIR"
-    check_for_changes
+    create_temp_and_check_for_changes
 
     # 1st, back up any uncommitted changes that may exist
 
@@ -203,16 +202,18 @@ update_pc2 () {
 
     # Hard-pull from the remote server to fully overwrite local copy of this branch.
     # See: https://stackoverflow.com/questions/1125968/how-do-i-force-git-pull-to-overwrite-local-files/8888015#8888015
-    echo "Checking out \"$SYNC_BRANCH\" branch."
-    git checkout "$SYNC_BRANCH"
-    echo "Force pulling from remote \"$SYNC_BRANCH\" branch to overwrite local copy of this branch."
-    echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
-    echo "  (w/'ssh-add <my_github_key>') OR ELSE THIS WILL FAIL!"
     # TODO: figure out if origin is even available (ex: via a ping or something), and if not, error out right here!
+    echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
+    echo "  (w/'ssh-add <my_github_key>') OR ELSE THESE FOLLOWING STEPS WILL FAIL!"
+    echo "Force pulling from remote \"$SYNC_BRANCH\" branch to overwrite local copy of this branch."
     echo "  1st: git fetch origin \"$SYNC_BRANCH\""
-    git fetch origin "$SYNC_BRANCH"
-    echo "  2nd: git reset --hard \"origin/$SYNC_BRANCH\""
-    git reset --hard "origin/$SYNC_BRANCH"
+    git fetch origin "$SYNC_BRANCH"         # MAY NEED TO COMMENT OUT DURING TESTING
+    echo "  2nd: git checkout \"$SYNC_BRANCH\"" 
+    # Note: this `git checkout` call automatically checks out this branch from the remote "origin" if this branch
+    # is not already present locally
+    git checkout "$SYNC_BRANCH"             # MAY NEED TO COMMENT OUT DURING TESTING
+    echo "  3rd: git reset --hard \"origin/$SYNC_BRANCH\" (to force-update the local branch to match the origin branch)"
+    git reset --hard "origin/$SYNC_BRANCH"  # MAY NEED TO COMMENT OUT DURING TESTING
 }
 
 # On remote machine:
