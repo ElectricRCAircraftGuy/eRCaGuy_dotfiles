@@ -159,24 +159,43 @@ git_show_branch() {
 PS1="\e[7m\$(git_show_branch)\e[m\n$PS1"
 PS1='\$SHLVL'":$SHLVL $PS1"
 
-# GS: git branch backups: back up git branch hashes before deleting branches, so you can always have their hashes
-# to go back to to checkout rather than having to dig through your `git reflog` forever.
+# GS: git branch backups: useful to back up git branch hashes before deleting branches, so you can 
+# always have their hashes to go back to to checkout rather than having to dig through your `git reflog` forever.
 # - Note that this currently requires that the GIT_BRANCH_HASH_BAK_DIR directory already exists. 
 # - TODO: fail more gracefully: make it check to see if this dir exists & prompt the user for permission to 
 #   auto-create it with `mkdir -p ${GIT_BRANCH_HASH_BAK_DIR}` if it does not.
-GIT_BRANCH_HASH_BAK_DIR="./git_branch_hash_backups"
+# Syntax: `gs_git_branch_hash_bak [dir]` = back up to a backup file in directory "dir" if a dir is passed in
+GIT_BRANCH_HASH_BAK_DEFAULT_DIR="./git_branch_hash_backups"
 gs_git_branch_hash_bak () {
+    GIT_BRANCH_HASH_BAK_DIR="$GIT_BRANCH_HASH_BAK_DEFAULT_DIR"
+    if [ -n "$1" ]; then
+        # If an arg is passed in, then use it instead of the default directory!
+        GIT_BRANCH_HASH_BAK_DIR="$1"
+    fi
     DATE=`date +%Y%m%d-%H%Mhrs-%Ssec`
-    FILE="${GIT_BRANCH_HASH_BAK_DIR}/git_branch_bak--${DATE}.txt"
     BRANCH="$(git_show_branch)"
     DIR=$(pwd)
-    echo -e "pwd = \"$DIR\"" > $FILE
+    REPO=$(basename "$DIR") # repository name
+    # Replace any spaces in the repository name with underscores
+    # See: https://stackoverflow.com/questions/19661267/replace-spaces-with-underscores-via-bash/19661428#19661428
+    REPO="${REPO// /_}"
+    FILE="${GIT_BRANCH_HASH_BAK_DIR}/${REPO}_git_branch_bak--${DATE}.txt"
+
+    echo "Backing up 'git branch -vv' info to \"$FILE\"."
+    echo -e "date = \"$DATE\"" > $FILE
+    echo -e "repo (folder) name = \"$REPO\"" >> $FILE
+    echo -e "pwd = \"$DIR\"" >> $FILE
     echo -e "current branch name = \"$BRANCH\"" >> $FILE
     echo -e "\n=== \`git branch -vv\` ===\n" >> $FILE
     git branch -vv >> $FILE
+    echo "Done!"
 }
 alias gs_git_branch_hash_bak_echo='echo -e "This is a bash function in \"~/.bashrc\" which backs up git branch names \
-& short hashes to your local \"${GIT_BRANCH_HASH_BAK_DIR}\" dir."'
+& short hashes to your local \"${GIT_BRANCH_HASH_BAK_DEFAULT_DIR}\" (or other specified) dir."'
+# Alias to do the git hash backups in a directory one higher so you don't have to add this backup dir
+# to this git project's .gitignore file
+alias gs_git_branch_hash_bak_up1="gs_git_branch_hash_bak \"../git_branch_hash_backups\""
+alias gs_git_branch_hash_bak_up1_echo="echo gs_git_branch_hash_bak \"../git_branch_hash_backups\""
 
 # Edit this ssh command! Make the username, domain_name, & options what they should be for you.
 # Note: enable X11 window forwarding with `-X`; see here: 
