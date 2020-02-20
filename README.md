@@ -77,4 +77,6 @@ See the headers at the top of these files for additonal information, installatio
 1. "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh"
 2. "eRCaGuy_dotfiles/.sync_git_repo"
 
+**See also this answer and writeup on StackOverflow: https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh/60315754#60315754**
+
 Essentially, you just copy the .sync_git_repo file to ~/.sync_git_repo, update its parameters, and then run the script from any directory *inside the git repo* on PC1. This also assumes that PC2 already has the repo cloned, and that all your ssh keys are set up and functioning to both A) push and pull to/from the remote git repo on both PC1 and PC2, and B) ssh from PC1 into PC2. Again, see the instructions in the files above. 
