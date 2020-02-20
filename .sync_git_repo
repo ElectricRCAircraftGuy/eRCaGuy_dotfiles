@@ -20,17 +20,8 @@
 # - Do NOT use variables such as `$HOME`. Be explicit instead. This is because the variable expansion will 
 #   happen on the local machine when what we need is the variable expansion from the remote machine. Being 
 #   explicit instead just avoids this problem.
-PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles"
+PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles" # explicitly type this out; don't use variables
 
 PC2_SSH_USERNAME="my_username" # explicitly type this out; don't use variables
 PC2_SSH_HOST="my_hostname"     # explicitly type this out; don't use variables
-
-# Your name. No spaces allowed! Recommended to use all lower-case. This is only used to create the 
-# synchronization git branch name just below. 
-MY_NAME="gabriel.staples" 
-
-# This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
-# Feel free to modify this as you see fit.
-SYNC_BRANCH="${MY_NAME}_SYNC"
-
 

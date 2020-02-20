@@ -60,9 +60,16 @@ fi
 # PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles"
 # PC2_SSH_USERNAME="my_username" # explicitly type this out; don't use variables
 # PC2_SSH_HOST="my_hostname"     # explicitly type this out; don't use variables
-# MY_NAME="gabriel.staples" 
-# SYNC_BRANCH="${MY_NAME}_SYNC"
+
 # ----------------------------------------------------------------------------------------------------------------------
+
+# Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create the 
+# synchronization git branch name just below. 
+MY_NAME="gabriel.staples" 
+
+# This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
+# Feel free to modify this as you see fit.
+SYNC_BRANCH="${MY_NAME}_SYNC"
 
 # Debugging prints
 # echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
@@ -168,7 +175,7 @@ sync_pc1_to_remote_branch () {
         echo "Making a temporary commit of all uncommitted changes."
         cd "$REPO_ROOT_DIR"
         git add -A
-        git commit -m "SYNC TO PC2 (BUILD MACHINE)"
+        git commit -m "AUTOMATIC COMMIT TO SYNC TO PC2 (BUILD MACHINE)"
     fi
 
     echo "Force pushing to remote \"$SYNC_BRANCH\" branch."
@@ -310,6 +317,7 @@ main () {
 # Run this always:
 PATH_TO_THIS_SCRIPT="$(get_path_to_this_script)"
 echo "PATH_TO_THIS_SCRIPT = \"$PATH_TO_THIS_SCRIPT\""
+echo "SYNC_BRANCH = \"$SYNC_BRANCH\""
 echo "Running on PC user@hostname: $USER@$HOSTNAME"
 
 # Only run main if no input args are given
