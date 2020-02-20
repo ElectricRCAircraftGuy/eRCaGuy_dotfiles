@@ -260,7 +260,10 @@ gs_open_default_tabs() {
 # This chunk of code allows one to essentially call `open_default_tabs` from another script to open up all 
 # default tabs in a brand new terminal window simply by entering these lines into your script:
 #   export OPEN_DEFAULT_TABS=true
-#   gnome-terminal
+#   gnome-terminal          # this also sources ~/.bashrc (this script)
+#   OPEN_DEFAULT_TABS=      # set this variable back to an empty string so it's no longer in force
+#   unset OPEN_DEFAULT_TABS # unexport it
+# See "eRCaGuy_dotfiles/useful_scripts/open_programming_tools.sh" for a full example & more detailed comments.
 if [[ -n "$OPEN_DEFAULT_TABS" ]]; then # If length of this is NONzero (see `man test`)
     # Reset to an empty string so this only happens ONCE since ~/.bashrc is about to be sourced recursively
     OPEN_DEFAULT_TABS= 
