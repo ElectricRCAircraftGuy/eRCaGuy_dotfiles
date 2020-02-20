@@ -1,9 +1,13 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 Gabriel Staples
-15 Feb. 2020
+Sat. 15 Feb. 2020
 
+------------------------------------------------------------------------------------------------------------------------
 Notes to self on how to accomplish this "sync_git_repo_to_server.sh" script.
+- THESE NOTES WERE WHAT I USED TO DESIGN AND WRITE THE SCRIPT. THEY HAVE NO DIRECT PURPOSE FOR A 
+  USER OF THE SCRIPT.
+------------------------------------------------------------------------------------------------------------------------
 
 # Related:
 1. Google search for "workflow to develop locally but build remotely" - https://www.google.com/search?q=workflow+to+develop+locally+but+build+remotely&oq=workflow+to+develop+locally+but+build+remotely&aqs=chrome..69i57.7154j0j7&sourceid=chrome&ie=UTF-8

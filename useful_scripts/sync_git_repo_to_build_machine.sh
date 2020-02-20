@@ -5,11 +5,17 @@
 # sync_git_repo_to_build_machine.sh
 # - Sometimes you need to develop software on one machine (ex: a decent laptop, running an IDE like Eclipse) 
 #   while building on a remote server machine (ex: a powerful desktop, or a paid cloud-based server such as 
-#   AWS or Google Cloud). The problem, however, is "how do I sync from the machine I work on to the machine 
-#   I build on?". This script answers that problem. It uses git to sync from one to the other. Git is 
+#   AWS or Google Cloud--like this guy: https://matttrent.com/remote-development/). The problem, however, 
+#   is "how do I sync from the machine I work on to the machine I build on?". 
+#   This script answers that problem. It uses git to sync from one to the other. Git is 
 #   preferred over rsync or other sync tools since they try to sync *everything* and on large repos 
-#   they take FOREVER (dozens of minutes, to hours)! This script is lightning-fast (seconds)! 
-# - Run it from the *client* machine where you develop code, NOT the server where you will build the code!
+#   they take FOREVER (dozens of minutes, to hours)! This script is lightning-fast (seconds) and 
+#   ***safe***, because it always backs up any uncommitted changes you have on either PC1 or PC2
+#   before changing anything!
+# - A typical run might take <= ~30 seconds, and require ~25 MB of data (which you care about if running on
+#   a hotspot on your cell phone). 
+# - Run it from the *client* machine where you develop code (PC1), NOT the server where you will build
+#   the code (PC2)!
 # - It MUST be run from a directory inside the repo you are syncing FROM.
 
 # INSTALLATION:
@@ -18,9 +24,8 @@
 #       mkdir -p ~/bin
 #       ln -s "${PWD}/sync_git_repo_to_build_machine.sh" ~/bin/sync_git_repo_to_build_machine
 # 2. Now cd into a repo you want to sync from a PC1 (ex: some light development machine) to a 
-#    PC2 (some powerful build machine), and run this script. Note that I like to add `time` to the 
-#    call to see how long it takes!:
-#       time sync_git_repo_to_build_machine
+#    PC2 (some powerful build machine), and run this script.
+#       sync_git_repo_to_build_machine
 
 # References:
 # 1. For main notes & reference links see "sync_git_repo_to_build_machine--notes.txt"
@@ -37,28 +42,36 @@
 #    https://www.google.com/search?q=eclipse+work+local+build+remote&oq=eclipse+work+local+build+remote&aqs=chrome..69i57.218j0j9&sourceid=chrome&ie=UTF-8
 #   1. https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh
 
-# --------------------
-# USER PARAMETERS, INCL. SSH PARAMETERS TO SYNC & SSH FROM PC1 TO PC2
-# Option 1: Create a "~/.sync_git_repo" file on PC1 and define these variables inside there 
-# (comment these next lines out if using Option 2)
+# ======================================================================================================================
+# USER PARAMETERS, INCL. SSH PARAMETERS TO SYNC OVER SSH FROM PC1 TO PC2
+# - COMMENT OUT THE OPTION (1 or 2) BELOW THAT YOU'RE NOT USING!
+# ======================================================================================================================
+# Option 1: Create a "~/.sync_git_repo" file on PC1 and define these variables inside there. See and
+# use the example file in this project: "eRCaGuy_dotfiles/.sync_git_repo".
+# (Comment these next lines out if using Option 2)
 if [ -f ~/.sync_git_repo ]; then
     # Source this file only if it exists
     . ~/.sync_git_repo
 fi
 
-MY_NAME="gabriel.staples" # No spaces allowed! Recommended to use all lower-case.
-# Option 2: set these variables right here (comment out these lines if using Option 1)
-# PC2_GIT_REPO_TARGET_DIR="$/home/gabriel/dev/eRCaGuy_dotfiles"
-# PC2_SSH_USERNAME="gabriel"
-# PC2_SSH_HOST="my_hostname"
-# --------------------
+# Option 2: fill out all these variables right here instead. For descriptions on what they mean, see
+# the example file in this project: "eRCaGuy_dotfiles/.sync_git_repo". 
+# (Comment these next lines out if using Option 1)
+# PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles"
+# PC2_SSH_USERNAME="my_username" # explicitly type this out; don't use variables
+# PC2_SSH_HOST="my_hostname"     # explicitly type this out; don't use variables
+# MY_NAME="gabriel.staples" 
+# SYNC_BRANCH="${MY_NAME}_SYNC_TO_BUILD_MACHINE"
+# ----------------------------------------------------------------------------------------------------------------------
 
 # Debugging prints
 # echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
 # echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
 # echo "PC2_SSH_HOST = $PC2_SSH_HOST"
 
-SYNC_BRANCH="${MY_NAME}_SYNC_TO_BUILD_MACHINE" # The remote git branch we use for file synchronization from PC1 to PC2
+# ======================================================================================================================
+# FUNCTION DEFINITIONS
+# ======================================================================================================================
 
 get_path_to_this_script () {
     # Find the directory where this script lies
@@ -73,10 +86,6 @@ get_path_to_this_script () {
 
     echo "$SOURCE"
 }
-
-PATH_TO_THIS_SCRIPT="$(get_path_to_this_script)"
-echo "PATH_TO_THIS_SCRIPT = \"$PATH_TO_THIS_SCRIPT\""
-echo "Running on PC user@hostname: $USER@$HOSTNAME"
 
 # A function to obtain the temporary directory we will use, given a directory to a git repo.
 # Call syntax: `get_temp_dir "$REPO_ROOT_DIR`
@@ -268,6 +277,12 @@ sync_remote_branch_to_pc2 () {
     # echo "script_path_on_pc2 = $script_path_on_pc2" # Debugging
 
     echo "Calling script on PC2 to sync from remote branch to PC2."
+    # NB: the `-t` flag to `ssh` tells it that it is an interactive shell. Some commands which use `screen`
+    # internally require the `-t` flag when being called over ssh. Using `-t` also has the effect of causing
+    # it to print out "Connection to $HOSTNAME closed" whenever the cmd is over. See `man ssh` to read
+    # more about the -t flag. Also see here:
+    # https://malcontentcomics.com/systemsboy/2006/07/send-remote-commands-via-ssh.html
+    # and here: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
     ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST  "$script_path_on_pc2 update_pc2 \"$PC2_GIT_REPO_TARGET_DIR\""
 
     echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
@@ -288,12 +303,21 @@ main () {
     echo "END!"
 }
 
-# Only run main if no input args are given
-# Calling syntax: `sync_git_repo_to_build_machine.sh`
-if [ "$#" -eq "0" ];  then
-    main
+# ======================================================================================================================
+# PROGRAM ENTRY POINT
+# ======================================================================================================================
 
-# Call only `update_pc2` function if desired
+# Run this always:
+PATH_TO_THIS_SCRIPT="$(get_path_to_this_script)"
+echo "PATH_TO_THIS_SCRIPT = \"$PATH_TO_THIS_SCRIPT\""
+echo "Running on PC user@hostname: $USER@$HOSTNAME"
+
+# Only run main if no input args are given
+# Sample calling syntax to this script: `sync_git_repo_to_build_machine.sh`
+if [ "$#" -eq "0" ];  then
+    time main # use `time` cmd in front to output the total time this process took when it ends!
+
+# Call only `update_pc2` function if desired (ie: when running this script from PC2 only!)
 # Calling syntax: `sync_git_repo_to_build_machine.sh update_pc2 <input_arg_to_update_pc2>`
 elif [ "$1" = "update_pc2" ];  then
     update_pc2 "$2"
