@@ -2,7 +2,7 @@
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# sync_git_repo_to_build_machine.sh
+# sync_git_repo_from_pc1_to_pc2.sh
 # - Sometimes you need to develop software on one machine (ex: a decent laptop, running an IDE like Eclipse) 
 #   while building on a remote server machine (ex: a powerful desktop, or a paid cloud-based server such as 
 #   AWS or Google Cloud--like this guy: https://matttrent.com/remote-development/). The problem, however, 
@@ -22,13 +22,13 @@
 # 1. Create symlinks in ~/bin to this script so you can run it from anywhere:
 #       cd /path/to/here
 #       mkdir -p ~/bin
-#       ln -s "${PWD}/sync_git_repo_to_build_machine.sh" ~/bin/sync_git_repo_to_build_machine
+#       ln -s "${PWD}/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/sync_git_repo_from_pc1_to_pc2
 # 2. Now cd into a repo you want to sync from a PC1 (ex: some light development machine) to a 
 #    PC2 (some powerful build machine), and run this script.
-#       sync_git_repo_to_build_machine
+#       sync_git_repo_from_pc1_to_pc2
 
 # References:
-# 1. For main notes & reference links see "sync_git_repo_to_build_machine--notes.txt"
+# 1. For main notes & reference links see "sync_git_repo_from_pc1_to_pc2--notes.txt"
 # 1. Bash numerical comparisons: 
 #    https://stackoverflow.com/questions/18668556/comparing-numbers-in-bash/18668580#18668580
 # 1. How to create a branch in a remote git repository:
@@ -61,7 +61,7 @@ fi
 # PC2_SSH_USERNAME="my_username" # explicitly type this out; don't use variables
 # PC2_SSH_HOST="my_hostname"     # explicitly type this out; don't use variables
 # MY_NAME="gabriel.staples" 
-# SYNC_BRANCH="${MY_NAME}_SYNC_TO_BUILD_MACHINE"
+# SYNC_BRANCH="${MY_NAME}_SYNC"
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Debugging prints
@@ -168,7 +168,7 @@ sync_pc1_to_remote_branch () {
         echo "Making a temporary commit of all uncommitted changes."
         cd "$REPO_ROOT_DIR"
         git add -A
-        git commit -m "SYNC TO BUILD MACHINE"
+        git commit -m "SYNC TO PC2 (BUILD MACHINE)"
     fi
 
     echo "Force pushing to remote \"$SYNC_BRANCH\" branch."
@@ -313,12 +313,12 @@ echo "PATH_TO_THIS_SCRIPT = \"$PATH_TO_THIS_SCRIPT\""
 echo "Running on PC user@hostname: $USER@$HOSTNAME"
 
 # Only run main if no input args are given
-# Sample calling syntax to this script: `sync_git_repo_to_build_machine.sh`
+# Sample calling syntax to this script: `./sync_git_repo_from_pc1_to_pc2.sh`
 if [ "$#" -eq "0" ];  then
     time main # use `time` cmd in front to output the total time this process took when it ends!
 
 # Call only `update_pc2` function if desired (ie: when running this script from PC2 only!)
-# Calling syntax: `sync_git_repo_to_build_machine.sh update_pc2 <input_arg_to_update_pc2>`
+# Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh update_pc2 <input_arg_to_update_pc2>`
 elif [ "$1" = "update_pc2" ];  then
     update_pc2 "$2"
 fi

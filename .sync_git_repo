@@ -1,6 +1,6 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# Variables for "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_to_build_machine.sh" script
+# Variables for "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh" script
 
 # The above script synchronizes a git repository from Personal Computer 1 (PC1) to Personal Computer 2 (PC2).
 
@@ -13,7 +13,7 @@
 # 4. Manually `git clone` your repo onto both PC1 and PC2.
 # 5. Now run the sync script whenever you have changes you want to push from PC1 to PC2 for building or 
 #    testing!: 
-#       eRCaGuy_dotfiles/useful_scripts/sync_git_repo_to_build_machine.sh
+#       eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh
 
 # The git repo root directory on PC2 where you are syncing your files TO; this dir must *already exist* 
 # and you must have *already `git clone`d* a copy of your git repo into it!
@@ -31,6 +31,6 @@ MY_NAME="gabriel.staples"
 
 # This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
 # Feel free to modify this as you see fit.
-SYNC_BRANCH="${MY_NAME}_SYNC_TO_BUILD_MACHINE"
+SYNC_BRANCH="${MY_NAME}_SYNC"
 
 
