@@ -12,7 +12,7 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 1. .bashrc file which contains:
     1. `ls` aliases such as `ll`, `la`, & `l`
     1. Prompt String 1 (`PS1`) modifications to add terminal titles, current git branch name checked out [VERY USEFUL FEATURE!], bash shell level, etc
-        1. ![bash shell terminal prompt showing current git branch!](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/bashrc_sample_terminal_prompt.png)
+        1. ![bash shell terminal prompt showing current git branch!](./bashrc_sample_terminal_prompt.png)
     1. ssh alias
     1. function to set terminal title
     1. ability to open up default tabs (with unique titles) for rapid launching of tabs in a terminal for development work
@@ -47,7 +47,7 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 
 1. etc.
 
-# Usage & Installation:
+# eRCaGuy_dotfiles Installation & Usage:
 1. Most files contain comments with additional info, instructions, or helpful links to look at.
 2. Many directories contain readmes, and some contain install scripts, such as my scripts to help install .desktop files. 
 3. If a readme exists in a subfolder, take a look at it too for more install help or other usage information. 
@@ -71,7 +71,7 @@ This is an incredibly powerful and useful script, so I'm giving it a section all
 1. Run it from the *client* machine where you develop code (PC1), NOT the server where you will build or otherwise test or use the code (PC2)!
 1. It MUST be run from a directory inside the repo you are syncing FROM.
 
-## Installation and Usage:
+## `sync_git_repo_from_pc1_to_pc2.sh` Installation and Usage:
 See the headers at the top of these files for additonal information, installation, and usage:
 
 1. "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh"
@@ -79,4 +79,4 @@ See the headers at the top of these files for additonal information, installatio
 
 **See also this answer and writeup on StackOverflow: https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh/60315754#60315754**
 
-Essentially, you just copy the .sync_git_repo file to ~/.sync_git_repo, update its parameters, and then run the script from any directory *inside the git repo* on PC1. This also assumes that PC2 already has the repo cloned, and that all your ssh keys are set up and functioning to both A) push and pull to/from the remote git repo on both PC1 and PC2, and B) ssh from PC1 into PC2. Again, see the instructions in the files above. 
+Essentially, you just copy the `.sync_git_repo` file to `~/.sync_git_repo`, update its parameters, and then run the `path/to/eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh` script from any directory *inside the git repo* on PC1. This also assumes that PC2 already has the repo cloned, and that all your ssh keys are set up and functioning to both A) push and pull to/from the remote git repo on both PC1 and PC2, and B) ssh from PC1 into PC2. Again, see the instructions in the files above. 
