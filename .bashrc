@@ -309,5 +309,26 @@ CMD="gs_sound_bell; alert \"task complete\""
 alias gs_alert="$CMD"
 alias gs_alert_echo="echo '$CMD'"
 
+# More sounds:
+# From: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/604116#604116
+sound() {
+  # plays sounds in sequence and waits for them to finish
+  for s in $@; do
+    paplay $s
+  done
+}
+sn1() {
+  sound /usr/share/sounds/ubuntu/stereo/dialog-information.ogg
+}
+sn2() {
+  sound /usr/share/sounds/freedesktop/stereo/complete.oga
+}
+sn3() {
+  sound /usr/share/sounds/freedesktop/stereo/suspend-error.oga
+}
+
+# Text to speech as a sound:
+# See also: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/587575#587575
+# Ex: `long_cmd; spd-say done` <=== AMAZING! 
 
 
