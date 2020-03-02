@@ -295,7 +295,40 @@ fi
 # TERMINAL TABS & TITLE (END)
 #-----------------------------------------------------------------------------------------------------------------------
 
+# Play sound; very useful to add to the end of a long cmd you want to be notified of when it completes!
+# Ex: `long_cmd; gs_sound_bell` will play the sound bell when `long_cmd` completes!
+CMD="echo -e \"\a\""
+alias gs_sound_bell="$CMD"
+alias gs_sound_bell_echo="echo '$CMD'"
 
+# Even better, have a pop-up notification too! 
+# Ex: `long_cmd; gs_alert` will play the sound above *and* pop up a notification when complete!
+# See more details, & screenshot of popup, here: 
+# https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/1213564#1213564
+CMD="gs_sound_bell; alert \"task complete\""
+alias gs_alert="$CMD"
+alias gs_alert_echo="echo '$CMD'"
 
+# More sounds:
+# From: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/604116#604116
+sound() {
+  # plays sounds in sequence and waits for them to finish
+  for s in $@; do
+    paplay $s
+  done
+}
+sn1() {
+  sound /usr/share/sounds/ubuntu/stereo/dialog-information.ogg
+}
+sn2() {
+  sound /usr/share/sounds/freedesktop/stereo/complete.oga
+}
+sn3() {
+  sound /usr/share/sounds/freedesktop/stereo/suspend-error.oga
+}
+
+# Text to speech as a sound:
+# See also: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/587575#587575
+# Ex: `long_cmd; spd-say done` <=== AMAZING! 
 
 
