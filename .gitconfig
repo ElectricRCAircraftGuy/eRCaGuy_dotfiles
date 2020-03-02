@@ -6,12 +6,12 @@
 # Option 2) append contents to existing .gitconfig file: `cat .gitconfig >> ~/.gitconfig`
 
 [user]
-	name = FIRSTNAME LASTNAME
-	email = MY_EMAIL@gmail.com
+    name = FIRSTNAME LASTNAME
+    email = MY_EMAIL@gmail.com
 [diff]
     tool = meld
 [core]
     editor = subl --project ~/.git_editor.sublime-project --wait
 [alias]
     # Source for this `git lg` "better git log" alias: https://coderwall.com/p/euwpig/a-better-git-log
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
