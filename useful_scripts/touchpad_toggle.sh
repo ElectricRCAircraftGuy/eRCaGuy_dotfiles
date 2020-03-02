@@ -8,7 +8,26 @@
 # - I recommend attaching this script to an Ubuntu ***keyboard shortcut such as Ctrl + Alt + P*** to toggle the touchpad
 #   and other devices on and off
 
-# Gabriel Staples
+# INSTALLATION INSTRUCTIONS:
+# 1. Ensure ~/bin dir exists:
+#		mkdir -p ~/bin
+# 2. Copy this script to ~/bin with a name that you like. Ex:
+#		cp -i touchpad_toggle.sh ~/bin/gs_touchpad_toggle
+# 3. Adjust the USER INPUTS section below, as required. This will require running `xinput` once from
+#    the command line to ensure that TouchPad/Touchpad is spelled right, for instance. See below for details.
+# 4. Create a keyboard shortcut to associate Ctrl + Alt + P with this script via (on Ubuntu 18.04)
+#    Settings --> Devices --> Keyboard --> scroll to very bottom and click the "+" button to add a custom
+#    shortcut, then name it "Touchpad Toggle", give it the command "gs_touchpad_toggle", and associate it
+#    with the Ctrl + Alt + P keyboard shortcut. Test this shortcut now to ensure it works!
+# 5. Add a startup call to toggle touchpad OFF with every boot: press Windows (Super) key --> search for 
+#    "Startup Applications", and open it --> click "Add" to create a new entry --> Name it
+#    "disable touchpad (Ctrl + Alt + P)", enter "gs_touchpad_toggle --off" for the "Command", and 
+#    "found in ~/bin" for the "Comment." Click "Save", then "Close".
+# 6. Done! Your Touchpad and Touchscreen will automatically become DISABLED at every boot! To toggle it on/off
+#    use the Ctrl + Alt + P shortcut you set up. This is very useful to quickly swap between using an external
+#    mouse vs the built-in touchpad or touchscreen.
+
+# Author: Gabriel Staples
 # Started: 2 Apr. 2018 
 # Update History (newest on TOP): 
 #   every date thereafter - refer to the eRCaGuy_dotfiles project referenced above; see git commits

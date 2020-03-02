@@ -12,4 +12,5 @@
 # Optional: this will be prepended to every symbolic link created in ~/bin in order to make it super easy to 
 # find all of your custom scripts. I recommend you set it to your initials, followed by an underscore. Set it
 # to "" to not prepend anything.
-PREPEND_STR="gs_" # 
+PREPEND_STR="gs_" # set to your initials
+# PREPEND_STR="" # or use this one to use nothing
