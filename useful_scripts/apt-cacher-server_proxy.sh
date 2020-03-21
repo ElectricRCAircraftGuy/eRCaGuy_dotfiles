@@ -3,7 +3,7 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # INSTRUCTIONS:
-# Refer to the other files with similar filename.
+# Follow the instructions in "apt-cacher-server_proxy_status.sh".
 
 # apt-cacher-server_proxy.sh
 # - Toggle on/off, or obtain the status of the apt-cacher proxy server.

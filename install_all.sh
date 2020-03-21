@@ -48,8 +48,16 @@ echo "Copying \"Desktop_launchers\" files to ~/Desktop_launchers"
 cp -ri Desktop_launchers/*.desktop ~/Desktop_launchers
 cp -ri Desktop_launchers/*.md ~/Desktop_launchers
 echo "Installing \"desktop_file_install\" & \"desktop_file_uninstall\" scripts"
-ln -si "$PWD/Desktop_launchers/desktop_file_install.sh" ~/bin/${PREPEND_STR}desktop_file_install
-ln -si "$PWD/Desktop_launchers/desktop_file_uninstall.sh" ~/bin/${PREPEND_STR}desktop_file_uninstall
+ln -si "${PWD}/Desktop_launchers/desktop_file_install.sh" ~/bin/${PREPEND_STR}desktop_file_install
+ln -si "${PWD}/Desktop_launchers/desktop_file_uninstall.sh" ~/bin/${PREPEND_STR}desktop_file_uninstall
+echo "Installing select launchers"
+echo "  open_programming_tools.desktop"
+OPEN_PROG_TOOLS_PATH="$HOME/bin/${PREPEND_STR}open_programming_tools"
+sed -i "s/Exec=.*/Exec=${HOME}\/bin\/open_programming_tools/" open_programming_tools.desktop
+sed -i "s|Exec=.*|Exec=$HOME/bin/open_programming_tools|" open_programming_tools.desktop # good!
+# 1. https://superuser.com/questions/723441/how-to-replace-line-in-file-with-pattern-with-sed/1012877#1012877
+# 2. https://unix.stackexchange.com/questions/259083/replace-unix-path-inside-a-file/259087#259087
+# 3. https://stackoverflow.com/questions/9366816/sed-fails-with-unknown-option-to-s-error/9366940#9366940
 
 # eclipse
 # Do it manually
@@ -57,14 +65,14 @@ ln -si "$PWD/Desktop_launchers/desktop_file_uninstall.sh" ~/bin/${PREPEND_STR}de
 
 # etc
 # Arduino USBasp stuff already done above.
-# See also "etc/udev/rules.d/readme--udev_rules.md"
+# See also "etc/udev/rules.d/readme--udev_rules.md" for more info.
 
 # NoMachine
 # Do it manually
 # See: "NoMachine/readme--NoMachine.md"
 
 # rsync
-# For sample usage, see my answer here: 
+# For sample usage, see my answers here: 
 # https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264
 # and here: https://unix.stackexchange.com/questions/65077/is-it-possible-to-see-cp-speed-and-percent-copied/567828#567828
 
@@ -78,10 +86,19 @@ echo "Copying \"Templates\" files to ~/Templates"
 cp -ri Templates ~
 
 # tmux
-# TODO
+echo "= tmux stuff ="
+cp -i .tmux.conf ~
 
 # useful_scripts
-# TODO
+echo "= useful_scripts stuff ="
+echo "Creating symbolic links for apt-cacher-server_proxy stuff"
+ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_status.sh" ~/bin/${PREPEND_STR}apt-cacher-status
+ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_toggle.sh" ~/bin/${PREPEND_STR}apt-cacher-toggle
+echo "Copying \"open_programming_tools\" script to ~/bin. Go there and manually update it!"
+echo "  Also symbolically linking to it on your desktop."
+cp -i useful_scripts/open_programming_tools.sh ~/bin/${PREPEND_STR}open_programming_tools
+ln -si ~/bin/${PREPEND_STR}open_programming_tools ~/Desktop/${PREPEND_STR}open_programming_tools/////////
+
 
 # Sublime Text 3, incl. as a git editor, & copying main settings over
 # TODO
