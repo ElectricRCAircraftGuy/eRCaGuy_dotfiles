@@ -1,0 +1,1 @@
+../useful_scripts/sync_git_repo_from_pc1_to_pc2.sh
