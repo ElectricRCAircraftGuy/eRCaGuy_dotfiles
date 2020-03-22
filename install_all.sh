@@ -86,15 +86,17 @@ echo "  - open_programming_tools.desktop"
 # Replace path for my username in this .desktop file with proper path for your username:
 OPEN_PROG_TOOLS_PATH="$HOME/bin/${CMD_PREFIX}open_programming_tools"
 # Replace a line in the .desktop file
+echo "  Replacing the \"Exec=\" line in \"~/Desktop_launchers/open_programming_tools.desktop\""
 sed -i "s|Exec=.*|Exec=${OPEN_PROG_TOOLS_PATH}|" ~/Desktop_launchers/open_programming_tools.desktop
 ${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/open_programming_tools.desktop
 echo "  - eclipse.desktop"
 # Replace two lines in the .desktop file
+echo "  Replacing the \"Exec=\" and \"Icon=\" lines in \"~/Desktop_launchers/eclipse.desktop\""
 sed -i "s|Exec=.*|Exec=$HOME/eclipse/cpp-2019-12/eclipse/eclipse|" ~/Desktop_launchers/eclipse.desktop
-sed -i "s|Icon=.*|Exec=$HOME/eclipse/cpp-2019-12/eclipse/icon.xpm|" ~/Desktop_launchers/eclipse.desktop
+sed -i "s|Icon=.*|Icon=$HOME/eclipse/cpp-2019-12/eclipse/icon.xpm|" ~/Desktop_launchers/eclipse.desktop
 ${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/eclipse.desktop
 echo "  - show-desktop.desktop"
-echo "sudo apt install xdotool"
+echo "  sudo apt install xdotool"
 sudo apt install xdotool
 ${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/show-desktop.desktop
 
@@ -147,9 +149,11 @@ echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 # rsync
 echo ""
 echo "= rsync stuff ="
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo "For sample usage, see my answers here:"
 echo "https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264"
 echo "and here: https://unix.stackexchange.com/questions/65077/is-it-possible-to-see-cp-speed-and-percent-copied/567828#567828"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 
 # segger programmer
 echo ""
@@ -163,8 +167,10 @@ echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 echo ""
 echo "= Sublime Text 3 editor ="
 echo "Copying editor preferences file"
-echo "The \".git_editor.sublime-project\" file was previously copied to your home dir above"
-cp -i Sublime_Text_editor/Preferences.sublime-settings "$HOME/.config/sublime-text-3/Packages/User/Preferences.sublime-settings"
+echo "The \".git_editor.sublime-project\" file was previously copied to your home dir above."
+SUBLIME_SETTINGS_PATH="$HOME/.config/sublime-text-3/Packages/User/Preferences.sublime-settings"
+echo "Copying the \"Preferences.sublime-settings\" file to \"$SUBLIME_SETTINGS_PATH\""
+cp -i Sublime_Text_editor/Preferences.sublime-settings "$SUBLIME_SETTINGS_PATH"
 
 # Templates
 echo ""
