@@ -67,6 +67,7 @@ echo ""
 echo "= Desktop_launchers stuff ="
 
 echo "1. Copying \"Desktop_launchers\" files to ~/Desktop_launchers"
+mkdir -p ~/Desktop_launchers
 cp -i Desktop_launchers/*.desktop ~/Desktop_launchers
 cp -i Desktop_launchers/*.md ~/Desktop_launchers
 echo "Installing \"desktop_file_install\" & \"desktop_file_uninstall\" scripts"
