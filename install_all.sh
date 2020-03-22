@@ -27,11 +27,14 @@ THIS_DIR="$(dirname "$THIS_PATH")"
 mkdir -p ~/bin
 cd "$THIS_DIR"
 
-echo    "-----------------------------------------------------------------------------------------"
-echo -e "Beginning installation. Note that if it asks if you'd like to \"overwrite\" or \"replace\"\n"\
-"a file, simply pressing Enter will default to \"No\", which is the safe option to take.\n"\
-"No files will be overwritten without you consenting by typing in \"y\" or \"yes\"."
-echo    "-----------------------------------------------------------------------------------------"
+echo "-----------------------------------------------------------------------------------------"
+echo "Beginning installation. All copy ('cp -i') and symbolic link ('ln -si') calls herein are"
+echo "interactive (hence the '-i' option), which means if the file already exists in the"
+echo "destination it will *ask you* if you'd like to overwrite it! When it asks if you'd like"
+echo "to \"overwrite\" or \"replace\" a file, simply pressing Enter will default to \"No\","
+echo "which is the safe option to take. To overwrite these files in the destination, simply"
+echo "type in \"y\" or \"yes\"."
+echo "-----------------------------------------------------------------------------------------"
 
 sudo apt update 
 
