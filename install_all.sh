@@ -31,11 +31,13 @@ echo -e "Beginning installation. Note that if it asks if you'd like to \"overwri
 "No files will be overwritten without you consenting by typing in \"y\" or \"yes\"."
 echo    "-----------------------------------------------------------------------------------------"
 
+sudo apt update 
+
 # In alphabetical order by folder name
 
 # arduino
-# See "arduino/readme--arduino.md"
 echo "= Arduino stuff ="
+echo "See \"arduino/readme--arduino.md\""
 echo "Adding user to \"dialout\" group."
 echo "***Please log out and log back in afterwards for this to take effect.***"
 sudo usermod -a -G dialout $USERNAME
@@ -79,25 +81,50 @@ sudo apt install xdotool
 ${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/show-desktop.desktop
 
 # eclipse
-# Do it manually
-# Esp. see "eclipse/Eclipse setup instructions on a new Linux (or other OS) computer.pdf"
+echo "= eclipse stuff ="
+echo "***Do it manually***"
+echo "Esp. see the \"eclipse\" folder as well as the detailed PDF instructions in"
+echo "  \"eclipse/Eclipse setup instructions on a new Linux (or other OS) computer.pdf\""
 
-# etc
-# Arduino USBasp stuff already done above.
-# See also "etc/udev/rules.d/readme--udev_rules.md" for more info.
+# /etc folder
+echo "= /etc folder stuff ="
+echo "Arduino USBasp stuff already done above."
+echo "See also \"etc/udev/rules.d/readme--udev_rules.md\" for more info."
+
+# git
+echo "= git stuff ="
+echo "Will mostly be done in \"home\" folder install below."
+echo "For anything else, do it manually."
+
+# home
+echo "= home folder (\"$HOME\") stuff ="
+echo "Interactively copying everything"
+cp -i home/* ~
+sudo apt install imwheel # For ~/.imwheelrc
+echo -e "Don't forget to ***manually update*** ~/.bashrc, ~/.gitconfig with your ***name and email***, ~/.imwheelrc\n"\
+"  ~/.sync_git_repo, etc."
 
 # NoMachine
-# Do it manually
-# See: "NoMachine/readme--NoMachine.md"
+echo "= NoMachine stuff ="
+echo "***Do it manually***"
+echo "See: \"NoMachine/readme--NoMachine.md\""
 
 # rsync
-# For sample usage, see my answers here: 
-# https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264
-# and here: https://unix.stackexchange.com/questions/65077/is-it-possible-to-see-cp-speed-and-percent-copied/567828#567828
+echo "= rsync stuff ="
+echo "For sample usage, see my answers here:"
+echo "https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264"
+echo "and here: https://unix.stackexchange.com/questions/65077/is-it-possible-to-see-cp-speed-and-percent-copied/567828#567828"
 
 # segger programmer
-# Do it manually
-# See my answer here: https://stackoverflow.com/questions/57307738/is-there-anybody-using-keil-mdk-on-linux-through-wine/57313990#57313990
+echo "= Segger JTAG/SWD microcontroller/microprocessor programmer ="
+echo "***Do it manually***"
+echo "See my answer here: https://stackoverflow.com/questions/57307738/is-there-anybody-using-keil-mdk-on-linux-through-wine/57313990#57313990"
+
+# Sublime Text 3 editor
+echo "= Sublime Text 3 editor ="
+echo "Copying editor preferences file"
+echo "The \".git_editor.sublime-project\" file was previously copied to your home dir above"
+cp -i Sublime_Text_editor/Preferences.sublime-settings "$HOME/.config/sublime-text-3/Packages/User/Preferences.sublime-settings"
 
 # Templates
 echo "= Templates stuff ="
@@ -106,7 +133,7 @@ cp -ri Templates ~
 
 # tmux
 echo "= tmux stuff ="
-cp -i .tmux.conf ~
+echo "The \".tmux.conf\" file was previously copied to your home dir above"
 
 # useful_scripts
 echo "= useful_scripts stuff ="
