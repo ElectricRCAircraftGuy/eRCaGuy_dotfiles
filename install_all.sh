@@ -49,11 +49,15 @@ echo ""
 echo "= Arduino stuff ="
 echo "See \"arduino/readme--arduino.md\""
 echo "Adding user to \"dialout\" group."
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo "***If this is your first time running this script, please log out and log back in afterwards"
 echo "  for this to take effect.***"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 sudo usermod -a -G dialout $USERNAME
 echo "Adding USBasp udev rules."
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo "***When done, unplug and plug back in any USBasp programmer, if applicable.***"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 sudo cp -i etc/udev/rules.d/99-USBasp.rules /etc/udev/rules.d
 sudo udevadm control --reload-rules
 sudo udevadm trigger
@@ -97,11 +101,11 @@ ${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/show-desktop.desktop
 # eclipse
 echo ""
 echo "= eclipse stuff ="
-echo "--------------------------------"
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo "***Do it manually***"
 echo "Esp. see the \"eclipse\" folder as well as the detailed instructions in this PDF:"
 echo "  \"eclipse/Eclipse setup instructions on a new Linux (or other OS) computer.pdf\""
-echo "--------------------------------"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 
 # /etc folder
 echo ""
@@ -113,9 +117,9 @@ echo "See also \"etc/udev/rules.d/readme--udev_rules.md\" for more info."
 echo ""
 echo "= git stuff ="
 echo "This will mostly be done in the \"home\" folder install below."
-echo "--------------------------------"
-echo "For anything else, do it manually."
-echo "--------------------------------"
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
+echo "***For anything else, do it manually.***"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 
 # home
 echo ""
@@ -127,18 +131,18 @@ echo "  (\"$HOME\")"
 cp -ri home/. ~
 echo "sudo apt install imwheel"
 sudo apt install imwheel # For ~/.imwheelrc
-echo "--------------------------------"
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo -e "***Don't forget to manually update*** ~/.bashrc, ~/.gitconfig with your ***name*** and ***email***,\n"\
 "~/.imwheelrc, ~/.sync_git_repo, etc."
-echo "--------------------------------"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 
 # NoMachine
 echo ""
 echo "= NoMachine stuff ="
-echo "--------------------------------"
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo "***Do it manually***"
 echo "See: \"NoMachine/readme--NoMachine.md\""
-echo "--------------------------------"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 
 # rsync
 echo ""
@@ -150,10 +154,10 @@ echo "and here: https://unix.stackexchange.com/questions/65077/is-it-possible-to
 # segger programmer
 echo ""
 echo "= Segger JTAG/SWD microcontroller/microprocessor programmer ="
-echo "--------------------------------"
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo "***Do it manually***"
 echo "See my answer here: https://stackoverflow.com/questions/57307738/is-there-anybody-using-keil-mdk-on-linux-through-wine/57313990#57313990"
-echo "--------------------------------"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 
 # Sublime Text 3 editor
 echo ""
@@ -182,9 +186,9 @@ echo "Creating symbolic links for apt-cacher-server_proxy stuff"
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_status.sh" ~/bin/${CMD_PREFIX}apt-cacher-status
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_toggle.sh" ~/bin/${CMD_PREFIX}apt-cacher-toggle
 echo "Copying \"open_programming_tools\" script to ~/bin."
-echo "--------------------------------"
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo "***Go there and manually update this script when done!***"
-echo "--------------------------------"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 cp -i useful_scripts/open_programming_tools.sh "$OPEN_PROG_TOOLS_PATH"
 echo "Symbolically linking \"sync_git_repo_from_pc1_to_pc2\" script to ~/bin"
 ln -si "${PWD}/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/${CMD_PREFIX}sync_git_repo_from_pc1_to_pc2
@@ -194,9 +198,9 @@ echo "  Read more here: https://superuser.com/questions/440015/restore-tmux-sess
 echo "  and here: https://github.com/mislav/dotfiles/blob/d2af5900fce38238d1202aa43e7332b20add6205/bin/tmux-session"
 ln -si "${PWD}/useful_scripts/tmux-session.sh" ~/bin/${CMD_PREFIX}tmux-session
 echo "Copying \"touchpad_toggle\" script to ~bin"
-echo "--------------------------------"
+echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo "***Go there and manually update this script when done! See the \"USER INPUTS\" section of the script.***"
-echo "--------------------------------"
+echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 cp -i useful_scripts/touchpad_toggle.sh ~/bin/${CMD_PREFIX}touchpad_toggle
 
 echo "END."
