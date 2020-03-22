@@ -13,8 +13,8 @@
 # Optional: this will be prepended to every symbolic link created in ~/bin in order to make it super easy to 
 # find all of your custom scripts. I recommend you set it to your initials, followed by an underscore. Set it
 # to "" to not prepend anything.
-PREPEND_STR="gs_" # set to your initials
-# PREPEND_STR="" # or use this one to use nothing
+CMD_PREFIX="gs_" # set to your initials
+# CMD_PREFIX="" # or use this one to use nothing
 
 # See my own ans here: https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself/60157372#60157372
 THIS_PATH="$(realpath $0)"
@@ -31,6 +31,7 @@ echo -e "Beginning installation. Note that if it asks if you'd like to \"overwri
 "No files will be overwritten without you consenting by typing in \"y\" or \"yes\"."
 echo    "-----------------------------------------------------------------------------------------"
 
+# In alphabetical order by folder name
 
 # arduino
 # See "arduino/readme--arduino.md"
@@ -43,14 +44,39 @@ sudo cp -i etc/udev/rules.d/99-USBasp.rules /etc/udev/rules.d
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
-# Desktop_launchers 1 of 2 (just copy them over here; they will be installed at the end of this file)
-echo "= Desktop_launchers stuff (copying only) ="
-echo "Copying \"Desktop_launchers\" files to ~/Desktop_launchers"
+# Desktop_launchers
+echo "= Desktop_launchers stuff ="
+
+echo "1. Copying \"Desktop_launchers\" files to ~/Desktop_launchers"
 cp -i Desktop_launchers/*.desktop ~/Desktop_launchers
 cp -i Desktop_launchers/*.md ~/Desktop_launchers
 echo "Installing \"desktop_file_install\" & \"desktop_file_uninstall\" scripts"
-ln -si "${PWD}/Desktop_launchers/desktop_file_install.sh" ~/bin/${PREPEND_STR}desktop_file_install
-ln -si "${PWD}/Desktop_launchers/desktop_file_uninstall.sh" ~/bin/${PREPEND_STR}desktop_file_uninstall
+ln -si "${PWD}/Desktop_launchers/desktop_file_install.sh" ~/bin/${CMD_PREFIX}desktop_file_install
+ln -si "${PWD}/Desktop_launchers/desktop_file_uninstall.sh" ~/bin/${CMD_PREFIX}desktop_file_uninstall
+
+echo "2. Installing select launchers"
+echo "  - open_programming_tools.desktop"
+# Use `sed` for string replacement in files; see:
+# 1. Basic format: 
+#    https://superuser.com/questions/723441/how-to-replace-line-in-file-with-pattern-with-sed/1012877#1012877
+# 2. Use a different delimiter (such as `|`), when "/" is part of the string you are replacing:
+#    https://unix.stackexchange.com/questions/259083/replace-unix-path-inside-a-file/259087#259087
+# 3. You absolutely *must* use a different delimiter when "/" is part of the string you are replacing, 
+#    or else sed will fail with "unknown option to `s'" error:
+#    https://stackoverflow.com/questions/9366816/sed-fails-with-unknown-option-to-s-error/9366940#9366940
+# Replace path for my username in this .desktop file with proper path for your username:
+OPEN_PROG_TOOLS_PATH="$HOME/bin/${CMD_PREFIX}open_programming_tools"
+# Replace a line in the .desktop file
+sed -i "s|Exec=.*|Exec=${OPEN_PROG_TOOLS_PATH}|" ~/Desktop_launchers/open_programming_tools.desktop
+${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/open_programming_tools.desktop
+echo "  - eclipse.desktop"
+# Replace two lines in the .desktop file
+sed -i "s|Exec=.*|Exec=$HOME/eclipse/cpp-2019-12/eclipse/eclipse|" ~/Desktop_launchers/eclipse.desktop
+sed -i "s|Icon=.*|Exec=$HOME/eclipse/cpp-2019-12/eclipse/icon.xpm|" ~/Desktop_launchers/eclipse.desktop
+${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/eclipse.desktop
+echo "  - show-desktop.desktop"
+sudo apt install xdotool
+${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/show-desktop.desktop
 
 # eclipse
 # Do it manually
@@ -85,12 +111,10 @@ cp -i .tmux.conf ~
 # useful_scripts
 echo "= useful_scripts stuff ="
 echo "Creating symbolic links for apt-cacher-server_proxy stuff"
-ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_status.sh" ~/bin/${PREPEND_STR}apt-cacher-status
-ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_toggle.sh" ~/bin/${PREPEND_STR}apt-cacher-toggle
+ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_status.sh" ~/bin/${CMD_PREFIX}apt-cacher-status
+ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_toggle.sh" ~/bin/${CMD_PREFIX}apt-cacher-toggle
 echo "Copying \"open_programming_tools\" script to ~/bin. Go there and manually update this script!"
-echo "  Also symbolically linking to it on your desktop."
-cp -i useful_scripts/open_programming_tools.sh ~/bin/${PREPEND_STR}open_programming_tools
-ln -si ~/bin/${PREPEND_STR}open_programming_tools ~/Desktop/${PREPEND_STR}open_programming_tools/////////
+cp -i useful_scripts/open_programming_tools.sh "$OPEN_PROG_TOOLS_PATH"
 
 
 # Sublime Text 3, incl. as a git editor, & copying main settings over
@@ -102,21 +126,6 @@ ln -si ~/bin/${PREPEND_STR}open_programming_tools ~/Desktop/${PREPEND_STR}open_p
 # .gitconfig
 # TODO
 
-# DO THIS LAST
-# Desktop_launchers 2 of 2
-echo "= Desktop_launchers stuff (installing only) ="
-echo "Installing select launchers"
-echo "  open_programming_tools.desktop"
-# Use `sed` for string replacement in files; see:
-# 1. Basic format: 
-#    https://superuser.com/questions/723441/how-to-replace-line-in-file-with-pattern-with-sed/1012877#1012877
-# 2. Use a different delimiter (such as `|`), when "/" is part of the string you are replacing:
-#    https://unix.stackexchange.com/questions/259083/replace-unix-path-inside-a-file/259087#259087
-# 3. You absolutely *must* use a different delimiter when "/" is part of the string you are replacing, 
-#    or else sed will fail with "unknown option to `s'" error:
-#    https://stackoverflow.com/questions/9366816/sed-fails-with-unknown-option-to-s-error/9366940#9366940
-# Replace path for my username in this .desktop file with proper path for your username:
-OPEN_PROG_TOOLS_PATH="$HOME/bin/${PREPEND_STR}open_programming_tools"
-sed -i "s|Exec=.*|Exec=${OPEN_PROG_TOOLS_PATH}|" ~/Desktop_launchers/open_programming_tools.desktop
+
 
 
