@@ -27,7 +27,8 @@ cd "$THIS_DIR"
 
 echo    "-----------------------------------------------------------------------------------------"
 echo -e "Beginning installation. Note that if it asks if you'd like to \"overwrite\" or \"replace\"\n"\
-"a file, simply pressing Enter will default to \"No\", which is the safe option to take."
+"a file, simply pressing Enter will default to \"No\", which is the safe option to take.\n"\
+"No files will be overwritten without you consenting by typing in \"y\" or \"yes\"."
 echo    "-----------------------------------------------------------------------------------------"
 
 
@@ -35,29 +36,21 @@ echo    "-----------------------------------------------------------------------
 # See "arduino/readme--arduino.md"
 echo "= Arduino stuff ="
 echo "Adding user to \"dialout\" group."
-echo "Please log out and log back in for this to take effect."
+echo "***Please log out and log back in afterwards for this to take effect.***"
 sudo usermod -a -G dialout $USERNAME
-echo "Also, unplug and plug back in any USBasp programmer, if applicable."
+echo "Adding USBasp udev rules. ***When done, unplug and plug back in any USBasp programmer, if applicable.***"
 sudo cp -i etc/udev/rules.d/99-USBasp.rules /etc/udev/rules.d
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
-# Desktop_launchers
-echo "= Desktop_launchers stuff ="
+# Desktop_launchers 1 of 2 (just copy them over here; they will be installed at the end of this file)
+echo "= Desktop_launchers stuff (copying only) ="
 echo "Copying \"Desktop_launchers\" files to ~/Desktop_launchers"
-cp -ri Desktop_launchers/*.desktop ~/Desktop_launchers
-cp -ri Desktop_launchers/*.md ~/Desktop_launchers
+cp -i Desktop_launchers/*.desktop ~/Desktop_launchers
+cp -i Desktop_launchers/*.md ~/Desktop_launchers
 echo "Installing \"desktop_file_install\" & \"desktop_file_uninstall\" scripts"
 ln -si "${PWD}/Desktop_launchers/desktop_file_install.sh" ~/bin/${PREPEND_STR}desktop_file_install
 ln -si "${PWD}/Desktop_launchers/desktop_file_uninstall.sh" ~/bin/${PREPEND_STR}desktop_file_uninstall
-echo "Installing select launchers"
-echo "  open_programming_tools.desktop"
-OPEN_PROG_TOOLS_PATH="$HOME/bin/${PREPEND_STR}open_programming_tools"
-sed -i "s/Exec=.*/Exec=${HOME}\/bin\/open_programming_tools/" open_programming_tools.desktop
-sed -i "s|Exec=.*|Exec=$HOME/bin/open_programming_tools|" open_programming_tools.desktop # good!
-# 1. https://superuser.com/questions/723441/how-to-replace-line-in-file-with-pattern-with-sed/1012877#1012877
-# 2. https://unix.stackexchange.com/questions/259083/replace-unix-path-inside-a-file/259087#259087
-# 3. https://stackoverflow.com/questions/9366816/sed-fails-with-unknown-option-to-s-error/9366940#9366940
 
 # eclipse
 # Do it manually
@@ -94,7 +87,7 @@ echo "= useful_scripts stuff ="
 echo "Creating symbolic links for apt-cacher-server_proxy stuff"
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_status.sh" ~/bin/${PREPEND_STR}apt-cacher-status
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_toggle.sh" ~/bin/${PREPEND_STR}apt-cacher-toggle
-echo "Copying \"open_programming_tools\" script to ~/bin. Go there and manually update it!"
+echo "Copying \"open_programming_tools\" script to ~/bin. Go there and manually update this script!"
 echo "  Also symbolically linking to it on your desktop."
 cp -i useful_scripts/open_programming_tools.sh ~/bin/${PREPEND_STR}open_programming_tools
 ln -si ~/bin/${PREPEND_STR}open_programming_tools ~/Desktop/${PREPEND_STR}open_programming_tools/////////
@@ -109,6 +102,21 @@ ln -si ~/bin/${PREPEND_STR}open_programming_tools ~/Desktop/${PREPEND_STR}open_p
 # .gitconfig
 # TODO
 
-
+# DO THIS LAST
+# Desktop_launchers 2 of 2
+echo "= Desktop_launchers stuff (installing only) ="
+echo "Installing select launchers"
+echo "  open_programming_tools.desktop"
+# Use `sed` for string replacement in files; see:
+# 1. Basic format: 
+#    https://superuser.com/questions/723441/how-to-replace-line-in-file-with-pattern-with-sed/1012877#1012877
+# 2. Use a different delimiter (such as `|`), when "/" is part of the string you are replacing:
+#    https://unix.stackexchange.com/questions/259083/replace-unix-path-inside-a-file/259087#259087
+# 3. You absolutely *must* use a different delimiter when "/" is part of the string you are replacing, 
+#    or else sed will fail with "unknown option to `s'" error:
+#    https://stackoverflow.com/questions/9366816/sed-fails-with-unknown-option-to-s-error/9366940#9366940
+# Replace path for my username in this .desktop file with proper path for your username:
+OPEN_PROG_TOOLS_PATH="$HOME/bin/${PREPEND_STR}open_programming_tools"
+sed -i "s|Exec=.*|Exec=${OPEN_PROG_TOOLS_PATH}|" ~/Desktop_launchers/open_programming_tools.desktop
 
 
