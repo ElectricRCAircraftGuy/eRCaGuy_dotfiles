@@ -22,6 +22,16 @@
 #   explicit instead just avoids this problem.
 PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles" # explicitly type this out; don't use variables
 
-PC2_SSH_USERNAME="my_username" # explicitly type this out; don't use variables
-PC2_SSH_HOST="my_hostname"     # explicitly type this out; don't use variables
+# Target SSH username: explicitly type this out; don't use variables; you may run any one of the following
+# commands on your target machine to see your username:
+#       who
+#       whoami
+#       echo $USER
+#       echo $USERNAME
+# Ex: "gabriel"
+PC2_SSH_USERNAME="my_username"
+# Target SSH hostname or IP address: explicitly type this out; don't use variables; run the `hostname` 
+# command on your target machine to see your hostname, or run `ifconfig` to see your IP address.
+# Ex: "gabriel-mypc1234", "10.0.0.100", or "192.168.200.100"
+PC2_SSH_HOST="my_hostname"
 

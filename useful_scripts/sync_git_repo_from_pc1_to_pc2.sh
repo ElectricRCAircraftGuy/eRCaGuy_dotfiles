@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Author: Gabriel Staples
+
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # sync_git_repo_from_pc1_to_pc2.sh

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Author: Gabriel Staples
+
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # desktop_file_install.sh

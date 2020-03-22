@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Author: Gabriel Staples
+
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # Install all scripts!
@@ -101,8 +103,8 @@ echo "= home folder (\"$HOME\") stuff ="
 echo "Interactively copying everything"
 cp -i home/* ~
 sudo apt install imwheel # For ~/.imwheelrc
-echo -e "Don't forget to ***manually update*** ~/.bashrc, ~/.gitconfig with your ***name and email***, ~/.imwheelrc\n"\
-"  ~/.sync_git_repo, etc."
+echo -e "Don't forget to ***manually update*** ~/.bashrc, ~/.gitconfig with your ***name*** and ***email***,\n"\
+"~/.imwheelrc, ~/.sync_git_repo, etc."
 
 # NoMachine
 echo "= NoMachine stuff ="
@@ -137,21 +139,26 @@ echo "The \".tmux.conf\" file was previously copied to your home dir above"
 
 # useful_scripts
 echo "= useful_scripts stuff ="
+echo "Here are the scripts this dir contains:"
+tree useful_scripts
 echo "Creating symbolic links for apt-cacher-server_proxy stuff"
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_status.sh" ~/bin/${CMD_PREFIX}apt-cacher-status
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_toggle.sh" ~/bin/${CMD_PREFIX}apt-cacher-toggle
-echo "Copying \"open_programming_tools\" script to ~/bin. Go there and manually update this script!"
+echo "Copying \"open_programming_tools\" script to ~/bin."
+echo "  ***Go there and manually update this script when done!***"
 cp -i useful_scripts/open_programming_tools.sh "$OPEN_PROG_TOOLS_PATH"
+echo "Symbolically linking \"sync_git_repo_from_pc1_to_pc2\" script to ~/bin"
+ln -si "${PWD}/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/${CMD_PREFIX}sync_git_repo_from_pc1_to_pc2
+echo "Symbolically linking \"tmux-session\" script to ~/bin"
+echo "  Typical usage is 'tmux-session save' and 'tmux-session restore'."
+echo "  Read more here: https://superuser.com/questions/440015/restore-tmux-session-after-reboot/615716#615716"
+echo "  and here: https://github.com/mislav/dotfiles/blob/d2af5900fce38238d1202aa43e7332b20add6205/bin/tmux-session"
+ln -si "${PWD}/useful_scripts/tmux-session.sh" ~/bin/${CMD_PREFIX}tmux-session
+echo "Copying \"touchpad_toggle\" script to ~bin"
+echo "  ***Go there and manually update this script when done! See the \"USER INPUTS\" section of the script.***"
+cp -i useful_scripts/touchpad_toggle.sh ~/bin/${CMD_PREFIX}touchpad_toggle
 
-
-# Sublime Text 3, incl. as a git editor, & copying main settings over
-# TODO
-
-# ~/.bashrc & ~/.profile
-# TODO
-
-# .gitconfig
-# TODO
+echo "END."
 
 
 

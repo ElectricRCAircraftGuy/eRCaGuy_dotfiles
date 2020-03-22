@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
 
 # --------------------------------------------------------------------------------------------------
-# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+# This file added to eRCaGuy_dotfiles by Gabriel Staples
 
 # Author: Mislav Marohnić
-# Added to eRCaGuy_dotfiles by Gabriel Staples
+
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # Source: https://github.com/mislav/dotfiles/blob/d2af5900fce38238d1202aa43e7332b20add6205/bin/tmux-session
 # and: https://superuser.com/questions/440015/restore-tmux-session-after-reboot/615716#615716
 
 # INSTALLATION:
-#   cp -i tmux-session.sh ~/bin/tmux-session
+# Create symlinks in ~/bin to this script so you can run it from anywhere:
+#       cd /path/to/here
+#       mkdir -p ~/bin
+#       ln -si "${PWD}/tmux-session.sh" ~/bin/tmux-session
+
+# Primary Usage:
+#       tmux-session save
+#       tmux-session restore
 # --------------------------------------------------------------------------------------------------
 
 # Save and restore the state of tmux sessions and windows.
