@@ -126,8 +126,8 @@ echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 # home
 echo ""
 echo "= home folder (\"$HOME\") stuff ="
-echo "Interactively copying everything inside the \"eRCaGuy_dotfiles/home\" dir to your home dir"
-echo "  (\"$HOME\")"
+echo "Interactively copying everything inside the \"eRCaGuy_dotfiles/home\" dir to your home dir (\"$HOME\")."
+echo "CAUTION: BE CAREFUL HERE *NOT* TO OVERWRITE ANY FILES IN YOUR HOME DIRECTORY THAT YOU DON'T WANT TO!"
 # For the `cp` dot (folder/.) syntax used here, see: 
 # https://askubuntu.com/questions/86822/how-can-i-copy-the-contents-of-a-folder-to-another-folder-in-a-different-directo/86824#86824
 cp -ri home/. ~
@@ -167,7 +167,7 @@ echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 echo ""
 echo "= Sublime Text 3 editor ="
 echo "Copying editor preferences file"
-echo "The \".git_editor.sublime-project\" file was previously copied to your home dir above."
+echo "Note: the \".git_editor.sublime-project\" file was previously copied to your home dir above."
 SUBLIME_SETTINGS_PATH="$HOME/.config/sublime-text-3/Packages/User/Preferences.sublime-settings"
 echo "Copying the \"Preferences.sublime-settings\" file to \"$SUBLIME_SETTINGS_PATH\""
 cp -i Sublime_Text_editor/Preferences.sublime-settings "$SUBLIME_SETTINGS_PATH"
@@ -181,18 +181,18 @@ cp -ri Templates ~
 # tmux
 echo ""
 echo "= tmux stuff ="
-echo "The \".tmux.conf\" file was previously copied to your home dir above"
+echo "The \".tmux.conf\" file was previously copied to your home dir above."
 
 # useful_scripts
 echo ""
 echo "= useful_scripts stuff ="
 echo "Here are the scripts this dir contains:"
 tree useful_scripts
-echo "Creating symbolic links for apt-cacher-server_proxy stuff"
+echo "Creating symbolic links for apt-cacher-server_proxy script."
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_status.sh" ~/bin/${CMD_PREFIX}apt-cacher-status
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_toggle.sh" ~/bin/${CMD_PREFIX}apt-cacher-toggle
-echo "Copying \"open_programming_tools\" script to ~/bin."
 echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
+echo "Copying \"open_programming_tools\" script to ~/bin."
 echo "***Go there and manually update this script when done!***"
 echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 cp -i useful_scripts/open_programming_tools.sh "$OPEN_PROG_TOOLS_PATH"
@@ -203,13 +203,14 @@ echo "  Typical usage is 'tmux-session save' and 'tmux-session restore'."
 echo "  Read more here: https://superuser.com/questions/440015/restore-tmux-session-after-reboot/615716#615716"
 echo "  and here: https://github.com/mislav/dotfiles/blob/d2af5900fce38238d1202aa43e7332b20add6205/bin/tmux-session"
 ln -si "${PWD}/useful_scripts/tmux-session.sh" ~/bin/${CMD_PREFIX}tmux-session
-echo "Copying \"touchpad_toggle\" script to ~bin"
 echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
+echo "Copying \"touchpad_toggle\" script to ~bin"
 echo "***Go there and manually update this script when done! See the \"USER INPUTS\" section of the script.***"
 echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 cp -i useful_scripts/touchpad_toggle.sh ~/bin/${CMD_PREFIX}touchpad_toggle
 
-echo "END."
+echo ""
+echo "END of \"install_all.sh\" eRCaGuy_dotfiles installation script."
 
 
 
