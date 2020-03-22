@@ -36,7 +36,7 @@ DESKTOP_FILE_PATH="$1" # relative OR absolute path--whatever the user inputs
 DESKTOP_FILE_PATH_ABS="$(realpath "$DESKTOP_FILE_PATH")" # absolute path
 DESKTOP_FILENAME="$(basename "$DESKTOP_FILE_PATH_ABS")" # *.desktop file name
 
-echo "Installing desktop file from \"$DESKTOP_FILE_PATH_ABS\"."
+echo "== Installing desktop file from \"$DESKTOP_FILE_PATH_ABS\" =="
 
 # Ensure it is executable
 echo "Ensuring desktop file is executable."
@@ -45,11 +45,11 @@ chmod +x "$DESKTOP_FILE_PATH_ABS"
 # Add to Desktop
 DESKTOP_PATH="$HOME/Desktop/$DESKTOP_FILENAME"
 echo "Adding symbolic link to the desktop at \"$DESKTOP_PATH\"."
-ln -s "$DESKTOP_FILE_PATH_ABS" "$DESKTOP_PATH"
+ln -si "$DESKTOP_FILE_PATH_ABS" "$DESKTOP_PATH"
 
 # Add to Application menu
 APP_PATH="/usr/share/applications/$DESKTOP_FILENAME"
 echo "Adding symbolic link to the Application Menu at \"$APP_PATH\"."
-sudo ln -s "$DESKTOP_FILE_PATH_ABS" "$APP_PATH"
+sudo ln -si "$DESKTOP_FILE_PATH_ABS" "$APP_PATH"
 
 echo "Done!"

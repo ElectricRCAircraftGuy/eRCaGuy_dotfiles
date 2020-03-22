@@ -20,12 +20,15 @@ CMD_PREFIX="gs_" # set to your initials
 
 # See my own ans here: https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself/60157372#60157372
 THIS_PATH="$(realpath $0)"
-echo "Path to this install script = \"$THIS_PATH\""
+echo "Full path to this install script = \"$THIS_PATH\""
 THIS_DIR="$(dirname "$THIS_PATH")"
 # echo "THIS_DIR = \"$THIS_DIR\"" # for debugging 
 
 mkdir -p ~/bin
 cd "$THIS_DIR"
+
+echo ""
+echo "= Installing eRCaGuy_dotfiles. ="
 
 echo "-----------------------------------------------------------------------------------------"
 echo "Beginning installation. All copy ('cp -i') and symbolic link ('ln -si') calls herein are"
@@ -36,22 +39,27 @@ echo "which is the safe option to take. To overwrite these files in the destinat
 echo "type in \"y\" or \"yes\"."
 echo "-----------------------------------------------------------------------------------------"
 
+echo "sudo apt update"
 sudo apt update 
 
 # In alphabetical order by folder name
 
 # arduino
+echo ""
 echo "= Arduino stuff ="
 echo "See \"arduino/readme--arduino.md\""
 echo "Adding user to \"dialout\" group."
-echo "***Please log out and log back in afterwards for this to take effect.***"
+echo "***If this is your first time running this script, please log out and log back in afterwards"
+echo "  for this to take effect.***"
 sudo usermod -a -G dialout $USERNAME
-echo "Adding USBasp udev rules. ***When done, unplug and plug back in any USBasp programmer, if applicable.***"
+echo "Adding USBasp udev rules."
+echo "***When done, unplug and plug back in any USBasp programmer, if applicable.***"
 sudo cp -i etc/udev/rules.d/99-USBasp.rules /etc/udev/rules.d
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
 # Desktop_launchers
+echo ""
 echo "= Desktop_launchers stuff ="
 
 echo "1. Copying \"Desktop_launchers\" files to ~/Desktop_launchers"
@@ -82,65 +90,91 @@ sed -i "s|Exec=.*|Exec=$HOME/eclipse/cpp-2019-12/eclipse/eclipse|" ~/Desktop_lau
 sed -i "s|Icon=.*|Exec=$HOME/eclipse/cpp-2019-12/eclipse/icon.xpm|" ~/Desktop_launchers/eclipse.desktop
 ${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/eclipse.desktop
 echo "  - show-desktop.desktop"
+echo "sudo apt install xdotool"
 sudo apt install xdotool
 ${CMD_PREFIX}desktop_file_install ~/Desktop_launchers/show-desktop.desktop
 
 # eclipse
+echo ""
 echo "= eclipse stuff ="
+echo "--------------------------------"
 echo "***Do it manually***"
-echo "Esp. see the \"eclipse\" folder as well as the detailed PDF instructions in"
+echo "Esp. see the \"eclipse\" folder as well as the detailed instructions in this PDF:"
 echo "  \"eclipse/Eclipse setup instructions on a new Linux (or other OS) computer.pdf\""
+echo "--------------------------------"
 
 # /etc folder
+echo ""
 echo "= /etc folder stuff ="
-echo "Arduino USBasp stuff already done above."
+echo "The Arduino USBasp stuff was already done above."
 echo "See also \"etc/udev/rules.d/readme--udev_rules.md\" for more info."
 
 # git
+echo ""
 echo "= git stuff ="
-echo "Will mostly be done in \"home\" folder install below."
+echo "This will mostly be done in the \"home\" folder install below."
+echo "--------------------------------"
 echo "For anything else, do it manually."
+echo "--------------------------------"
 
 # home
+echo ""
 echo "= home folder (\"$HOME\") stuff ="
-echo "Interactively copying everything"
-cp -i home/* ~
+echo "Interactively copying everything inside the \"eRCaGuy_dotfiles/home\" dir to your home dir"
+echo "  (\"$HOME\")"
+# For the `cp` dot (folder/.) syntax used here, see: 
+# https://askubuntu.com/questions/86822/how-can-i-copy-the-contents-of-a-folder-to-another-folder-in-a-different-directo/86824#86824
+cp -ri home/. ~
+echo "sudo apt install imwheel"
 sudo apt install imwheel # For ~/.imwheelrc
-echo -e "Don't forget to ***manually update*** ~/.bashrc, ~/.gitconfig with your ***name*** and ***email***,\n"\
+echo "--------------------------------"
+echo -e "***Don't forget to manually update*** ~/.bashrc, ~/.gitconfig with your ***name*** and ***email***,\n"\
 "~/.imwheelrc, ~/.sync_git_repo, etc."
+echo "--------------------------------"
 
 # NoMachine
+echo ""
 echo "= NoMachine stuff ="
+echo "--------------------------------"
 echo "***Do it manually***"
 echo "See: \"NoMachine/readme--NoMachine.md\""
+echo "--------------------------------"
 
 # rsync
+echo ""
 echo "= rsync stuff ="
 echo "For sample usage, see my answers here:"
 echo "https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264"
 echo "and here: https://unix.stackexchange.com/questions/65077/is-it-possible-to-see-cp-speed-and-percent-copied/567828#567828"
 
 # segger programmer
+echo ""
 echo "= Segger JTAG/SWD microcontroller/microprocessor programmer ="
+echo "--------------------------------"
 echo "***Do it manually***"
 echo "See my answer here: https://stackoverflow.com/questions/57307738/is-there-anybody-using-keil-mdk-on-linux-through-wine/57313990#57313990"
+echo "--------------------------------"
 
 # Sublime Text 3 editor
+echo ""
 echo "= Sublime Text 3 editor ="
 echo "Copying editor preferences file"
 echo "The \".git_editor.sublime-project\" file was previously copied to your home dir above"
 cp -i Sublime_Text_editor/Preferences.sublime-settings "$HOME/.config/sublime-text-3/Packages/User/Preferences.sublime-settings"
 
 # Templates
+echo ""
 echo "= Templates stuff ="
 echo "Copying \"Templates\" files to ~/Templates"
 cp -ri Templates ~
 
 # tmux
+echo ""
 echo "= tmux stuff ="
 echo "The \".tmux.conf\" file was previously copied to your home dir above"
 
 # useful_scripts
+echo ""
 echo "= useful_scripts stuff ="
 echo "Here are the scripts this dir contains:"
 tree useful_scripts
@@ -148,7 +182,9 @@ echo "Creating symbolic links for apt-cacher-server_proxy stuff"
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_status.sh" ~/bin/${CMD_PREFIX}apt-cacher-status
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_toggle.sh" ~/bin/${CMD_PREFIX}apt-cacher-toggle
 echo "Copying \"open_programming_tools\" script to ~/bin."
-echo "  ***Go there and manually update this script when done!***"
+echo "--------------------------------"
+echo "***Go there and manually update this script when done!***"
+echo "--------------------------------"
 cp -i useful_scripts/open_programming_tools.sh "$OPEN_PROG_TOOLS_PATH"
 echo "Symbolically linking \"sync_git_repo_from_pc1_to_pc2\" script to ~/bin"
 ln -si "${PWD}/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/${CMD_PREFIX}sync_git_repo_from_pc1_to_pc2
@@ -158,7 +194,9 @@ echo "  Read more here: https://superuser.com/questions/440015/restore-tmux-sess
 echo "  and here: https://github.com/mislav/dotfiles/blob/d2af5900fce38238d1202aa43e7332b20add6205/bin/tmux-session"
 ln -si "${PWD}/useful_scripts/tmux-session.sh" ~/bin/${CMD_PREFIX}tmux-session
 echo "Copying \"touchpad_toggle\" script to ~bin"
-echo "  ***Go there and manually update this script when done! See the \"USER INPUTS\" section of the script.***"
+echo "--------------------------------"
+echo "***Go there and manually update this script when done! See the \"USER INPUTS\" section of the script.***"
+echo "--------------------------------"
 cp -i useful_scripts/touchpad_toggle.sh ~/bin/${CMD_PREFIX}touchpad_toggle
 
 echo "END."
