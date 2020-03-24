@@ -186,9 +186,9 @@ sync_pc1_to_remote_branch () {
         file_names_path="$FILES_STAGED"
         if [ "$num" -gt "0" ]; then
             if [ "$num" -eq "1" ]; then
-                verbiage="1. This ${num} file was staged & is now committed:"
+                verbiage="1. This ${num} file was **staged** & is now committed:"
             else
-                verbiage="1. These ${num} files were staged & are now committed:"
+                verbiage="1. These ${num} files were **staged** & are now committed:"
             fi
             commit_msg="$(printf "${commit_msg}\n\n${verbiage}")"
             file_names="$(cat "$file_names_path")"
@@ -200,9 +200,9 @@ sync_pc1_to_remote_branch () {
         file_names_path="$FILES_NOT_STAGED"
         if [ "$num" -gt "0" ]; then
             if [ "$num" -eq "1" ]; then
-                verbiage="2. This ${num} file was changed but not staged & is now committed:"
+                verbiage="2. This ${num} file was changed but **not staged** & is now committed:"
             else
-                verbiage="2. These ${num} files were changed but not staged & are now committed:"
+                verbiage="2. These ${num} files were changed but **not staged** & are now committed:"
             fi
             commit_msg="$(printf "${commit_msg}\n\n${verbiage}")"
             file_names="$(cat "$file_names_path")"
@@ -214,9 +214,9 @@ sync_pc1_to_remote_branch () {
         file_names_path="$FILES_UNTRACKED"
         if [ "$num" -gt "0" ]; then
             if [ "$num" -eq "1" ]; then
-                verbiage="3. This ${num} file was untracked & is now committed:"
+                verbiage="3. This ${num} file was **untracked** & is now committed:"
             else
-                verbiage="3. These ${num} files were untracked & are now committed:"
+                verbiage="3. These ${num} files were **untracked** & are now committed:"
             fi
             commit_msg="$(printf "${commit_msg}\n\n${verbiage}")"
             file_names="$(cat "$file_names_path")"
@@ -301,13 +301,13 @@ update_pc2 () {
     echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
     echo "  (w/'ssh-add <my_github_key>') OR ELSE THESE FOLLOWING STEPS WILL FAIL!"
     echo "Force pulling from remote \"$SYNC_BRANCH\" branch to overwrite local copy of this branch."
-    echo "  1st: git fetch origin \"$SYNC_BRANCH\""
+    echo "  1/3: git fetch origin \"$SYNC_BRANCH\""
     git fetch origin "$SYNC_BRANCH"         # MAY NEED TO COMMENT OUT DURING TESTING
-    echo "  2nd: git checkout \"$SYNC_BRANCH\"" 
+    echo "  2/3: git checkout \"$SYNC_BRANCH\"" 
     # Note: this `git checkout` call automatically checks out this branch from the remote "origin" if this branch
     # is not already present locally
     git checkout "$SYNC_BRANCH"             # MAY NEED TO COMMENT OUT DURING TESTING
-    echo "  3rd: git reset --hard \"origin/$SYNC_BRANCH\" (to force-update the local branch to match the origin branch)"
+    echo "  3/3: git reset --hard \"origin/$SYNC_BRANCH\" (to force-update the local branch to match the origin branch)"
     git reset --hard "origin/$SYNC_BRANCH"  # MAY NEED TO COMMENT OUT DURING TESTING
 
     echo "---\"update_pc2\" script end---"
