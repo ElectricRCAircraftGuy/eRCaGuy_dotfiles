@@ -257,14 +257,20 @@ fi
 DEFAULT_TABS_TITLE1="git"
 DEFAULT_TABS_TITLE2="bazel"
 DEFAULT_TABS_TITLE3="Python"
-DEFAULT_TABS_TITLE4="other"
+DEFAULT_TABS_TITLE4="ssh1"
+DEFAULT_TABS_TITLE5="ssh2"
+DEFAULT_TABS_TITLE6="ssh3"
+DEFAULT_TABS_TITLE7="other"
 
 # Tab commands
 # Note: use quotes like this if there are spaces in the path: `DEFAULT_TABS_CMD3="cd '$HOME/temp/test folder'"`
-DEFAULT_TABS_CMD1="cd '$HOME/dev'"
-DEFAULT_TABS_CMD2="cd '$HOME/dev'"
-DEFAULT_TABS_CMD3="cd '$HOME/dev'"
-DEFAULT_TABS_CMD4="cd '$HOME/dev'"
+DEFAULT_TABS_CMD1="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD2="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD3="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD4="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD5="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD6="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD7="cd '$HOME/GS/dev'"
 
 # Call this function to open up the following tabs, calling the desired command in each tab and setting
 # the title of each tab as desired. This is really helpful to get your programming environment set up
@@ -274,6 +280,9 @@ gs_open_default_tabs() {
     gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
     gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
     gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
+    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
+    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
+    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
 }
 
 # This chunk of code allows one to essentially call `open_default_tabs` from another script to open up all 
@@ -317,6 +326,7 @@ sound() {
     paplay $s
   done
 }
+# Run these commands directly from the terminal; ex: `sn1`, `sn2`, `sn3`
 sn1() {
   sound /usr/share/sounds/ubuntu/stereo/dialog-information.ogg
 }
@@ -327,8 +337,8 @@ sn3() {
   sound /usr/share/sounds/freedesktop/stereo/suspend-error.oga
 }
 
-# Text to speech as a sound:
-# See also: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/587575#587575
+# Text to speech as a sound: use cmd `spd-say "some text to read"`
 # Ex: `long_cmd; spd-say done` <=== AMAZING! 
+# See also: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/587575#587575
 
 

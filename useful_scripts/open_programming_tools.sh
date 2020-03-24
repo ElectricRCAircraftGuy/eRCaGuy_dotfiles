@@ -56,7 +56,7 @@ unset OPEN_DEFAULT_TABS # unexport it
 
 # 2) Open up other programs:
 
-nemo "$HOME/dev"& # Nemo file manager
+nemo "$HOME/GS/dev"& # Nemo file manager; start in this folder
 subl& # Sublime Text editor
 # gnome-system-monitor& # nah, add to Ubuntu's system startup menu to open this at boot instead
 libreoffice --writer&

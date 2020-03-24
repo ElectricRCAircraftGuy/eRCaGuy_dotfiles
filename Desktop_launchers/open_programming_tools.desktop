@@ -26,7 +26,7 @@
 Name=Open Programming Tools
 Name[en_US]=Open Programming Tools
 Comment=
-Exec=/home/gabriel/dev/eRCaGuy_dotfiles/useful_scripts/open_programming_tools.sh
+Exec=/home/gabriel/GS/dev/eRCaGuy_dotfiles/useful_scripts/open_programming_tools.sh
 Icon=terminal
 Terminal=false
 Type=Application
