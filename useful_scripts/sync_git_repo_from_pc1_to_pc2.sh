@@ -177,7 +177,18 @@ sync_pc1_to_remote_branch () {
         echo "Making a temporary commit of all uncommitted changes."
         cd "$REPO_ROOT_DIR"
         git add -A
-        git commit -m "AUTOMATIC COMMIT TO SYNC TO PC2 (BUILD MACHINE)"
+        # Prepare a commit message in a file first, then commit with it. Use a heredoc; see:
+        # https://stackoverflow.com/questions/23929235/multi-line-string-with-extra-space-preserved-indentation/37222377#37222377
+        COMMIT_MSG_FILE="$TEMP_DIR/commit_msg.txt"
+        COMMIT_MSG=$(cat <<- END_OF_FILE
+AUTOMATIC COMMIT TO SYNC TO PC2 (BUILD MACHINE)
+
+
+END_OF_FILE
+)
+        echo -e "AUTOMATIC COMMIT TO SYNC TO PC2 (BUILD MACHINE)\n"\
+""
+        git commit -F "$COMMIT_MSG_FILE"
     fi
 
     echo "Force pushing to remote \"$SYNC_BRANCH\" branch."
