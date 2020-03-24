@@ -180,21 +180,46 @@ sync_pc1_to_remote_branch () {
         # See *my own answer here!*: 
         # https://stackoverflow.com/questions/29933349/how-can-i-make-git-commit-messages-divide-into-multiple-lines/60826932#60826932
         commit_msg="AUTOMATIC COMMIT TO SYNC TO PC2 (BUILD MACHINE)"
-        if [ "$num_staged" -gt "0" ]; then
-            commit_msg="$(printf "${commit_msg}\n\nThese ${num_staged} files were staged & are now committed:")"
-            file_names="$(cat "$FILES_STAGED")"
+        
+        # Staged files
+        num="$num_staged"
+        file_names_path="$FILES_STAGED"
+        if [ "$num" -gt "0" ]; then
+            if [ "$num" -eq "1" ]; then
+                verbiage="1. This ${num} file was staged & is now committed:"
+            else
+                verbiage="1. These ${num} files were staged & are now committed:"
+            fi
+            commit_msg="$(printf "${commit_msg}\n\n${verbiage}")"
+            file_names="$(cat "$file_names_path")"
             commit_msg="$(printf "${commit_msg}\n\n${file_names}")"
         fi
 
-        if [ "$num_not_staged" -gt "0" ]; then
-            commit_msg="$(printf "${commit_msg}\n\nThese ${num_not_staged} files were changed but not staged & are now committed:")"
-            file_names="$(cat "$FILES_NOT_STAGED")"
+        # Not staged files
+        num="$num_not_staged"
+        file_names_path="$FILES_NOT_STAGED"
+        if [ "$num" -gt "0" ]; then
+            if [ "$num" -eq "1" ]; then
+                verbiage="2. This ${num} file was changed but not staged & is now committed:"
+            else
+                verbiage="2. These ${num} files were changed but not staged & are now committed:"
+            fi
+            commit_msg="$(printf "${commit_msg}\n\n${verbiage}")"
+            file_names="$(cat "$file_names_path")"
             commit_msg="$(printf "${commit_msg}\n\n${file_names}")"
         fi
 
-        if [ "$num_untracked" -gt "0" ]; then
-            commit_msg="$(printf "${commit_msg}\n\nThese ${num_untracked} files were untracked & are now committed:")"
-            file_names="$(cat "$FILES_UNTRACKED")"
+        # Untracked files
+        num="$num_untracked"
+        file_names_path="$FILES_UNTRACKED"
+        if [ "$num" -gt "0" ]; then
+            if [ "$num" -eq "1" ]; then
+                verbiage="3. This ${num} file was untracked & is now committed:"
+            else
+                verbiage="3. These ${num} files were untracked & are now committed:"
+            fi
+            commit_msg="$(printf "${commit_msg}\n\n${verbiage}")"
+            file_names="$(cat "$file_names_path")"
             commit_msg="$(printf "${commit_msg}\n\n${file_names}")"
         fi
 
