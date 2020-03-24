@@ -176,19 +176,30 @@ sync_pc1_to_remote_branch () {
 
         echo "Making a temporary commit of all uncommitted changes."
         cd "$REPO_ROOT_DIR"
+        # Prepare a multi-line commit message in a variable first, then do the commit w/this msg. 
+        # See *my own answer here!*: 
+        # https://stackoverflow.com/questions/29933349/how-can-i-make-git-commit-messages-divide-into-multiple-lines/60826932#60826932
+        commit_msg="AUTOMATIC COMMIT TO SYNC TO PC2 (BUILD MACHINE)"
+        if [ "$num_staged" -gt "0" ]; then
+            commit_msg="$(printf "${commit_msg}\n\nThese ${num_staged} files were staged & are now committed:")"
+            file_names="$(cat "$FILES_STAGED")"
+            commit_msg="$(printf "${commit_msg}\n\n${file_names}")"
+        fi
+
+        if [ "$num_not_staged" -gt "0" ]; then
+            commit_msg="$(printf "${commit_msg}\n\nThese ${num_not_staged} files were changed but not staged & are now committed:")"
+            file_names="$(cat "$FILES_NOT_STAGED")"
+            commit_msg="$(printf "${commit_msg}\n\n${file_names}")"
+        fi
+
+        if [ "$num_untracked" -gt "0" ]; then
+            commit_msg="$(printf "${commit_msg}\n\nThese ${num_untracked} files were untracked & are now committed:")"
+            file_names="$(cat "$FILES_UNTRACKED")"
+            commit_msg="$(printf "${commit_msg}\n\n${file_names}")"
+        fi
+
         git add -A
-        # Prepare a commit message in a file first, then commit with it. Use a heredoc; see:
-        # https://stackoverflow.com/questions/23929235/multi-line-string-with-extra-space-preserved-indentation/37222377#37222377
-        COMMIT_MSG_FILE="$TEMP_DIR/commit_msg.txt"
-        COMMIT_MSG=$(cat <<- END_OF_FILE
-AUTOMATIC COMMIT TO SYNC TO PC2 (BUILD MACHINE)
-
-
-END_OF_FILE
-)
-        echo -e "AUTOMATIC COMMIT TO SYNC TO PC2 (BUILD MACHINE)\n"\
-""
-        git commit -F "$COMMIT_MSG_FILE"
+        git commit -m "$commit_msg"
     fi
 
     echo "Force pushing to remote \"$SYNC_BRANCH\" branch."
