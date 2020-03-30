@@ -28,3 +28,9 @@ temp/
 # - you don't need to back these up, as they are auto-generated from a project file and specific to a local machine
 # - back up only the *.sublime-project files instead!
 *.sublime-workspace
+
+# Symbolic links (which are files) to Bazel build *folders*
+/bazel-bin
+# /bazel-MY_PROJECT_NAME_HERE
+/bazel-out
+/bazel-testlogs
