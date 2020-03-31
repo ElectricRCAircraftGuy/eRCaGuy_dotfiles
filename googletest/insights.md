@@ -28,16 +28,16 @@ _As you read and study the below documentation, save each one as (print it to) a
 **Official Google Documentation:**
 
 1. gtest: it's all in this folder: https://github.com/google/googletest/tree/master/googletest/docs. The key documents to study, in this order probably, are the:
-  1. **primer**
-  1. **FAQ**
-  1. **samples** (look at and carefully study the source code for *at least* the first 3 samples)
-  1. advanced
+    1. **primer**
+    1. **FAQ**
+    1. **samples** (look at and carefully study the source code for *at least* the first 3 samples)
+    1. advanced
 2. gmock: it's all in this folder: https://github.com/google/googletest/tree/master/googlemock/docs. The key documents to study, in this order probably, are the:
-  1. **for dummies**
-  1. **cook book**
-  1. **cheat sheet** - this is the best one-stop-shop or "summary of gmock rules" of all of the docs, but lacks some things that are even spelled out explicitly in (and only in) the "for dummies" manual that you will need in addition to this doc.
-  1. **FAQ**
-  1. **for dummies** <-- yes, AGAIN! AFTER doing and attempting to write a bunch of tests and mocks, then *come back* and re-read this document again! It will make sooo much more sense the 2nd time around after putting gtest and gmock principles into practice yourself first.
+    1. **for dummies**
+    1. **cook book**
+    1. **cheat sheet** - this is the best one-stop-shop or "summary of gmock rules" of all of the docs, but lacks some things that are even spelled out explicitly in (and only in) the "for dummies" manual that you will need in addition to this doc.
+    1. **FAQ**
+    1. **for dummies** <-- yes, AGAIN! AFTER doing and attempting to write a bunch of tests and mocks, then *come back* and re-read this document again! It will make sooo much more sense the 2nd time around after putting gtest and gmock principles into practice yourself first.
 
 ## Some subtle rules to remember in general:
 1. "Remember that the test order is undefined, so your code can't depend on a test preceding or following another" (https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#sharing-resources-between-tests-in-the-same-test-suite).
@@ -72,9 +72,9 @@ From most generic --> most specific (AKA: "outer" --> "inner" scope).
         ...
         EXPECT_CALL(myMockClass, myMockMethod(1000));
 
-  In particular, the above `EXPECT_CALL`s each specify that a call to `myMockMethod()` with that matching signature must occur _exactly 1 time_. That's because the [cardinality rules][6] in this case dictate than an implicit `.Times(1)` is present on each of those `EXPECT_CALL`s, even though you don't see it written.  
+    In particular, the above `EXPECT_CALL`s each specify that a call to `myMockMethod()` with that matching signature must occur _exactly 1 time_. That's because the [cardinality rules][6] in this case dictate than an implicit `.Times(1)` is present on each of those `EXPECT_CALL`s, even though you don't see it written.  
 
-  To specify that you want a given `EXPECT_CALL` to mach *any* input value for a given parameter, use the `::testing::_` matcher, like this:
+    To specify that you want a given `EXPECT_CALL` to mach *any* input value for a given parameter, use the `::testing::_` matcher, like this:
 
         using ::testing::_;
 
@@ -82,7 +82,7 @@ From most generic --> most specific (AKA: "outer" --> "inner" scope).
 
 1. **Don't have _duplicate `EXPECT_CALL`s with the same matcher signature_ on the same mock method, but _multiple_ `EXPECT_CALL`s with _overlapping/overriding_ (but NOT duplicate) matcher signatures on the same mock method are OK:** If you attach more than one `EXPECT_CALL` to the same *matching values*, only *the last one set* will have any effect. See [here][7], [here][8], and [here][9], for instance. This means if you have two or more `EXPECT_CALL`s with duplicate matcher signatures (the same parameters passed to the mock method), then ONLY THE LAST ONE WILL EVER GET ANY CALLS.
 
-  Therefore, your test will ALWAYS FAIL except in the unusual case that all `EXPECT_CALL`s except the last one have a `.Times(0)` value, specifying that they will _never_ be called, as indeed this is the case: the last `EXPECT_CALL` will match all of the calls for these matchers and all duplicate `EXPECT_CALL`s above it will have _no_ matching calls! Here is an example of a test which will **always fail** as a result of this behavior. This is the main behavior that @luantkow focuses on [in his answer here](https://stackoverflow.com/a/44035118/4561887).
+    Therefore, your test will ALWAYS FAIL except in the unusual case that all `EXPECT_CALL`s except the last one have a `.Times(0)` value, specifying that they will _never_ be called, as indeed this is the case: the last `EXPECT_CALL` will match all of the calls for these matchers and all duplicate `EXPECT_CALL`s above it will have _no_ matching calls! Here is an example of a test which will **always fail** as a result of this behavior. This is the main behavior that @luantkow focuses on [in his answer here](https://stackoverflow.com/a/44035118/4561887).
 
         using ::testing::_;
 
@@ -104,7 +104,7 @@ From most generic --> most specific (AKA: "outer" --> "inner" scope).
         // ... duplicate the line just above 1000 more times here
         EXPECT_CALL(myMockClass, myMockMethod(_)).Times(3); // EXPECT_CALL #1007
 
-  This weird exception, however, makes the test valid simply by setting all duplicate `EXPECT_CALL`s, _except for the last one_, to have a `.Times(0)` cardinal setting:
+    This weird exception, however, makes the test valid simply by setting all duplicate `EXPECT_CALL`s, _except for the last one_, to have a `.Times(0)` cardinal setting:
 
         using ::testing::_;
 
@@ -123,9 +123,9 @@ From most generic --> most specific (AKA: "outer" --> "inner" scope).
         // ... duplicate the line just above 1000 more times here
         EXPECT_CALL(myMockClass, myMockMethod(_)).Times(3); // EXPECT_CALL #1007
 
-  Here, only `EXPECT_CALL` #1007 (the very last `EXPECT_CALL`) will ever match a call to `myMockMethod()`, and `Times(3)` will be in effect. Since all duplicate `EXPECT_CALL`s above this one will NEVER MATCH AND GET CALLED, since they are never reached, tests with duplicate `EXPECT_CALL`s for a given matcher would ALWAYS FAIL for any `.Times()` value other than `.Times(0)` for all non-last-place duplicate `EXPECT_CALL`s. 
+    Here, only `EXPECT_CALL` #1007 (the very last `EXPECT_CALL`) will ever match a call to `myMockMethod()`, and `Times(3)` will be in effect. Since all duplicate `EXPECT_CALL`s above this one will NEVER MATCH AND GET CALLED, since they are never reached, tests with duplicate `EXPECT_CALL`s for a given matcher would ALWAYS FAIL for any `.Times()` value other than `.Times(0)` for all non-last-place duplicate `EXPECT_CALL`s. 
 
-  This effect of making later matchers have the ability to override earlier matchers is *intentional* and part of the Googlemock design, as it allows you to create a very useful kind of hierarchy of expected calls, based on value passed to the mock method, like this:
+    This effect of making later matchers have the ability to override earlier matchers is *intentional* and part of the Googlemock design, as it allows you to create a very useful kind of hierarchy of expected calls, based on value passed to the mock method, like this:
 
         using ::testing::_;
 
@@ -136,9 +136,9 @@ From most generic --> most specific (AKA: "outer" --> "inner" scope).
         EXPECT_CALL(myMockClass, myMockMethod(7)).Times(2);
         EXPECT_CALL(myMockClass, myMockMethod(5)).Times(4);
 
-  The various google documents say that matching `EXPECT_CALL`s are searched for in *reverse order*, from *bottom to top*. So, if `myMockMethod(8)` is called, it will be checked against the last `EXPECT_CALL` for this method, which is looking for `myMockMethod(5)`. That doesn't match, so it goes up one and checks against `myMockMethod(7)`. That doesn't match, so it goes up one and checks against `myMockMethod(_)`. This matches! So, it counts as the one call authorized by the `Times(1)` cardinal value. 
+    The various google documents say that matching `EXPECT_CALL`s are searched for in *reverse order*, from *bottom to top*. So, if `myMockMethod(8)` is called, it will be checked against the last `EXPECT_CALL` for this method, which is looking for `myMockMethod(5)`. That doesn't match, so it goes up one and checks against `myMockMethod(7)`. That doesn't match, so it goes up one and checks against `myMockMethod(_)`. This matches! So, it counts as the one call authorized by the `Times(1)` cardinal value. 
 
-  So, what you've defined above is this: we expect `myMockMethod(5)` to be called 4 times, `myMockMethod(7)` to be called 2 times, and `myMockMethod(anything_other_than_5_or_7)` to be called 1 time. For more reading on this topic, see my other answer here: https://stackoverflow.com/questions/44249293/google-mock-how-to-say-function-must-be-called-once-with-a-certain-parameter/60896373#60896373.
+    So, what you've defined above is this: we expect `myMockMethod(5)` to be called 4 times, `myMockMethod(7)` to be called 2 times, and `myMockMethod(anything_other_than_5_or_7)` to be called 1 time. For more reading on this topic, see my other answer here: https://stackoverflow.com/questions/44249293/google-mock-how-to-say-function-must-be-called-once-with-a-certain-parameter/60896373#60896373.
 
 **Key summary:** the main point to remember regarding the question "Can I call `EXPECT_CALL` multiple times on same mock object?", is this: you can only call `EXPECT_CALL` multiple times on the same mock object _and method_ if the matchers (arguments specified to be passed to the mocked method) are _different_ for each `EXPECT_CALL`. That is, of course, unless you set `.Times(0)` on all but the last duplicate `EXPECT_CALL`, which makes them useless, so just remember instead to not have duplicate `EXPECT_CALL`s with the same matchers.
 
@@ -228,19 +228,19 @@ Here are some work-arounds to safely and correctly perform the above test which 
 
 1. **Use `Assign(&variable, value)`.** In this particular case, this is a bit hacky, but it does work properly. For a simpler test case you may have, this might be the perfect way to do what you need. Here's a viable solution:
 
-  Side note: an error output I got while trying to run a gmock test said: 
+    Side note: an error output I got while trying to run a gmock test said: 
 
-  > `.Times()` cannot appear after `.InSequence()`, `.WillOnce()`, `.WillRepeatedly()`, or `.RetiresOnSaturation()`,
+    > `.Times()` cannot appear after `.InSequence()`, `.WillOnce()`, `.WillRepeatedly()`, or `.RetiresOnSaturation()`,
 
-  ...so it turns out we don't need to (and we are not even _allowed to_) specify `.Times(::testing::AnyNumber())` here. Instead, gmock will figure it out automatically, according to [these cardinality rules][6], since we are using `.WillRepeatedly()`: 
+    ...so it turns out we don't need to (and we are not even _allowed to_) specify `.Times(::testing::AnyNumber())` here. Instead, gmock will figure it out automatically, according to [these cardinality rules][6], since we are using `.WillRepeatedly()`: 
 
-  > **If you omit `Times()`, gMock will infer the cardinality for you.** The rules are easy to remember:
+    > **If you omit `Times()`, gMock will infer the cardinality for you.** The rules are easy to remember:
 
-  > - If **neither** `WillOnce()` nor `WillRepeatedly()` is in the `EXPECT_CALL()`, the inferred cardinality is `Times(1)`.
-  > - If there are _n_ `WillOnce()`'s but **no** `WillRepeatedly()`, where _n_ >= 1, the cardinality is `Times(n)`.
-  > - If there are _n_ `WillOnce()`'s and **one** `WillRepeatedly()`, where _n_ >= 0, the cardinality is `Times(AtLeast(n))`.
+    > - If **neither** `WillOnce()` nor `WillRepeatedly()` is in the `EXPECT_CALL()`, the inferred cardinality is `Times(1)`.
+    > - If there are _n_ `WillOnce()`'s but **no** `WillRepeatedly()`, where _n_ >= 1, the cardinality is `Times(n)`.
+    > - If there are _n_ `WillOnce()`'s and **one** `WillRepeatedly()`, where _n_ >= 0, the cardinality is `Times(AtLeast(n))`.
 
-  _This technique has actually been tested and proven to work on real code:_
+    _This technique has actually been tested and proven to work on real code:_
 
         using ::testing::_;
         using ::testing::Assign;
@@ -307,7 +307,7 @@ Here are some work-arounds to safely and correctly perform the above test which 
 
 2. **Use `InvokeWithoutArgs(f)` with a global counter variable and a global counter function.** This works great, and is much easier to use and more versatile than the previous approach! Note that you could also migrate this global function and variable to be inside your test fixture class as well if you wanted, which would clean it up a bit.
 
-  _This technique has actually been tested and proven to work on real code:_
+    _This technique has actually been tested and proven to work on real code:_
 
         using ::testing::_;
         using ::testing::InvokeWithoutArgs;
@@ -361,7 +361,7 @@ Here are some work-arounds to safely and correctly perform the above test which 
 
 3. **[BEST TECHNIQUE] Use `InvokeWithoutArgs(f)` with a _local_ counter variable and a simple lambda function!** This works great, and is much easier to use and more versatile than the 1st approach, while avoiding the global variable and additional global function of the 2nd approach. It is for sure my favorite way to handle this, and works extremely well.
 
-  _This technique has actually been tested and proven to work on real code:_
+    _This technique has actually been tested and proven to work on real code:_
 
         using ::testing::_;
         using ::testing::InvokeWithoutArgs;
