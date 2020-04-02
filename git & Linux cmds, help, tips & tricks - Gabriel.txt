@@ -1,6 +1,90 @@
 
 Gabriel Staples
 
+= Doxygen: = 
+
+See other examples here:
+1. http://www.doxygen.nl/manual/commands.html
+1. https://stackoverflow.com/questions/15398711/whats-the-right-way-to-reference-a-parameter-in-doxygen/56745246#56745246
+1. https://stackoverflow.com/questions/34196663/stm32-how-to-get-last-reset-status/54728664#54728664
+1. https://stackoverflow.com/questions/385975/error-handling-in-c-code/59221452#59221452
+
+    /// \brief          A brief one or two line description of the function.
+    /// \note           An important note the user should be aware of--perhaps many lines.
+    /// \details        Extra details.
+    ///                 Perhaps
+    ///                 even
+    ///                 a long
+    ///                 paragraph.
+    /// \param[in]      var1            Description of variable one, an input
+    /// \param[in]      var2            Description of variable two, an input
+    /// \param[out]     var3            Description of variable three, an output (usu. via a pointer
+    ///                                 to a variable)
+    /// \param[in,out]  var4            Description of variable four, an input/output (usu. via a
+    ///                                 pointer) since its initial value is read and used, but then 
+    ///                                 it is also updated by the function at some point
+    /// \return         Description of return types. It may be an enum, with these
+    ///                 possible values:
+    ///                 - #ENUM_VALUE_1
+    ///                 - #ENUM_VALUE_2
+    ///                 - #ENUM_VALUE_3
+    my_enum_t myFunc(int var1, int var2, int* var3, int* var4)
+    {
+        // function implementation here
+        
+        my_enum_t error = ENUM_VALUE_1;
+        
+        // Check for NULL pointers
+        if (!var3 || !var4)
+        {
+            // var3 or var4 are NULL pointers, which means they can't be dereferenced
+            error = ENUM_VALUE_2;
+            goto done;
+        }
+
+        if (that)
+        {
+            error = ENUM_VALUE_3;
+            goto done;
+        }
+
+    done:
+        return error;
+    }
+
+You may also use `@` instead of `\`:
+
+    /// @brief          A brief one or two line description of the function.
+    /// @param[in]      var1            Description of variable one, an input
+    /// @param[in]      var2            Description of variable two, an input
+    /// @param[out]     var3            Description of variable three, an output (usu. via a pointer
+    ///                                 to a variable)
+    /// @param[in,out]  var4            Description of variable four, an input/output (usu. via a
+    ///                                 pointer) since its initial value is read and used, but then 
+    ///                                 it is also updated by the function at some point
+    /// @return         None
+    void myFunc(int var1, int var2, int* var3, int* var4)
+    {
+        // function implementation here
+    }
+
+And this shorter version again now with `\` again instead of `@`:
+
+    /// \brief          A brief one or two line description of the function.
+    /// \param[in]      var1            Description of variable one, an input
+    /// \param[in]      var2            Description of variable two, an input
+    /// \param[out]     var3            Description of variable three, an output (usu. via a pointer
+    ///                                 to a variable)
+    /// \param[in,out]  var4            Description of variable four, an input/output (usu. via a
+    ///                                 pointer) since its initial value is read and used, but then 
+    ///                                 it is also updated by the function at some point
+    /// \return         None
+    void myFunc(int var1, int var2, int* var3, int* var4)
+    {
+        // function implementation here
+    }
+
+
 = bazel: =
 
 time bazel build //...
