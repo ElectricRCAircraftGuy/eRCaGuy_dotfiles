@@ -198,9 +198,11 @@ alias gs_git_branch_hash_bak_up1="gs_git_branch_hash_bak \"../git_branch_hash_ba
 alias gs_git_branch_hash_bak_up1_echo="echo gs_git_branch_hash_bak \"../git_branch_hash_backups\""
 
 # Edit this ssh command! Make the username, domain_name, & options what they should be for you.
-# Note: enable X11 window forwarding with `-X`; see here: 
+# Notes: 1) enable X11 window forwarding with `-X`; see here: 
 # https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely/12772#12772
-SSH_CMD="ssh -X username@domain_name" 
+# 2) keep the connection alive with `-o "ServerAliveInterval 60"`; see here:
+# https://superuser.com/questions/699676/how-to-prevent-ssh-from-disconnecting-if-its-been-idle-for-a-while/699680#699680
+SSH_CMD="ssh -X -o \"ServerAliveInterval 60\" username@domain_name" 
 alias gs_ssh="$SSH_CMD"
 alias gs_ssh_echo="echo '$SSH_CMD'"
 
