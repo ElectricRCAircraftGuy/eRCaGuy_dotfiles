@@ -112,6 +112,21 @@ time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get co
 
 = git: = 
 
+To delete a branch, there are actually **3 different branches to delete!**. Read more here: https://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-locally-and-remotely/23961231#23961231
+1. Deleting a **remote branch**:
+    git push origin --delete <branch>  # Git version 1.7.0 or newer
+    git push origin -d <branch>        # Shorter version (Git 1.7.0 or newer)
+    git push origin :<branch>          # Git versions older than 1.7.0
+2. Deleting a **local branch**:
+    git branch --delete <branch>
+    git branch -d <branch> # Shorter version
+    git branch -D <branch> # Force-delete un-merged branches
+3. Deleting a **remote-tracking branch**:
+    git branch --delete --remotes <remote>/<branch>
+    git branch -dr <remote>/<branch> # Shorter <===
+    -----
+    git fetch <remote> --prune # Delete multiple obsolete remote-tracking branches
+    git fetch <remote> -p      # Shorter
 
 
 = grep: = 
