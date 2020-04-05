@@ -9,6 +9,8 @@ See other examples here:
 1. https://stackoverflow.com/questions/34196663/stm32-how-to-get-last-reset-status/54728664#54728664
 1. https://stackoverflow.com/questions/385975/error-handling-in-c-code/59221452#59221452
 
+Full Doxygen function header example:
+
     /// \brief          A brief one or two line description of the function.
     /// \note           An important note the user should be aware of--perhaps many lines.
     /// \details        Extra details.
@@ -68,7 +70,7 @@ You may also use `@` instead of `\`:
         // function implementation here
     }
 
-And this shorter version again now with `\` again instead of `@`:
+And here's this shorter version again now with `\` again instead of `@`:
 
     /// \brief          A brief one or two line description of the function.
     /// \param[in]      var1            Description of variable one, an input
