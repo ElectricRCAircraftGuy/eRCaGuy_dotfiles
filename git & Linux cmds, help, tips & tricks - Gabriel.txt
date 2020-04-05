@@ -44,7 +44,7 @@ Full Doxygen function header example:
             goto done;
         }
 
-        if (that)
+        if (something_else)
         {
             error = ENUM_VALUE_3;
             goto done;
