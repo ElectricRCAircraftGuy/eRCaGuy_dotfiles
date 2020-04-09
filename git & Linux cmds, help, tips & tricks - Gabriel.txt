@@ -132,3 +132,14 @@ To delete a branch, there are actually **3 different branches to delete!**. Read
 
 
 = grep: = 
+
+
+= Jinja2: = 
+- a template-based automatic code/file generator (think string formatter/replacer for an entire text file).
+
+Main Jinja2 References:
+1. [Main Jinja2 website](https://jinja.palletsprojects.com/en/2.11.x/)
+2. [Entire Jinja2 documentation in PDF form](https://jinja.palletsprojects.com/_/downloads/en/2.11.x/pdf/)
+3. [Jinja2 Python API](https://jinja.palletsprojects.com/en/2.11.x/api/)
+4. [Jinja2 Template Designer (used for writing template files, which some people like to end in .j2)](https://jinja.palletsprojects.com/en/2.11.x/templates/)
+
