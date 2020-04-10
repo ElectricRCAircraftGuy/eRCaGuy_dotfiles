@@ -96,16 +96,16 @@ bazel --version
 bazel help
 bazel help build
 
-bazel --host_jvm_args=-Xmx10g build //... = set max java heap size to 10g then build everything; see: https://stackoverflow.com/questions/55190272/java-lang-outofmemoryerror-when-running-bazel-build/60572662#60572662
+bazel --host_jvm_args=-Xmx16g build //... = set max java heap size to 16g then build everything; see: https://stackoverflow.com/questions/55190272/java-lang-outofmemoryerror-when-running-bazel-build/60572662#60572662
 
 *****BEST BAZEL BUILD CMD*****
-time bazel --host_jvm_args=-Xmx10g build //...; gs_alert = same as above but better: time the whole thing and do an alert sound (bell character sound) & pop-up notification to notify me when done
+time bazel --host_jvm_args=-Xmx16g build //...; gs_alert = same as above but better: time the whole thing and do an alert sound (bell character sound) & pop-up notification to notify me when done
 
 bazel test --test_output errors //... = log all errors (failed test results) to stdout; see: https://groups.google.com/forum/#!topic/bazel-discuss/2mJPklIaCeo; see also: `bazel help test` for other options!
 bazel test --test_output summary //... = the default (doesn't show errors; just shows a summary)
 bazel test --test_output all //... = prints ALL output to stdout, even for tests that pass!
 
-*****BEST BAZEL TEST CMD (optionally add `--host_jvm_args=-Xmx10g` if needed too)*****
+*****BEST BAZEL TEST CMD (optionally add `--host_jvm_args=-Xmx16g` if needed too)*****
 time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
 
 
