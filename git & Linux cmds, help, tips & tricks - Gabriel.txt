@@ -95,6 +95,9 @@ And here's this shorter version again now with `\` again instead of `@`:
         --host_jvm_args=<jvm_arg>
     2. To limit how many of your local CPUs Bazel can use. Note that HOST_CPUS here is probably (and usually is) 1/2 the number of cores you have. So, if gnome-system-monitor shows you have 8 cores, you may only have 4 CPUs.: https://docs.bazel.build/versions/master/command-line-reference.html#flag--local_cpu_resources
         --local_cpu_resources=<an integer, or "HOST_CPUS", optionally followed by [-|*]<float>.> default: "HOST_CPUS"
+        NB: THIS cpu resource limiter option above doesn't actually work very well! Frequently, even with it in-use, the CPU usage will still lock out at 100% for periods of many minutes at a time! To prevent this, just use the Linux `cpulimit` program in a separate terminal!:
+            cpulimit -p <pid> -l 500 # limit your bazel build to 62.5% max CPU usage on an 8-core machine
+        Read more about the above command in the "Limit CPU usage" section of this document down below.
     3. To limit local RAM usage: https://docs.bazel.build/versions/master/command-line-reference.html#flag--local_ram_resources
          --local_ram_resources=<an integer, or "HOST_RAM", optionally followed by [-|*]<float>.> default: "HOST_RAM*.67"
     4. To disable remote caching: https://docs.bazel.build/versions/master/command-line-reference.html#flag--remote_cache
@@ -170,13 +173,15 @@ So, to limit to 80% on an 8-core machine, use 0.8*800 = 640, like this:
 Limit to 62.5% on an 8-core machine:
     cpulimit -p 3185 -l 500
 
-This is very useful to limit your CPU usage being used by Bazel, for instance, when it is building for dozens of minutes, or even hours. Leave the `cpulimit` process running as long as you want this limiting effect in place. You don't need to restart it each time you begin a new bazel build, as the bazel build server continues running in the background even after a build completes. Note that the Bazel build server JVM is usually just called "java", and can easily be viewed with `ps`, `top`, `htop`, or the `gnome-system-monitor` GUI (my preferred choice).
+This is very useful to limit your CPU usage being used by Bazel, for instance, when it is building for dozens of minutes, or even hours. Note that the Bazel build server JVM is usually just called "java", and can easily be viewed with `ps`, `top`, `htop`, or the `gnome-system-monitor` GUI (my preferred choice).
 
     sudo apt update
     sudo apt install cpulimit
     # Start your bazel build in one terminal, then in a separate terminal, run the following.
     # Replace <pid> with the Process ID number for your bazel build server process (usually
     # just called "java" when you look at it with `ps`, `top`, `htop`, or `gnome-system-monitor`).
-    cpulimit -p <pid> -l 500 // limit your bazel build to 62.5% max CPU usage on an 8-core machine
+    cpulimit -p <pid> -l 500 # limit your bazel build to 62.5% max CPU usage on an 8-core machine
+
+Leave the `cpulimit` process running as long as you want this limiting effect in place. You don't need to restart it each time you begin a new bazel build, as the bazel build server continues running in the background even after a build completes.
 
 
