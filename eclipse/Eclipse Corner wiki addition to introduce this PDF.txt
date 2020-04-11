@@ -1,0 +1,42 @@
+
+Gabriel Staples
+11 Apr. 2020 
+
+I just added (submitted for review) the following section to the Eclipse Corner page here: https://wiki.eclipse.org/Eclipse_Corner.  
+Hopefully it gets accepted.  
+
+Summary: significantly update this section description, & move it to the top since it details basic Eclipse setup, concepts, & usage and also acts as a good intro to Eclipse: == Eclipse setup instructions on a new Linux (or other OS) computer ==
+
+Link to continue editing my version of this page prior to approval: https://wiki.eclipse.org/index.php?title=Eclipse_Corner&modqueued=1&action=edit
+
+Mediawiki.org formatting rules: https://www.mediawiki.org/wiki/Help:Formatting
+
+
+-----
+
+
+== Eclipse setup instructions on a new Linux (or other OS) computer ==
+
+* Direct download link is here: [https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/eclipse/Eclipse%20setup%20instructions%20on%20a%20new%20Linux%20(or%20other%20OS)%20computer.pdf Eclipse setup instructions on a new Linux (or other OS) computer.pdf] (PDF).
+* It is part of this larger project here: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles.
+
+
+Getting started with Eclipse as a beginner is difficult. This document ''significantly'' eases that transition. Even for experienced Eclipse users, getting it to work perfectly and bug-free on large projects requires several advanced tricks, all of which are documented carefully in this document with the words "[IMPORTANT TO PREVENT FREEZES]". This is unofficial documentation to help Eclipse users get Eclipse installed and configured on any operating system, with a particular emphasis on using Eclipse on Linux. It details getting it to work well and crash-free on any OS when working with small or gigantic projects. 
+
+This document also introduces in detail the following concepts which are unique to Eclipse and very confusing for beginners: 
+# workspace
+# project
+# perspective
+# working set
+...and it introduces dozens of really useful shortcuts used daily by experienced Eclipse developers. 
+
+Here is a snapshot of its table of contents:
+# Table of Contents:  1
+# Install & Setup Steps:  1
+# Plugins to Install: 7
+# Configure “eclipse.ini”:    8
+# Freezes, & Clearing Eclipse’s Cached .pdom Indexer File For Your Project:   10
+# Project Resource Filters (adding resources, linked resources, excluded resources, virtual folders, etc):    10
+## Resource Filters (“Include only” or “Exclude all”)   10
+## “Virtual” Folders and “Links” to files or folders (ie: Linked Folders or Linked Files)   11
+# Eclipse Usage, Workflow, Help, Tips & Tricks:   13
