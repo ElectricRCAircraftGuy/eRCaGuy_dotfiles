@@ -187,7 +187,7 @@ echo "The \".tmux.conf\" file was previously copied to your home dir above."
 # useful_scripts
 echo ""
 echo "= useful_scripts stuff ="
-echo "Here are the scripts this dir contains:"
+echo "Here are the scripts this dir (\"$THIS_DIR/useful_scripts\") contains:"
 tree useful_scripts
 echo "Creating symbolic links for apt-cacher-server_proxy script."
 ln -si "${PWD}/useful_scripts/apt-cacher-server_proxy_status.sh" ~/bin/${CMD_PREFIX}apt-cacher-status
