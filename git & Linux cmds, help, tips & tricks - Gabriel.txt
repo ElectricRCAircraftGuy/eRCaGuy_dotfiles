@@ -89,6 +89,18 @@ And here's this shorter version again now with `\` again instead of `@`:
 
 = bazel: =
 
+1. See all Bazel commands here (ie: `bazel --[startup options] <cmd> --[cmd options]`): https://docs.bazel.build/versions/master/command-line-reference.html#commands
+2. See all Bazel options online here! https://docs.bazel.build/versions/master/command-line-reference.html. Ex:
+    1. To pass in Java Virtual Machine (JVM) options, such as heap size, as Bazel startup options: https://docs.bazel.build/versions/master/command-line-reference.html#flag--host_jvm_args
+        --host_jvm_args=<jvm_arg>
+    2. To limit how many of your local CPUs Bazel can use. Note that HOST_CPUS here is probably (and usually is) 1/2 the number of cores you have. So, if gnome-system-monitor shows you have 8 cores, you may only have 4 CPUs.: https://docs.bazel.build/versions/master/command-line-reference.html#flag--local_cpu_resources
+        --local_cpu_resources=<an integer, or "HOST_CPUS", optionally followed by [-|*]<float>.> default: "HOST_CPUS"
+    3. To limit local RAM usage: https://docs.bazel.build/versions/master/command-line-reference.html#flag--local_ram_resources
+         --local_ram_resources=<an integer, or "HOST_RAM", optionally followed by [-|*]<float>.> default: "HOST_RAM*.67"
+    4. To disable remote caching: https://docs.bazel.build/versions/master/command-line-reference.html#flag--remote_cache
+        --remote_cache=""
+
+
 time bazel build //...
 time bazel query //...
 time bazel test //...
@@ -142,4 +154,29 @@ Main Jinja2 References:
 2. [Entire Jinja2 documentation in PDF form](https://jinja.palletsprojects.com/_/downloads/en/2.11.x/pdf/)
 3. [Jinja2 Python API](https://jinja.palletsprojects.com/en/2.11.x/api/)
 4. [Jinja2 Template Designer (used for writing template files, which some people like to end in .j2)](https://jinja.palletsprojects.com/en/2.11.x/templates/)
+
+
+= Linux (General): = 
+
+== Limit CPU usage: == 
+Limit CPU usage of a process in Linux: https://linoxide.com/linux-how-to/limit-cpu-usage-processes-linux/; ex:
+    cpulimit -p 3185 -l 40 = limit Process ID (PID) 3185 to 40% ***of 1 CPU*** max CPU usage; so, for a multi-core machine (ex: 8 cores), to get a total of 40% of all cores you would need to use 0.4*(100/core * 8 cores) = 0.4*800 = 320, like this:
+    cpulimit -p 3185 -l 320 = limit PID 3185 to 320% out of 800% (on an 8-core machine) = 320/800 = 40% overall on an 8-core machine!
+OR
+    cpulimit -e vmware-vmx -l 40 = limit the process named "vmware-vmx" to 40% ***of 1 CPU*** max CPU usage
+    cpulimit -e vmware-vmx -l 320 = limit PID 3185 to 320% out of 800% (on an 8-core machine) = 320/800 = 40% overall on an 8-core machine!
+So, to limit to 80% on an 8-core machine, use 0.8*800 = 640, like this:
+    cpulimit -p 3185 -l 640
+Limit to 62.5% on an 8-core machine:
+    cpulimit -p 3185 -l 500
+
+This is very useful to limit your CPU usage being used by Bazel, for instance, when it is building for dozens of minutes, or even hours. Leave the `cpulimit` process running as long as you want this limiting effect in place. You don't need to restart it each time you begin a new bazel build, as the bazel build server continues running in the background even after a build completes. Note that the Bazel build server JVM is usually just called "java", and can easily be viewed with `ps`, `top`, `htop`, or the `gnome-system-monitor` GUI (my preferred choice).
+
+    sudo apt update
+    sudo apt install cpulimit
+    # Start your bazel build in one terminal, then in a separate terminal, run the following.
+    # Replace <pid> with the Process ID number for your bazel build server process (usually
+    # just called "java" when you look at it with `ps`, `top`, `htop`, or `gnome-system-monitor`).
+    cpulimit -p <pid> -l 500 // limit your bazel build to 62.5% max CPU usage on an 8-core machine
+
 
