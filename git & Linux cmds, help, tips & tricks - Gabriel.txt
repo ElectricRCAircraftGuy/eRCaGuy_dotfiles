@@ -126,18 +126,34 @@ time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get co
 
 = linter, clang-format: = 
 
+References:
+1. Main documentation, setup, instructions, etc! https://clang.llvm.org/docs/ClangFormat.html
+1. Download the Windows & other installers/executables: https://llvm.org/builds/
+
+Install in Ubuntu with `sudo apt install clang-format`; source (note I also have an answer here): https://stackoverflow.com/questions/20756924/how-can-i-install-clang-format-in-ubuntu
+
+Help:
+    clang-format --help
+    man clang-format
+
+To generate a .clang-format file as a starting point:
+-See: https://clang.llvm.org/docs/ClangFormat.html
+    clang-format -style=llvm -dump-config > .clang-format
+    OR
+    clang-format -style=Google -dump-config > .clang-format
+
 
 = git: = 
 
 To delete a branch, there are actually **3 different branches to delete!**. Read more here: https://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-locally-and-remotely/23961231#23961231
-1. Deleting a **remote branch**:
-    git push origin --delete <branch>  # Git version 1.7.0 or newer
-    git push origin -d <branch>        # Shorter version (Git 1.7.0 or newer)
-    git push origin :<branch>          # Git versions older than 1.7.0
-2. Deleting a **local branch**:
+1. Deleting a **local branch**:
     git branch --delete <branch>
     git branch -d <branch> # Shorter version
     git branch -D <branch> # Force-delete un-merged branches
+2. Deleting a **remote branch**:
+    git push origin --delete <branch>  # Git version 1.7.0 or newer
+    git push origin -d <branch>        # Shorter version (Git 1.7.0 or newer)
+    git push origin :<branch>          # Git versions older than 1.7.0
 3. Deleting a **remote-tracking branch**:
     git branch --delete --remotes <remote>/<branch>
     git branch -dr <remote>/<branch> # Shorter <===
@@ -150,6 +166,7 @@ To delete a branch, there are actually **3 different branches to delete!**. Read
 
 
 = Jinja2: = 
+
 - a template-based automatic code/file generator (think string formatter/replacer for an entire text file).
 
 Main Jinja2 References:

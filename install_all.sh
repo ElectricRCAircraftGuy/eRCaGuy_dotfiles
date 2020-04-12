@@ -120,6 +120,8 @@ echo "See also \"etc/udev/rules.d/readme--udev_rules.md\" for more info."
 echo ""
 echo "= git stuff ="
 echo "This will mostly be done in the \"home\" folder install below."
+echo "Installing meld so you can use it as your 'git difftool'"
+sudo apt install meld
 echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo "***For anything else, do it manually.***"
 echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
