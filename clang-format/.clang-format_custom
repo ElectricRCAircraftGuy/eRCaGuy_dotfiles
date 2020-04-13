@@ -11,6 +11,10 @@
 # 1. https://clang.llvm.org/docs/ClangFormat.html
 # 2. "eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt"
 # 3. Clang-Format Style Options: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+#    - Oops! This documentation is for clang-format version 11, but my version is 6; here's
+#      the documentation for version 6!:
+#      https://releases.llvm.org/6.0.1/tools/clang/docs/ClangFormatStyleOptions.html <===== USE 
+#      THIS! ===
 # 4. .clang-format interactive guide and builder! [very useful!--but is a little out-dated & 
 #    missing many options]: https://clangformat.com/
 # 
@@ -40,22 +44,22 @@ AccessModifierOffset: -1
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
-AlignConsecutiveMacros: false
+# AlignConsecutiveMacros: false
 AlignEscapedNewlines: Left
 AlignOperands:   true
 AlignTrailingComments: true
-AllowAllArgumentsOnNextLine: false
-AllowAllConstructorInitializersOnNextLine : false
+# AllowAllArgumentsOnNextLine: false
+# AllowAllConstructorInitializersOnNextLine : false
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Empty
+AllowShortBlocksOnASingleLine: false # Empty <== use on later clang-format versions
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLambdasOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false # Never <== use on later clang-format versions
+# AllowShortLambdasOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterReturnType: All
 AlwaysBreakBeforeMultilineStrings: false
-AlwaysBreakTemplateDeclarations: Yes
+AlwaysBreakTemplateDeclarations: true # Yes <== use on later clang-format versions
 BinPackArguments: true
 BinPackParameters: true
 # Per the documentation, this BraceWrapping section is only used if BreakBeforeBraces is set 
@@ -86,7 +90,7 @@ BreakBeforeTernaryOperators: false
 BreakConstructorInitializers: AfterColon
 # Not found in the docs; must be deprecated?:
 # BreakAfterJavaFieldAnnotations: false
-BreakInheritanceList: AfterColon
+# BreakInheritanceList: AfterColon
 BreakStringLiterals: true
 ColumnLimit:     100
 CommentPragmas:  '^ IWYU pragma:'
@@ -118,12 +122,12 @@ IncludeCategories:
 IncludeIsMainRegex: '([-_](test|unittest))?$'
 # I can add this one too if I want, but I'd need to specify a value:
 # IncludeIsMainSourceRegex: 
-IndentCaseBlocks: false
+# IndentCaseBlocks: false
 # true: same as Arduino does: 
 # https://www.arduino.cc/reference/tr/language/structure/control-structure/switchcase/
 IndentCaseLabels: true
-IndentGotoLabels: false
-IndentPPDirectives: BeforeHash
+# IndentGotoLabels: false
+# IndentPPDirectives: BeforeHash
 IndentWidth:     2
 IndentWrappedFunctionNames: false
 JavaScriptQuotes: Leave
@@ -158,21 +162,21 @@ ReflowComments:  true
 SortIncludes:    true
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
-SpaceAfterLogicalNot: false
+# SpaceAfterLogicalNot: false
 SpaceAfterTemplateKeyword: true
 SpaceBeforeAssignmentOperators: true
-SpaceBeforeCpp11BracedList: true
-SpaceBeforeCtorInitializerColon: true
-SpaceBeforeInheritanceColon: true
+# SpaceBeforeCpp11BracedList: true
+# SpaceBeforeCtorInitializerColon: true
+# SpaceBeforeInheritanceColon: true
 SpaceBeforeParens: ControlStatements
-SpaceBeforeRangeBasedForLoopColon: true
-SpaceBeforeSquareBrackets: false
-SpaceInEmptyBlock: false
+# SpaceBeforeRangeBasedForLoopColon: true
+# SpaceBeforeSquareBrackets: false
+# SpaceInEmptyBlock: false
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 2
 SpacesInAngles: false
 SpacesInCStyleCastParentheses: false
-SpacesInConditionalStatement: false
+# SpacesInConditionalStatement: false
 SpacesInContainerLiterals: true
 # Is alphabetically here, but in the documentation is earlier, so is already defined above:
 # SpacesInCStyleCastParentheses
