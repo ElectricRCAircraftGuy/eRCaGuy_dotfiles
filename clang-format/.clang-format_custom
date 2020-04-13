@@ -2,8 +2,6 @@
 #
 # ==================================================================================================
 # It is a custom file to represent my (Gabriel Staples's) CUSTOM FORMATTING PREFERENCES FOR C & C++!
-# STATUS: ***NOT CURRENTLY UPDATED***--IT IS JUST A DIRECT COPY OF THE GOOGLE STYLE; I NEED TO 
-# CHANGE IT SIGNIFICANTLY STILL.
 # ==================================================================================================
 # It was first generated with `clang-format --style=google --dump-config > .clang-format_google`.
 # Then, I modified it from there. 
@@ -12,60 +10,93 @@
 # References:
 # 1. https://clang.llvm.org/docs/ClangFormat.html
 # 2. "eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt"
+# 3. Clang-Format Style Options: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# 4. .clang-format interactive guide and builder! [very useful!--but is a little out-dated & 
+#    missing many options]: https://clangformat.com/
+# 
+# "The .clang-format file uses YAML format:" `key1: value1`
+#
+# To turn off clang formatting in a given section of C/C++ source code, do the following:
+#       // clang-format off
+#       // (this section of code will not be formatted)
+#       // clang-format on
+#
+# Tab size/indentation note: though I prefer 4 spaces for indentation, I'm OK with 2 for Arduino
+# code since that's the default for the Arduino IDE, which many others are using, and the only way
+# to change it in the Arduino IDE is to edit the preferences file (ex: 
+# "/home/gabriel/.arduino15/preferences.txt") while the Arduino IDE isn't running, which I'm not
+# going to force people to do. 
+#
+# Sample style guides: 
+# 1. "Google C++ Style Guide": https://google.github.io/styleguide/cppguide.html
+# 2. "Linux kernel coding style" guide: 
+#    https://www.kernel.org/doc/Documentation/process/coding-style.rst
 
 ---
 Language:        Cpp
-# BasedOnStyle:  Google
+# BasedOnStyle:  Google (with heavy modifications, the biggest one being setting braces to
+# `BreakBeforeBraces: Allman`)
 AccessModifierOffset: -1
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: false
 AlignEscapedNewlines: Left
 AlignOperands:   true
 AlignTrailingComments: true
-AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortBlocksOnASingleLine: false
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine : false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: All
-AllowShortIfStatementsOnASingleLine: true
-AllowShortLoopsOnASingleLine: true
-AlwaysBreakAfterDefinitionReturnType: None
-AlwaysBreakAfterReturnType: None
-AlwaysBreakBeforeMultilineStrings: true
-AlwaysBreakTemplateDeclarations: true
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterReturnType: All
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: true
 BinPackParameters: true
-BraceWrapping:   
-  AfterClass:      false
-  AfterControlStatement: false
-  AfterEnum:       false
-  AfterFunction:   false
-  AfterNamespace:  false
-  AfterObjCDeclaration: false
-  AfterStruct:     false
-  AfterUnion:      false
-  AfterExternBlock: false
-  BeforeCatch:     false
-  BeforeElse:      false
-  IndentBraces:    false
-  SplitEmptyFunction: true
-  SplitEmptyRecord: true
-  SplitEmptyNamespace: true
-BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Attach
-BreakBeforeInheritanceComma: false
-BreakBeforeTernaryOperators: true
-BreakConstructorInitializersBeforeComma: false
-BreakConstructorInitializers: BeforeColon
-BreakAfterJavaFieldAnnotations: false
+# Per the documentation, this BraceWrapping section is only used if BreakBeforeBraces is set 
+# to Custom.
+# BraceWrapping:   
+#   AfterClass:      false
+#   AfterControlStatement: false
+#   AfterEnum:       false
+#   AfterFunction:   false
+#   AfterNamespace:  false
+#   AfterObjCDeclaration: false
+#   AfterStruct:     false
+#   AfterUnion:      false
+#   AfterExternBlock: false
+#   BeforeCatch:     false
+#   BeforeElse:      false
+#   IndentBraces:    false
+#   SplitEmptyFunction: true
+#   SplitEmptyRecord: true
+#   SplitEmptyNamespace: true
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Allman
+# Not found in the docs; must be deprecated?:
+# BreakBeforeInheritanceComma: false
+BreakBeforeTernaryOperators: false
+# Not found in the docs; must be deprecated?:
+# BreakConstructorInitializersBeforeComma: false
+BreakConstructorInitializers: AfterColon
+# Not found in the docs; must be deprecated?:
+# BreakAfterJavaFieldAnnotations: false
+BreakInheritanceList: AfterColon
 BreakStringLiterals: true
-ColumnLimit:     80
+ColumnLimit:     100
 CommentPragmas:  '^ IWYU pragma:'
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
+ConstructorInitializerIndentWidth: 2
+ContinuationIndentWidth: 2
 Cpp11BracedListStyle: true
+# Note: see PointerAlignment too, as it's used as fallback in case deriving the pointer alignment
+# fails
 DerivePointerAlignment: true
 DisableFormat:   false
 ExperimentalAutoDetectBinPacking: false
@@ -85,18 +116,28 @@ IncludeCategories:
   - Regex:           '.*'
     Priority:        3
 IncludeIsMainRegex: '([-_](test|unittest))?$'
+# I can add this one too if I want, but I'd need to specify a value:
+# IncludeIsMainSourceRegex: 
+IndentCaseBlocks: false
+# true: same as Arduino does: 
+# https://www.arduino.cc/reference/tr/language/structure/control-structure/switchcase/
 IndentCaseLabels: true
-IndentPPDirectives: None
+IndentGotoLabels: false
+IndentPPDirectives: BeforeHash
 IndentWidth:     2
 IndentWrappedFunctionNames: false
 JavaScriptQuotes: Leave
 JavaScriptWrapImports: true
 KeepEmptyLinesAtTheStartOfBlocks: false
+# For the `Language` key/value, see the very top of this configuration list
 MacroBlockBegin: ''
 MacroBlockEnd:   ''
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
+# Not used: NameSpaceMacros
+# Not used: ObjCBinPackProtocolList
 ObjCBlockIndentWidth: 2
+# Not used: ObjCBreakBeforeNestedBlockParam
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: false
 PenaltyBreakAssignment: 2
@@ -104,8 +145,10 @@ PenaltyBreakBeforeFirstCallParameter: 1
 PenaltyBreakComment: 300
 PenaltyBreakFirstLessLess: 120
 PenaltyBreakString: 1000
+# Not set, but could/should be: PenaltyBreakTemplateDeclaration
 PenaltyExcessCharacter: 1000000
 PenaltyReturnTypeOnItsOwnLine: 200
+# Note: see DerivePointerAlignment too, as it takes precedence
 PointerAlignment: Left
 RawStringFormats: 
   - Delimiter:       pb
@@ -115,18 +158,31 @@ ReflowComments:  true
 SortIncludes:    true
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
 SpaceAfterTemplateKeyword: true
 SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
 SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 2
-SpacesInAngles:  false
-SpacesInContainerLiterals: true
+SpacesInAngles: false
 SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: true
+# Is alphabetically here, but in the documentation is earlier, so is already defined above:
+# SpacesInCStyleCastParentheses
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard:        Auto
+# Not used: StatementMacros
 TabWidth:        8
+# Not used: TypenameMacros
+# Not set: UseCRLF
 UseTab:          Never
 ...
 
