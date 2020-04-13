@@ -1,6 +1,9 @@
 
 Gabriel Staples
 
+This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+
 = Doxygen: = 
 
 See other examples here:
@@ -138,9 +141,9 @@ Help:
 
 To generate a .clang-format file as a starting point:
 -See: https://clang.llvm.org/docs/ClangFormat.html
-    clang-format -style=llvm -dump-config > .clang-format
+    clang-format --style=llvm --dump-config > .clang-format
     OR
-    clang-format -style=Google -dump-config > .clang-format
+    clang-format --style=google --dump-config > .clang-format
 
 
 = git: = 
