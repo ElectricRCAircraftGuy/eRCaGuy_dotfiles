@@ -196,8 +196,13 @@ To delete a branch, there are actually **3 different branches to delete!**. Read
     git fetch --prune <remote> # Delete multiple obsolete remote-tracking branches
     git fetch -p <remote>      # Shorter
 
+git rev-parse HEAD = obtain the git hash for HEAD; see: https://stackoverflow.com/questions/949314/how-to-retrieve-the-hash-for-the-current-commit-in-git/949391#949391
+git rev-parse HEAD~4 = obtain the git hash 4 commits prior to HEAD; this is REALLY USEFUL, for instance, when trying to figure out which commit is N commits back when there have been multiple merges and it's confusing which commit was on which fork of those branches when looking at just `git log`. `git lg`, therefore, becomes much more important and useful as well, as it graphically shows these forks, branches, and merges in tree form!
+
 
 = grep: = 
+
+See my own answer here, for instance, for `grep` & `git grep` examples: https://stackoverflow.com/questions/60843047/locating-a-function-in-a-git-repository/60843055#60843055
 
 
 = Jinja2: = 
