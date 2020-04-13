@@ -2,6 +2,8 @@
 #
 # ==================================================================================================
 # It is a custom file to represent my (Gabriel Staples's) CUSTOM FORMATTING PREFERENCES FOR C & C++!
+# STATUS: ***NOT CURRENTLY UPDATED***--IT IS JUST A DIRECT COPY OF THE GOOGLE STYLE; I NEED TO 
+# CHANGE IT SIGNIFICANTLY STILL.
 # ==================================================================================================
 # It was first generated with `clang-format --style=google --dump-config > .clang-format_google`.
 # Then, I modified it from there. 

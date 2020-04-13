@@ -199,6 +199,8 @@ To delete a branch, there are actually **3 different branches to delete!**. Read
 git rev-parse HEAD = obtain the git hash for HEAD; see: https://stackoverflow.com/questions/949314/how-to-retrieve-the-hash-for-the-current-commit-in-git/949391#949391
 git rev-parse HEAD~4 = obtain the git hash 4 commits prior to HEAD; this is REALLY USEFUL, for instance, when trying to figure out which commit is N commits back when there have been multiple merges and it's confusing which commit was on which fork of those branches when looking at just `git log`. `git lg`, therefore, becomes much more important and useful as well, as it graphically shows these forks, branches, and merges in tree form!
 
+git checkout -- my_file.txt = [WARNING: DESTRUCTIVE OF LOCAL COPY!] check out my_file.txt from HEAD and make it overwrite the current local copy I have! Good for "reverting" local, uncommitted changes on a file or two you're working on and messed up.
+
 
 = grep: = 
 
