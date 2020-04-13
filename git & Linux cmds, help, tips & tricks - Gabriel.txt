@@ -129,9 +129,14 @@ time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get co
 
 = linter, clang-format: = 
 
+== clang-format: ==
+
+A source code automatic style formatting tool.
+
 References:
 1. Main documentation, setup, instructions, etc! https://clang.llvm.org/docs/ClangFormat.html
-1. Download the Windows & other installers/executables: https://llvm.org/builds/
+2. Download the Windows & other installers/executables: https://llvm.org/builds/
+3. Clang-Format Style Options: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 
 Install in Ubuntu with `sudo apt install clang-format`; source (note I also have an answer here): https://stackoverflow.com/questions/20756924/how-can-i-install-clang-format-in-ubuntu
 
@@ -144,6 +149,33 @@ To generate a .clang-format file as a starting point:
     clang-format --style=llvm --dump-config > .clang-format
     OR
     clang-format --style=google --dump-config > .clang-format
+
+Main clang-format tools & commands include:
+    clang-format [options] [<file> ...] = the main command; see: https://clang.llvm.org/docs/ClangFormat.html
+    
+    clang-format-diff = a python script that allows you to format a git diff patch; see: https://clang.llvm.org/docs/ClangFormat.html
+    
+    git clang-format = a tool blended in with git to allow you to format just the lines you touched before you git commit them [GS: I don't like this work-flow; I'd rather do a commit and THEN go back and run a command to format *the entire file* for any file I touched, instead. Then, I'll make that format run a separate commit.]
+
+Example usages:
+    clang-format --style=google my_file.cpp > my_file_formatted.cpp = format a file and send the output to a separate file, using a preconfigured style
+    clang-format -i --style=google my_file.cpp = format this file in-place!
+  Use `--verbose` to also print the file names processed!
+    clang-format -i --verbose --style=google my_file.cpp = same as above, but print the name of the file processed (particularly useful when you have a script which processes many files and you want the user to see as output a list of the files processed!)
+  Use `--style=file` to "load style configuration from .clang-format file located in one of the parent directories of the source file (or current directory for stdin)".
+    clang-format --verbose -i --style=file my_file.cpp = format my_file.cpp in place, using the .clang-format file located in one of the parent directories of the source file, printing the name(s) of the file(s) processed. <======= BEST OPTION FOR MANUALLY-SPECIFIED FILE(S)! =======
+
+Whenever I do a `git commit`, however, I'd like to format *all parts of all files I have touched*. To do this, you can see which files were changed between two commits like this:
+    git diff --name-only commit1~..commit2  # Note that the tilde (~) is required to specify the commit *before* commit1, because otherwise commit1 would *not* be included in determining which files were changed.
+Then you can manually clang-format all of those files, OR (I think--needs to be tested), you can automate the process like this:
+    clang-format --verbose -i --style=file $(git diff --name-only commit1~..commit2)  <======= NEEDS TO BE TESTED, BUT SHOULD BE THE BEST OPTION FOR AUTOMATICALLY-SPECIFIED FILES! ======
+
+== clang-tidy: ==
+
+A source code static analysis (programming errors, style, best practices, bug checker) tool.
+
+References:
+1. https://clang.llvm.org/extra/clang-tidy/ 
 
 
 = git: = 
