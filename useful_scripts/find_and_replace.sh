@@ -52,9 +52,13 @@ print_help() {
     echo '           = searching in all files in directory ~/development which end in .ino or .cpp, replace'
     echo '           all instances of serial.print with Serial.print'
     echo ''
-    echo 'Example 2: `find_and_replace "~/development/my_file.ino" "" "serial\.print" "Serial.print"`'
+    echo 'Example 2: `find_and_replace "~/development/my_file.ino" "" "serial\.print" "Serial.print" -w`'
     echo '           = searching in only this one file: ~/development/my_file.ino, replace'
-    echo '           all instances of serial.print with Serial.print'
+    echo '           all instances of serial.print with Serial.print, matching whole words only'
+    echo ''
+    echo 'Example 3: `find_and_replace "~/development/" "\.txt" "hello how are you" "sup dude"`'
+    echo '           = searching in all files in directory ~/development/ which end in .txt, replace'
+    echo '           all instances of "hello how are you" with "sup dude"'
     echo ''
     echo 'This program is part of: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles'
     echo ''
@@ -104,24 +108,83 @@ parse_args() {
     REPLACEMENT_STR="$4"
 }
 
+# # Count the number of string matches in a file
+# count_str_matches() {
+#     # do the replacement
+#     grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
+
+#     # export num_replacements=7 #$(xargs grep -c "my_search_str" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
+#     # echo "num = $num"
+# }
+
 main() {
-    num_replacements=0
     num_files=0
+    num_replacements=0
 
     if [ "$WHOLE_WORD" == "true" ]; then
         # Match only whole words by surrounding the STRING_REGEX with \b regular expression escape
         # chars
-        echo "Matching whole words."
-        # find
-        find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|\b${STRING_REGEX}\b|${REPLACEMENT_STR}|g"
+        echo "Matching just whole words, not substrings."
+        STRING_REGEX="\b${STRING_REGEX}\b"
     else 
         # Matching substrings is OK
-        echo "Matching substrings."
-        find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
+        echo "Matching substrings, not just whole words."
     fi
 
-    # find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pattern\b|replacement_string|g"
-    # find ros/src/drivers -type f | xargs grep -c TsCSWR_h_PlatformVersionReq_pkt_t | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc
+    files="$(find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX")"
+    echo "files = $files"
+
+    # WORKS!
+    # num_files="$(find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | wc -l)"
+    # num_replacements="$(find "$DIR_PATH" -type f | xargs grep -c "$STRING_REGEX" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)"
+
+    num_files="$(echo "$files" | wc -l)"
+
+    ###### NEXT: SPLIT STRING INTO BASH ARRAY BASED ON NEWLINE CHARS, THEN ITERATE OVER THE ARRAY!
+    # https://stackoverflow.com/a/24628676/4561887
+
+    num_replacements="$(echo "$files" | grep -o ":[1-9]")" # | tr -d ':' | paste -sd+ | bc)"
+
+
+    # find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
+
+
+
+    # if [ "$WHOLE_WORD" == "true" ]; then
+    #     # Match only whole words by surrounding the STRING_REGEX with \b regular expression escape
+    #     # chars
+    #     echo "Matching just whole words, not substrings."
+    #     find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|\b${STRING_REGEX}\b|${REPLACEMENT_STR}|g"
+    # else 
+    #     # Matching substrings is OK
+    #     echo "Matching substrings, not just whole words."
+    #     # find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
+    #     num_replacements=$(find "$DIR_PATH" -type f | tee >(count_str_matches) | xargs grep -c "my_search_str" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
+    # fi
+
+    # FILES="$(find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX")"
+    # echo "$FILES"
+
+    # for file in "$FILES"; do 
+    #     echo "file = $file"
+    # done
+
+    # echo "$FILES" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
+
+    # if [ "$WHOLE_WORD" == "true" ]; then
+    #     # Match only whole words by surrounding the STRING_REGEX with \b regular expression escape
+    #     # chars
+    #     echo "Matching just whole words, not substrings."
+    #     find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|\b${STRING_REGEX}\b|${REPLACEMENT_STR}|g"
+    # else 
+    #     # Matching substrings is OK
+    #     echo "Matching substrings, not just whole words."
+    #     # find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
+    #     num_replacements=$(find "$DIR_PATH" -type f | tee >(count_str_matches) | xargs grep -c "my_search_str" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
+    # fi
+
+    # num_replacements=$(find "$DIR_PATH" -type f | xargs grep -c "$STRING_REGEX" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
+    # num_replacements=$(find "$DIR_PATH" -type f | xargs grep -c "$STRING_REGEX" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
 
     echo "Done! ${num_replacements} string replacements in ${num_files} files."
 }
