@@ -269,6 +269,8 @@ References:
 
 == Find files and replace text in files: ==
 
+find -type f = recursively find only files (NOT directories)
+
 find | grep "my_file" = find any file with "my_file" in its name
 find -L | grep "my_file" = same as above, but also follow symbolic links when searching
 
@@ -283,6 +285,7 @@ References:
 1. https://linuxize.com/post/how-to-use-sed-to-find-and-replace-string-in-files/
 1. https://unix.stackexchange.com/questions/159367/using-sed-to-find-and-replace/159369#159369 (also see my comment under this answer!)
 1. *****https://stackoverflow.com/questions/10445934/change-multiple-files/30717770#30717770
+1. *****Really good sed reference! https://www.grymoire.com/Unix/Sed.html
 
 find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|regex_pattern|replacement_string|g" = find all files in some/path which end in .ino or .cpp and pipe them to sed. sed will then find and replace all matches of "regex_pattern" with "replacement_string" in these files. <======= BEST NON-WHOLE-WORD MULTI-FILE SEARCH & REPLACE =====
 EXAMPLE:
@@ -294,4 +297,7 @@ find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pat
 EXAMPLE:
 find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
 
+== wc: == 
+wc = 'w'ord 'c'ount
 
+find | wc -l = count and return the number of 'l'ines returned by find, which corresponds to the number of files and folders in a directory and its sub-directories.
