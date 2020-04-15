@@ -98,29 +98,32 @@ parse_args() {
         WHOLE_WORD=true
     fi
 
-    PATH="$1"
-    FILE_REGEX="$2"
+    DIR_PATH="$1"
+    FILENAME_REGEX="$2"
     STRING_REGEX="$3"
     REPLACEMENT_STR="$4"
 }
 
 main() {
+    num_replacements=0
+    num_files=0
+
     if [ "$WHOLE_WORD" == "true" ]; then
         # Match only whole words by surrounding the STRING_REGEX with \b regular expression escape
         # chars
         echo "Matching whole words."
         # find
-        find "$PATH" -type f | grep -E "$FILE_REGEX" | xargs sed -i "s|\b${STRING_REGEX}\b|${REPLACEMENT_STR}|g"
+        find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|\b${STRING_REGEX}\b|${REPLACEMENT_STR}|g"
     else 
         # Matching substrings is OK
         echo "Matching substrings."
-        find "$PATH" -type f | grep -E "$FILE_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
+        find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
     fi
 
     # find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pattern\b|replacement_string|g"
     # find ros/src/drivers -type f | xargs grep -c TsCSWR_h_PlatformVersionReq_pkt_t | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc
 
-    echo "Done! X strings replaced in Y files."
+    echo "Done! ${num_replacements} string replacements in ${num_files} files."
 }
 
 
