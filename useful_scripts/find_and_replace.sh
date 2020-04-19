@@ -6,9 +6,8 @@
 
 # find_and_replace.sh
 # - find and replace a string across multiple files, using regular expressions
-#   - excellent for mass variable replacements/renaming when writing software, for instance
+#   - excellent for mass variable replacements/variable renaming when writing software, for instance
 
-# TODO: ADD THIS TO THE MAIN INSTALLATION SCRIPT AS PART OF THE MAIN INSTALLATION PROCESS!
 # INSTALLATION INSTRUCTIONS:
 # 1. Create a symlink in ~/bin to this script so you can run it from anywhere:
 #       cd /path/to/here
@@ -20,6 +19,8 @@
 # 1. I used my "PDF2SearchablePDF" bash-based project as a model for how to write good bash scripts
 #    and code when wiriting this program. Here is the file of mine I was referencing:
 #    https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/blob/master/pdf2searchablepdf.sh
+# 1. Regex learning & quick reference (on right side of pg): https://regexone.com/
+# 1. Regex tester online: https://regex101.com/
 
 EXIT_SUCCESS=0
 EXIT_ERROR=1
@@ -32,6 +33,8 @@ AUTHOR="Gabriel Staples"
 # what *would be* replaced without actually replacing anything!
 # 2. Make this a stand-alone repository, perhaps, as I think it would get more usage and 
 # exposure that way.
+# 3. ADD THIS TO THE MAIN DOTFILES INSTALLATION SCRIPT AS PART OF THE MAIN INSTALLATION PROCESS!
+# 4. 
 
 
 print_help() {
@@ -168,8 +171,8 @@ main() {
 
         num_lines_matched=$(grep -c -E "$STRING_REGEX" "$filename")
         # echo "num_lines_matched = $num_lines_matched" # for debugging
-        
-        # The old way to do it (avoid this way so we don't have to run the slow `find` command again!):
+        # Here is the old way to do it (avoid this way so we don't have to run the slow `find`
+        # command again!):
         # num_lines_matched=$(find "$DIR_PATH" -type f | xargs grep -c "$STRING_REGEX" | grep -o ":[1-9]*" | tr -d ':' | paste -sd+ | bc)
         
         # Count number of matches too, in case there are multiple matches per line; see: 

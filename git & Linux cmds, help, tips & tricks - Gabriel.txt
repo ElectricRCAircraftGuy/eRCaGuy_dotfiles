@@ -223,6 +223,10 @@ git diff --name-only <commit_hash1>..<commit_hash2> | wc -l = see how many files
 
 See my own answer here, for instance, for `grep` & `git grep` examples: https://stackoverflow.com/questions/60843047/locating-a-function-in-a-git-repository/60843055#60843055
 
+Exlude a word:
+echo "redhat redwood redbox redding" | grep "(redhat|redbox)" | grep -v box
+grep -v "unwanted_word" file | grep XXXXXXXX
+
 
 = Jinja2: = 
 
