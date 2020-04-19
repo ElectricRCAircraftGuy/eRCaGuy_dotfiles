@@ -223,9 +223,21 @@ git diff --name-only <commit_hash1>..<commit_hash2> | wc -l = see how many files
 
 See my own answer here, for instance, for `grep` & `git grep` examples: https://stackoverflow.com/questions/60843047/locating-a-function-in-a-git-repository/60843055#60843055
 
-Exlude a word:
-echo "redhat redwood redbox redding" | grep "(redhat|redbox)" | grep -v box
-grep -v "unwanted_word" file | grep XXXXXXXX
+== Exlude a word: == 
+Use the `-v`, or `--invert-match` option! See:
+1. https://stackoverflow.com/questions/4538253/how-can-i-exclude-one-word-with-grep/4538335#4538335
+1. https://stackoverflow.com/questions/10411616/grep-regex-not-containing-string/10411661#10411661
+    grep "pattern_to_find" file | grep -v "pattern_to_exclude" = search for "pattern_to_find" while EXCLUDING (in'v'erting the match on) "pattern_to_exclude"  <==== EXCLUDE WORD(S) WHEN GREP-SEARCHING! =====
+OR
+    grep -v "unwanted_word" file | grep "wanted_word" = same as above, just in the opposite order is all.
+
+Here's some examples. This outputs "redhat" and "yellowtail":
+    $ echo "redhat redwood redbox redding yellowtail" | grep -E -o "(redhat|yellowtail)"
+    redhat
+    yellowtail
+So this outputs just "yellowtail", by then excluding anything with "red" in it!:
+    $ echo "redhat redwood redbox redding yellowtail" | grep -E -o "(redhat|yellowtail)" | grep -v red
+    yellowtail
 
 
 = Jinja2: = 

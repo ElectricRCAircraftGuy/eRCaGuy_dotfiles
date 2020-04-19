@@ -142,7 +142,7 @@ main() {
     # regular expression; there will be one line per filename path. It is important that we run
     # the `find` command ONLY ONCE, since it takes the longest amoung of time of all of the 
     # commands we use in this script! So, we must run it once & store its output into a variable.
-    filenames="$(find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX")"
+    filenames="$(find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | sort -V)"
     # echo -e "===============\nfilenames = \n${filenames}\n===============" # for debugging
 
     # Count the number of files by counting the number of lines in the `filenames` variable, since
