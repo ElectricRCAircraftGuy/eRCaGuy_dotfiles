@@ -6,7 +6,7 @@
 
 # find_and_replace.sh
 # - find and replace a string across multiple files, using regular expressions
-#   - excellent for variable replacements when writing software, for instance
+#   - excellent for mass variable replacements/renaming when writing software, for instance
 
 # TODO: ADD THIS TO THE MAIN INSTALLATION SCRIPT AS PART OF THE MAIN INSTALLATION PROCESS!
 # INSTALLATION INSTRUCTIONS:
@@ -16,11 +16,23 @@
 #       ln -si "${PWD}/find_and_replace.sh" ~/bin/gs_find_and_replace
 # 2. Now you can use the `gs_find_and_replace` command directly anywhere you like.
 
+# References:
+# 1. I used my "PDF2SearchablePDF" bash-based project as a model for how to write good bash scripts
+#    and code when wiriting this program. Here is the file of mine I was referencing:
+#    https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/blob/master/pdf2searchablepdf.sh
+
 EXIT_SUCCESS=0
 EXIT_ERROR=1
 
 VERSION="0.1.0"
 AUTHOR="Gabriel Staples"
+
+# TODO list: 
+# 1. Make the option parsing much more robust, and add a `--dry-run` / `-d` option to just show
+# what *would be* replaced without actually replacing anything!
+# 2. Make this a stand-alone repository, perhaps, as I think it would get more usage and 
+# exposure that way.
+
 
 print_help() {
     echo ''
@@ -97,8 +109,9 @@ parse_args() {
     fi
 
     # -w
-    if [ $# -eq 5 ]; then
+    if [ $# -eq 5 ] && [ "$5" == "-w" ]; then
         # Do a whole word search!
+        echo '"-w" flag captured'
         WHOLE_WORD=true
     fi
 
@@ -108,19 +121,7 @@ parse_args() {
     REPLACEMENT_STR="$4"
 }
 
-# # Count the number of string matches in a file
-# count_str_matches() {
-#     # do the replacement
-#     grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
-
-#     # export num_replacements=7 #$(xargs grep -c "my_search_str" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
-#     # echo "num = $num"
-# }
-
 main() {
-    num_files=0
-    num_replacements=0
-
     if [ "$WHOLE_WORD" == "true" ]; then
         # Match only whole words by surrounding the STRING_REGEX with \b regular expression escape
         # chars
@@ -131,62 +132,88 @@ main() {
         echo "Matching substrings, not just whole words."
     fi
 
-    files="$(find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX")"
-    echo "files = $files"
+    echo -e "\nSearching in \"${DIR_PATH}\" for filenames which match"\
+            "the regex pattern \"${FILENAME_REGEX}\":"
 
-    # WORKS!
-    # num_files="$(find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | wc -l)"
-    # num_replacements="$(find "$DIR_PATH" -type f | xargs grep -c "$STRING_REGEX" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)"
+    # Obtain a long multi-line string of paths to all files whose names match the FILENAME_REGEX
+    # regular expression; there will be one line per filename path. It is important that we run
+    # the `find` command ONLY ONCE, since it takes the longest amoung of time of all of the 
+    # commands we use in this script! So, we must run it once & store its output into a variable.
+    filenames="$(find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX")"
+    # echo -e "===============\nfilenames = \n${filenames}\n===============" # for debugging
 
-    num_files="$(echo "$files" | wc -l)"
+    # Count the number of files by counting the number of lines in the `filenames` variable, since
+    # there is one line per filename path
+    num_files="$(echo "$filenames" | wc -l)"
 
-    ###### NEXT: SPLIT STRING INTO BASH ARRAY BASED ON NEWLINE CHARS, THEN ITERATE OVER THE ARRAY!
-    # https://stackoverflow.com/a/24628676/4561887
+    # Convert the long `filenames` string to a Bash array, separated by new-line chars; see:
+    # 1. https://stackoverflow.com/questions/24628076/bash-convert-n-delimited-strings-into-array/24628676#24628676
+    # 2. https://unix.stackexchange.com/questions/184863/what-is-the-meaning-of-ifs-n-in-bash-scripting/184867#184867
+    SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
+    IFS=$'\n'      # Change IFS to new line
+    filenames_array=($filenames) # split long string into array, separating by IFS (newline chars)
+    IFS=$SAVEIFS   # Restore IFS
 
-    num_replacements="$(echo "$files" | grep -o ":[1-9]")" # | tr -d ':' | paste -sd+ | bc)"
-
-
-    # find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
-
-
-
-    # if [ "$WHOLE_WORD" == "true" ]; then
-    #     # Match only whole words by surrounding the STRING_REGEX with \b regular expression escape
-    #     # chars
-    #     echo "Matching just whole words, not substrings."
-    #     find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|\b${STRING_REGEX}\b|${REPLACEMENT_STR}|g"
-    # else 
-    #     # Matching substrings is OK
-    #     echo "Matching substrings, not just whole words."
-    #     # find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
-    #     num_replacements=$(find "$DIR_PATH" -type f | tee >(count_str_matches) | xargs grep -c "my_search_str" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
-    # fi
-
-    # FILES="$(find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX")"
-    # echo "$FILES"
-
-    # for file in "$FILES"; do 
-    #     echo "file = $file"
+    # Debugging: print all filename paths one by one to make sure this worked
+    # See here for how to print a Bash array: 
+    # https://opensource.com/article/18/5/you-dont-know-bash-intro-bash-arrays
+    # for filename in ${filenames_array[@]}; do
+    #     echo "  filename = \"${filename}\""
     # done
 
-    # echo "$FILES" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
+    # Count the number of string replacements by grepping for the STRING_REGEX in each of these 
+    # files
+    num_matches_total=0
+    for filename in ${filenames_array[@]}; do
 
-    # if [ "$WHOLE_WORD" == "true" ]; then
-    #     # Match only whole words by surrounding the STRING_REGEX with \b regular expression escape
-    #     # chars
-    #     echo "Matching just whole words, not substrings."
-    #     find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|\b${STRING_REGEX}\b|${REPLACEMENT_STR}|g"
-    # else 
-    #     # Matching substrings is OK
-    #     echo "Matching substrings, not just whole words."
-    #     # find "$DIR_PATH" -type f | grep -E "$FILENAME_REGEX" | xargs sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g"
-    #     num_replacements=$(find "$DIR_PATH" -type f | tee >(count_str_matches) | xargs grep -c "my_search_str" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
-    # fi
+        num_lines_matched=$(grep -c -E "$STRING_REGEX" "$filename")
+        # echo "num_lines_matched = $num_lines_matched" # for debugging
+        
+        # The old way to do it (avoid this way so we don't have to run the slow `find` command again!):
+        # num_lines_matched=$(find "$DIR_PATH" -type f | xargs grep -c "$STRING_REGEX" | grep -o ":[1-9]*" | tr -d ':' | paste -sd+ | bc)
+        
+        # Count number of matches too, in case there are multiple matches per line; see: 
+        # https://superuser.com/questions/339522/counting-total-number-of-matches-with-grep-instead-of-just-how-many-lines-match/339523#339523
+        num_matches=$(grep -o -E "$STRING_REGEX" "$filename" | wc -l)
+        # echo "num_matches = $num_matches" # for debugging
 
-    # num_replacements=$(find "$DIR_PATH" -type f | xargs grep -c "$STRING_REGEX" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
-    # num_replacements=$(find "$DIR_PATH" -type f | xargs grep -c "$STRING_REGEX" | grep -o ":[1-9]" | tr -d ':' | paste -sd+ | bc)
+        if [ "$num_matches" -gt 0 ]; then
+            # Update `num_matches_total`; see here for how do add numbers in Bash: 
+            # https://stackoverflow.com/questions/6348902/how-can-i-add-numbers-in-a-bash-script/6348941#6348941
+            num_matches_total=$((num_matches_total + num_matches))
 
-    echo "Done! ${num_replacements} string replacements in ${num_files} files."
+            echo -e "\n${num_matches} matches found on ${num_lines_matched} lines in file"\
+                    "\"${filename}\":"
+            # Now show these exact matches with their corresponding line 'n'umbers in the file
+            grep -n --color=always -E "$STRING_REGEX" "$filename"
+            # Now actually DO the string replacing on the files 'i'n place using the `sed` 's'tream 'ed'itor!
+            sed -i "s|${STRING_REGEX}|${REPLACEMENT_STR}|g" "$filename"
+        fi
+    done
+    # echo -e "\nnum_matches_total = $num_matches_total" # For debugging
+
+    ############
+    # ALSO SHOULD POST THIS SCRIPT AS AN ANSWER HERE!
+    # https://stackoverflow.com/questions/15433058/how-to-check-if-the-sed-command-replaced-some-string
+    # 
+    # and update the readme here to mention this since it is super useful!
+    # AND ADD THE TEST FOLDER TO THE REPO SO OTHERS CAN RUN THIS TEST!
+    # make stand-alone project; use description: "linux multi-file find and replace script"
+    # post here: https://unix.stackexchange.com/questions/159367/using-sed-to-find-and-replace
+    # and here: https://unix.stackexchange.com/questions/112023/how-can-i-replace-a-string-in-a-files
+    #
+    # TODO: also allow input a file containing a list of dirs to search in, and a file 
+    # containing a list of replacement strings to process in those dirs
+    ###########
+
+    echo -e "\nDone! ${num_matches_total} string replacements in ${num_files} matching files."
+    echo "Replaced all regex matches for \"${STRING_REGEX}\" with string \"${REPLACEMENT_STR}\"."
+    echo -e "\nTime required:"
+
+    # echo ""
+    # echo "Done! Replaced all regex matches for \"${STRING_REGEX}\" with string \"${REPLACEMENT_STR}\"."
+    # echo "${num_matches_total} string replacements in ${num_files} matching files."
+    # echo -e "\nTime required:"
 }
 
 
@@ -196,3 +223,69 @@ main() {
 
 parse_args "$@"
 time main
+
+
+# Multiline comment hack; see: https://linuxize.com/post/bash-comments/
+<< 'MULTILINE-COMMENT'
+
+SAMPLE OUTPUT:
+
+Run 1: notice the `-w` I used:
+
+    $ gs_find_and_replace test_folder/ "\.txt" "bo" "do" -w
+    "-w" flag captured
+    Matching just whole words, not substrings.
+
+    Searching in "test_folder/" for filenames which match the regex pattern "\.txt":
+
+    Done! 0 string replacements in 3 matching files.
+    Replaced all regex matches for "\bbo\b" with string "do".
+
+    Time required:
+
+    real    0m0.037s
+    user    0m0.021s
+    sys 0m0.029s
+
+Run 2: withOUT the `-w`:
+
+    $ gs_find_and_replace test_folder/ "\.txt" "bo" "do"
+    Matching substrings, not just whole words.
+
+    Searching in "test_folder/" for filenames which match the regex pattern "\.txt":
+
+    9 matches found on 6 lines in file "test_folder/test2.txt":
+    1:hey how are you boing today
+    2:hey how are you boing today
+    3:hey how are you boing today
+    4:hey how are you boing today  hey how are you boing today  hey how are you boing today  hey how are you boing today
+    5:hey how are you boing today
+    6:hey how are you boing today?
+
+    7 matches found on 7 lines in file "test_folder/test3.txt":
+    1:hey how are you boing today
+    2:hey how are you boing today
+    3:hey how are you boing today
+    4:hey how are you boing today
+    5:hey how are you boing today
+    6:hey how are you boing today
+    7:hey how are you boing today?
+
+    5 matches found on 5 lines in file "test_folder/test.txt":
+    1:hey how are you boing today
+    2:hey how are you boing today
+    3:hey how are you boing today
+    4:hey how are you boing today
+    5:hey how are you boing today?
+
+    Done! 21 string replacements in 3 matching files.
+    Replaced all regex matches for "bo" with string "do".
+
+    Time required:
+
+    real    0m0.043s
+    user    0m0.020s
+    sys 0m0.035s
+
+MULTILINE-COMMENT
+
