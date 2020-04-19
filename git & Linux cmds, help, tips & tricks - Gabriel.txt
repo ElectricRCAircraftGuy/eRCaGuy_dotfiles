@@ -216,6 +216,8 @@ git rev-parse HEAD~4 = obtain the git hash 4 commits prior to HEAD; this is REAL
 
 git checkout -- my_file.txt = [WARNING: DESTRUCTIVE OF LOCAL COPY!] check out my_file.txt from HEAD and make it overwrite the current local copy I have! Good for "reverting" local, uncommitted changes on a file or two you're working on and messed up.
 
+git diff --name-only <commit_hash1>..<commit_hash2> | wc -l = see how many files were changed between commit_hash1 and commit_hash2
+
 
 = grep: = 
 
@@ -301,3 +303,6 @@ find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
 wc = 'w'ord 'c'ount
 
 find | wc -l = count and return the number of 'l'ines returned by find, which corresponds to the number of files and folders in a directory and its sub-directories.
+
+== tr: ==
+<your_command> | tr -d ',' = remove all commas from the output of `your_command`; see: https://stackoverflow.com/questions/12668020/removing-characters-from-grep-output/12668078#12668078

@@ -344,3 +344,27 @@ sn3() {
 # See also: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/587575#587575
 
 
+# Posted here: https://stackoverflow.com/questions/12144158/how-to-check-if-sed-has-changed-a-file
+# Usage: `gs_replace_str "regex_search_pattern" "replacement_string" "file_path"`
+# Ex:    `gs_replace_str "myFunc(" "myNewFunc(" "my_file.cpp"
+gs_replace_str() {
+    REGEX_SEARCH="$1"
+    REPLACEMENT_STR="$2"
+    FILENAME="$3"
+
+    num_lines_matched=$(grep -c -E "$REGEX_SEARCH" "$FILENAME")
+    # Also count number of matches, NOT just lines (`grep -c` counts lines), in case there are
+    # multiple matches per line; see: 
+    # https://superuser.com/questions/339522/counting-total-number-of-matches-with-grep-instead-of-just-how-many-lines-match/339523#339523
+    num_matches=$(grep -o -E "$REGEX_SEARCH" "$FILENAME" | wc -l)
+
+    echo -e "\n${num_matches} matches found on ${num_lines_matched} lines in file \"${FILENAME}\":"
+
+    if [ "$num_matches" -gt 0 ]; then
+        # Now *show these exact matches* with their corresponding line 'n'umbers in the file
+        grep -n --color=always -E "$REGEX_SEARCH" "$FILENAME"
+        # Now actually *DO the string replacing* on the files 'i'n place using the `sed` 
+        # 's'tream 'ed'itor!
+        sed -i "s|${REGEX_SEARCH}|${REPLACEMENT_STR}|g" "$FILENAME"
+    fi
+}
