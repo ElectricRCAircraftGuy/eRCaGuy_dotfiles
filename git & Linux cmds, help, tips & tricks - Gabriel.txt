@@ -107,6 +107,15 @@ And the more compact version of the above (assumes shorter parameter names, and 
 
 = bazel: =
 
+Good example to get started in Bazel: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice
+
+Config files:
+1. BUILD (deprecated)
+1. BUILD.bazel (new)
+1. WORKSPACE
+1. .bazelrc in your workspace directory (next to the main WORKSPACE file); see: https://docs.bazel.build/versions/master/guide.html#where-are-the-bazelrc-files
+
+Bazel Online Documentation:
 1. See all Bazel commands here (ie: `bazel --[startup options] <cmd> --[cmd options]`): https://docs.bazel.build/versions/master/command-line-reference.html#commands
 2. See all Bazel options online here! https://docs.bazel.build/versions/master/command-line-reference.html. Ex:
     1. To pass in Java Virtual Machine (JVM) options, such as heap size, as Bazel startup options: https://docs.bazel.build/versions/master/command-line-reference.html#flag--host_jvm_args
@@ -120,6 +129,7 @@ And the more compact version of the above (assumes shorter parameter names, and 
          --local_ram_resources=<an integer, or "HOST_RAM", optionally followed by [-|*]<float>.> default: "HOST_RAM*.67"
     4. To disable remote caching: https://docs.bazel.build/versions/master/command-line-reference.html#flag--remote_cache
         --remote_cache=""
+3. "A user's guide to Bazel" - https://docs.bazel.build/versions/master/guide.html
 
 
 time bazel build //...
@@ -193,9 +203,80 @@ References:
 1. https://clang.llvm.org/extra/clang-tidy/ 
 
 
+= tmux: = 
+
+EXCELLENT how-to video! https://www.youtube.com/watch?time_continue=5&v=BHhA_ZKjyxo&feature=emb_logo
+EXCELLENT SHORTCUTS & CHEAT-SHEET!: https://gist.github.com/MohamedAlaa/2961058  <=========
+
+tmux = create a new tmux session
+tmux new = same as `tmux`
+tmux new -s <session_name> = create a new tmux session called "session_name"
+tmux ls = list open tmux sessions
+tmux list-sessions = same as `tmux ls`!
+tmux attach -t <session_num> = re-attach back to 't'arget session session_num!   <===== ATTACH!
+tmux a -t <session_num> = same as above ("a" is an alias for "attach")
+tmux a = attach the only available session (assuming only one is available) <======= MY MOST COMMON USAGE!
+tmux kill-session -t <session_name_or_num> = kill this session! (or, you can just attach to it then type `exit` repeatedly until it's all exited/killed)
+tmux rename-session [-t current_name] [new_name] = rename a tmux session! See: https://superuser.com/questions/428016/how-do-i-rename-a-session-in-tmux/428025#428025 
+
+exit = exit the window
+
+Ctrl + B, then <cmd> = have tmux run <cmd>:  <=======
+== LIST OF CMDS: ==
+:<manual_cmd> = run <manual_cmd>
+:split-window = do horizontal split (same as " below!)
+=== Windows: ===
+c = create window
+, = rename window
+p = previous window
+n = next window
+w = list windows
+=== Panes (splits): ===
+% = vertical split
+" = horizontal split
+o = swap panes [ie: change from one pane to another, within the same window]
+x = kill pane
+=== Sessions: ===
+d = detach session (leaving it running on the server)!                                  <===== DETACH!
+$ = rename current session
+
+
 = git: = 
 
-To delete a branch, there are actually **3 different branches to delete!**. Read more here: https://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-locally-and-remotely/23961231#23961231
+git branch -a = show ALL branches, even remote-only branches
+git branch -r = show ONLY 'r'emote branches
+git branch -r | grep gabriel.staples = show all of my remote branches (which, by my convention, begin with "gabriel.staples_")
+git branch -d -r origin/mybranch = delete remote branch; see: https://stackoverflow.com/questions/5094293/git-remote-branch-deleted-but-still-it-appears-in-branch-a/5096739#5096739
+git branch -rd origin/mybranch = same as above
+
+git diff --name-only commit_hash = only see a list of changed files by filename
+git diff --name-status commit_hash = [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
+
+man git commit
+git commit --date "Wed Jan 01 23:00:00 2020 -0700"
+    - See `git log` for what various date formats look like
+
+== patch files / patches ==
+Source: https://stackoverflow.com/questions/28192623/create-patch-or-diff-file-from-git-repository-and-apply-it-to-another-different/28193089#28193089
+git diff tag1..tag2 > mypatch.patch = produce a patch file with the differences from tag1 to tag2
+git apply mypatch.patch = apply all the changes detailed in mypatch.patch
+git add -A && git commit = add and commit the changes just applied via the patch command above 
+SEE ALSO MY ANSWER HERE ABOUT OBTAINING A PATCH FILE WHICH IS THE EQUIVALENT OF A BIG SQUASH AFTER A MERGE!
+  https://stackoverflow.com/questions/7566416/how-to-see-which-commits-in-one-branch-arent-in-the-other/60731900#60731900 
+BREAKING UP A BIG DIFF! ^^ See the link to my answer just above!
+
+git branch --edit-description = edit a description of your branch stored in your project's local ".git/config" file; see: https://stackoverflow.com/questions/2108405/branch-descriptions-in-git/8858853#8858853 
+See also: https://github.com/bahmutov/git-branches
+    git branch --edit-description
+    git config branch.master.description "description text"  <=======
+    git config branch.master.description
+And: https://glebbahmutov.com/blog/git-branches-with-descriptions/#disqus_thread
+
+git clean -fd = WARNING WARNING WARNING THIS IS *DESTRUCTIVE*!!! REMOVE ALL UNTRACKED FILES AND DIRECTORIES; see: https://stackoverflow.com/questions/61212/how-to-remove-local-untracked-files-from-the-current-git-working-tree/64966#64966 
+
+== to delete a branch: == 
+
+There are actually **3 different branches to delete!**. Read more here: https://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-locally-and-remotely/23961231#23961231
 1. Deleting a **local branch**:
     git branch --delete <branch>
     git branch -d <branch> # Shorter version
@@ -253,6 +334,8 @@ Main Jinja2 References:
 
 = Linux (General): = 
 
+w = "Show who is logged on and what they are doing"; great command to ensure you're the only one remotely logged on to a PC, for instance!
+
 == Limit CPU usage: == 
 [throttle cpu usage]
 Limit CPU usage of a process in Linux: https://linoxide.com/linux-how-to/limit-cpu-usage-processes-linux/; ex:
@@ -277,6 +360,7 @@ This is very useful to limit your CPU usage being used by Bazel, for instance, w
 
 Leave the `cpulimit` process running as long as you want this limiting effect in place. You don't need to restart it each time you begin a new bazel build, as the bazel build server continues running in the background even after a build completes.
 
+
 == Mosh: ==
 An ssh-replacement program for better connections over wifi, cellular, and long-distance links. It is free software (GNU GPLv3)!
 It can decrease response time by a factor of 30~50 on lossy networks (see Wikipedia article below)! Ex: 16.8 seconds response time --> 0.33 seconds, or 5.9 --> 0.19 sec.
@@ -284,6 +368,7 @@ It can decrease response time by a factor of 30~50 on lossy networks (see Wikipe
 References:
 1. https://mosh.org/#getting
 2. https://en.wikipedia.org/wiki/Mosh_(software)
+
 
 == Find files and replace text in files: ==
 
@@ -315,10 +400,13 @@ find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pat
 EXAMPLE:
 find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
 
+
 == wc: == 
 wc = 'w'ord 'c'ount
 
 find | wc -l = count and return the number of 'l'ines returned by find, which corresponds to the number of files and folders in a directory and its sub-directories.
 
+
 == tr: ==
 <your_command> | tr -d ',' = remove all commas from the output of `your_command`; see: https://stackoverflow.com/questions/12668020/removing-characters-from-grep-output/12668078#12668078
+
