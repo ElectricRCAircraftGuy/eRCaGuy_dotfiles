@@ -127,7 +127,7 @@ IncludeIsMainRegex: '([-_](test|unittest))?$'
 # https://www.arduino.cc/reference/tr/language/structure/control-structure/switchcase/
 IndentCaseLabels: true
 # IndentGotoLabels: false
-# IndentPPDirectives: BeforeHash
+IndentPPDirectives: AfterHash # BeforeHash <== use on later clang-format versions
 IndentWidth:     2
 IndentWrappedFunctionNames: false
 JavaScriptQuotes: Leave
