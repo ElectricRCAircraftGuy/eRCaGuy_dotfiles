@@ -4,7 +4,9 @@ Gabriel Staples
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 
+====================================================================================================
 = Doxygen: = 
+====================================================================================================
 
 See other examples here:
 1. http://www.doxygen.nl/manual/commands.html
@@ -105,7 +107,9 @@ And the more compact version of the above (assumes shorter parameter names, and 
     }
 
 
+====================================================================================================
 = bazel: =
+====================================================================================================
 
 Good example to get started in Bazel: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice
 
@@ -131,7 +135,6 @@ Bazel Online Documentation:
         --remote_cache=""
 3. "A user's guide to Bazel" - https://docs.bazel.build/versions/master/guide.html
 
-
 time bazel build //...
 time bazel query //...
 time bazel test //...
@@ -152,7 +155,9 @@ bazel test --test_output all //... = prints ALL output to stdout, even for tests
 time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
 
 
+====================================================================================================
 = linter, clang-format: = 
+====================================================================================================
 
 == clang-format: ==
 
@@ -203,7 +208,9 @@ References:
 1. https://clang.llvm.org/extra/clang-tidy/ 
 
 
+====================================================================================================
 = tmux: = 
+====================================================================================================
 
 EXCELLENT how-to video! https://www.youtube.com/watch?time_continue=5&v=BHhA_ZKjyxo&feature=emb_logo
 EXCELLENT SHORTCUTS & CHEAT-SHEET!: https://gist.github.com/MohamedAlaa/2961058  <=========
@@ -241,7 +248,9 @@ d = detach session (leaving it running on the server)!                          
 $ = rename current session
 
 
+====================================================================================================
 = git: = 
+====================================================================================================
 
 git branch -a = show ALL branches, even remote-only branches
 git branch -r = show ONLY 'r'emote branches
@@ -252,11 +261,59 @@ git branch -rd origin/mybranch = same as above
 git diff --name-only commit_hash = only see a list of changed files by filename
 git diff --name-status commit_hash = [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
 
+git merge-base branch1 branch2 = find the common ancestor between branch1 and branch2; see: https://stackoverflow.com/questions/1549146/git-find-the-most-recent-common-ancestor-of-two-branches/1549155#1549155
+
 man git commit
 git commit --date "Wed Jan 01 23:00:00 2020 -0700"
     - See `git log` for what various date formats look like
 
+git push origin my_local_branchname:my_remote_branchname = push my_local_branchname to origin/my_remote_branchname; normally `git push`ing only allows pushing to a remote branch of the *same* branch name, so this is the work-around! See: https://stackoverflow.com/questions/13897717/push-commits-to-another-branch/13897766#13897766.
+
+== To *locally* view, review, and compare changes from a GitHub PR, in the (fantastic) "meld" file comparison tool: ==  
+Note: despite being able to locally view the changes, you'll still have to use the GitHub interface for all comments and things in the review process. 
+
+A) *Locally* look at changes in meld from a GitHub PR:  <========= VERY USEFUL FOR REVIEWING GITHUB PRs! ===========
+1. Set up `meld` as your `git difftool`: https://stackoverflow.com/questions/14821358/git-mergetool-with-meld-on-windows/48979939#48979939
+2. See the changes in meld as your `git difftool`:
+    git fetch --all
+    git checkout origin/branch_from_github_PR
+    # This allows you to see all changes introduced by this feature branch, as compared to the 
+    # original origin/master the author last rebased against or merged into their feature branch!
+    git difftool $(git merge-base origin/master HEAD)   <========= VERY USEFUL FOR REVIEWING GITHUB PRs *in meld*! =========== 
+- Optionally, see the *names of files changed* with this:
+    git difftool --name-only $(git merge-base origin/master HEAD)
+- And the *number of files changed* with this:
+    git difftool --name-only $(git merge-base origin/master HEAD) | wc -l
+- And the *commit hashes* for all commits that created the feature branch (where I learned about `git cherry`: https://stackoverflow.com/questions/7566416/how-to-see-which-commits-in-one-branch-arent-in-the-other/7566523#7566523; also sort of related (my own ans): https://stackoverflow.com/questions/7566416/how-to-see-which-commits-in-one-branch-arent-in-the-other/60731900#60731900):
+    git cherry $(git merge-base origin/master HEAD) HEAD
+- And the *commit hashes PLUS commit message subject lines* for all commits that created the feature branch, add `-v`:
+    git cherry -v $(git merge-base origin/master HEAD) HEAD
+- Why do the `git merge-base` part of the above? Because if you don't, then the `origin/master` that they recently merged into their PR to fix merge conflicts may NOT be the same `origin/master` you just pulled (yours is *newer*). If your `origin/master` you just pulled contains a bunch of newly-landed PRs from other people working simultaneously, for instance, then doing `git difftool master` alone, or `git difftool origin/master`, will be IN THE FUTURE, and you'll be `git diff`ing against FUTURE CHANGES that the PR in question doesn't even know about! Therefore, instead of seeing the true 5 or 10 files changed or whatever, you could see hundreds or even thousands of files changed from these future commits which occurred AFTER the PR requester last merged origin/master into their feature branch. 
+-- To verify this and get more insight into it, you can manually `git merge origin/master` into their feature branch on your local machine, and then `git difftool origin/master` will work correctly, and so long as you did a `git merge-base origin/master branch_from_github_PR` BEFORE merging the latest origin/master into their feature branch (and copied and saved the output hash for your future reference), `git lg` will allow you to track back to that merge-base (manually search for it in `git lg` with the forward slash tool (/)), and you'll be able to see what's going on in all of the forks and splits and how far into the FUTURE `git difftool origin/master` was looking! 
+-- So, to just avoid all this hassle in the first place, just use the `git difftool $(git merge-base origin/master HEAD)` command every time instead!
+
+B) You may also do the comparison withOUT checking out the branch from the PR as follows:
+Note: this has the benefit of allowing you to do the comparison withOUT checking out the branch first! This means you can keep open whatever work you currently had open. The downside, of course, is that you can't `git grep`, `grep`, or otherwise search the code base in the modified state, nor use your IDE or editor to explore the changes. Therefore, I highly recommend just doing option A above instead! 
+    git fetch origin/branch_from_github_PR  # update your locally-stored remote-tracking branch to origin/branch_from_github_PR
+    git difftool $(git merge-base origin/master origin/branch_from_github_PR)
+
+== To move a chunk of commits to a new branch after a merge as though they were squashed instead: == 
+See: https://stackoverflow.com/questions/7566416/how-to-see-which-commits-in-one-branch-arent-in-the-other/60731900#60731900
+
+== To compare file changes after a major rebase: == 
+0. Back up your branch and do the rebase onto latest master (this is overly-simplified, but makes the general point):
+    git branch mybranch_bak     # make a backup copy of mybranch called mybranch_bak *before* doing the rebase, just in case you mess up the rebase!
+    git rebase -i master        # rebase mybranch onto latest master
+1. Figure out which files mybranch_bak changed:
+    MERGE_BASE=$(git merge-base master mybranch_bak) && git diff --name-only $MERGE_BASE..mybranch_bak > file_list.txt
+2. Now look at any changes, ***in just these files**, between your rebased branch and your backed-up branch, to see how your rebase you just did affected these files you previously had worked in and changed: 
+    git checkout mybranch       # Ensure you are in your branch you just rebased
+    git difftool branch_bak $(cat file_list.txt)    # Look at the files of interest to see how the rebase affected them; ensure no errors exist or were introduced in the rebase!
+[THIS SINGLE-LINE CMD IS BROKEN! JUST USE THE 2-STEP CMD SEQUENCE ABOVE FOR NOW INTEAD.] OR, do it all in one single command!
+    CHANGED_FILES="$(MERGE_BASE=$(git merge-base master mybranch_bak) && git diff --name-only $MERGE_BASE..mybranch_bak)" && git difftool branch_bak "$CHANGED_FILES"
+
 == patch files / patches ==
+
 Source: https://stackoverflow.com/questions/28192623/create-patch-or-diff-file-from-git-repository-and-apply-it-to-another-different/28193089#28193089
 git diff tag1..tag2 > mypatch.patch = produce a patch file with the differences from tag1 to tag2
 git apply mypatch.patch = apply all the changes detailed in mypatch.patch
@@ -289,8 +346,10 @@ There are actually **3 different branches to delete!**. Read more here: https://
     git branch --delete --remotes <remote>/<branch>
     git branch -dr <remote>/<branch> # Shorter <===
     -----
-    git fetch --prune <remote> # Delete multiple obsolete remote-tracking branches
-    git fetch -p <remote>      # Shorter
+    git fetch --prune <remote> # Delete multiple obsolete remote-tracking branches; ie: "Before fetching, remove any remote-tracking references that no longer exist on the remote."--see `man git fetch` then search for "prune"
+    git fetch -p <remote>      # Shorter version of the above
+
+== other: == 
 
 git rev-parse HEAD = obtain the git hash for HEAD; see: https://stackoverflow.com/questions/949314/how-to-retrieve-the-hash-for-the-current-commit-in-git/949391#949391
 git rev-parse HEAD~4 = obtain the git hash 4 commits prior to HEAD; this is REALLY USEFUL, for instance, when trying to figure out which commit is N commits back when there have been multiple merges and it's confusing which commit was on which fork of those branches when looking at just `git log`. `git lg`, therefore, becomes much more important and useful as well, as it graphically shows these forks, branches, and merges in tree form!
@@ -300,9 +359,11 @@ git checkout -- my_file.txt = [WARNING: DESTRUCTIVE OF LOCAL COPY!] check out my
 git diff --name-only <commit_hash1>..<commit_hash2> | wc -l = see how many files were changed between commit_hash1 and commit_hash2
 
 
+====================================================================================================
 = grep: = 
+====================================================================================================
 
-See my own answer here, for instance, for `grep` & `git grep` examples: https://stackoverflow.com/questions/60843047/locating-a-function-in-a-git-repository/60843055#60843055
+*****See my own answer here, for instance, for `grep` & `git grep` examples: https://stackoverflow.com/questions/60843047/locating-a-function-in-a-git-repository/60843055#60843055
 
 == Exlude a word: == 
 Use the `-v`, or `--invert-match` option! See:
@@ -321,7 +382,9 @@ So this outputs just "yellowtail", by then excluding anything with "red" in it!:
     yellowtail
 
 
+====================================================================================================
 = Jinja2: = 
+====================================================================================================
 
 - a template-based automatic code/file generator (think string formatter/replacer for an entire text file).
 
@@ -332,7 +395,9 @@ Main Jinja2 References:
 4. [Jinja2 Template Designer (used for writing template files, which some people like to end in .j2)](https://jinja.palletsprojects.com/en/2.11.x/templates/)
 
 
+====================================================================================================
 = Linux (General): = 
+====================================================================================================
 
 w = "Show who is logged on and what they are doing"; great command to ensure you're the only one remotely logged on to a PC, for instance!
 
@@ -360,7 +425,6 @@ This is very useful to limit your CPU usage being used by Bazel, for instance, w
 
 Leave the `cpulimit` process running as long as you want this limiting effect in place. You don't need to restart it each time you begin a new bazel build, as the bazel build server continues running in the background even after a build completes.
 
-
 == Mosh: ==
 An ssh-replacement program for better connections over wifi, cellular, and long-distance links. It is free software (GNU GPLv3)!
 It can decrease response time by a factor of 30~50 on lossy networks (see Wikipedia article below)! Ex: 16.8 seconds response time --> 0.33 seconds, or 5.9 --> 0.19 sec.
@@ -368,7 +432,6 @@ It can decrease response time by a factor of 30~50 on lossy networks (see Wikipe
 References:
 1. https://mosh.org/#getting
 2. https://en.wikipedia.org/wiki/Mosh_(software)
-
 
 == Find files and replace text in files: ==
 
@@ -400,12 +463,10 @@ find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pat
 EXAMPLE:
 find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
 
-
 == wc: == 
 wc = 'w'ord 'c'ount
 
 find | wc -l = count and return the number of 'l'ines returned by find, which corresponds to the number of files and folders in a directory and its sub-directories.
-
 
 == tr: ==
 <your_command> | tr -d ',' = remove all commas from the output of `your_command`; see: https://stackoverflow.com/questions/12668020/removing-characters-from-grep-output/12668078#12668078
