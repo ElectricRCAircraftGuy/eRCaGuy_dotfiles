@@ -263,6 +263,19 @@ git diff --name-status commit_hash = [MUCH MORE USEFUL THAN THE CMD ABOVE!] see 
 
 git merge-base branch1 branch2 = find the common ancestor between branch1 and branch2; see: https://stackoverflow.com/questions/1549146/git-find-the-most-recent-common-ancestor-of-two-branches/1549155#1549155
 
+Assuming you just did this to rebase your feature branch onto latest master:
+    git checkout master
+    git pull origin master
+    git checkout my_branch
+    git rebase master  # or `git rebase -i master` to do it interactively
+THEN HERE'S HOW TO COMPARE A JUST-REBASED BRANCH (`my_branch`) TO ITS OLD BACKUP (`my_brank_BAK`) FROM BEFORE REBASING:
+(Assuming you're still on the newly-rebased branch `my_branch`):
+    git difftool my_branch_BAK $(git diff --name-only $(git merge-base my_branch_BAK master) my_branch_BAK) = description: the inner-most $() finds the merge-base between the backup branch and the old master, and the outer $() finds the *list of filenames* which changed from that merge-base to the backup branch. This way, we end up `difftool`ing between the backup branch and the rebased branch, ONLY LOOKING AT THE FILES WE KNOW WE HAD PREVIOUSLY CHANGED!
+  Better (easier to read):
+    BRANCH_BAK=my_branch_bak && git difftool $BRANCH_BAK $(git diff --name-only $(git merge-base $BRANCH_BAK master) $BRANCH_BAK) <======= QUICKLY CHECK NEWLY-REBASED BRANCH AGAINST ITS BACKUP BRANCH! ======= [be sure to change `master` near the end to whatever upstream you have if necessary too!] <=======
+  OR, if you're not on the newly-rebased `my_branch` anymore:
+    git difftool my_branch_BAK..my_branch $(git diff --name-only $(git merge-base my_branch_BAK master) my_branch_BAK)
+
 man git commit
 git commit --date "Wed Jan 01 23:00:00 2020 -0700"
     - See `git log` for what various date formats look like
@@ -380,6 +393,8 @@ Here's some examples. This outputs "redhat" and "yellowtail":
 So this outputs just "yellowtail", by then excluding anything with "red" in it!:
     $ echo "redhat redwood redbox redding yellowtail" | grep -E -o "(redhat|yellowtail)" | grep -v red
     yellowtail
+
+find -type f | grep -v \.xml | xargs grep --color=always my_regex_search = find only 'f'iles (no directories) which do NOT end in .xml, then search each of those files to see if they contain "my_regex_search" <====== VERY USEFUL! =======
 
 
 ====================================================================================================
