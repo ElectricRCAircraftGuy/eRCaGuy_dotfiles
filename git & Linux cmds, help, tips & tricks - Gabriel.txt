@@ -371,6 +371,77 @@ git checkout -- my_file.txt = [WARNING: DESTRUCTIVE OF LOCAL COPY!] check out my
 
 git diff --name-only <commit_hash1>..<commit_hash2> | wc -l = see how many files were changed between commit_hash1 and commit_hash2
 
+== Changing commit history author info (name and email address): == 
+See: https://help.github.com/en/github/using-git/changing-author-info
+
+In case you made a mistake and had your name and/or email wrong while pushing commits, there's a way to go back and rewrite the history of your entire repo, fixing the author info. 
+CAUTION: this rewrites the whole history of your repo, meaning ALL (I believe) commit hashes IN ALL BRANCHES IN THE ENTIRE REPO will be changed when done, which means NO common merge-base will exist with any prior, unmerged branches or commits, and anyone who has forked your repo will no longer be able to merge into it without conflicts until they do a *hard reset* to reset their repo back on top of your changed repo, like this:
+
+- Perform a hard reset of your local `master` branch onto the latest `upstream/master` branch:
+
+    git fetch --all 
+    git checkout master
+    # reset their local `master` branch onto your latest, rewritten, upstream master branch (as
+    # stored locally on their PC as remote-tracking-branch `upstream/master`)
+    git reset --hard upstream/master  # WARNING: this is destructive of any local changes or differences
+
+So, here's how to rewrite the history. See GitHub's instructions here: https://help.github.com/en/github/using-git/changing-author-info
+
+1. Open Terminal.
+2. Create a fresh, bare clone of your repository:
+
+    git clone --bare https://github.com/user/repo.git
+    cd repo.git
+
+3. Copy and paste the script, replacing the following variables based on the information you gathered:
+    1. OLD_EMAIL
+    2. CORRECT_NAME
+    3. CORRECT_EMAIL
+
+        #!/bin/sh
+
+        git filter-branch --env-filter '
+
+        OLD_EMAIL="old_email@gmail.com"
+        CORRECT_NAME="Your_Correct_Full_Name"
+        CORRECT_EMAIL="correct_email@gmail.com"
+
+        if [ "$GIT_COMMITTER_EMAIL" = "$OLD_EMAIL" ]
+        then
+        export GIT_COMMITTER_NAME="$CORRECT_NAME"
+        export GIT_COMMITTER_EMAIL="$CORRECT_EMAIL"
+        fi
+        if [ "$GIT_AUTHOR_EMAIL" = "$OLD_EMAIL" ]
+        then
+        export GIT_AUTHOR_NAME="$CORRECT_NAME"
+        export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL"
+        fi
+        ' --tag-name-filter cat -- --branches --tags
+
+4. Press Enter to run the script.
+5. Review the new Git history for errors.
+6. Push the corrected history to GitHub:
+
+    git push --force --tags origin 'refs/heads/*'
+
+7. Clean up the temporary clone:
+
+    cd ..
+    rm -rf repo.git
+
+8. [GS-added] Now update your local ".git/config" file in this repo, OR your user-level "~/.gitconfig" file in your user home directory, ***to ensure your new name and email are correct SO THAT ALL FUTURE COMMITS YOU MAKE in this repo will have your new, correct name and email as well!***
+
+    # assuming you're in your repo of interest, run this to open the editor and edit this repo's
+    # git config file (alternatively, edit your user-level git config file with 
+    # `gedit ~/.gitconfig`)
+    gedit .git/config  
+
+  Then, ensure the following is somewhere in the file. If it isn't, add it to the bottom!
+
+    [user]
+        name = Your_Correct_Full_Name
+        email = correct_email@gmail.com
+
 
 ====================================================================================================
 = grep: = 
