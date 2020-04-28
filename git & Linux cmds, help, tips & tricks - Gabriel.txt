@@ -147,9 +147,9 @@ bazel --host_jvm_args=-Xmx16g build //... = set max java heap size to 16g then b
 *****BEST BAZEL BUILD CMD*****
 time bazel --host_jvm_args=-Xmx16g build //...; gs_alert = same as above but better: time the whole thing and do an alert sound (bell character sound) & pop-up notification to notify me when done
 
-bazel test --test_output errors //... = log all errors (failed test results) to stdout; see: https://groups.google.com/forum/#!topic/bazel-discuss/2mJPklIaCeo; see also: `bazel help test` for other options!
-bazel test --test_output summary //... = the default (doesn't show errors; just shows a summary)
-bazel test --test_output all //... = prints ALL output to stdout, even for tests that pass!
+bazel test --test_output=errors //... = log all errors (failed test results) to stdout--in other words, you'll only see a long output from running the bazel test if it fails!--this is a good setting to use; for help, see: https://groups.google.com/forum/#!topic/bazel-discuss/2mJPklIaCeo; see also: `bazel help test` for other options!
+bazel test --test_output=summary //... = the default (doesn't show errors; just shows a summary)
+bazel test --test_output=all //... = prints ALL output to stdout, even for tests that pass!
 
 *****BEST BAZEL TEST CMD (optionally add `--host_jvm_args=-Xmx16g` if needed too)*****
 time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
@@ -247,6 +247,8 @@ x = kill pane
 d = detach session (leaving it running on the server)!                                  <===== DETACH!
 $ = rename current session
 
+tmux source-file ~/.tmux.conf = (unconfirmed--maybe is the wrong command?) re-source your ~/.tmux.conf tmux config file to bring in its latest changes! See here: https://sanctum.geek.nz/arabesque/reloading-tmux-config/
+tmux source ~/.tmux.conf = (try this instead maybe--looks more legitimate!) same as above apparently--need to try it out still; see here: https://unix.stackexchange.com/questions/66606/tmux-not-sourcing-my-tmux-conf/66607#66607; has lots of upvotes, so looks more legitimate
 
 ====================================================================================================
 = git: = 
