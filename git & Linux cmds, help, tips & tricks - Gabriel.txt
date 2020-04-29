@@ -156,6 +156,17 @@ time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get co
 
 
 ====================================================================================================
+= googletest (gtest) / googlemock (gmock): = 
+====================================================================================================
+
+See the "eRCaGuy_dotfiles/googletest" directory.
+
+== test (`TEST() {}`, `TEST_F() {}`) order: == 
+
+You can NOT rely on google tests to be run in any particular order. Also, the order can be shuffled with `--gtest_shuffle`; see: https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#shuffling-the-tests
+
+
+====================================================================================================
 = linter, clang-format: = 
 ====================================================================================================
 
