@@ -570,3 +570,55 @@ find | wc -l = count and return the number of 'l'ines returned by find, which co
 == tr: ==
 <your_command> | tr -d ',' = remove all commas from the output of `your_command`; see: https://stackoverflow.com/questions/12668020/removing-characters-from-grep-output/12668078#12668078
 
+
+====================================================================================================
+= flowcharts and drawing tools, graphics, emojis, unicode chars & icons, etc.: = 
+====================================================================================================
+
+Every piece of software is benefited by flowcharts, diagrams, and drawings to show how it works and how the data flows. Here are a few popular options:
+
+1. *****LucidChart: https://www.lucidchart.com
+    1. It is paid/professional (probably the industry standard), but has a free light version--sign up with just an email address
+1. ****Google Slides/Docs/Drawings: docs.google.com
+    1. A bit simplistic, but works
+1. ***LibreOffice Draw
+1. *****+AsciiFlow: http://asciiflow.com/; and on GitHub: https://github.com/lewish/asciiflow2
+    1. Probably my favorite! 
+    1. Super simple, ASCII-text-based drawing tool for easily pasting ASCII flow chart drawings into text files such as readmes or as comments/documentation inside actual code files.
+    1. Looks great inside GitHub markdown readmes when pasted as though it was a code snippet!
+    1. For inserting symbols, emojis, specialty icons, etc, as unicode chars, just copy and paste from one of the nice lists shown below: 
+1. *****For other ASCII-based drawing options, see here! https://unix.stackexchange.com/questions/126630/creating-diagrams-in-ascii
+1. Dot (a scripted flow-chart drawing tool) & GraphViz
+
+== Unicode icons/chars/emojis: == 
+
+1. Graphics available on GitHub, apparently: https://gist.github.com/rxaviers/7360908
+    Ex: `:goat:`, `:rooster:`, `:+1:`, etc.
+2. A ton of unicode chars, including with color graphics: https://gist.github.com/endolith/157796
+    Ex: 
+    🎃 Jack-O-Lantern
+    🎄 Christmas Tree
+    🎅 Father Christmas
+    🎆 Fireworks
+    🎇 Firework Sparkler
+    🎈 Balloon
+    🎉 Party Popper
+    etc.
+3. Just some very basic ASCII graphics and symbols: https://gist.github.com/spudbean/1558257
+    Ex:
+    ◔̯◔ [sad]
+    ⊙︿⊙ [sad]
+    ◕︵◕ [sad]
+    ●︵• [sad]
+    ◉︵◉ [really sad]
+    ಡ_ಡ [misty eyes]
+    ಥ_ಥ [crying]
+    ಢ_ಢ [crying]
+    ಢ_ಥ [heavily distraught]
+    ⊙﹏⊙ [embarrassed]
+    ( ﾟoﾟ) [surprised]
+    ⋋_⋌ [frustrated]
+    〴⋋_⋌〵[angry]
+
+
+
