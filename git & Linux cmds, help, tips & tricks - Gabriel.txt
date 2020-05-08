@@ -509,6 +509,86 @@ So, here's how to rewrite the history. See GitHub's instructions here: https://h
 
 
 ====================================================================================================
+= github: = 
+====================================================================================================
+
+- This is mostly to describe things like doing searches on GitHub. For `git` commands related to GitHub, see the "= git: =" section above instead.
+
+== GitHub search: == 
+1. See my longer answer and "GitHub search quick-reference cheat sheet" here: https://stackoverflow.com/questions/29136057/can-i-search-github-labels-with-logical-operator-or/61618255#61618255
+1. See my shorter answer here. This is a summary of what to expect when using the GitHub global search bar versus the GitHub Pull Request search bar: https://webapps.stackexchange.com/questions/57933/how-to-search-with-logic-operators-on-github/142071#142071
+
+The following content is my own content that I wrote, originally copy/pasted from [here](https://stackoverflow.com/questions/29136057/can-i-search-github-labels-with-logical-operator-or/61618255#61618255).
+
+# GitHub search quick-reference cheat sheet:
+Reminder: [read here](https://webapps.stackexchange.com/questions/57933/how-to-search-with-logic-operators-on-github/142071#142071) for a quick refresher/summary of what to expect when using the GitHub global search bar versus the GitHub Pull Request search bar.
+
+## DEFAULT GITHUB PULL REQUEST (PR) SEARCHES:
+1. All open PRs created by me: 
+    1. https://github.com --> click "Pull requests" at the *very top*. 
+    1. Direct link: https://github.com/pulls
+1. All open PRs assigned to me: 
+    1. https://github.com --> "Pull requests" --> "Assigned".
+    1. Direct link: https://github.com/pulls/assigned
+1. All open PRs which mention me in a comment (via @my-username): 
+    1. https://github.com --> "Pull requests" --> "Mentioned".
+    1. Direct link: https://github.com/pulls/mentioned
+1. All open PRs for which my review is requested:
+    1. https://github.com --> "Pull requests" --> "Review requests".
+    1. Direct link: https://github.com/pulls/review-requested
+
+## CUSTOM GITHUB PULL REQUEST (PR) SEARCHES:
+-----------------------------------------
+1. SEE ALL OPEN PRS--BY AUTHOR
+Sample Chrome bookmark to create to one of these URLs: "PRS BY AUTHOR--Username 1"
+-----------------------------------------
+    1. Using the Pull request search bar:
+        1. https://github.com --> click "Pull requests" at the *very top*. 
+        1. Direct link: https://github.com/pulls
+        1. Now use the search bar at the top-center/top-right.
+        1. _Note that this search bar is limited to only one author at a time:_
+
+                is:open is:pr archived:false author:username-1
+                is:open is:pr archived:false author:username-2 
+                is:open is:pr archived:false author:username-3 
+                is:open is:pr archived:false author:username-4
+
+        1. Here is a sample URL for the first of the 4 searches just above: https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+author%3Ausername-1
+            1. Now create a Google Chrome shortcut named "PRS BY AUTHOR--Username 1", pointing to this URL!
+
+    1. Using the GitHub global search bar (main search bar at top-left of any GitHub page):
+        - This search bar allows multiple authors at once, but displays slightly differently than (doesn't look as good as) the Pull request search above:
+
+                is:open is:pr archived:false author:username-1 author:username-2 author:username-3 author:username-4
+
+        - Here is what the URL looks like after performing this search in the GitHub global search bar: https://github.com/search?q=is%3Aopen+is%3Apr+archived%3Afalse+author%3Ausername-1+author%3Ausername-2+author%3Ausername-3+author%3Ausername-4
+            - Now create a Google Chrome shortcut named "PRS BY AUTHOR--ALL", pointing to this URL!
+
+-----------------------------------------
+2. SEE REVIEW REQUESTS of me from AUTHOR
+Sample Chrome bookmark to create to one of these URLs: "REVIEW REQUESTED BY--Username 1"
+-----------------------------------------
+    1. Using the Pull request search bar:
+        - Note that this search bar is limited to only one author at a time: 
+
+                is:open is:pr archived:false review-requested:my-username author:username-1
+                is:open is:pr archived:false review-requested:my-username author:username-2
+                is:open is:pr archived:false review-requested:my-username author:username-3
+                is:open is:pr archived:false review-requested:my-username author:username-4
+
+        - Here is a sample URL for the first search above: https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+review-requested%3Amy-username+author%3Ausername-1
+            - Now create a Google Chrome shortcut named "REVIEW REQUESTED BY--Username 1", pointing to this URL!
+
+    1. Using the GitHub global search bar (main search bar at top-left of any GitHub page):
+        - This search bar allows multiple authors at once, but displays slightly differently than (doesn't look as good as) the Pull request search above:
+
+                is:open is:pr archived:false review-requested:my-username author:username-1 author:username-2 author:username-3 author:username-4
+
+        - URL produced by the above global search: https://github.com/search?q=is%3Aopen+is%3Apr+archived%3Afalse+review-requested%3Amy-username+author%3Ausername-1+author%3Ausername-2+author%3Ausername-3+author%3Ausername-4
+            - Now create a Google Chrome shortcut named "REVIEW REQUESTED BY--ALL", pointing to this URL!
+
+
+====================================================================================================
 = grep: = 
 ====================================================================================================
 
