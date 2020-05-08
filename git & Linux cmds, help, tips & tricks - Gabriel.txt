@@ -311,6 +311,12 @@ git branch -r | grep gabriel.staples = show all of my remote branches (which, by
 git branch -d -r origin/mybranch = delete remote branch; see: https://stackoverflow.com/questions/5094293/git-remote-branch-deleted-but-still-it-appears-in-branch-a/5096739#5096739
 git branch -rd origin/mybranch = same as above
 
+git add -A = add (stage changes for) all changes and files, including new files or actions to delete files
+git add . = add (stage changes for) only those files which are already tracked (have been previously commited)
+git add --patch <filename> = interactively add hunks/parts of filename, as desired! See here: https://stackoverflow.com/questions/1085162/commit-only-part-of-a-file-in-git/1085191#1085191
+git add -p <filename> = same as above
+git gui = open the GUI tool to do things like stage hunks, lines, or files; very useful for breaking up diffs/PRs! See: https://stackoverflow.com/questions/1085162/commit-only-part-of-a-file-in-git/1085202#1085202
+
 git diff --name-only commit_hash = only see a list of changed files by filename
 git diff --name-status commit_hash = [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
 
