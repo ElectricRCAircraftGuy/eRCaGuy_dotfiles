@@ -301,6 +301,10 @@ tmux source ~/.tmux.conf = (try this instead maybe--looks more legitimate!) same
 = git: = 
 ====================================================================================================
 
+General References:
+1. Stack Overflow (do general searches)
+2. [GitHub git cheat sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet/)
+
 git branch -a = show ALL branches, even remote-only branches
 git branch -r = show ONLY 'r'emote branches
 git branch -r | grep gabriel.staples = show all of my remote branches (which, by my convention, begin with "gabriel.staples_")
@@ -309,6 +313,15 @@ git branch -rd origin/mybranch = same as above
 
 git diff --name-only commit_hash = only see a list of changed files by filename
 git diff --name-status commit_hash = [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
+
+git log = show the git log history
+git lg = show the git log history in a condensed form, with graphics lines to show forks, branches, and merges
+    See: "eRCaGuy_dotfiles/home/.gitconfig" for how to create this `lg` alias for git, and 
+    https://coderwall.com/p/euwpig/a-better-git-log for where I originally got it from!
+git log --follow <one_single_filename> = [VERY USEFUL!] Show the `git log` history which affected JUST THIS ONE SINGLE FILE YOU TOLD IT TO FOLLOW! This is VERY helpful to track and follow all of the commits which touched a certain file, in order to go back commit by commit until you find out **which commit** introduced the changes to that file that you care about! 
+    See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/ and `man git log` (then search for "--follow")
+git show <commit_hash> = show the commit message that was stored, as well as a `git diff` of the changes this commit introduced, and to which files! 
+    See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/
 
 git merge-base branch1 branch2 = find the common ancestor between branch1 and branch2; see: https://stackoverflow.com/questions/1549146/git-find-the-most-recent-common-ancestor-of-two-branches/1549155#1549155
 
@@ -338,7 +351,10 @@ A) *Locally* look at changes in meld from a GitHub PR:  <========= VERY USEFUL F
 1. Set up `meld` as your `git difftool`: https://stackoverflow.com/questions/14821358/git-mergetool-with-meld-on-windows/48979939#48979939
 2. See the changes in meld as your `git difftool`:
     git fetch --all
-    git checkout origin/branch_from_github_PR
+    # OR, if on a HUGE repo with thousands of branches, `git fetch --all` can take a long time (1 to 2+ minutes), so instead just fetch the 2 branches you need to check out: 1) the remote branch of interest from the GitHub PR, and 2) the latest remote master
+    git fetch origin branch_from_github_PR master
+    # Then check out this remote GitHub branch locally (ie: check out your locally-stored remote-tracking branch [of this branch] which just got updated by the `fit fetch` above!)
+    git checkout branch_from_github_PR
     # This allows you to see all changes introduced by this feature branch, as compared to the 
     # original origin/master the author last rebased against or merged into their feature branch!
     git difftool $(git merge-base origin/master HEAD)   <========= VERY USEFUL FOR REVIEWING GITHUB PRs *in meld*! =========== 
