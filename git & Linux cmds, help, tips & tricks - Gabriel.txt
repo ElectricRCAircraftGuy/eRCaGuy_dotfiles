@@ -218,6 +218,32 @@ A source code static analysis (programming errors, style, best practices, bug ch
 References:
 1. https://clang.llvm.org/extra/clang-tidy/ 
 
+== clang sanitizers: ==
+
+Sanitizers are built into the clang (LLVM) compiler, and designed to find problems, such as undefined behavior. 
+
+1. There are a bunch of sanitizers; see them all here: https://clang.llvm.org/docs/index.html; search this page for "sanitizer"; ex:
+    1. https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
+        1. Finds undefined behavior, such as signed overflow
+    1. https://clang.llvm.org/docs/AddressSanitizer.html
+        1. Finds address problems, such as use after free, out of bounds access, double free, etc.
+    1. https://clang.llvm.org/docs/ThreadSanitizer.html
+        1. Detects data races. 
+    1. https://clang.llvm.org/docs/MemorySanitizer.html
+        1. Detects uninitialized reads.
+    1. etc.
+
+Example of using the undefined behavior sanitizer:
+- Read more here: https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
+Normal clang build command for a single-file project, test.cc:
+    clang++ test.cc  # build it
+    ./a.out          # run it
+And now building the same project, but "sanitizing" for (looking for) undefined behavior:
+    clang++ -fsanitize=undefined test.cc  # build it in sanitize mode
+    ./a.out  # run it
+    # Results: undefined behavior found while running the application!
+    #       test.cc:3:5: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'
+
 
 ====================================================================================================
 = tmux: = 
