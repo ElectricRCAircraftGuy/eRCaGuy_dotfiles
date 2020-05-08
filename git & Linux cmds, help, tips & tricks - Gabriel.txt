@@ -154,6 +154,16 @@ bazel test --test_output=all //... = prints ALL output to stdout, even for tests
 *****BEST BAZEL TEST CMD (optionally add `--host_jvm_args=-Xmx16g` if needed too)*****
 time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
 
+== Visualizing your Bazel build using dot/Graphviz ==
+See:
+1. Bazel info:
+    1. https://blog.bazel.build/2015/06/17/visualize-your-build.html
+    1. *****https://docs.bazel.build/versions/master/query-how-to.html
+1. General dot/Graphviz info:
+    1. https://www.graphviz.org/
+    1. [Drawing graphs with _dot_](https://www.graphviz.org/pdf/dotguide.pdf)
+    1. https://en.wikipedia.org/wiki/DOT_(graph_description_language)
+
 
 ====================================================================================================
 = googletest (gtest) / googlemock (gmock): = 
