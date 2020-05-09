@@ -62,6 +62,8 @@ You can run the main installation script for this **eRCaGuy_dotfiles** project l
 
 # PC-to-PC Git-based Folder/Project Sync Script: 
 
+Sync a **50\~100+ GB folder** containing **100k \~ 1M+ files** from PC1 to PC2 over a **cell phone WiFi hotspot** using as little as **25\~50 MB of cellular data** in **20 seconds \~ 2 minutes**.
+
     sync_git_repo_from_pc1_to_pc2.sh
 
 ## Description & Details:
