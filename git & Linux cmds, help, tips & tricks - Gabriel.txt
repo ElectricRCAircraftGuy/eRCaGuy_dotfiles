@@ -326,8 +326,55 @@ git lg = show the git log history in a condensed form, with graphics lines to sh
     https://coderwall.com/p/euwpig/a-better-git-log for where I originally got it from!
 git log --follow <one_single_filename> = [VERY USEFUL!] Show the `git log` history which affected JUST THIS ONE SINGLE FILE YOU TOLD IT TO FOLLOW! This is VERY helpful to track and follow all of the commits which touched a certain file, in order to go back commit by commit until you find out **which commit** introduced the changes to that file that you care about! 
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/ and `man git log` (then search for "--follow")
+git log --author="name or email regex search pattern" = show an abridged git log with ONLY commits by an author which matches this regex search pattern. Ex:
+    git log --author="Gabriel Staples"
+    git log --author="some_email@gmail.com"
+
 git show <commit_hash> = show the commit message that was stored, as well as a `git diff` of the changes this commit introduced, and to which files! 
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/
+
+== `git ls-files` and `git ls-tree`: ==
+
+HOW TO LIST (ls) FILES IN A GIT REPO: `git ls-files` and `git ls-tree`
+
+References:
+    - `man git ls-files`: https://git-scm.com/docs/git-ls-files
+    - `man git ls-tree`: https://git-scm.com/docs/git-ls-tree
+
+1. GIT LS-FILES:
+
+git ls-files = list (`ls`-like) all files in the git repo in the directory you are currently in
+cd $(git rev-parse --show-toplevel) = cd into the absolute path of the top-level (root) of this git repo; see: https://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-root-directory-in-one-command/957978#957978
+cd $(git rev-parse --show-toplevel) && git ls-files = list all files in this git repo
+git ls-files | wc -l = count all files in this repo, at this dir level or lower
+
+find | wc -l = count all files in this directory or lower, including those NOT part of the checked-in files to this repo, and including all .git hidden metadata files to describe the branches and content of this repo; so...kind of similar to the above, except counting MORE than what is actually checked-in to this repo!
+
+2. GIT LS-TREE:
+
+git ls-tree -r HEAD = list (`ls`-like) all files in the git repo in branch/commit HEAD in the directory you are currently in
+    See: https://stackoverflow.com/questions/277546/can-i-use-git-to-search-for-matching-filenames-in-a-repository/277557#277557
+git ls-tree --full-tree -r HEAD = same as above, except list ALL files in the repo, as if you were in the repo's root dir when making this call
+cd $(git rev-parse --show-toplevel) && git ls-tree -r HEAD = same effect as the above, simply by `cd`ing into the repo's root dir first.
+git ls-tree -r HEAD | wc -l = same as `git ls-files | wc -l`: count all files in this repo, at this dir level or lower
+git ls-tree --full-tree -r HEAD | wc -l = count all files in this repo, period
+cd $(git rev-parse --show-toplevel) && git ls-tree -r HEAD | wc -l = same as above, but in a different way; count all files in this repo, period
+
+git ls-tree -r HEAD | grep "my_filename" = search for file "my_filename" in branch/commit HEAD at this dir level or lower <========= VERY USEFUL! =========
+git ls-tree --full-tree -r HEAD | grep "my_filename" = search for file "my_filename" in branch/commit HEAD in ALL dirs! <========= VERY USEFUL! (MORE THOROUGH) =========
+git ls-files | grep "my_filename" = same as above, except no need to explicitly set the branch/commit you'd like to search in! (It just searches the currently-checked-out branch/commit you're in). <========= VERY USEFUL! (MY FAVORITE) =========
+    See: https://stackoverflow.com/questions/277546/can-i-use-git-to-search-for-matching-filenames-in-a-repository/24289481#24289481
+
+3. To find a long-lost file that could be in ANY of your repo's branches or commits!
+    See: https://stackoverflow.com/questions/277546/can-i-use-git-to-search-for-matching-filenames-in-a-repository/34100574#34100574
+    and the gist it references: https://gist.github.com/dirkjot/073ffac502567e32f7ad
+    - It relies on `git rev-list --all` as well as `git ls-tree --full-tree -r COMMIT | grep "search_term"`, and is quite ingenious and useful!
+
+4. Related:
+git rev-list --all = list all commits in reverse-chronological order which are traceable from your currently-checked-out commit...I think?
+git rev-list HEAD --max-count=10 = list only the last 10 commits in reverse-chronological order which are traceable starting from "parent commit" HEAD; note that this is identical to doing `git log` (or `git lg`) and then looking back at ONLY the commit hashes for ONLY the last "--max-count" commits!
+
+==
 
 git merge-base branch1 branch2 = find the common ancestor between branch1 and branch2; see: https://stackoverflow.com/questions/1549146/git-find-the-most-recent-common-ancestor-of-two-branches/1549155#1549155
 
@@ -600,6 +647,8 @@ Sample Chrome bookmark to create to one of these URLs: "REVIEW REQUESTED BY--Use
 
 *****See my own answer here, for instance, for `grep` & `git grep` examples: https://stackoverflow.com/questions/60843047/locating-a-function-in-a-git-repository/60843055#60843055
 
+time git grep -E -n "\bmyFuncName\b" = do a *whole word search* (hence the \b surrounding the search string) for "myFuncName", displaying li'n'e 'n'umbers (`-n`) too 
+
 == Exlude a word: == 
 Use the `-v`, or `--invert-match` option! See:
 1. https://stackoverflow.com/questions/4538253/how-can-i-exclude-one-word-with-grep/4538335#4538335
@@ -617,6 +666,8 @@ So this outputs just "yellowtail", by then excluding anything with "red" in it!:
     yellowtail
 
 find -type f | grep -v \.xml | xargs grep --color=always my_regex_search = find only 'f'iles (no directories) which do NOT end in .xml, then search each of those files to see if they contain "my_regex_search" <====== VERY USEFUL! =======
+
+find some/path/ -maxdepth 1 -type d | grep "_messages$" = find only 'd'irectories (`-type d`) in some/path/, only 1 layer deep (`-maxdepth 1`), which have names that end in (`$` indicates a line end) "_messages"
 
 
 ====================================================================================================
@@ -637,6 +688,26 @@ Main Jinja2 References:
 ====================================================================================================
 
 w = "Show who is logged on and what they are doing"; great command to ensure you're the only one remotely logged on to a PC, for instance!
+
+df -h = show 'd'isk 'f'ile usage to see how much hard drive/SSD space you have total, used, and remaining
+free -h = look at RAM and swap file/swap partition usage
+du -h = see file space usage of every item (file? and folder) in your current directory; NB: just look at the very last line to see the total usage of your current directory!
+du -h | tail -n 1 = same as above, except retain ONLY the *last line* so that you can immediately see the total usage of this directory! Sample output:
+        100G .
+du -h | tail -n 1 | awk '{print $1}' = same as the line just above, except also retain ONLY the *first column* so that you get rid of the extra dot (.) at the end which indicates "current directory". Sample output:
+        100G
+    See here for `awk` usage help which enabled me to retain only the 1st column above: https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
+
+== awk: == 
+Use `awk` to select only certain columns of textual output--see:
+1. https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
+1. and https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/7315716#7315716
+
+Ex:
+    echo "column1 column2 column3 column4" | awk '{print $1}' = select & keep only the 1st column of the text
+    echo "column1 column2 column3 column4" | awk '{print $2}' = select & keep only the 2nd column of the text
+    echo "column1 column2 column3 column4" | awk '{print $3}' = select & keep only the 3rd column of the text
+    echo "column1 column2 column3 column4" | awk '{print $4}' = select & keep only the 4th column of the text
 
 == Limit CPU usage: == 
 [throttle cpu usage]
