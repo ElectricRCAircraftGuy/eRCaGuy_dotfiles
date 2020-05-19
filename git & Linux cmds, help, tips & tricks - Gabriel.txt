@@ -121,7 +121,12 @@ Config files:
 
 Bazel Online Documentation:
 1. See all Bazel commands here (ie: `bazel --[startup options] <cmd> --[cmd options]`): https://docs.bazel.build/versions/master/command-line-reference.html#commands
-2. See all Bazel options online here! https://docs.bazel.build/versions/master/command-line-reference.html. Ex:
+1. See all Bazel options online here! https://docs.bazel.build/versions/master/command-line-reference.html. Ex:
+    1. Sub-categories of options:
+        1. All `bazel build` options: https://docs.bazel.build/versions/master/command-line-reference.html#build-options
+        1. All `bazel test`  options: https://docs.bazel.build/versions/master/command-line-reference.html#test-options
+        1. All `bazel query` options: https://docs.bazel.build/versions/master/command-line-reference.html#query-options
+        1. etc.
     1. To pass in Java Virtual Machine (JVM) options, such as heap size, as Bazel startup options: https://docs.bazel.build/versions/master/command-line-reference.html#flag--host_jvm_args
         --host_jvm_args=<jvm_arg>
     2. To limit how many of your local CPUs Bazel can use. Note that HOST_CPUS here is probably (and usually is) 1/2 the number of cores you have. So, if gnome-system-monitor shows you have 8 cores, you may only have 4 CPUs.: https://docs.bazel.build/versions/master/command-line-reference.html#flag--local_cpu_resources
@@ -133,14 +138,27 @@ Bazel Online Documentation:
          --local_ram_resources=<an integer, or "HOST_RAM", optionally followed by [-|*]<float>.> default: "HOST_RAM*.67"
     4. To disable remote caching: https://docs.bazel.build/versions/master/command-line-reference.html#flag--remote_cache
         --remote_cache=""
-3. "A user's guide to Bazel" - https://docs.bazel.build/versions/master/guide.html
+1. "A user's guide to Bazel" - https://docs.bazel.build/versions/master/guide.html
+    1. Specifying targets to build (`bazel build //...` [build the whole project], `bazel build //:all` [build just the top-level build targets], etc.) - 
+       https://docs.bazel.build/versions/master/guide.html#specifying-targets-to-build
+1. Macros (Bazel build rule macros--used to generate build targets):
+    1. Macros: https://docs.bazel.build/versions/master/skylark/macros.html
+        1. Expanding macros: https://docs.bazel.build/versions/master/skylark/macros.html#expanding-macros. To see their expanded forms:
+                time bazel query --output=build //path/to/my/target/... > out.txt  # Store the expanded form of all macros/build rules into out.txt
+                subl out.txt  # open out.txt in Sublime Text 3
+    1. Creating a macro: https://docs.bazel.build/versions/master/skylark/tutorial-creating-a-macro.html
 
-time bazel build //...
+
+time bazel build //... = build the whole project
+time bazel build //:all = (apparently) build only the build targets at the **top level** of the project (defined directly in the top-most BUILD or BUILD.bazel file), NOT recursing down and building all lower-level build targets too, like `bazel build //...` would do; see here for more info:
+    https://docs.bazel.build/versions/master/guide.html#specifying-targets-to-build
 time bazel query //...
 time bazel test //...
 bazel --version
 bazel help
 bazel help build
+
+time bazel query --output=build //path/to/my/target/... > out.txt = Store the expanded form of all macros/build rules into out.txt; see above; see this too for more on **expanding Bazel build macros**: https://docs.bazel.build/versions/master/skylark/macros.html#expanding-macros 
 
 bazel --host_jvm_args=-Xmx16g build //... = set max java heap size to 16g then build everything; see: https://stackoverflow.com/questions/55190272/java-lang-outofmemoryerror-when-running-bazel-build/60572662#60572662
 
