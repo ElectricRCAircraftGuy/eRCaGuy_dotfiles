@@ -485,6 +485,8 @@ See the section titled "How to use a patch file as a much easier replacement for
         # Patch the 30 commit patch file onto it:
         git apply mypatch.patch
 
+    If your patch won't apply, do some Googling. Ex: ["git patch failed"](https://www.google.com/search?q=git+patch+failed&oq=git+patch+failed&aqs=chrome..69i57.5337j0j7&sourceid=chrome&ie=UTF-8). You might try some of these suggestions to force the patch to apply: https://stackoverflow.com/questions/4770177/git-patch-does-not-apply.
+
     Now I have my 30-commit patch all applied locally, but unstaged and uncommitted.
 
     ## Now use `git gui` to add files, chunks, and/or lines and break up your big PR or "diff", as you see fit.
