@@ -760,6 +760,25 @@ du -h | tail -n 1 | awk '{print $1}' = same as the line just above, except also 
         100G
     See here for `awk` usage help which enabled me to retain only the 1st column above: https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
 
+== `head` and `tail`: == 
+- Use `head` to output the first part of files
+- Use `tail` to output the last part of files
+- This works great for piping `grep` output to one of these too!
+
+echo -e "1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \n10" | head -n 3 = output just the FIRST 3 lines:
+    $ echo -e "1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \n10" | head -n 3
+    1 
+    2 
+    3 
+echo -e "1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \n10" | tail -n 3 = output just the LAST 3 lines:
+    $ echo -e "1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \n10" | tail -n 3 
+    8 
+    9 
+    10
+
+grep -rni --color=always "some search expression" | head -n 50 = output just the FIRST 50 occurrences I find!
+grep -rni --color=always "some search expression" | tail -n 50 = output just the LAST 50 occurrences I find!
+
 == awk: == 
 Use `awk` to select only certain columns of textual output--see:
 1. https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
