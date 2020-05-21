@@ -5,7 +5,9 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # git-filechange-search.sh
-# - see which commit changed a certain keyword (regex search pattern) in a certain file
+# - See which commit changed a certain keyword (regex search pattern) in a certain file.
+# - This allows you to track down the exact commit which changed a certain variable or function 
+#   of interest, for example, in a particular file.
 
 # INSTALLATION INSTRUCTIONS:
 # 1. Create a symlink in ~/bin to this script so you can run it from anywhere:
@@ -152,7 +154,7 @@ main() {
     # which modify this file
     if [ -z "$REGEX_SEARCH" ]; then 
         commit="commit_hash"
-
+        
         # Copy to VERBOSE_INSTRUCTIONS below to match if you modify this block
         VERBOSE_INSTRUCTIONS="\
 Run this command to see the commit log header for this commit:\n\
@@ -191,13 +193,14 @@ Run this command to see the commit changes:\n\
                 echo "$VERBOSE_STR"
                 echo -e "$VERBOSE_INSTRUCTIONS"
             elif [ "$VERBOSITY_LEVEL" -eq 2 ]; then
-                echo "------"
+                echo "======"
                 # echo "$VERBOSE_STR" # Unused
                 echo "${count}/${num_elements}: ${commit}"
                 echo "---full commit header start---"
                 git log -n 1 "$commit"
                 echo "---full commit header end---"
                 echo -e "$VERBOSE_INSTRUCTIONS"
+                echo ""
             fi
         done
         echo "($num_elements total commits)"
