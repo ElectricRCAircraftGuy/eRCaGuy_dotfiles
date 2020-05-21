@@ -350,6 +350,37 @@ git lg = show the git log history in a condensed form, with graphics lines to sh
     https://coderwall.com/p/euwpig/a-better-git-log for where I originally got it from!
 git log --follow <one_single_filename> = [VERY USEFUL!] Show the `git log` history which affected JUST THIS ONE SINGLE FILE YOU TOLD IT TO FOLLOW! This is VERY helpful to track and follow all of the commits which touched a certain file, in order to go back commit by commit until you find out **which commit** introduced the changes to that file that you care about! 
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/ and `man git log` (then search for "--follow")
+    [keywords: show file history]
+git log --follow some/file/name | grep --color=always commit | head -n 10 = output just the FIRST 10 commits, hashes ONLY (ie: only the line containing the word "commit"), which have changed file some/file/name; ex:
+    $ git log --follow "git & Linux cmds, help, tips & tricks - Gabriel.txt" | grep --color=always commit | head -n 10
+    commit c6b9afa08d2b54ac80de3a5348f2d3455755a2b3
+    commit c15c92170a00481c2a0f2fed9293e29b3209f3fd
+    commit 47707a49d2789f218ae1b0a12e46e9c447a5b546
+    commit bcd1674fb2576dd5ae8c0bc040496a087650f03a
+    commit 4a01aa865add7bfe216ed408d2ea35c79704b59b
+    commit f28e233e2e6727c60e6b2e6c6bba620515ecc41b
+    commit ca451665a170a277aecc244bd76d98623b864590
+            git show <commit_hash>
+    commit 343f51041afcbc0984a123bc6e72d21c60cd95ce
+    commit 3583e6d05b5505e9c40d00ade448bd1a3ba3e11d
+- But, notice the extraneous "commit" keyword was picked up above, so remove it by forcing a search for the word "commit" followed by a 30+ char hex-only hash! Add `-E` for extended regex search, and `[0-9a-f]{30,}` to find 30 or more chars in a row which are 0-9 or a-f (lower-case hex chars)!
+git log --follow "git & Linux cmds, help, tips & tricks - Gabriel.txt" | grep -E --color=always "commit [0-9a-f]{30,}" | head -n 10 = does the above! <====== EXCELLENT; WORKS GREAT! ======
+  Ex:
+    $ git log --follow "git & Linux cmds, help, tips & tricks - Gabriel.txt" | grep -E --color=always "commit [0-9a-f]{30,}" | head -n 10
+    commit c6b9afa08d2b54ac80de3a5348f2d3455755a2b3
+    commit c15c92170a00481c2a0f2fed9293e29b3209f3fd
+    commit 47707a49d2789f218ae1b0a12e46e9c447a5b546
+    commit bcd1674fb2576dd5ae8c0bc040496a087650f03a
+    commit 4a01aa865add7bfe216ed408d2ea35c79704b59b
+    commit f28e233e2e6727c60e6b2e6c6bba620515ecc41b
+    commit ca451665a170a277aecc244bd76d98623b864590
+    commit 343f51041afcbc0984a123bc6e72d21c60cd95ce
+    commit 3583e6d05b5505e9c40d00ade448bd1a3ba3e11d
+    commit 00138466c643736cecc6f26e5255a6180a950890
+- Now, to see what changes a given commit has done to this file, do this!
+    git difftool commit_hash~..commit_hash some/file/name
+  Ex:
+    git difftool c6b9afa08d2b54ac80de3a5348f2d3455755a2b3~..c6b9afa08d2b54ac80de3a5348f2d3455755a2b3 "git & Linux cmds, help, tips & tricks - Gabriel.txt"
 git log --author="name or email regex search pattern" = show an abridged git log with ONLY commits by an author which matches this regex search pattern. Ex:
     git log --author="Gabriel Staples"
     git log --author="some_email@gmail.com"
