@@ -348,6 +348,7 @@ git log = show the git log history
 git lg = show the git log history in a condensed form, with graphics lines to show forks, branches, and merges
     See: "eRCaGuy_dotfiles/home/.gitconfig" for how to create this `lg` alias for git, and 
     https://coderwall.com/p/euwpig/a-better-git-log for where I originally got it from!
+
 git log --follow <one_single_filename> = [VERY USEFUL!] Show the `git log` history which affected JUST THIS ONE SINGLE FILE YOU TOLD IT TO FOLLOW! This is VERY helpful to track and follow all of the commits which touched a certain file, in order to go back commit by commit until you find out **which commit** introduced the changes to that file that you care about! 
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/ and `man git log` (then search for "--follow")
     [keywords: show file history]
@@ -381,6 +382,15 @@ git log --follow "git & Linux cmds, help, tips & tricks - Gabriel.txt" | grep -E
     git difftool commit_hash~..commit_hash some/file/name
   Ex:
     git difftool c6b9afa08d2b54ac80de3a5348f2d3455755a2b3~..c6b9afa08d2b54ac80de3a5348f2d3455755a2b3 "git & Linux cmds, help, tips & tricks - Gabriel.txt"
+- Better than all of the above, use this script: "eRCaGuy_dotfiles/useful_scripts/git-filechange-search.sh"
+  Examples: <=============== BEST WAY TO SEARCH FOR WHICH COMMIT CAUSES A GIVEN CHANGE ============
+    gs_git-filechange-search "git & Linux cmds, help, tips & tricks - Gabriel.txt" = display a list of all commit hashes which change this file
+    gs_git-filechange-search -v "git & Linux cmds, help, tips & tricks - Gabriel.txt" = same as above, but 'v'erbose (ie: also print out the commit log headers for these commits)
+    gs_git-filechange-search -vv "git & Linux cmds, help, tips & tricks - Gabriel.txt" = same as above, but extra 'v'erbose
+    gs_git-filechange-search "git & Linux cmds, help, tips & tricks - Gabriel.txt" "difftool" = display only those commits which change this file AND contain changes which contain the word "difftool"
+    gs_git-filechange-search -v "git & Linux cmds, help, tips & tricks - Gabriel.txt" "difftool" = same as above, but 'v'erbose (ie: also print out the commit log headers for these commits)
+    gs_git-filechange-search -vv "git & Linux cmds, help, tips & tricks - Gabriel.txt" "difftool" = same as above, but extra 'v'erbose
+
 git log --author="name or email regex search pattern" = show an abridged git log with ONLY commits by an author which matches this regex search pattern. Ex:
     git log --author="Gabriel Staples"
     git log --author="some_email@gmail.com"
