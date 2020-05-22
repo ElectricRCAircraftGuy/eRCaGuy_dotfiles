@@ -955,4 +955,36 @@ Every piece of software is benefited by flowcharts, diagrams, and drawings to sh
     〴⋋_⋌〵[angry]
 
 
+====================================================================================================
+= Scratch Work/Work in Progress (WIP): = 
+====================================================================================================
+
+WORK IN PROGRESS (WIP)
+- this is a scratch work place for me to take notes as I discover them.
+
+Trying to create a version of `git diff` which includes line numbers!
+Getting there, but numbers + and - lines, thereby making the numbers waaay too long!
+
+    git diff -U100000 --color=always --no-prefix HEAD~ | grep --color=never -m 1 -A 100000 @@ | tail -n +2 | grep --color=never -n .
+
+    git diff -U100000 --color=always --no-prefix HEAD~ | grep --color=never -m 1 -A 100000 @@ | tail -n +2
+
+    git diff -U100000 --color=always --no-prefix HEAD~ | grep -E "@@.{0,20}@@"
+
+GOT ONE! The left-hand (-) side:
+
+WORKS:
+    git diff -U100000 --color=always --no-prefix HEAD~..HEAD | grep --color=never -m 1 -A 100000 @@ | tail -n +2 | grep --color=never -v -E $'^\e\[32m\+' | grep --color=never -n .
+
+And now the right-hand (+) side:
+
+WORKS:
+    git diff -U100000 --color=always --no-prefix HEAD~..HEAD | grep --color=never -m 1 -A 100000 @@ | tail -n +2 | grep --color=never -v -E $'^\e\[31m-' | grep --color=never -n .
+
+NEXT:
+Now, store them into two separate variables, recombine them into one variable, sort them, and delete duplicate lines (lines which are *exactly* identical!) Then display the output. Make it a git alias. Done.
+
+Update: use this as a starting point instead!
+  1. https://stackoverflow.com/questions/24455377/git-diff-with-line-numbers-git-log-with-line-numbers/33249416#33249416
+  1. See also my question here: https://stackoverflow.com/questions/61932427/git-diff-with-line-numbers-and-proper-code-alignment-indentation
 
