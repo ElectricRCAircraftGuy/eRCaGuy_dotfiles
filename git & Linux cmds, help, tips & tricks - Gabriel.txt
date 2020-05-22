@@ -172,6 +172,9 @@ bazel test --test_output=all //... = prints ALL output to stdout, even for tests
 *****BEST BAZEL TEST CMD (optionally add `--host_jvm_args=-Xmx16g` if needed too)*****
 time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
 
+`--keep_going` flag: useful when debugging--tells Bazel to keep going and build/run as much as possible, even if an error is encountered. See: https://docs.bazel.build/versions/master/command-line-reference.html#flag--keep_going. [keep going, keep building, continue building after errors, build through errors]
+time bazel build --keep_going //... = keep going/building during a Bazel build/run error, so that you can get and see as many errors as possible at once to speed up the fix/build/test process as you try to debug build or test problems and get your code to work right. <========= VERY USEFUL! ==========
+
 == Visualizing your Bazel build using dot/Graphviz ==
 See:
 1. Bazel info:
@@ -793,7 +796,7 @@ Main Jinja2 References:
 w = "Show who is logged on and what they are doing"; great command to ensure you're the only one remotely logged on to a PC, for instance!
 
 df -h = show 'd'isk 'f'ile usage to see how much hard drive/SSD space you have total, used, and remaining
-free -h = look at RAM and swap file/swap partition usage
+free -h = look at RAM and swap file/swap partition usage [memory free, ram free, swap free]
 du -h = see file space usage of every item (file? and folder) in your current directory; NB: just look at the very last line to see the total usage of your current directory!
 du -h | tail -n 1 = same as above, except retain ONLY the *last line* so that you can immediately see the total usage of this directory! Sample output:
         100G .
