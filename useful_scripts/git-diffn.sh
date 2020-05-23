@@ -66,21 +66,10 @@
 #    --color=always option as you run the command! This will give the user an easy way to turn off
 #    color!
 
-# GS I changed this:
-# match(bare, "^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@", a) {
-#     left = a[1]
-#     right = a[2]
-#     next
-# }
-# TO THIS, TO PRINT THIS LINE TOO!
-# match(bare, "^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@", a) {
-#     left = a[1]
-#     right = a[2]
-#     print
-#     next
-# }
 
 
+
+# git diff "$@" | \
 git diff --color=always "$@" | \
 gawk '
 {
