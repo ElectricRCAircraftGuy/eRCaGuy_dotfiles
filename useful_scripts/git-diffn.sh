@@ -46,6 +46,13 @@
 # 1. awk printf: https://www.gnu.org/software/gawk/manual/html_node/Basic-Printf.html
 # 1. awk printf examples: https://www.gnu.org/software/gawk/manual/html_node/Printf-Examples.html
 #   1. Sample data files for all awk examples: https://www.gnu.org/software/gawk/manual/html_node/Sample-Data-Files.html#Sample-Data-Files
+# 1. awk String Functions: https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html; Including:
+#   1. gsub()
+#   1. match()
+#   1. gensub()
+#   1. etc. 
+# 1. awk `next` statement: https://www.gnu.org/software/gawk/manual/html_node/Next-Statement.html
+#   
 
 
 
@@ -79,11 +86,10 @@ git diff --color=always "$@" | \
 gawk '
 {
     bare = $0
-    # gsub: 
-    gsub("\033[[][0-9]*m", "", bare)
+    gsub(/\033[[][0-9]*m/, "", bare)
 }
 
-match(bare, "^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@", array) {
+match(bare, /^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@/, array) {
     left = array[1]
     right = array[2]
     print $0
@@ -96,7 +102,7 @@ bare ~ /^(---|\+\+\+|[^-+ ])/ {
 }
 
 {
-    line = gensub("^(\033[[][0-9]*m)?(.)", "\\2\\1", 1, $0)
+    line = gensub(/^(\033[[][0-9]*m)?(.)/, "\\2\\1", 1, $0)
 }
 
 bare ~ /^-/ {
