@@ -62,6 +62,10 @@
 #      https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
 #      
 
+# Awk-language Notes:
+# The gist of awk: pattern {action}
+# Meaning of tidle (~): ?
+
 
 
 ####### ADD A MECHANISM of turning off color, in case the user wants no color. ie: 
@@ -86,9 +90,9 @@
 
 
 # ANSI Color Codes:
-COLOR_RED="\033[31m" # Color code for red
-COLOR_GRN="\033[32m" # Color code for green
-COLOR_OFF="\033[m"   # Code to turn off or "end" the previous color code
+COLOR_RED="\033[31m" # red
+COLOR_GRN="\033[32m" # green
+COLOR_OFF="\033[m"   # code to turn off or "end" the previous color code
 
 # git diff "$@" | \
 git diff --color=always "$@" | \
@@ -105,17 +109,18 @@ gawk \
 match(bare, /^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@/, array) {
     left = array[1]
     right = array[2]
-    print $0
+    print bare
     next
 }
 
 bare ~ /^(---|\+\+\+|[^-+ ])/ {
-    print $0
+    print bare
     next
 }
 
 {
-    line = gensub(/^(\033[[][0-9]*m)?(.)/, "\\2\\1", 1, $0)
+    # line = gensub(/^(\033[[][0-9]*m)?(.)/, "\\2\\1", 1, bare) ########## WHATS THIS DO!? AND WHY?
+    line = bare
 }
 
 bare ~ /^-/ {
@@ -131,8 +136,10 @@ bare ~ /^[+]/ {
 {
     printf " %+4s,%+4s:%s\n", left++, right++, line
     next
-}' \
-| less -R -F -X
+}
+' \
+| less -F -X
+# | less -R -F -X
 
 
 # ^^  use -R to interpret ANSI color codes, -F to quit if less than one-screen, and -X to not clear
