@@ -39,6 +39,8 @@
 #    https://stackoverflow.com/questions/24455377/git-diff-with-line-numbers-git-log-with-line-numbers/32616440#32616440
 # 3. I also received help from @Ed Morton and @Inian here: 
 #    https://stackoverflow.com/questions/61932427/git-diff-with-line-numbers-and-proper-code-alignment-indentation
+# 4. https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
+# 5. Dynamic Regexps: https://www.gnu.org/software/gawk/manual/html_node/Computed-Regexps.html
 
 
 ####### ADD A MECHANISM of turning off color, in case the user wants no color. ie: 
@@ -78,13 +80,14 @@
 #     next
 # }
 
+
 git diff --color=always "$@" | \
-gawk -v C_RED="\033[31m" '{bare=$0;gsub("\033[[][0-9]*m","",bare)};\
-  match(bare,"^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@",a){left=a[1];right=a[2];print;next};\
-  bare ~ /^(---|\+\+\+|[^-+ ])/{print;next};\
-  {line=gensub("^(\033[[][0-9]*m)?(.)","\\2\\1",1,$0)};\
-  bare~/^-/{printf   "\033[31m-%+4s     \033[m:\033[31m%s\n", left++, line;next};\
-  bare~/^[+]/{printf "\033[32m+     %+4s\033[m:\033[32m%s\n", right++, line;next};\
+gawk '{bare=$0;gsub("\033[[][0-9]*m","",bare)};
+  match(bare,"^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@",a){left=a[1];right=a[2];print;next};
+  bare ~ /^(---|\+\+\+|[^-+ ])/{print;next};
+  {line=gensub("^(\033[[][0-9]*m)?(.)","\\2\\1",1,$0)};
+  bare~/^-/{printf   "\033[31m-%+4s     \033[m:\033[31m%s\n", left++, line;next};
+  bare~/^[+]/{printf "\033[32m+     %+4s\033[m:\033[32m%s\n", right++, line;next};
   {printf                    " %+4s,%+4s:%s\n", left++, right++, line;next}' | \
   less -R -F -X
 
