@@ -39,8 +39,14 @@
 #    https://stackoverflow.com/questions/24455377/git-diff-with-line-numbers-git-log-with-line-numbers/32616440#32616440
 # 3. I also received help from @Ed Morton and @Inian here: 
 #    https://stackoverflow.com/questions/61932427/git-diff-with-line-numbers-and-proper-code-alignment-indentation
-# 4. https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
-# 5. Dynamic Regexps: https://www.gnu.org/software/gawk/manual/html_node/Computed-Regexps.html
+# 1. https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
+# 1. Dynamic Regexps: https://www.gnu.org/software/gawk/manual/html_node/Computed-Regexps.html
+# 1. https://www.gnu.org/software/gawk/manual/html_node/Quoting.html
+# 1. awk print: https://www.gnu.org/software/gawk/manual/html_node/Print.html 
+# 1. awk printf: https://www.gnu.org/software/gawk/manual/html_node/Basic-Printf.html
+# 1. awk printf examples: https://www.gnu.org/software/gawk/manual/html_node/Printf-Examples.html
+#   1. Sample data files for all awk examples: https://www.gnu.org/software/gawk/manual/html_node/Sample-Data-Files.html#Sample-Data-Files
+
 
 
 ####### ADD A MECHANISM of turning off color, in case the user wants no color. ie: 
@@ -68,24 +74,24 @@
 
 
 
-
 # git diff "$@" | \
 git diff --color=always "$@" | \
 gawk '
 {
     bare = $0
+    # gsub: 
     gsub("\033[[][0-9]*m", "", bare)
 }
 
-match(bare, "^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@", a) {
-    left = a[1]
-    right = a[2]
-    print
+match(bare, "^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@", array) {
+    left = array[1]
+    right = array[2]
+    print $0
     next
 }
 
 bare ~ /^(---|\+\+\+|[^-+ ])/ {
-    print
+    print $0
     next
 }
 
