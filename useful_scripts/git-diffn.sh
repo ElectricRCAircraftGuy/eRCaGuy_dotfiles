@@ -39,6 +39,9 @@
 #    https://stackoverflow.com/questions/24455377/git-diff-with-line-numbers-git-log-with-line-numbers/32616440#32616440
 # 3. I also received help from @Ed Morton and @Inian here: 
 #    https://stackoverflow.com/questions/61932427/git-diff-with-line-numbers-and-proper-code-alignment-indentation
+
+# Awk-language-specific References:
+# 1. awk cheatsheet: https://www.shortcutfoo.com/app/dojos/awk/cheatsheet
 # 1. https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
 # 1. Dynamic Regexps: https://www.gnu.org/software/gawk/manual/html_node/Computed-Regexps.html
 # 1. https://www.gnu.org/software/gawk/manual/html_node/Quoting.html
@@ -52,16 +55,18 @@
 #   1. gensub()
 #   1. etc. 
 # 1. awk `next` statement: https://www.gnu.org/software/gawk/manual/html_node/Next-Statement.html
-#   
+# 1. awk variable and shell variable usage
+#   1. see the last example here:
+#      https://www.gnu.org/software/gawk/manual/html_node/Printf-Examples.html
+#   1. and also this info here: 
+#      https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
+#      
 
 
 
 ####### ADD A MECHANISM of turning off color, in case the user wants no color. ie: 
 # if --color=never then don't do --color=always
 
-# C_RED="\033[31m" # Color code for red
-# C_GRN="\033[32m" # Color code for green
-# C_OFF="\033[m"   # Code to turn off or "end" the previous color code
 
 # git diff --color=always "$@" | \
 # gawk '{bare=$0;gsub("\033[[][0-9]*m","",bare)};\
@@ -80,10 +85,18 @@
 #    color!
 
 
+# ANSI Color Codes:
+COLOR_RED="\033[31m" # Color code for red
+COLOR_GRN="\033[32m" # Color code for green
+COLOR_OFF="\033[m"   # Code to turn off or "end" the previous color code
 
 # git diff "$@" | \
 git diff --color=always "$@" | \
-gawk '
+gawk \
+-v RED="$COLOR_RED" \
+-v GRN="$COLOR_GRN" \
+-v OFF="$COLOR_OFF" \
+'
 {
     bare = $0
     gsub(/\033[[][0-9]*m/, "", bare)
@@ -106,19 +119,20 @@ bare ~ /^(---|\+\+\+|[^-+ ])/ {
 }
 
 bare ~ /^-/ {
-    printf "\033[31m-%+4s     \033[m:\033[31m%s\n", left++, line
+    printf RED "-%+4s     " OFF ":" RED "%s\n", left++, line
     next
 }
 
 bare ~ /^[+]/ {
-    printf "\033[32m+     %+4s\033[m:\033[32m%s\n", right++, line
+    printf GRN "+     %+4s" OFF ":" GRN "%s\n", right++, line
     next
 }
 
 {
     printf " %+4s,%+4s:%s\n", left++, right++, line
     next
-}' | less -R -F -X
+}' \
+| less -R -F -X
 
 
 # ^^  use -R to interpret ANSI color codes, -F to quit if less than one-screen, and -X to not clear
