@@ -326,6 +326,11 @@ General References:
 1. Stack Overflow (do general searches)
 2. [GitHub git cheat sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet/)
 
+git alias = print out all of your aliases you have defined in your config file(s), such as in "~/.gitconfig" (or locally in a single repo I think too, in "/path/to/myrepo/.git/config")
+
+"git-" + [TAB] [TAB] = see all programs or commands in your PATH (from git directly OR custom or 3rd-party git programs) whose names begin with "git-" (convention: name + the dash symbol), such as "git-alias". These programs can automatically be run withOUT the dash, because git automatically searches your PATH for this naming convention and makes them available. Therefore, a program named "git-alias", for example, can be run as `git alias`, withOUT the dash! [git-whatever]
+See here for where I first learned this: http://barkas.com/2018/git-alias-bash-functions-with-arguments/#git-alias-in-your-path
+
 git branch -a = show ALL branches, even remote-only branches
 git branch -r = show ONLY 'r'emote branches
 git branch -r | grep gabriel.staples = show all of my remote branches (which, by my convention, begin with "gabriel.staples_")
