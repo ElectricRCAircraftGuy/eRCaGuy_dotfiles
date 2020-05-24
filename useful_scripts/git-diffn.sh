@@ -132,24 +132,24 @@ bare ~ /^(---|\+\+\+|[^-+ ])/ {
     next
 }
 
-{
-    # uncolor the char immediately after the color code by swapping it with the color code!
-    line = gensub(/^(\033[[][0-9]*m)?(.)/, "\\2\\1", 1, $0) ########## WHATS THIS DO!? AND WHY?
-    # line = bare
-}
+# {
+#     # uncolor the char immediately after the color code by swapping it with the color code!
+#     line = gensub(/^(\033[[][0-9]*m)?(.)/, "\\2\\1", 1, $0) ########## WHATS THIS DO!? AND WHY?
+#     # line = bare
+# }
 
 bare ~ /^-/ {
-    printf RED "-%+4s     " OFF ":" RED "%s\n", left++, line
+    printf RED "-%+4s     " OFF ":" RED "%s\n", left++, $0
     next
 }
 
 bare ~ /^[+]/ {
-    printf GRN "+     %+4s" OFF ":" GRN "%s\n", right++, line
+    printf GRN "+     %+4s" OFF ":" GRN "%s\n", right++, $0
     next
 }
 
 {
-    printf " %+4s,%+4s:%s\n", left++, right++, line
+    printf " %+4s,%+4s:%s\n", left++, right++, $0
     next
 }
 ' \
