@@ -13,7 +13,7 @@
 #   `git diff` accepts. Examples:
 #   - `git diffn HEAD~`
 #   - `git diffn HEAD~3..HEAD~2`
-# - the one caveat and difference is that if you want to disable the output color, you must use
+# - ###########the one caveat and difference is that if you want to disable the output color, you must use
 #   `--no-color` or `--color=never` as your FIRST ARGUMENT, as I'm parsing it as a positional 
 #   argument. Examples: 
 #   - `git diffn --color=never HEAD~`
@@ -41,7 +41,9 @@
 #    https://stackoverflow.com/questions/61932427/git-diff-with-line-numbers-and-proper-code-alignment-indentation
 
 # Awk-language-specific References:
+# 1. Great awk intro, description, & examples to get started!: https://en.wikipedia.org/wiki/AWK
 # 1. awk cheatsheet: https://www.shortcutfoo.com/app/dojos/awk/cheatsheet
+# 1. *****"The Essential Syntax of AWK": https://www.grymoire.com/Unix/Awk.html#uh-5
 # 1. https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
 # 1. Dynamic Regexps: https://www.gnu.org/software/gawk/manual/html_node/Computed-Regexps.html
 # 1. https://www.gnu.org/software/gawk/manual/html_node/Quoting.html
@@ -49,6 +51,7 @@
 # 1. awk printf: https://www.gnu.org/software/gawk/manual/html_node/Basic-Printf.html
 # 1. awk printf examples: https://www.gnu.org/software/gawk/manual/html_node/Printf-Examples.html
 #   1. Sample data files for all awk examples: https://www.gnu.org/software/gawk/manual/html_node/Sample-Data-Files.html#Sample-Data-Files
+# 1. awk `next` statement: https://www.gnu.org/software/gawk/manual/html_node/Next-Statement.html
 # 1. awk String Functions: https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html; Including:
 #   1. gsub()
 #   1. match()
@@ -60,11 +63,17 @@
 #      https://www.gnu.org/software/gawk/manual/html_node/Printf-Examples.html
 #   1. and also this info here: 
 #      https://www.gnu.org/software/gawk/manual/html_node/Using-Shell-Variables.html
-#      
+# 1. See also my Q & the answers & comments here: 
+#    https://stackoverflow.com/questions/61932427/git-diff-with-line-numbers-and-proper-code-alignment-indentation
 
 # Awk-language Notes:
 # The gist of awk: pattern {action}
-# Meaning of tidle (~): ?
+#  - See here: https://en.wikipedia.org/wiki/AWK
+# Meaning of tidle (~): "matches a regular expression against a string" (https://en.wikipedia.org/wiki/AWK)
+#  - Can be read as: "check the operands on either side to see if they match" (http://billconner.com/techie/awk.html)
+#  - See also here: https://www.grymoire.com/Unix/Awk.html#uh-11
+#  - Ex:  `my_var ~ /regex/ { action }` means: "if the contents of my_var has a match against 
+#    the regular expression "regex", then do `action`".
 
 
 
@@ -106,14 +115,16 @@ gawk \
     gsub(/\033[[][0-9]*m/, "", bare)
 }
 
-match(bare, /^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@/, array) {
+match(bare, /^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@/, array) 
+{
     left = array[1]
     right = array[2]
     print bare
     next
 }
 
-bare ~ /^(---|\+\+\+|[^-+ ])/ {
+(bare ~ /^(---|\+\+\+|[^-+ ])/)
+{
     print bare
     next
 }
@@ -123,12 +134,14 @@ bare ~ /^(---|\+\+\+|[^-+ ])/ {
     line = bare
 }
 
-bare ~ /^-/ {
+(bare ~ /^-/)
+{
     printf RED "-%+4s     " OFF ":" RED "%s\n", left++, line
     next
 }
 
-bare ~ /^[+]/ {
+(bare ~ /^[+]/) 
+{
     printf GRN "+     %+4s" OFF ":" GRN "%s\n", right++, line
     next
 }
@@ -138,8 +151,8 @@ bare ~ /^[+]/ {
     next
 }
 ' \
-| less -F -X
-# | less -R -F -X
+| less -R -F -X
+# | less -F -X 
 
 
 # ^^  use -R to interpret ANSI color codes, -F to quit if less than one-screen, and -X to not clear
