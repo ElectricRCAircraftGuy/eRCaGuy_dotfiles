@@ -97,11 +97,16 @@
 #    --color=always option as you run the command! This will give the user an easy way to turn off
 #    color!
 
+# gsub(), match(), gensub()
 
 # ANSI Color Codes:
 COLOR_RED="\033[31m" # red
 COLOR_GRN="\033[32m" # green
 COLOR_OFF="\033[m"   # code to turn off or "end" the previous color code
+
+# COLOR_RED="" # red
+# COLOR_GRN="" # green
+# COLOR_OFF=""   # code to turn off or "end" the previous color code
 
 # git diff "$@" | \
 git diff --color=always "$@" | \
@@ -129,6 +134,7 @@ bare ~ /^(---|\+\+\+|[^-+ ])/ {
 }
 
 {
+    # uncolor the char immediately after the color code by swapping it with the color code!
     line = gensub(/^(\033[[][0-9]*m)?(.)/, "\\2\\1", 1, $0) ########## WHATS THIS DO!? AND WHY?
     # line = bare
 }
