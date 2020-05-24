@@ -120,8 +120,7 @@ gawk \
     gsub(/\033\[[0-9]*m/, "", bare)
 }
 
-match(bare, /^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@/, array) 
-{
+match(bare, /^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@/, array) {
     left = array[1]
     right = array[2]
     print $0
