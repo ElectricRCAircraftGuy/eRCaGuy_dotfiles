@@ -112,36 +112,33 @@ gawk \
 '
 {
     bare = $0
-    gsub(/\033[[][0-9]*m/, "", bare)
+    gsub(/\033\[[0-9]*m/, "", bare)
 }
 
 match(bare, /^@@ -([0-9]+),[0-9]+ [+]([0-9]+),[0-9]+ @@/, array) 
 {
     left = array[1]
     right = array[2]
-    print bare
+    print $0
     next
 }
 
-(bare ~ /^(---|\+\+\+|[^-+ ])/)
-{
-    print bare
+bare ~ /^(---|\+\+\+|[^-+ ])/ {
+    print $0
     next
 }
 
 {
-    # line = gensub(/^(\033[[][0-9]*m)?(.)/, "\\2\\1", 1, bare) ########## WHATS THIS DO!? AND WHY?
-    line = bare
+    line = gensub(/^(\033[[][0-9]*m)?(.)/, "\\2\\1", 1, $0) ########## WHATS THIS DO!? AND WHY?
+    # line = bare
 }
 
-(bare ~ /^-/)
-{
+bare ~ /^-/ {
     printf RED "-%+4s     " OFF ":" RED "%s\n", left++, line
     next
 }
 
-(bare ~ /^[+]/) 
-{
+bare ~ /^[+]/ {
     printf GRN "+     %+4s" OFF ":" GRN "%s\n", right++, line
     next
 }
