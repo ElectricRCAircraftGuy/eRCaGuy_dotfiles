@@ -81,6 +81,11 @@
 #  - Ex:  `my_var ~ /regex/ { action }` means: "if the contents of my_var has a match against 
 #    the regular expression "regex", then do `action`".
 
+# IMPORTANT: SINCE I'M USING SINGLE QUOTES (' ') AROUND THE WHOLE AWK PROGRAM BELOW, ***NO***
+# UNESCAPED SINGLE QUOTES ARE ALLOWED IN THE CODE BELOW, ***INCLUDING IN AWK COMMENTS!*** Since 
+# this comment says "I'm" in it, if you move it down into the awk code below, it will make the awk
+# code fail to run too!
+
 # ANSI Color Code Examples to help make sense of the regex expressions below
 # COLOR_OFF="\033[m"   # code to turn off or "end" the previous color code
 # COLOR_WHT="\033[1m"  # white
@@ -136,8 +141,8 @@ match(raw_line, /^(\033\[[0-9]{1,2}m)?@@ -([0-9]+),[0-9]+ \+([0-9]+),[0-9]+ @@/,
 
 # 2. Match uncolored or white `--- a/my/file` and 
 #                             `+++ b/my/file` type lines, as well as ANY OTHER LINE WHICH DOES
-# *NOT* BEGIN WITH A -, +, or space.
-match(raw_line, /^(\033\[[0-9]{1,2}m)?(---|\+\+\+|[^-+ ])/ {
+# *NOT* BEGIN WITH A -, +, or space (optional color code at the start accounted for).
+match(raw_line, /^(\033\[[0-9]{1,2}m)?(---|\+\+\+|[^-+ ])/) {
     print raw_line
     next 
 }
@@ -147,7 +152,7 @@ match(raw_line, /^(\033\[[0-9]{1,2}m)?(---|\+\+\+|[^-+ ])/ {
 {
     # lines deleted (-)
     /^(\033\[[0-9]{1,2}m)?-/ {
-        # Detect the color code if we don't yet know it
+        # Detect the color code if we dont yet know it
         if (color_is_on == "true" && color_L_known == "false") {
             match_index = match(raw_line, /^(\033\[[0-9]{1,2}m)?/, array)
             if (match_index > 0) {
@@ -171,45 +176,46 @@ match(raw_line, /^(\033\[[0-9]{1,2}m)?(---|\+\+\+|[^-+ ])/ {
         next
     }
 
-    # lines added (+)
-    /^(\033\[[0-9]{1,2}m)?+/ {
-        # Detect the color code if we don't yet know it
-        if (color_is_on == "true" && color_R_known == "false") {
-            match_index = match(raw_line, /^(\033\[[0-9]{1,2}m)?/, array)
-            if (match_index > 0) {
-                # `git diff` color is ON, so lets save the color being used!
-                # Index zero stores the string matched by regexp: "...the zeroth element of array 
-                # is set to the entire portion of string matched by regexp." See:
-                # https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html#index-match_0028_0029-function
-                color_R = array[0] # left color code (for deleted lines -)
-                color_off = COLOR_OFF
-                color_R_known = "true"
-            }
-            else {
-                # `git diff` color is NOT ON
-                color_is_on = "false"
-            }
-        }
+#     # lines added (+)
+#     /^(\033\[[0-9]{1,2}m)?+/ {
+#         # Detect the color code if we dont yet know it
+#         if (color_is_on == "true" && color_R_known == "false") {
+#             match_index = match(raw_line, /^(\033\[[0-9]{1,2}m)?/, array)
+#             if (match_index > 0) {
+#                 # `git diff` color is ON, so lets save the color being used!
+#                 # Index zero stores the string matched by regexp: "...the zeroth element of array 
+#                 # is set to the entire portion of string matched by regexp." See:
+#                 # https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html#index-match_0028_0029-function
+#                 color_R = array[0] # left color code (for deleted lines -)
+#                 color_off = COLOR_OFF
+#                 color_R_known = "true"
+#             }
+#             else {
+#                 # `git diff` color is NOT ON
+#                 color_is_on = "false"
+#             }
+#         }
 
-        # Print an **added line** with the appropriate colors based on whatever `git diff` is using
-        printf color_R"+     %+4s"color_off":"color_R"%s\n", left_num, $0
-        right_num++
-        next
-    }
+#         # Print an **added line** with the appropriate colors based on whatever `git diff` is using
+#         printf color_R"+     %+4s"color_off":"color_R"%s\n", left_num, $0
+#         right_num++
+#         next
+#     }
 
-    # lines not changed (begin with an empty space ` `)
-    /^ / {
-        printf " %+4s,%+4s:%s\n", left_num, left_num, $0
-        left_num++
-        right_num++
-        next
-    }
+#     # lines not changed (begin with an empty space ` `)
+#     /^ / {
+#         printf " %+4s,%+4s:%s\n", left_num, left_num, $0
+#         left_num++
+#         right_num++
+#         next
+#     }
 }
 
 # 4. Error-checking for sanity: this code should never be reached
 {
     print "=========== GIT DIFFN ERROR =============="
     print "THIS CODE SHOULD NEVER BE REACHED!"
+    print "Raw line: "raw_line
     print "=========================================="
 }
 
