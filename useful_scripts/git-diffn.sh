@@ -2,10 +2,13 @@
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# Author: Gabriel Staples
 # Status: IT WORKS! USE AS A COMPLETE, 100% SYNTAX-COMPATIBLE, DROP-IN REPLACEMENT FOR `git diff`!
 #         See details just below.
 
+# Author: Gabriel Staples
+# www.ElectricRCAircraftGuy.com 
+
+# DESCRIPTION:
 # git-diffn.sh
 # - a drop-in replacement for `git diff` which also shows line 'n'umbers! Use it *exactly* like
 #   `git diff`, except you'll see these beautiful line numbers as well to help you make sense of
@@ -14,15 +17,18 @@
 #   options and parameters that `git diff` accepts. Examples:
 #   - `git diffn HEAD~`
 #   - `git diffn HEAD~3..HEAD~2`
-# - ###############works with any of your `git diff` color settings, even if you are using custom colors
-#   - See my answer here for how to set custom diff colors:
+# - works with any of your `git diff` color settings, even if you are using custom colors
+#   - See my answer here for how to set custom diff colors, as well as to see a screenshot of
+#     custom-color output from `git diffn`:
 #     https://stackoverflow.com/questions/26941144/how-do-you-customize-the-color-of-the-diff-header-in-git-diff/61993060#61993060
-#   - Ex:
-#       git config --global color.diff.meta "blue"
-#       git config --global color.diff.old "black red strike"
-#       git config --global color.diff.new "black green italic"
-# - color is ON by default; if you want to disable the output color, you must use
-#   `--no-color` or `--color=never`. See `man git diff` for details. Examples: 
+#   - Here are some sample `git config` commands from my answer above to set custom `git diff` 
+#     colors and attributes (text formatting):
+#           git config --global color.diff.meta "blue"
+#           git config --global color.diff.old "black red strike"
+#           git config --global color.diff.new "black green italic"
+#           git config --global color.diff.context "yellow bold"
+# - in `git diffn`, color output is ON by default; if you want to disable the output color, you 
+#   must use `--no-color` or `--color=never`. See `man git diff` for details. Examples: 
 #   - `git diffn --color=never HEAD~`
 #   - `git diffn --no-color HEAD~3..HEAD~2`
 
@@ -100,21 +106,21 @@
 # ANSI Color Code Examples to help make sense of the regex expressions below
 # Git config color code descriptions; see here:
 # https://stackoverflow.com/questions/26941144/how-do-you-customize-the-color-of-the-diff-header-in-git-diff/61993060#61993060
-#            --------------     ---------------------------------------------------------
-#                               Git config color code desription
-#            ANSI Color Code    text_color(x1) background_color(x1) attributes(0 or more)
-#            ---------------    ---------------------------------------------------------
-# COLOR_OFF="\033[m"            # code to turn off or "end" the previous color code
-# COLOR_WHT="\033[1m"           # "white"
-# COLOR_RED="\033[31m"          # "red"
-# COLOR_GRN="\033[32m"          # "green"
-# COLOR_GRN="\033[33m"          # "yellow"
-# COLOR_GRN="\033[34m"          # "blue"
-# COLOR_TEA="\033[36m"          # "cyan"
-# COLOR_YLB="\033[1;33m"        # "yellow bold"
-# COLOR_YLB="\033[1;36m"        # "cyan bold"
-# COLOR_YLB="\033[3;30;42m"     # "black green italic" = black text with green background, italic text
-# COLOR_YLB="\033[9;30;41m"     # "black red strike" = black text with red background, strikethrough line through the text
+# ---------------    ----------------------------------------------------------------
+#                    Git config color code desription
+# ANSI Color Code    Order: text_color(x1) background_color(x1) attributes(0 or more)
+# ----------------   ----------------------------------------------------------------
+# \033[m             # code to turn off or "end" the previous color code
+# \033[1m            # "white"
+# \033[31m           # "red"
+# \033[32m           # "green"
+# \033[33m           # "yellow"
+# \033[34m           # "blue"
+# \033[36m           # "cyan"
+# \033[1;33m         # "yellow bold"
+# \033[1;36m         # "cyan bold"
+# \033[3;30;42m      # "black green italic" = black text with green background, italic text
+# \033[9;30;41m      # "black red strike" = black text with red background, strikethrough line through the text
 
 # Use this website to help you decipher and build regular expressions: https://regex101.com/
 
@@ -188,7 +194,7 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
 # 3. Match lines beginning with a minus (`-`), plus (`+`), or space (` `), optionally with
 # ANY color code in front of them too
 
-# lines deleted (-)
+# match lines deleted (-)
 # Check to see if raw_line matches this regexp
 /^(\033\[(([0-9]{1,2};?){1,10})m)?-/ {
     # Detect the color code if we dont yet know it
@@ -219,7 +225,7 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
     next
 }
 
-# lines added (+)
+# match lines added (+)
 # Check to see if raw_line matches this regexp
 /^(\033\[(([0-9]{1,2};?){1,10})m)?\+/ {
     # Detect the color code if we dont yet know it
@@ -244,7 +250,7 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
     next
 }
 
-# lines not changed (begin with an empty space ` `)
+# match lines not changed (these begin with an empty space ` `)
 # These lines have no color or other attribute formatting by default (such as bold, italics, etc),
 # but the user can add this in their git config settings if desired, so we must be able to handle
 # color and attribute formatting on this text too.
@@ -275,13 +281,13 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
 
 # 4. Error-checking for sanity: this code should never be reached
 {
-    print "=========== GIT DIFFN ERROR =============="
+    print "============== GIT DIFFN ERROR =============="
     print "THIS CODE SHOULD NEVER BE REACHED! If you see this, open up an issue for `git diffn`"
     print "  here: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/issues"
     print "  It may be because you have some custom `git config` color or text formatting settings"
     print "  or something, which perhaps I am failing to handle correctly."
     print "Raw line: "raw_line
-    print "=========================================="
+    print "============================================="
 }
 
 # -------------------------------
