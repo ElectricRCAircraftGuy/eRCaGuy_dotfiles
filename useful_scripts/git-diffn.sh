@@ -49,6 +49,21 @@
 #   4. `git-gs_diffn`
 #   3. `gs_git-diffn`
 
+# FUTURE WORK:
+# 1. Make work with standard awk?
+#    This has been tested on Linux Ubuntu 18.04. If anyone can't get this working on their system,
+#    such as in the git bash terminal that comes with Git for Windows, or on MacOS, due to 
+#    compatibility probems with `gawk`, I can rewrite the few places relying on `gawk` extensions
+#    to just use basic awk instead. That should solve any compatibility problems, but there's no
+#    sense in doing it if there's no need. If I ever need to do this in the future though, I'm
+#    going to need this trick to obtain a substring using standard awk:
+#    https://stackoverflow.com/questions/5536018/how-to-print-matched-regex-pattern-using-awk/5536342#5536342
+#   1. Also, look into this option in gawk for testing said compatibility: 
+#     1. `--lint` - https://www.gnu.org/software/gawk/manual/html_node/Options.html
+#     1. `--traditional` and `--posix` - https://www.gnu.org/software/gawk/manual/html_node/Compatibility-Mode.html
+#   1. Currently, `--lint` is telling me that the 3rd argument to `match()` (ie: the array 
+#      parameter) is a gawk extension.
+
 # References:
 # 1. This script borrows from @PFudd's script here:
 #    https://stackoverflow.com/questions/24455377/git-diff-with-line-numbers-git-log-with-line-numbers/33249416#33249416
@@ -133,6 +148,9 @@
 # "41", "42", etc. codes is this:
 #       ^(\033\[(([0-9]{1,2};?){1,10})m)?
 
+# Be sure to place all args (`"$@"`) AFTER `--color=always` so that if the user passes in
+# `--color=never` or `--no-color` they will override my `--color=always` here, since later
+# options override earlier ones.
 git diff --color=always "$@" | \
 gawk \
 '
