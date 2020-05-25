@@ -170,7 +170,7 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?@@ -([0-9]+),[0-9]+ \+([0-9]+)
     # above; see: 
     # https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html#index-match_0028_0029-function
     left_num = array[2]  # left (deletion) starting line number
-    right_num = array[3] # right (additiona) starting line number
+    right_num = array[3] # right (addition) starting line number
     print raw_line
     # printf "===left_num = %i, right_num = %i===\n", left_num, right_num # for debugging
     next
@@ -213,7 +213,7 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
     }
 
     # Print a **deleted line** with the appropriate colors based on whatever `git diff` is using
-    printf color_L"-%+4s     "color_off":"color_L"%s\n", left_num, raw_line
+    printf color_L"-%+4s     "color_off":%s\n", left_num, raw_line
     left_num++
     next
 }
@@ -238,7 +238,7 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
     }
 
     # Print an **added line** with the appropriate colors based on whatever `git diff` is using
-    printf color_R"+     %+4s"color_off":"color_R"%s\n", right_num, raw_line
+    printf color_R"+     %+4s"color_off":%s\n", right_num, raw_line
     right_num++
     next
 }
@@ -266,7 +266,7 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
     }
 
     # Print a **context line** with the appropriate colors based on whatever `git diff` is using
-    printf color_C" %+4s,%+4s"color_off":"color_C"%s\n", left_num, right_num, raw_line
+    printf color_C" %+4s,%+4s"color_off":%s\n", left_num, right_num, raw_line
     left_num++
     right_num++
     next
