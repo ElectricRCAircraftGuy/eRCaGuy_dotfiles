@@ -204,7 +204,7 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?@@ -([0-9]+),[0-9]+ \+([0-9]+)
 # 2. Match uncolored or colored (usually white) lines like this:
 #   `--- a/my/file` and `+++ b/my/file`, as well as ANY OTHER LINE WHICH DOES
 # *NOT* BEGIN WITH A -, +, or space (optional color code at the start accounted for).
-match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
+/^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/ {
     print raw_line
     next 
 }
