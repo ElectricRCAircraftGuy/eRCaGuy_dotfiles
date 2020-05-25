@@ -135,30 +135,36 @@ gawk \
 # -------------------------------
 
 BEGIN {
-    # color code to turn color OFF at this location in a string
+    # color code to turn color and text formatting OFF at this location in a string
     COLOR_OFF = "\033[m"
-    # color off code being used during printing; will be set to COLOR_OFF once color_L OR 
-    # color_R is detected
-    color_off = ""
+
     # color code for the left side, or lines deleted (-); this will be auto-detected later
     color_L = ""
     # color code for the right side, or lines added (+); this will be auto-detected later
     color_R = ""
+    # color code for **Context lines**, which are unchanged lines around added or deleted lines 
+    # which `git diff` shows for context; this will be auto-detected later
+    color_C = ""
+    
+    # Note that "knowing" any of the below color codes could also mean knowing that there are 
+    # no color codes for these lines, because they are uncolored and unformatted. If we 
+    # are able to detect that, we know that the code is empty/nonexistant, so we will set these 
+    # values to "true" in that case as well since we "know" the color code.
+
     # true if the -/left (deletion) color code is known; false otherwise
     color_L_known = "false"
     # true if the +/right (addition) color code is known; false otherwise
     color_R_known = "false"
-    # set to true to indicate `git diff` output color is ON, or false otherwise; assume it is
-    # on to start, then we will change this setting if necessary once we detect it is off
-    color_is_on = "true"
+    # true if the Context line color code is known; false otherwise
+    color_C_known = "false"
 }
 
 {
     raw_line = $0
 }
 
-# 1. First, find an uncolored or teal-colored line like this `@@ -159,6 +159,13 @@` which 
-# indicates the line numbers
+# 1. First, find an uncolored or (usually cyan) colored line like this which indicates the 
+# line numbers: `@@ -159,6 +159,13 @@`
 match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?@@ -([0-9]+),[0-9]+ \+([0-9]+),[0-9]+ @@/, array) {
     # The array indices below are according to the parenthetical group number in the regex
     # above; see: 
@@ -170,8 +176,8 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?@@ -([0-9]+),[0-9]+ \+([0-9]+)
     next
 }
 
-# 2. Match uncolored or white `--- a/my/file` and 
-#                             `+++ b/my/file` type lines, as well as ANY OTHER LINE WHICH DOES
+# 2. Match uncolored or colored (usually white) lines like this:
+#   `--- a/my/file` and `+++ b/my/file`, as well as ANY OTHER LINE WHICH DOES
 # *NOT* BEGIN WITH A -, +, or space (optional color code at the start accounted for).
 match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
     print raw_line
@@ -179,27 +185,31 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
 }
 
 # 3. Match lines beginning with a minus (`-`), plus (`+`), or space (` `), optionally with
-# a color code in front of them too
+# ANY color code in front of them too
 
 # lines deleted (-)
 # Check to see if raw_line matches this regexp
 /^(\033\[(([0-9]{1,2};?){1,10})m)?-/ {
     # Detect the color code if we dont yet know it
-    if (color_is_on == "true" && color_L_known == "false") {
+    if (color_L_known == "false") {
         match_index = match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?/, array)
         if (match_index > 0) {
             # `git diff` color is ON, so lets save the color being used!
             # Index zero stores the string matched by regexp: "...the zeroth element of array 
             # is set to the entire portion of string matched by regexp." See:
             # https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html#index-match_0028_0029-function
-            color_L = array[0] # left color code (for deleted lines -)
-            color_off = COLOR_OFF
-            color_L_known = "true"
+            color_L = array[0]
         }
-        else {
-            # `git diff` color is NOT ON
-            color_is_on = "false"
-        }
+        # Set this to true in BOTH CASES because if a match was found above, we now know the color 
+        # code, and if a match was NOT found, we now know these lines are NOT color-coded!
+        color_L_known = "true"
+    }
+
+    if (color_L == "") {
+        color_off = ""
+    }
+    else {
+        color_off = COLOR_OFF
     }
 
     # Print a **deleted line** with the appropriate colors based on whatever `git diff` is using
@@ -212,21 +222,19 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
 # Check to see if raw_line matches this regexp
 /^(\033\[(([0-9]{1,2};?){1,10})m)?\+/ {
     # Detect the color code if we dont yet know it
-    if (color_is_on == "true" && color_R_known == "false") {
+    if (color_R_known == "false") {
         match_index = match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?/, array)
         if (match_index > 0) {
-            # `git diff` color is ON, so lets save the color being used!
-            # Index zero stores the string matched by regexp: "...the zeroth element of array 
-            # is set to the entire portion of string matched by regexp." See:
-            # https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html#index-match_0028_0029-function
-            color_R = array[0] # left color code (for deleted lines -)
-            color_off = COLOR_OFF
-            color_R_known = "true"
+            color_R = array[0]
         }
-        else {
-            # `git diff` color is NOT ON
-            color_is_on = "false"
-        }
+        color_R_known = "true"
+    }
+
+    if (color_R == "") {
+        color_off = ""
+    }
+    else {
+        color_off = COLOR_OFF
     }
 
     # Print an **added line** with the appropriate colors based on whatever `git diff` is using
@@ -237,11 +245,28 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
 
 # lines not changed (begin with an empty space ` `)
 # These lines have no color or other attribute formatting by default (such as bold, italics, etc),
-# but the user can add this in the git config settings if desired, so we must be able to handle
+# but the user can add this in their git config settings if desired, so we must be able to handle
 # color and attribute formatting on this text too.
 # Check to see if raw_line matches this regexp
 /^(\033\[(([0-9]{1,2};?){1,10})m)? / {
-    printf " %+4s,%+4s:%s\n", left_num, right_num, raw_line
+    # Detect the color code if we dont yet know it
+    if (color_C_known == "false") {
+        match_index = match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?/, array)
+        if (match_index > 0) {
+            color_C = array[0]
+        }
+        color_C_known = "true"
+    }
+
+    if (color_C == "") {
+        color_off = ""
+    }
+    else {
+        color_off = COLOR_OFF
+    }
+
+    # Print a **context line** with the appropriate colors based on whatever `git diff` is using
+    printf color_C" %+4s,%+4s"color_off":"color_C"%s\n", left_num, right_num, raw_line
     left_num++
     right_num++
     next
@@ -252,6 +277,8 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
     print "=========== GIT DIFFN ERROR =============="
     print "THIS CODE SHOULD NEVER BE REACHED! If you see this, open up an issue for `git diffn`"
     print "  here: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/issues"
+    print "  It may be because you have some custom `git config` color or text formatting settings"
+    print "  or something, which perhaps I am failing to handle correctly."
     print "Raw line: "raw_line
     print "=========================================="
 }
