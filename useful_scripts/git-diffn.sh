@@ -98,15 +98,34 @@
 # code fail to run too!
 
 # ANSI Color Code Examples to help make sense of the regex expressions below
-# COLOR_OFF="\033[m"   # code to turn off or "end" the previous color code
-# COLOR_WHT="\033[1m"  # white
-# COLOR_RED="\033[31m" # red
-# COLOR_GRN="\033[32m" # green
-# COLOR_TEA="\033[36m" # teal
+# Git config color code descriptions; see here:
+# https://stackoverflow.com/questions/26941144/how-do-you-customize-the-color-of-the-diff-header-in-git-diff/61993060#61993060
+#            --------------     ---------------------------------------------------------
+#                               Git config color code desription
+#            ANSI Color Code    text_color(x1) background_color(x1) attributes(0 or more)
+#            ---------------    ---------------------------------------------------------
+# COLOR_OFF="\033[m"            # code to turn off or "end" the previous color code
+# COLOR_WHT="\033[1m"           # "white"
+# COLOR_RED="\033[31m"          # "red"
+# COLOR_GRN="\033[32m"          # "green"
+# COLOR_GRN="\033[33m"          # "yellow"
+# COLOR_GRN="\033[34m"          # "blue"
+# COLOR_TEA="\033[36m"          # "cyan"
+# COLOR_YLB="\033[1;33m"        # "yellow bold"
+# COLOR_YLB="\033[1;36m"        # "cyan bold"
+# COLOR_YLB="\033[3;30;42m"     # "black green italic" = black text with green background, italic text
+# COLOR_YLB="\033[9;30;41m"     # "black red strike" = black text with red background, strikethrough line through the text
 
-# A regex expression to match any of the color codes above EXCEPT for COLOR_OFF is 
-# as follows:  ^(\033\[[0-9]{1,2}m)?
 # Use this website to help you decipher and build regular expressions: https://regex101.com/
+
+# A regex expression to match any of the "single code" (text color only) color codes above, 
+# including `1m` through `99m`, is as follows:
+#       ^(\033\[[0-9]{1,2}m)?
+
+# Now, expanding upon that, here's a regexp which can handle "multiple code" (text color (x1) +
+# background color (x1) + attributes (0 or more)) color codes, with 1 to 10 groups of "1;", "30;",
+# "41", "42", etc. codes is this:
+#       ^(\033\[(([0-9]{1,2};?){1,10})m)?
 
 git diff --color=always "$@" | \
 gawk \
@@ -140,7 +159,7 @@ BEGIN {
 
 # 1. First, find an uncolored or teal-colored line like this `@@ -159,6 +159,13 @@` which 
 # indicates the line numbers
-match(raw_line, /^(\033\[[0-9]{1,2}m)?@@ -([0-9]+),[0-9]+ \+([0-9]+),[0-9]+ @@/, array) {
+match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?@@ -([0-9]+),[0-9]+ \+([0-9]+),[0-9]+ @@/, array) {
     # The array indices below are according to the parenthetical group number in the regex
     # above; see: 
     # https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html#index-match_0028_0029-function
@@ -154,7 +173,7 @@ match(raw_line, /^(\033\[[0-9]{1,2}m)?@@ -([0-9]+),[0-9]+ \+([0-9]+),[0-9]+ @@/,
 # 2. Match uncolored or white `--- a/my/file` and 
 #                             `+++ b/my/file` type lines, as well as ANY OTHER LINE WHICH DOES
 # *NOT* BEGIN WITH A -, +, or space (optional color code at the start accounted for).
-match(raw_line, /^(\033\[[0-9]{1,2}m)?(---|\+\+\+|[^-+ \033])/) {
+match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?(---|\+\+\+|[^-+ \033])/) {
     print raw_line
     next 
 }
@@ -164,10 +183,10 @@ match(raw_line, /^(\033\[[0-9]{1,2}m)?(---|\+\+\+|[^-+ \033])/) {
 
 # lines deleted (-)
 # Check to see if raw_line matches this regexp
-/^(\033\[[0-9]{1,2}m)?-/ {
+/^(\033\[(([0-9]{1,2};?){1,10})m)?-/ {
     # Detect the color code if we dont yet know it
     if (color_is_on == "true" && color_L_known == "false") {
-        match_index = match(raw_line, /^(\033\[[0-9]{1,2}m)?/, array)
+        match_index = match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?/, array)
         if (match_index > 0) {
             # `git diff` color is ON, so lets save the color being used!
             # Index zero stores the string matched by regexp: "...the zeroth element of array 
@@ -191,10 +210,10 @@ match(raw_line, /^(\033\[[0-9]{1,2}m)?(---|\+\+\+|[^-+ \033])/) {
 
 # lines added (+)
 # Check to see if raw_line matches this regexp
-/^(\033\[[0-9]{1,2}m)?\+/ {
+/^(\033\[(([0-9]{1,2};?){1,10})m)?\+/ {
     # Detect the color code if we dont yet know it
     if (color_is_on == "true" && color_R_known == "false") {
-        match_index = match(raw_line, /^(\033\[[0-9]{1,2}m)?/, array)
+        match_index = match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?/, array)
         if (match_index > 0) {
             # `git diff` color is ON, so lets save the color being used!
             # Index zero stores the string matched by regexp: "...the zeroth element of array 
@@ -217,8 +236,11 @@ match(raw_line, /^(\033\[[0-9]{1,2}m)?(---|\+\+\+|[^-+ \033])/) {
 }
 
 # lines not changed (begin with an empty space ` `)
+# These lines have no color or other attribute formatting by default (such as bold, italics, etc),
+# but the user can add this in the git config settings if desired, so we must be able to handle
+# color and attribute formatting on this text too.
 # Check to see if raw_line matches this regexp
-/^ / {
+/^(\033\[(([0-9]{1,2};?){1,10})m)? / {
     printf " %+4s,%+4s:%s\n", left_num, right_num, raw_line
     left_num++
     right_num++
@@ -228,7 +250,8 @@ match(raw_line, /^(\033\[[0-9]{1,2}m)?(---|\+\+\+|[^-+ \033])/) {
 # 4. Error-checking for sanity: this code should never be reached
 {
     print "=========== GIT DIFFN ERROR =============="
-    print "THIS CODE SHOULD NEVER BE REACHED!"
+    print "THIS CODE SHOULD NEVER BE REACHED! If you see this, open up an issue for `git diffn`"
+    print "  here: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/issues"
     print "Raw line: "raw_line
     print "=========================================="
 }
