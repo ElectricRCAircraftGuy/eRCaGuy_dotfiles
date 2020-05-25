@@ -169,10 +169,11 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?@@ -([0-9]+),[0-9]+ \+([0-9]+)
     # The array indices below are according to the parenthetical group number in the regex
     # above; see: 
     # https://www.gnu.org/software/gawk/manual/html_node/String-Functions.html#index-match_0028_0029-function
-    left_num = array[2]  # left (deletion) starting line number
-    right_num = array[3] # right (addition) starting line number
+    left_num = array[4]  # left (deletion) starting line number
+    right_num = array[5] # right (addition) starting line number
     print raw_line
-    # printf "===left_num = %i, right_num = %i===\n", left_num, right_num # for debugging
+    # for debugging the array capture group indices above
+    # printf "===left_num = %i, right_num = %i===\n", left_num, right_num 
     next
 }
 
