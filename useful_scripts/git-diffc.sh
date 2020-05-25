@@ -62,6 +62,7 @@
 #   1.  My answer here: https://stackoverflow.com/questions/24455377/git-diff-with-line-numbers-git-log-with-line-numbers/61997003#61997003
 
 # See all of my comments in git-diffn.sh above to help you decipher all of this goobly-gock.
+# See also here: https://stackoverflow.com/questions/18810623/git-diff-to-show-only-lines-that-have-been-modified/62009746#62009746
 git diff --color=always "$@" | awk '
 # 1. Match and then skip "--- a/" and "+++ b/" lines
 /^(\033\[(([0-9]{1,2};?){1,10})m)?(--- a\/|\+\+\+ b\/)/ {
