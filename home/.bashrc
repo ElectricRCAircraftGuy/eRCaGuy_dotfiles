@@ -159,6 +159,13 @@ git_show_branch() {
 PS1="\e[7m\$(git_show_branch)\e[m\n$PS1"
 PS1='\$SHLVL'":$SHLVL $PS1"
 
+############ TODO: fix this up! 
+# 1. make it stand-alone
+# 2. make it work as `git branch_hash_bak [optional message]`
+#   - let the optional message just be the remainder of the arguments, so it doesn't require a quote
+#   - however, force it to not contain spaces, so replace spaces with underscores
+#   - add the optional message into the filename itself at the end
+############
 # GS: git branch backups: useful to back up git branch hashes before deleting branches, so you can 
 # always have their hashes to go back to to checkout rather than having to dig through your `git reflog` forever.
 # - Note that this currently requires that the GIT_BRANCH_HASH_BAK_DIR directory already exists. 

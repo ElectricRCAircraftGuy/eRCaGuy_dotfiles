@@ -15,3 +15,32 @@
 [alias]
     # Source for this `git lg` "better git log" alias: https://coderwall.com/p/euwpig/a-better-git-log
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    
+
+# TODO: CLEAN UP ALL OF THESE SCRATCH NOTES BELOW; DO THEM, DELETE THEM, MOVE THEM TO BETTER PLACESS TO KEEP THEM AS 
+# PERMANENT NOTES, ETC.
+
+    # http://barkas.com/2018/git-alias-bash-functions-with-arguments/
+    # and http://barkas.com/2018/git-alias-bash-functions-with-arguments/#git-alias-in-your-path
+    # example1 = "!f() { echo "Listing branches"; git branch -vva; }; f"
+    # example2 = "!f() { echo "value passed as parameter is ${1}"; }; f"
+    ############ name it git-whatever and put in your path (ex: ~/bin/git-whatever) and now you can automatically use it as `git whatever`!
+
+    # gs_sync_git_repo_from_pc1_to_pc2 ---> rename to "git-sync_repo_from_pc1_to_pc2"!
+
+    # git-filechange-search - update instructions! Do one that is gs_... and one that is just git-...
+
+    # add this as an alias function here too! BRANCH_BAK=my_branch_bak && git difftool $BRANCH_BAK $(git diff --name-only $(git merge-base $BRANCH_BAK master) $BRANCH_BAK) <======= QUICKLY CHECK NEWLY-REBASED BRANCH AGAINST ITS BACKUP BRANCH! ======= [be sure to change `master` near the end to whatever upstream you have if necessary too!] <=======
+    # - it's too simple to be worth making it into its own program, yet too complex to just be a regular alias, so make it a git alias function
+
+    # and turn my git hash bak script into a stand-alone git function
+
+    # and add git-wtf to my dotfiles project, but rename it to git-branch_status, and make a symlink to it called git-wtf; be sure to cite where you're getting it from!
+    # Consider adding everything in this location, as many of these tools look pretty useful: https://github.com/DanielVartanov/willgit/tree/master/bin
+
+# HOW TO Customize your `git diff` colors. 
+# See: https://stackoverflow.com/questions/26941144/how-do-you-customize-the-color-of-the-diff-header-in-git-diff/61993060#61993060
+# [color "diff"]
+#   meta = blue                 # header: blue text
+#   old = black red strike      # deleted lines: black text with red background, strikethrough line through the text
+#   new = black green italic    # added lines: black text with green background, italic text
