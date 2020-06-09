@@ -51,11 +51,11 @@ _However, it's still a good idea to back up your home directory first before run
 4. Essentially, just read the readmes, headers, & other comments and it will become self-explanatory how to use or "install" something. If not, open up an issue or pull request and I'll address it. 
 
 # Useful Scripts 
-## See [useful_scripts/README.md](useful_scripts/README.md)
+## See [useful_scripts/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts)
 
 Here is a list of all of the scripts provided in the "useful_scripts" directory. Some of these are so amazingly useful to me, and powerful, they deserve a section all on their own! 
 
-**Therefore, I have created an additional readme to describe a few of these scripts in greater detail here: [useful_scripts/README.md](useful_scripts/README.md).**
+**Therefore, I have created an additional readme to describe a few of these scripts in greater detail here: [useful_scripts/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts).**
 
 (tree generated w/`tree eRCaGuy_dotfiles/useful_scripts`):
 
@@ -76,6 +76,10 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
     │   ├── test2.cpp
     │   ├── test2.txt
     │   └── test3.txt
+    ├── *****git-changes.sh
+    ├── git-diffc.sh
+    ├── git-diffn_screenshot_cropped.png
+    ├── git-diffn_screenshot.png
     ├── *****git-diffn.sh
     ├── *****git-filechange-search.sh
     ├── git-tree.txt
@@ -85,7 +89,10 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
     ├── Link to ElectricRCAircraftGuy - git-tree New git features 1) graphically view all your branches in a hierarchical fashion based on forking or desired dependencies; 2) cascade recursive rebases down the line.desktop
     ├── Link to ElectricRCAircraftGuy - PDF2SearchablePDF `pdf2searchablepdf input.pdf` = voila! ''input_searchable.pdf'' is created & now has searchable text!.desktop
     ├── *****open_programming_tools.sh
-    ├── readme.md
+    ├── README_git-diffn.md
+    ├── README_git-sync_repo_from_pc1_to_pc2.md
+    ├── README.md
+    ├── ****ros_readbagfile.py
     ├── scratch_work
     │   └── gawk_git_diff_with_line_numbers.sh
     ├── sync_git_repo_from_pc1_to_pc2--notes.txt
@@ -93,4 +100,4 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
     ├── *****tmux-session.sh
     └── *****touchpad_toggle.sh
 
-    2 directories, 31 files
+    2 directories, 34 files
