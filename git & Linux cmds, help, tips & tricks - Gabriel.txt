@@ -469,7 +469,7 @@ git ls-files | grep "my_filename" = same as above, except no need to explicitly 
 git rev-list --all = list all commits in reverse-chronological order which are traceable from your currently-checked-out commit...I think?
 git rev-list HEAD --max-count=10 = list only the last 10 commits in reverse-chronological order which are traceable starting from "parent commit" HEAD; note that this is identical to doing `git log` (or `git lg`) and then looking back at ONLY the commit hashes for ONLY the last "--max-count" commits!
 
-==
+== ==
 
 git merge-base branch1 branch2 = find the common ancestor between branch1 and branch2; see: https://stackoverflow.com/questions/1549146/git-find-the-most-recent-common-ancestor-of-two-branches/1549155#1549155
 
@@ -484,6 +484,10 @@ THEN HERE'S HOW TO COMPARE A JUST-REBASED BRANCH (`my_branch`) TO ITS OLD BACKUP
     git difftool my_branch_BAK $(git diff --name-only $(git merge-base my_branch_BAK master) my_branch_BAK) = description: the inner-most $() finds the merge-base between the backup branch and the old master, and the outer $() finds the *list of filenames* which changed from that merge-base to the backup branch. This way, we end up `difftool`ing between the backup branch and the rebased branch, ONLY LOOKING AT THE FILES WE KNOW WE HAD PREVIOUSLY CHANGED!
   Better (easier to read):
     BRANCH_BAK=my_branch_bak && git difftool $BRANCH_BAK $(git diff --name-only $(git merge-base $BRANCH_BAK master) $BRANCH_BAK) <======= QUICKLY CHECK NEWLY-REBASED BRANCH AGAINST ITS BACKUP BRANCH! ======= [be sure to change `master` near the end to whatever upstream you have if necessary too!] <=======
+   UPDATE: USE THIS SCRIPT INSTEAD NOW!: "eRCaGuy_dotfiles/useful_scripts/git-changes.sh".
+    git changes <common_base> <backup_branch> [any other args to pass to git difftool]
+   Ex:
+    git changes master my_branch_bak <===== BEST! ======
   OR, if you're not on the newly-rebased `my_branch` anymore:
     git difftool my_branch_BAK..my_branch $(git diff --name-only $(git merge-base my_branch_BAK master) my_branch_BAK)
 
