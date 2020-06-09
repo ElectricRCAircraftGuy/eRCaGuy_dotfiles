@@ -128,24 +128,29 @@ Bazel Online Documentation:
         1. All `bazel query` options: https://docs.bazel.build/versions/master/command-line-reference.html#query-options
         1. etc.
     1. To pass in Java Virtual Machine (JVM) options, such as heap size, as Bazel startup options: https://docs.bazel.build/versions/master/command-line-reference.html#flag--host_jvm_args
-        --host_jvm_args=<jvm_arg>
+            --host_jvm_args=<jvm_arg>
     2. To limit how many of your local CPUs Bazel can use. Note that HOST_CPUS here is probably (and usually is) 1/2 the number of cores you have. So, if gnome-system-monitor shows you have 8 cores, you may only have 4 CPUs.: https://docs.bazel.build/versions/master/command-line-reference.html#flag--local_cpu_resources
-        --local_cpu_resources=<an integer, or "HOST_CPUS", optionally followed by [-|*]<float>.> default: "HOST_CPUS"
+            --local_cpu_resources=<an integer, or "HOST_CPUS", optionally followed by [-|*]<float>.> default: "HOST_CPUS"
         NB: THIS cpu resource limiter option above doesn't actually work very well! Frequently, even with it in-use, the CPU usage will still lock out at 100% for periods of many minutes at a time! To prevent this, just use the Linux `cpulimit` program in a separate terminal!:
             cpulimit -p <pid> -l 500 # limit your bazel build to 62.5% max CPU usage on an 8-core machine
         Read more about the above command in the "Limit CPU usage" section of this document down below.
     3. To limit local RAM usage: https://docs.bazel.build/versions/master/command-line-reference.html#flag--local_ram_resources
-         --local_ram_resources=<an integer, or "HOST_RAM", optionally followed by [-|*]<float>.> default: "HOST_RAM*.67"
+            --local_ram_resources=<an integer, or "HOST_RAM", optionally followed by [-|*]<float>.> default: "HOST_RAM*.67"
     4. To disable remote caching: https://docs.bazel.build/versions/master/command-line-reference.html#flag--remote_cache
-        --remote_cache=""
+            --remote_cache=""
+    1. To share build outputs between users, for saving hard drive space, use bazel startup option:
+            --output_user_root=<path>
+       See: https://docs.bazel.build/versions/master/command-line-reference.html#flag--output_user_root
+       Ex:
+            bazel --output_user_root="/home/some_other_user/.cache/bazel" build //...
 1. "A user's guide to Bazel" - https://docs.bazel.build/versions/master/guide.html
     1. Specifying targets to build (`bazel build //...` [build the whole project], `bazel build //:all` [build just the top-level build targets], etc.) - 
        https://docs.bazel.build/versions/master/guide.html#specifying-targets-to-build
 1. Macros (Bazel build rule macros--used to generate build targets):
     1. Macros: https://docs.bazel.build/versions/master/skylark/macros.html
         1. Expanding macros: https://docs.bazel.build/versions/master/skylark/macros.html#expanding-macros. To see their expanded forms:
-                time bazel query --output=build //path/to/my/target/... > out.txt  # Store the expanded form of all macros/build rules into out.txt
-                subl out.txt  # open out.txt in Sublime Text 3
+            time bazel query --output=build //path/to/my/target/... > out.txt  # Store the expanded form of all macros/build rules into out.txt
+            subl out.txt  # open out.txt in Sublime Text 3
     1. Creating a macro: https://docs.bazel.build/versions/master/skylark/tutorial-creating-a-macro.html
 
 
@@ -160,10 +165,21 @@ bazel help build
 
 time bazel query --output=build //path/to/my/target/... > out.txt = Store the expanded form of all macros/build rules into out.txt; see above; see this too for more on **expanding Bazel build macros**: https://docs.bazel.build/versions/master/skylark/macros.html#expanding-macros 
 
-bazel --host_jvm_args=-Xmx16g build //... = set max java heap size to 16g then build everything; see: https://stackoverflow.com/questions/55190272/java-lang-outofmemoryerror-when-running-bazel-build/60572662#60572662
+bazel --host_jvm_args=-Xmx16g build //... = set max java heap size to 16g then build everything; see here for the command above, as well as for how to make a Linux swapfile! 
+https://stackoverflow.com/questions/55190272/java-lang-outofmemoryerror-when-running-bazel-build/60572662#60572662
 
 *****BEST BAZEL BUILD CMD*****
-time bazel --host_jvm_args=-Xmx16g build //...; gs_alert = same as above but better: time the whole thing and do an alert sound (bell character sound) & pop-up notification to notify me when done
+time bazel --host_jvm_args=-Xmx16g build //...; gs_alert = same as above but better: time the whole thing and do an alert sound (bell character sound) & pop-up notification to notify me when done     <============== OVERALL BEST BAZEL BUILD COMMAND ==========
+
+Other useful options:
+1) Specify a custom bazel cache directory (*bazel startup* option `--output_user_root`). Useful, for example, when you have limited space and need to A) put your build cache on another drive, or B) share a bazel build cache with another user, or even multiple users:
+- See: https://docs.bazel.build/versions/master/command-line-reference.html#flag--output_user_root
+        bazel --output_user_root="/path/to/custom/dir/bazel_cache" build //...
+2) Specify the number of "jobs", or threads to run at once during the build (bazel *build* option `--jobs N`). The default is `--jobs=auto`, which tries to "[calculate] a reasonable default based on host resources":
+- See: https://docs.bazel.build/versions/master/command-line-reference.html#flag--jobs
+        bazel build --jobs 4 //...  # 4 jobs might be good on a 6-core machine, for instance, or perhaps 6 jobs on an 8-core machine, or 16 jobs on a 20-core machine--whatever you think is best for your situation; not using all the cores leaves some for you to continue working while a build is running in the background
+#) Now, putting it all together:
+        bazel --output_user_root="/home/gabriels/.cache/bazel_cache" build --jobs 4 //...'     <============ VERY USEFUL TO KNOW ABOUT ============
 
 bazel test --test_output=errors //... = log all errors (failed test results) to stdout--in other words, you'll only see a long output from running the bazel test if it fails!--this is a good setting to use; for help, see: https://groups.google.com/forum/#!topic/bazel-discuss/2mJPklIaCeo; see also: `bazel help test` for other options!
 bazel test --test_output=summary //... = the default (doesn't show errors; just shows a summary)
@@ -173,7 +189,7 @@ bazel test --test_output=all //... = prints ALL output to stdout, even for tests
 time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
 
 `--keep_going` flag: useful when debugging--tells Bazel to keep going and build/run as much as possible, even if an error is encountered. See: https://docs.bazel.build/versions/master/command-line-reference.html#flag--keep_going. [keep going, keep building, continue building after errors, build through errors]
-time bazel build --keep_going //... = keep going/building during a Bazel build/run error, so that you can get and see as many errors as possible at once to speed up the fix/build/test process as you try to debug build or test problems and get your code to work right. <========= VERY USEFUL! ==========
+time bazel build --keep_going //... = keep going/building during a Bazel build/run error, so that you can get and see as many errors as possible at once to speed up the fix/build/test process as you try to debug build or test problems and get your code to work right. <========= VERY USEFUL!--ESP. WHEN DEBUGGING CODE THAT WON'T BUILD! ==========
 
 == Visualizing your Bazel build using dot/Graphviz ==
 See:
@@ -190,7 +206,7 @@ See:
 = googletest (gtest) / googlemock (gmock): = 
 ====================================================================================================
 
-See the "eRCaGuy_dotfiles/googletest" directory.
+See the "eRCaGuy_dotfiles/googletest" directory, **especially** the "eRCaGuy_dotfiles/googletest/insights.md" file, which has a bunch of my own personal documentation, notes, and insights!
 
 == test (`TEST() {}`, `TEST_F() {}`) order: == 
 
