@@ -855,6 +855,8 @@ Main Jinja2 References:
 = Linux (General): = 
 ====================================================================================================
 
+whoami = print your username (helps verify you are logged in under the correct user)
+sudo whoami = print your sudo username; it should say "root" since you ran it as `sudo`! This helps verify you have `sudo` access!--ie: that you are a member of the "sudo" group (run `groups` to check), and in the sudoers file (run `sudo visudo`--you should have an entry for your username at the bottom).
 w = "Show who is logged on and what they are doing"; great command to ensure you're the only one remotely logged on to a PC, for instance!
 
 df -h = show 'd'isk 'f'ile usage to see how much hard drive/SSD space you have total, used, and remaining
@@ -865,6 +867,41 @@ du -h | tail -n 1 = same as above, except retain ONLY the *last line* so that yo
 du -h | tail -n 1 | awk '{print $1}' = same as the line just above, except also retain ONLY the *first column* so that you get rid of the extra dot (.) at the end which indicates "current directory". Sample output:
         100G
     See here for `awk` usage help which enabled me to retain only the 1st column above: https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
+
+strings my_binary_file > temp_strings.txt = extract all ASCII strings from the binary file my_binary_file and store them into the text file temp_strings.txt.
+
+hexdump -C my_file = print all chars of the binary or ASCII file, my_file, in hex+ASCII mode (`-C` means "'C'anonical hex+ASCII display"). Ex:
+    $ hexdump -C temp_strings.txt 
+    00000000  6f 22 6c 69 6e 6b 22 64  68 74 74 70 73 3a 2f 2f  |o"link"dhttps://|
+    00000010  77 77 77 2e 72 65 64 64  69 74 2e 63 6f 6d 2f 72  |www.reddit.com/r|
+    00000020  2f 41 73 6b 52 65 64 64  69 74 2f 63 6f 6d 6d 65  |/AskReddit/comme|
+    00000030  6e 74 73 2f 65 73 74 32  62 34 2f 77 68 61 74 5f  |nts/est2b4/what_|
+    00000040  77 6f 75 6c 64 5f 62 65  5f 74 68 65 5f 77 6f 72  |would_be_the_wor|
+    00000050  73 74 5f 74 68 69 6e 67  5f 74 6f 5f 70 75 74 5f  |st_thing_to_put_|
+    00000060  69 6e 5f 61 5f 70 69 0a  61 74 61 2f 22 63 6f 72  |in_a_pi.ata/"cor|
+    ...
+
+gnome-system-monitor = CPU/RAM/network usage monitor GUI
+sudo baobab = disk usage GUI
+free -h = show memory and swap total, used, and free space!
+(sudo) swapon --show = show swap partition and swapfile status and sizes 
+df -h = show disk usage
+du -h my_folder = show folder usage
+How to make a Linux swapfile; see my own answer here! 
+https://stackoverflow.com/questions/55190272/java-lang-outofmemoryerror-when-running-bazel-build/60572662#60572662
+
+
+== IP & Networking: ==
+
+ifconfig = show the internet & network configuration/connection information for your system and all of its network cards (both wireless (ex: WIFI) and wired (ex: Ethernet ports))
+ip a = show some kind of IP address & network interface info; NB: I don't really understand this command yet, but it looks useful, and seems to show a bunch of the same information as `ifconfig`.
+ssh -X -o "ServerAliveInterval 60" my_username@my_hostname_or_IP = ssh into hostname or IP address my_hostname_or_IP with username my_username, enabling X-window forwarding, and with the additional 'o'ption set to send a heartbeat signal (server "keep alive" message) every 60 seconds, so your session never disconnects automatically!
+hostname = show my hostname; ex: mypcname23-aa
+nslookup some_ip_address = use 'n'ame 's'erver lookup to try to find the hostname of a given IP address
+nslookup some_hostname = the exact reverse of the above: try to find the IP address from a given hostname 
+
+curl = some web utility for interaction with websites; need to learn how to use
+wget https://path.to.some.file.to.download = download a file at this URL; shows a nice progress bar and download stats (speed, total size to download, total size downloaded so far, etc.) the entire time!
 
 == `head` and `tail`: == 
 - Use `head` to output the first part of files
@@ -895,6 +932,8 @@ Ex:
     echo "column1 column2 column3 column4" | awk '{print $2}' = select & keep only the 2nd column of the text
     echo "column1 column2 column3 column4" | awk '{print $3}' = select & keep only the 3rd column of the text
     echo "column1 column2 column3 column4" | awk '{print $4}' = select & keep only the 4th column of the text
+
+For a full `awk` program example, see the "eRCaGuy_dotfiles/useful_scripts/git-diffn.sh" program, which is written almost entirely in awk!
 
 == Limit CPU usage: == 
 [throttle cpu usage]
@@ -939,6 +978,7 @@ find | grep ".*\.txt$" = find any file which MUST END WITH .txt (the $ searches 
 
 find | grep -E ".*(\.ino|\.cpp|\.c|\.h|\.hpp|\.hh)" = find any file with one of these extensions
 
+`sed`:
 sed -i "s|regex_pattern_to_match|replacement_string|g" my_file.txt = 'g'lobally replace (ie: replace all matching occurrences) of "regex_pattern_to_match" 'i'n place in my_file.txt, replacing the matching pattern with "replacement_string"
 
 PUTTING IT ALL TOGETHER:
@@ -958,13 +998,37 @@ find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pat
 EXAMPLE:
 find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
 
+== sed: == 
+sed = "'s'tream 'ed'itor for filtering and transforming text" [stream editor]
+See also the `sed -i` examples just above!
+
+References:
+See also the 4 References for sed just above, underneath "PUTTING IT ALL TOGETHER"!
+1. *****[explains how to use regex groups () and \1 \2 \3 etc to reference those groups!] https://unix.stackexchange.com/questions/78625/using-sed-to-find-and-replace-complex-string-preferrably-with-regex/78626#78626
+1. How to use sed to find and replace text in files in Linux / Unix shell - https://www.cyberciti.biz/faq/how-to-use-sed-to-find-and-replace-text-in-files-in-linux-unix-shell/
+
+Basic usage:
+sed -E 's/regexp_search/replacement_str/g' my_file.txt = in my_file.txt, do a 'g'lobal 's'tring replacement, replacing all matches of regular expression regexp_search with "replacement_str".
+
 == wc: == 
 wc = 'w'ord 'c'ount
 
 find | wc -l = count and return the number of 'l'ines returned by find, which corresponds to the number of files and folders in a directory and its sub-directories.
 
 == tr: ==
+tr = 'tr'anslate or delete characters
 <your_command> | tr -d ',' = remove all commas from the output of `your_command`; see: https://stackoverflow.com/questions/12668020/removing-characters-from-grep-output/12668078#12668078
+
+== Basic Process profiling in Linux: ==
+
+cat /proc/<process_ID>/sched = show some profiling/scheduler stats for this process ID (PID) on Linux, including how many threads it has!
+ls /proc/<process_ID>/task/ = list the threads in this process!
+ls /proc/*/task = list the threads in all multi-threaded processes!
+
+== == 
+
+qpdf --decrypt in.pdf out.pdf = "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups! 
+- Once I do this, I like to rename "out.pdf" to "some useful name [`qpdf --decrypt`ed]" so I can remember right in the name itself how I did this!
 
 
 ====================================================================================================
