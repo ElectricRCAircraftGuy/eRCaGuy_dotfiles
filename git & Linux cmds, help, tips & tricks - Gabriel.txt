@@ -1082,6 +1082,151 @@ Every piece of software is benefited by flowcharts, diagrams, and drawings to sh
 
 
 ====================================================================================================
+= ros: = 
+====================================================================================================
+ROS = Robot Operating System
+https://www.ros.org/
+
+References:
+1. https://www.ros.org/
+    1. *****+http://wiki.ros.org/
+1. https://github.com/ros
+    1. https://github.com/ros/ros
+1. https://en.wikipedia.org/wiki/Robot_Operating_System
+1. *****+[VERY USEFUL!]rosbag command line: http://wiki.ros.org/rosbag/Commandline
+1. rosbag/Tutorials/Recording and playing back data - http://wiki.ros.org/rosbag/Tutorials/Recording%20and%20playing%20back%20data
+1. rosbag intro video: https://youtu.be/pwlbArh_neU
+1. http://wiki.ros.org/rxbag [WX Widgets-based ROS GUI tool--deprecated, replaced by rqt_bag]
+1. http://wiki.ros.org/rqt
+    1. http://wiki.ros.org/rqt_bag [QT-based ROS GUI tool--replaces rxbag]
+1. *****++[CODE SAMPLES & STUFF!] http://wiki.ros.org/rosbag/Cookbook
+1. http://wiki.ros.org/rospy
+        sudo apt install python-rospy
+   See: https://zoomadmin.com/HowToInstall/UbuntuPackage/python-rospy
+1. pyrosbag; see:
+    1. https://pyrosbag.readthedocs.io/en/latest/installation.html
+    1. https://pyrosbag.readthedocs.io/en/latest/usage.html
+            pip3 install pyrosbag
+                import pyrosbag # in python code
+1. *****rostopic: http://wiki.ros.org/rostopic
+1. *****++ EXCELLENT CHEAT SHEET: 
+    1. Google search for "ros cheat sheet" - https://www.google.com/search?q=ros+cheat+sheet&oq=ros+chea&aqs=chrome.0.69i59j69i57j69i60l3.1626j0j4&sourceid=chrome&ie=UTF-8
+    1. EXCELLENT CHEAT SHEET! - https://w3.cs.jmu.edu/spragunr/CS354_S19/handouts/ROSCheatsheet.pdf 
+
+== roscore ==
+- See: 
+    - http://wiki.ros.org/rosbag/Tutorials/Recording%20and%20playing%20back%20data#Recording_data_.28creating_a_bag_file.29
+    - http://wiki.ros.org/roscore
+roscore -h = help menu
+roscore = start up a "ROS core", which includes a ROS master node; this program is REQUIRED to be running for any ROS nodes to be up and running, for ROS params to be accessed, and for ROS topics to be published or subscribed to. `roslaunch` apparently launches a roscore process as part of its startup.
+
+== roslaunch ==
+- http://wiki.ros.org/roslaunch
+- a higher-level command to roscore; starts up a roscore process as part of its startup; see: http://wiki.ros.org/roslaunch#roscore
+roslaunch -h = help menu
+[I'm not really sure how to use this program yet]
+
+== rosbag info ==
+- http://wiki.ros.org/rosbag/Commandline#info
+- show info about the bag file
+- does NOT require a master node, via `roscore`, to be running first.
+rosbag info -h = help menu
+rosbag info myfile.bag = display a summary of the contents of the bag file(s) myfile.bag, including showing a list of all message types in the bag file, and a list of all topics published to, with their message types, and the number of times each topic was published to! This is very useful if you need to just see if a certain topic exists (was published to *at all*) in a given bag file! Ex:
+rosbag info myfile.bag | grep -E "(my_topic_2|my_topic_1)" = show if my_topic_1 and my_topic_2 exist at all (were published to at all) in this bag file, and if so, how many times and what are their message types in these topics
+
+== rosbag play ==
+- http://wiki.ros.org/rosbag/Commandline#play
+- plays back a recorded bag file in the same time span it was originally recorded
+- DOES require a master node, via `roscore`, to be running first.
+NB: *NOT* all of the CLI options are described on the website! See `rosbag play -h` for additional options! Ex:
+  --try-future-version  still try to open a bag file, even if the version
+                        number is not known to the player
+  --topics              topics to play back
+  --pause-topics        topics to pause on during playback
+  --bags=BAGS           bags files to play back from
+rosbag play -h = help menu
+rosbag play myfile.bag = play back the contents of bag file(s) myfile.bag, in a time-synchronized fashion (and at the same rates/time intervals as they were originally recorded); this is very useful for spoofing a system in order to replay live data, test systems and algorithms, test a robot's response to replayed inputs, etc. See: http://wiki.ros.org/rosbag/Commandline#play
+rosbag play -i myfile.bag = play back the whole file "'i'mmediately", or as fast as possible, rather than in a time-synchronized fashion; watch out! "For large files this will often lead to exceeding your incoming buffers."
+rosbag play --loop myfile.bag = continually play myfile.bag on a loop; ie: when done playing back the file, start back over from the beginning again, repeatedly
+rosbag play myfile.bag --topics topic1 topic2 = play back only topic1 and topic2 from myfile.bag! See `rosbag play -h` for where I found this. Also see this question here for where I first saw it: https://answers.ros.org/question/228676/exclude-some-topics-from-rosbag-play/
+rosbag play myfile.bag --topics topic1 --topics topic2 = same as above, but using the `--topics` flag repeatedly; just use the shorter syntax above instead!
+
+== rosbag filter ==
+- http://wiki.ros.org/rosbag/Commandline#filter
+- scans through a bag file and produces a new bag file containing only the content you are filtering on with your python filter command.
+- does NOT require a master node, via `roscore`, to be running first.
+rosbag filter -h = help menu
+rosbag filter input_file.bag new.bag "'topic1' in topic or 'topic2' in topic" = read in the input_file.bag bag file, and store any topics with the string "topic1" or "topic2" anywhere in their name into a new output bag file called new.bag. Note: this works, but it can potentially take a long time! On a 1 GB bag file, it might take up to 5 to 10 minutes or more, and some bag files could be as large as dozens of GB, which could take up to a couple hours just to filter out some messages on a few topics. There's got to be a faster way, especially if you just want to view the first few messages on a given topic, for instance...
+rosbag filter --print="'%s @ %d.%d: %s' % (topic, t.secs, t.nsecs, m.data)" input_file.bag new.bag "'topic1' in topic or 'topic2' in topic" = print message.data (`m.data`) for any messages with topic1 or topic2 in theit topic names, while creating a new output bag file; I can't seem to get this to work quite right, but it's something like this...
+
+== rostopic ==
+- http://wiki.ros.org/rostopic
+rostopic -h = help menu
+
+== rostopic echo ==
+- http://wiki.ros.org/rostopic#rostopic_echo
+- DOES require a master node, via `roscore`, to be running first.
+rostopic echo -h = help menu
+rostopic echo /my/ros/topic = echo (print to the terminal) any messages on this topic which are currently being published! (by a node, or played back by `rosbag play`)
+
+== rostopic list ==
+- http://wiki.ros.org/rostopic#rostopic_list
+- DOES require a master node, via `roscore`, to be running first.
+rostopic list -h = help menu
+rostopic list -v = list full details ('v'erbose mode) about each topic currently being played/published! See: http://wiki.ros.org/rosbag/Tutorials/Recording%20and%20playing%20back%20data#Recording_all_published_topics and the `rostopic list -h` help menu.
+
+== HOW TO READ MESSAGES FROM DESIRED TOPICS IN A BAG FILE ==
+- Let's say I want to see all messages on topic1, topic2, and topic3 in a huge (could be many GB) bag file; how do I read them? 
+
+OPTION 1: 
+Play them live as quickly as possible, and look at the output in various terminals.
+Pros: runs QUICKLY (~10 sec, for instance, once you get all the terminals set up).
+Cons: requires a bunch of separate terminals and processes and a `roscore` running, and is a bit of a pain to set up.
+
+    # In any terminal, ensure you know the topic names *exactly*.
+    # manually inspect all published topics and how many messages were published to each topic
+    time rosbag info mybag.bag  
+    # OR, grep for some keywords you're looking for which you know make up the topic names
+    time rosbag info mybag.bag | grep -E "(topic1|topic2|topic3)"
+
+    # In terminal 1, start up a ros core, which runs the required ROS master node
+    roscore
+
+    # In terminal 2, subscribe to /topic1, echoing (printing) everything published on this topic,
+    # while also teeing it to a file for later review, all in yaml format
+    rostopic echo /topic1 | tee topic1.yaml
+
+    # In terminal 3, subscribe to /topic2...
+    rostopic echo /topic2 | tee topic2.yaml
+
+    # In terminal 4, subscribe to /topic3...
+    rostopic echo /topic3 | tee topic3.yaml
+
+    # In terminal 5, play back the bag file now as quickly as possible, publishing ONLY the topics
+    # of interest. Note: on a 10GB~20GB or so sized bag file, this might take 10 or so seconds 
+    # on a high-speed SSD, so it is really quite fast! The underlying functionality must be 
+    # implemented in C++, as I think the Python implementation would take more like 1~2 minutes at
+    # least.
+    # Play back (publish) just these topics as quickly as possible!
+    time rosbag play --immediate mybag.bag --topics /topic1 /topic2 /topic3
+
+OPTION 2 [my preferred approach!]:
+Run a short Python program to output just what you want. 
+See here for starters: http://wiki.ros.org/rosbag/Cookbook
+Main `rosbag` API info pg. (C++ and Python): http://wiki.ros.org/rosbag/Code%20API
+Python2 `rosbag` Code API documentation: https://docs.ros.org/api/rosbag/html/python/
+- `read_messages()` API documentation: https://docs.ros.org/api/rosbag/html/python/rosbag.bag.Bag-class.html#read_messages
+Use this short Python script: "eRCaGuy_dotfiles/useful_scripts/ros_readbagfile.py"
+Pros: really easy to use; requires only 1 terminal, and NO `roscore` running.
+Cons: this Python implementation runs ~13x slower than the one above, so it might take up to 1 to 2+ minutes to process an entire bag file.
+TODO: convert the below Python script to a C++ program using the [C++ rosbag API](http://wiki.ros.org/rosbag/Code%20API#cpp_api).
+
+    python2 ros_readbagfile.py <mybagfile.bag> [topic1] [topic2] [topic3] [...]
+
+== == 
+
+
+====================================================================================================
 = Scratch Work/Work in Progress (WIP): = 
 ====================================================================================================
 
