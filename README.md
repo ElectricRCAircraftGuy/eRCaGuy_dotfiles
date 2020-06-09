@@ -9,6 +9,8 @@ https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 This project started out as just a few helpful nuggets I like to put in my `~/.bashrc` file, for example, as well as some scripts and other configuration files, but I decided to make it a place I put all sorts of reference scripts, files, shortcuts, Linux tips & tricks, Eclipse documentation, etc, I've built up over the years. 
 
 ## Here's some of the contents contained herein:
+1. `git diffn` drop-in-replacement program to show `git diff` with line 'n'umbers. As a thin `awk`-language-based wrapper around `git diff` it supports ALL options and features that `git diff` does! Screenshot:
+    1. ![`git diffn` screenshot](useful_scripts/git-diffn_screenshot_cropped.png)
 1. .bashrc file which contains:
     1. `ls` aliases such as `ll`, `la`, & `l`
     1. Prompt String 1 (`PS1`) modifications to add terminal titles, current git branch name checked out [VERY USEFUL FEATURE!], bash shell level, etc
@@ -30,80 +32,65 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
     1. Eclipse color theme to make it have syntax highlighting that looks exactly like Sublime Text 3 (thanks to Jeremy Shepherd!)
 1. /etc/udev/rules.d/ udev rules
 1. NoMachine remote login setup info
-1. Useful scripts (tree generated w/`tree eRCaGuy_dotfiles/useful_scripts`):
-
-        useful_scripts/
-        ├── apt-cacher-server_proxy.sh
-        ├── apt-cacher-server_proxy_status.sh
-        ├── apt-cacher-server_proxy_toggle.sh
-        ├── desktop_file_install.sh -> ../Desktop_launchers/desktop_file_install.sh
-        ├── desktop_file_uninstall.sh -> ../Desktop_launchers/desktop_file_uninstall.sh
-        ├── install.sh
-        ├── open_programming_tools.sh = quick script to load all the tools I need to do software development each day
-        ├── sync_git_repo_from_pc1_to_pc2--notes.txt
-        ├── sync_git_repo_from_pc1_to_pc2.sh = an EXCELLENT script to synchronize a git repo from one computer to another! SEE BELOW FOR DETAILS.
-        └── touchpad_toggle.sh = attached to Ctrl + Alt + P Ubuntu shortcut key to quickly toggle my touchpad & 
-                                 touchscreen on & off, & fix mouse scroll wheel speed
-
+1. Useful scripts: see [section below](#useful-scripts)
 1. etc.
 
 # Installation & Usage:
 
     ./install_all.sh
 
-You can run the main installation script for this **eRCaGuy_dotfiles** project like this: `./install_all.sh`. Edit this script first if customization is desired. It's all interactive, however, so it won't overwrite anything without your permission.
+You can run the main installation script for this **eRCaGuy_dotfiles** project like this: `./install_all.sh`. Edit this script first if customization is desired. It's all interactive, however, so it won't overwrite anything without your permission. 
+
+_However, it's still a good idea to back up your home directory first before running the installation script and to: 1) read the installation prompts carefully as it asks you to for permission to overwrite something, and 2) make sure you back any of those files it's prompting you about before allowing it to overwrite them._
 
 **Additionally:**  
 
 1. Most files contain comments with additional info, instructions, or helpful links to look at.
-2. Many directories contain readmes, and some contain install scripts, such as my scripts to help install .desktop files. 
+2. Many directories contain readmes, and some contain install scripts, such as my scripts to help install **.desktop** files. 
 3. If a readme exists in a subfolder, take a look at it too for more install help or other usage information. 
 4. Essentially, just read the readmes, headers, & other comments and it will become self-explanatory how to use or "install" something. If not, open up an issue or pull request and I'll address it. 
 
-# PC-to-PC Git-based Folder/Project Sync Script: 
+# Useful Scripts 
+## See [useful_scripts/README.md](useful_scripts/README.md)
 
-Sync a **50\~100+ GB folder** containing **100k \~ 1M+ files** from PC1 to PC2 over a **cell phone WiFi hotspot** using as little as **25\~50 MB of cellular data** in **20 seconds \~ 2 minutes**.
+Here is a list of all of the scripts provided in the "useful_scripts" directory. Some of these are so amazingly useful to me, and powerful, they deserve a section all on their own! 
 
-    sync_git_repo_from_pc1_to_pc2.sh
+**Therefore, I have created an additional readme to describe a few of these scripts in greater detail here: [useful_scripts/README.md](useful_scripts/README.md).**
 
-## Description & Details:
+(tree generated w/`tree eRCaGuy_dotfiles/useful_scripts`):
 
-This is an incredibly powerful and useful script, so I'm giving it a section all on its own. 
+Select scripts which I find especially useful are **marked with up to 5 asterisks (\*\*\*\*\*):**
 
-1. Sometimes you need to develop software on one machine (ex: a decent laptop, running an IDE like Eclipse) 
-   while building on a remote server machine (ex: a powerful desktop, or a paid cloud-based server such as 
-   AWS or Google Cloud--like this guy: https://matttrent.com/remote-development/). The problem, however, 
-   is **"how do I sync from the machine I work on (ex: Personal Computer 1, or PC1) to the machine I build on
-   (ex: Personal Computer 2, or PC2)?"**.  
-   This script answers that problem. It uses `git` to sync from one to the other. Git is 
-   preferred over `rsync` or other sync tools since they try to sync *everything* and on large repos 
-   they take FOREVER (dozens of minutes, to hours)! This script is lightning-fast (seconds) and 
-   ***safe***, because it always backs up any uncommitted changes you have on either PC1 or PC2
-   before changing anything!
-1. A typical run on a directory containing **hundreds of thousands of files** and **50~100 GB of data** might take **20 seconds ~ 2 minutes max** (30\~45 seconds is typical), and require **\~25 MB of WiFi/cellular data** is all! This is a very small amount of data compared to other options when syncing very large repos, and this is something which you care about if running on a hotspot from your cell phone.
-1. Run it from the *client* machine where you develop code (PC1), NOT the server where you will build or otherwise test or use the code (PC2)!
-1. It MUST be run from a directory inside the git repo you are syncing FROM.
+    $ tree useful_scripts/
+    useful_scripts/
+    ├── apt-cacher-server_proxy.sh
+    ├── apt-cacher-server_proxy_status.sh
+    ├── apt-cacher-server_proxy_toggle.sh
+    ├── desktop_file_install.sh -> ../Desktop_launchers/desktop_file_install.sh
+    ├── desktop_file_uninstall.sh -> ../Desktop_launchers/desktop_file_uninstall.sh
+    ├── *****find_and_replace.sh
+    ├── find_and_replace_test_folder
+    │   ├── readme.md
+    │   ├── test1.cpp
+    │   ├── test1.txt
+    │   ├── test2.cpp
+    │   ├── test2.txt
+    │   └── test3.txt
+    ├── *****git-diffn.sh
+    ├── *****git-filechange-search.sh
+    ├── git-tree.txt
+    ├── install_all.sh -> ../install_all.sh
+    ├── Link to ElectricRCAircraftGuy - Chrome-Case-Sensitive-Find A case-sensitive Find tool (recommended to use Ctrl + Alt + F) for the Google Chrome Browser.desktop
+    ├── Link to ElectricRCAircraftGuy - eRCaGuy_PyTerm A datalogging serial terminal-console written in Python (I hope to extend it to Telnet and others later).desktop
+    ├── Link to ElectricRCAircraftGuy - git-tree New git features 1) graphically view all your branches in a hierarchical fashion based on forking or desired dependencies; 2) cascade recursive rebases down the line.desktop
+    ├── Link to ElectricRCAircraftGuy - PDF2SearchablePDF `pdf2searchablepdf input.pdf` = voila! ''input_searchable.pdf'' is created & now has searchable text!.desktop
+    ├── *****open_programming_tools.sh
+    ├── readme.md
+    ├── scratch_work
+    │   └── gawk_git_diff_with_line_numbers.sh
+    ├── sync_git_repo_from_pc1_to_pc2--notes.txt
+    ├── *****sync_git_repo_from_pc1_to_pc2.sh
+    ├── *****tmux-session.sh
+    └── *****touchpad_toggle.sh
 
-## Installation and Usage:
-
-See the headers at the top of these files for additonal information, installation, and usage:
-
-1. "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh"
-2. "eRCaGuy_dotfiles/.sync_git_repo"
-
-**See also this answer and writeup on StackOverflow:  
-[Gabriel Staples' Stack Overflow answer for how to "Work on a remote project with Eclipse via SSH"](https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh/60315754#60315754)**
-
-Essentially, you just:
-
-1. Copy the `.sync_git_repo` file to `~/.sync_git_repo`, and update its parameters.
-1. Manually set up your ssh keys to be able to ssh from PC1 to PC2, and then:
-1. Run the `path/to/eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh` script from any directory *inside the git repo* on PC1. 
-
-This also assumes that PC2 already has the repo cloned--same as on PC1, and that all your ssh keys are set up and functioning to both:
-
-- A) push and pull to/from the remote git repo on both PC1 and PC2, and 
-- B) ssh from PC1 into PC2. 
-
-Again, see the instructions in the files referenced above, and (even easier) at the Stack Overflow answer linked-to above. 
-
+    2 directories, 31 files
