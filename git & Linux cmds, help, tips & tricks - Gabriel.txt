@@ -773,6 +773,43 @@ Sample Chrome bookmark to create to one of these URLs: "REVIEW REQUESTED BY--Use
 
 
 ====================================================================================================
+= ssh: = 
+====================================================================================================
+[incl: sshfs, ssh, putty, etc.]
+
+== ssh keys: == 
+- including for use with GitHub
+
+Key setup: see: 
+1. https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/connecting-to-github-with-ssh
+1. Generating a key: https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+
+GENERATE SSH KEYS:
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com" = generate a 4096-bit RSA key (strong encryption--industry standard today)
+OR
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f ~/.ssh/id_rsa = same as above, except **explicitly** tell it to save the private key into the output file "~/.ssh/id_rsa"!
+ssh-keygen -t ed25519 -C "your_email@example.com" = BEST and FASTEST and NEWEST encryption (better than the RSA one above, but not yet as widely supported; works fine on GitHub though!)
+
+READ SSH KEYS AND CHECK THEIR FINGERPRINTS:
+- See: https://stackoverflow.com/questions/9607295/calculate-rsa-key-fingerprint/32130465#32130465
+ssh-keygen -lf ~/.ssh/id_rsa = 'l'ist the fingerprint of the 'f'ile ~/.ssh/id_rsa, which is the private key. The default fingerprint type is "sha256" (`-E sha256`)
+ssh-keygen -E sha256 -lf ~/.ssh/id_rsa = exact same thing as above, except explicitly setting the fing'E'rprint type to sha256
+ssh-keygen -E sha256 -lf ~/.ssh/id_rsa.pub = exact same thing as above, except using the public (.pub) key instead of the private one
+ssh-keygen -E md5 -lf ~/.ssh/id_rsa.pub = 'l'ist the fing'E'rprint of this public key 'f'ile using the md5 hash, WHICH IS THE SAME FINGERPRINT HASH THAT GITHUB USES ONLINE IN CASE YOU ARE TRYING TO COMPARE YOUR HASH AGAINST WHAT GITHUB IS SHOWING TO SEE WHICH KEY IS BEING USED ON GITHUB! <===========
+- Note that using the *private* key in the above commands has the added benefit of telling you also *what the public key file is named and where it is located*, and *what type the key is!* The key type will be listed in parenthesis at the very end. Ex: '(ED25519)' or '(RSA)'.
+
+COPY PUBLIC SSH KEY TO ANOTHER COMPUTER FOR KEY-BASED/PASSWORD-LESS LOGON:
+ssh-copy-id -i ~/.ssh/id_rsa.pub user@hostname_or_ip_addr = copy your public identity file (public SSH key) "~/.ssh/id_rsa.pub" to the computer user@hostname_or_ip_addr into its ~/.ssh/authorized_keys file.
+- See: https://askubuntu.com/questions/4830/easiest-way-to-copy-ssh-keys-to-another-machine/4833#4833
+cat ~/.ssh/id_rsa.pub | ssh user@hostname_or_ip_addr 'cat >> ~/.ssh/authorized_keys && echo "Key copied"' = alternative, more "manual" way to do the above, manually copying your .pub public key into the server/host's "~/.ssh/authorized_keys" file!
+- See: https://askubuntu.com/questions/4830/easiest-way-to-copy-ssh-keys-to-another-machine/6186#6186
+
+== sshfs: ==
+sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 username@server_hostname:/path/on/server/to/mount ~/mnt/my_server = do an ssh 'F'ile 'S'ystem mount of a remote PC's disks to your local PC, over ssh. More specifically: mount path "path/on/server/to/mount", on the server "username@server_hostname", to your local disk at location "~/mnt/my_server", doing some fancy keep-alive stuff to keep the connection from going stale and disconnecting you!
+- See: [my own ans] https://askubuntu.com/questions/791002/how-to-prevent-sshfs-mount-freeze-after-changing-connection-after-suspend/942820#942820
+
+
+====================================================================================================
 = grep: = 
 ====================================================================================================
 
