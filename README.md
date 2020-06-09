@@ -51,11 +51,11 @@ _However, it's still a good idea to back up your home directory first before run
 4. Essentially, just read the readmes, headers, & other comments and it will become self-explanatory how to use or "install" something. If not, open up an issue or pull request and I'll address it. 
 
 # Useful Scripts 
-## See [useful_scripts/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts)
+## See [useful_scripts/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts#ercaguy_dotfilesuseful_scripts)
 
 Here is a list of all of the scripts provided in the "useful_scripts" directory. Some of these are so amazingly useful to me, and powerful, they deserve a section all on their own! 
 
-**Therefore, I have created an additional readme to describe a few of these scripts in greater detail here: [useful_scripts/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts).**
+**Therefore, I have created an additional readme to describe a few of these scripts in greater detail here: [useful_scripts/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts#ercaguy_dotfilesuseful_scripts).**
 
 (tree generated w/`tree eRCaGuy_dotfiles/useful_scripts`):
 
