@@ -313,7 +313,7 @@ match(raw_line, /^(\033\[(([0-9]{1,2};?){1,10})m)?@@ -([0-9]+),[0-9]+ \+([0-9]+)
 # -------------------------------
 # Note that we are piping the output to `less` with -R to interpret ANSI color codes, -F to 
 # quit immediately if the output takes up less than one-screen, and -X to not clear
-# the screen when less exits! This was `git diffn` will provide exactly identical behavior
+# the screen when less exits! This way `git diffn` will provide exactly identical behavior
 # to what `git diff` does! See:
 # 1. https://stackoverflow.com/questions/2183900/how-do-i-prevent-git-diff-from-using-a-pager/14118014#14118014
 # 2. https://unix.stackexchange.com/questions/38634/is-there-any-way-to-exit-less-without-clearing-the-screen/38638#38638

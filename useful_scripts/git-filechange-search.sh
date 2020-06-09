@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Author: Gabriel Staples
+# Status: IT WORKS! Ready for usage by anybody.
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
@@ -131,7 +132,7 @@ parse_args() {
             REGEX_SEARCH="$2"
         fi
     fi
-}
+} # parse_args()
 
 main() {
     echo "Searching for regex pattern \"$REGEX_SEARCH\" in filename \"$FILENAME\"."
@@ -279,7 +280,7 @@ Run this command to see the commit changes:\n\
     if [ "$match_count" -eq 0 ]; then
         echo "NO MATCHES FOUND!"
     fi
-}
+} # main()
 
 
 # ----------------------------------------------------------------------------------------------------------------------
