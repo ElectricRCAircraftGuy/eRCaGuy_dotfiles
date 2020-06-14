@@ -45,7 +45,7 @@ https://stackoverflow.com/questions/47008290/how-to-make-outer-repository-and-em
 # References:
 # 1. https://stackoverflow.com/questions/47008290/how-to-make-outer-repository-and-embedded-repository-work-as-common-standalone-r/62368415#62368415
 
-VERSION="0.2.0"
+VERSION="0.3.0"
 AUTHOR="Gabriel Staples"
 
 EXIT_SUCCESS=0
@@ -201,7 +201,7 @@ disable-all-repos() {
     # Get the length of the bash array; see here:
     # https://stackoverflow.com/questions/1886374/how-to-find-the-length-of-an-array-in-shell/1886483#1886483
     num_dirs="${#dirnames_array[@]}"
-    echo "Number of directories found = ${num_dirs}."
+    echo "Number of directories (git repositories) found = ${num_dirs}."
 
     dir_num=0
     num_dirs_renamed=0
