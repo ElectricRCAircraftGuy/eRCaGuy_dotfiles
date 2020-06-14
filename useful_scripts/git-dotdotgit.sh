@@ -153,11 +153,11 @@ parse_args() {
 dotdotgit() {
     # BORROWED FROM MY "eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh" script:
 
-    # Obtain a long multi-line string of paths to all dirs whose names match the `find_regex`
+    # Obtain a long multi-line string of paths to all dirs whose names match the `regex_from`
     # regular expression; there will be one line per filename path. It is important that we run
     # the `find` command ONLY ONCE, since it takes the longest amoung of time of all of the 
     # commands we use in this script! So, we must run it once & store its output into a variable.
-    dirnames="$(find . -type d | grep -E "$find_regex" | sort -V)"
+    dirnames="$(find . -type d | grep -E "$regex_from" | sort -V)"
     # echo -e "===============\ndirnames = \n${dirnames}\n===============" # for debugging
 
     # Convert the long `dirnames` string to a Bash array, separated by new-line chars; see:
@@ -181,15 +181,20 @@ dotdotgit() {
         parentdir="$(dirname "$dirname")"
         dir="$(basename "$dirname")"
 
+        from="${parentdir}/${dir}"
+        to="${parentdir}/${rename_to}"
+        from_colorized="$(echo "$from" | grep --color=always -E "$regex_from")"
+        to_colorized="$(echo "$to" | grep --color=always -E "$regex_to")"
+
         if [ "$DRY_RUN" == "true" ]; then
-            printf "DRY RUN: %3u: %s %50s %50s\n" $dir_num \
-            "mv" "\"${parentdir}/${dir}\"" "\"${parentdir}/${rename_to}\""
+            printf "DRY RUN: %3u: %s %70s %70s\n" $dir_num \
+            "mv" "\"${from_colorized}\"" "\"${to_colorized}\""
         elif [ "$DRY_RUN" == "false" ]; then
             num_dirs_renamed=$((num_dirs_renamed + 1))
-            printf "%3u: %s %50s %50s\n" $dir_num \
-            "mv" "\"${parentdir}/${dir}\"" "\"${parentdir}/${rename_to}\""
+            printf "%3u: %s %70s %70s\n" $dir_num \
+            "mv" "\"${from_colorized}\"" "\"${to_colorized}\""
             # Now actually DO the renames since it is NOT a dry run!
-            mv "${parentdir}/${dir}" "${parentdir}/${rename_to}"
+            mv "$from" "$to"
         fi
     done
 
@@ -199,23 +204,28 @@ dotdotgit() {
 main() {
     # echo "CMD = $CMD" # for debugging
 
+    # WARNING: DO *NOT* FORGET THE `/` AT THE BEGINNING AND THE `$` AT THE END FOR ALL OF THESE!
+    # - IF YOU FORGET IT, IT WILL COMPLETELY SCREW UP THE FOLDER RENAMING BADLY! SO BE SURE TO 
+    #   ALWAYS DO A DRYRUN FIRST IF YOU EVER MAKE CHANGES TO THESE REGULAR EXPRESSIONS!
+    DOTGIT="/\.git$" # matches "/.git" at the end of a line
+    DOTDOTGIT="/\.\.git$" # matches "/..git" at the end of a line
+    EITHERGIT="/(\.|\.\.)git$" # matches "/.git" and "/..git" at the end of a line
+
     if [ "$CMD" == "--on" ]; then
         echo "Renaming all \"/.git\" directories --> \"/..git\""
-        # WARNING: DO *NOT* FORGET THE `/` AT THE BEGINNING AND THE `$` AT THE END!
-        find_regex="/\.git$" # matches "/.git" at the end of a line
+        regex_from="$DOTGIT"
+        regex_to="$DOTDOTGIT"
         rename_to="..git"
         dotdotgit
     elif [ "$CMD" == "--off" ]; then
         echo "Renaming all \"/..git\" directories back to --> \"/.git\""
-        # WARNING: DO *NOT* FORGET THE `/` AT THE BEGINNING AND THE `$` AT THE END!
-        find_regex="/\.\.git$" # matches "/..git" at the end of a line
+        regex_from="$DOTDOTGIT"
+        regex_to="$DOTGIT"
         rename_to=".git"
         dotdotgit
     elif [ "$CMD" == "--list" ]; then
         echo "listing all \".git\" and \"..git\" directories:"
-        # Do not forget the `/` at the beginning and the `$` at the end.
-        # - matches "/.git" and "/..git" at the end of a line
-        find . -type d | grep --color=always -E "/(\.|\.\.)git$" 
+        find . -type d | grep --color=always -E "$EITHERGIT"
     fi
 
     echo "Done!"
