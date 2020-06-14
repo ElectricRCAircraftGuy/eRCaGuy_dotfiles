@@ -178,7 +178,7 @@ disable-all-repos() {
     # the `find` command ONLY ONCE, since it takes the longest amoung of time of all of the 
     # commands we use in this script! So, we must run it once & store its output into a variable.
     dirnames="$(find . -type d | grep -E "$regex_from" | sort -V)"
-    echo -e "===============\ndirnames = \n${dirnames}\n===============" # for debugging
+    # echo -e "===============\ndirnames = \n${dirnames}\n===============" # for debugging
 
     # Convert the long `dirnames` string to a Bash array, separated by new-line chars; see:
     # 1. https://stackoverflow.com/questions/24628076/bash-convert-n-delimited-strings-into-array/24628676#24628676
@@ -200,7 +200,7 @@ disable-all-repos() {
     for dirname in "${dirnames_array[@]}"; do
         dir_num=$((dir_num + 1))
 
-        echo "dirname = \"$dirname\"" # for debugging
+        # echo "dirname = \"$dirname\"" # for debugging
 
         if [ "$list_only" == "true" ]; then
             # List the results only
