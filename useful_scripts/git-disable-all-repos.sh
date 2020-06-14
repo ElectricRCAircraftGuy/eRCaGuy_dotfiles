@@ -84,7 +84,8 @@ Common Usage Example:
     directory, so as to not disable the parent repo's .git dir (assuming you are in the parent 
     repo's root dir when running this command), run this:
 
-        $SCRIPT_NAME --true && mv ..git .git
+        $SCRIPT_NAME --true  # disable all git repos from this dir and below
+        mv ..git .git        # re-enable just the parent repo
 
     Be sure to do a dry run first for safety, to ensure it will do what you expect:
 
