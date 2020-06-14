@@ -65,26 +65,35 @@ $NAME_AND_VERSION_STR
 
 Usage: '$SCRIPT_NAME [positional_parameters]'
   Positional Parameters:
-    '-h' OR '-?'        = print this help menu, piped to the 'less' page viewer
-    '-v' OR '--version' = print the author and version
-    '--on'              = rename all \".git\" subdirectories --> \"..git\"
-    '--on_dryrun'       = dry run of the above
-    '--off'             = rename all \"..git\" subdirectories --> \".git\"
-        So, once you do '$SCRIPT_NAME --off' Now you can then do 
-        'cd path/to/parent/repo && mv ..git .git && git add -A' to add all files and folders to 
-        the parent git repo, and then 'git commit' to commit them. Prior to running
-        '$SCRIPT_NAME', git would not have allowed this since it won't natively let 
-        you add sub-repos to a repo, and it recognizes sub-repos by the existence of their
-        \".git\" directories.  
-    '--off_dryrun'      = dry run of the above
-    '--list'            = list all \".git\" and \"..git\" subdirectories
+    '-h' OR '-?'         = print this help menu, piped to the 'less' page viewer
+    '-v' OR '--version'  = print the author and version
+    '--true'             = Disable all repos by renaming all \".git\" subdirectories --> \"..git\"
+        So, once you do '$SCRIPT_NAME --true' **from within the parent repo's root directory,** 
+        you can then do 'mv ..git .git && git add -A' to re-enable the parent repo ONLY and 
+        stage all files and folders to be added to it. Then, run 'git commit' to commit them. 
+        Prior to running '$SCRIPT_NAME --true', git would not have allowed adding all 
+        subdirectories since it won't normally let you add sub-repos to a repo, and it recognizes 
+        sub-repos by the existence of their \".git\" directories.  
+    '--true_dryrun'      = dry run of the above
+    '--false'            = Re-enable all repos by renaming all \"..git\" subdirectories --> \".git\"
+    '--false_dryrun'     = dry run of the above
+    '--list'             = list all \".git\" and \"..git\" subdirectories
 
 Common Usage Example:
   - To rename all '.git' subdirectories to '..git' **except for** the one immediately in the current 
     directory, so as to not disable the parent repo's .git dir (assuming you are in the parent 
-    repo's root dir), run this:
+    repo's root dir when running this command), run this:
 
-        $SCRIPT_NAME --on && mv ..git .git
+        $SCRIPT_NAME --true && mv ..git .git
+
+    Be sure to do a dry run first for safety, to ensure it will do what you expect:
+
+        $SCRIPT_NAME --true_dryrun
+
+  - To recursively list all git repos within a given folder, run this command from within the 
+    folder of interest:
+
+        $SCRIPT_NAME --list
 
 Long Description: $DESCRIPTION
 This program is part of: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
@@ -112,6 +121,7 @@ print_version() {
     echo "$NAME_AND_VERSION_STR"
     echo "Author = $AUTHOR"
     echo "See '$SCRIPT_NAME -h' for more info."
+    echo "This program is part of: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles"
 }
 
 parse_args() {
@@ -148,16 +158,16 @@ parse_args() {
     # WARNING: default to the SAFE STATE, which is to do a dry run, *NOT* the unsafe state, which
     # is to do real renames!
     DRY_RUN="true" 
-    if [ "$1" == "--on" ] || [ "$1" == "--on_dryrun" ] || \
-       [ "$1" == "--off" ] || [ "$1" == "--off_dryrun" ] || \
+    if [ "$1" == "--true" ] || [ "$1" == "--true_dryrun" ] || \
+       [ "$1" == "--false" ] || [ "$1" == "--false_dryrun" ] || \
        [ "$1" == "--list" ]; then
 
         CMD="$1"
-        if [ "$CMD" == "--on_dryrun" ]; then
-            CMD="--on"
-        elif [ "$CMD" == "--off_dryrun" ]; then
-            CMD="--off"
-        elif [ "$CMD" == "--on" ] || [ "$CMD" == "--off" ]; then
+        if [ "$CMD" == "--true_dryrun" ]; then
+            CMD="--true"
+        elif [ "$CMD" == "--false_dryrun" ]; then
+            CMD="--false"
+        elif [ "$CMD" == "--true" ] || [ "$CMD" == "--false" ]; then
             # disable the dry run setting for real runs
             DRY_RUN="false"
         fi
@@ -169,7 +179,7 @@ parse_args() {
     fi
 } # parse_args()
 
-# Actually do the renaming here (".git" <--> "..git")
+# Actually do the renaming (disabling/enabling of git repos) here: (".git" <--> "..git")
 disable-all-repos() {
     # BORROWED FROM MY "eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh" script:
 
@@ -184,14 +194,14 @@ disable-all-repos() {
     # 1. https://stackoverflow.com/questions/24628076/bash-convert-n-delimited-strings-into-array/24628676#24628676
     # 2. https://unix.stackexchange.com/questions/184863/what-is-the-meaning-of-ifs-n-in-bash-scripting/184867#184867
     SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
-    IFS=$'\n'      # Change IFS to new line
+    IFS=$'\n'      # Change IFS to the newline char
     dirnames_array=($dirnames) # split long string into array, separating by IFS (newline chars)
     IFS=$SAVEIFS   # Restore IFS
 
     # Get the length of the bash array; see here:
     # https://stackoverflow.com/questions/1886374/how-to-find-the-length-of-an-array-in-shell/1886483#1886483
     num_dirs="${#dirnames_array[@]}"
-    echo "number of directories found = $num_dirs"
+    echo "Number of directories found = ${num_dirs}."
 
     dir_num=0
     num_dirs_renamed=0
@@ -231,7 +241,7 @@ disable-all-repos() {
         fi
     done
 
-    echo "number of directories actually renamed = $num_dirs_renamed"
+    echo "Number of directories actually renamed = ${num_dirs_renamed} of ${num_dirs}."
 }
 
 main() {
@@ -245,14 +255,14 @@ main() {
     EITHERGIT="/(\.|\.\.)git$" # matches "/.git" and "/..git" at the end of a line
 
     list_only="false"
-    if [ "$CMD" == "--on" ]; then
-        echo "Temporarily disabling all git repos by renaming all \"/.git\" directories --> \"/..git\""
+    if [ "$CMD" == "--true" ]; then
+        echo "Temporarily disabling all git repos by renaming all \"/.git\" directories --> \"/..git\"."
         regex_from="$DOTGIT"
         regex_to="$DOTDOTGIT"
         rename_to="..git"
         disable-all-repos
-    elif [ "$CMD" == "--off" ]; then
-        echo "Re-enabling all git repos by renaming all \"/..git\" directories back to --> \"/.git\""
+    elif [ "$CMD" == "--false" ]; then
+        echo "Re-enabling all git repos by renaming all \"/..git\" directories back to --> \"/.git\"."
         regex_from="$DOTDOTGIT"
         regex_to="$DOTGIT"
         rename_to=".git"
