@@ -178,23 +178,32 @@ dotdotgit() {
     for dirname in ${dirnames_array[@]}; do
         dir_num=$((dir_num + 1))
 
-        parentdir="$(dirname "$dirname")"
-        dir="$(basename "$dirname")"
+        if [ "$list_only" == "true" ]; then
+            # List the results only
+            dirname_colorized="$(echo "$dirname" | grep --color=always -E "$regex_from")"
+            printf "%3u: %-70s\n" $dir_num "\"${dirname_colorized}\""
 
-        from="${parentdir}/${dir}"
-        to="${parentdir}/${rename_to}"
-        from_colorized="$(echo "$from" | grep --color=always -E "$regex_from")"
-        to_colorized="$(echo "$to" | grep --color=always -E "$regex_to")"
+        elif [ "$list_only" == "false" ]; then
+            # Also do renaming or renaming dry runs
 
-        if [ "$DRY_RUN" == "true" ]; then
-            printf "DRY RUN: %3u: %s %70s %70s\n" $dir_num \
-            "mv" "\"${from_colorized}\"" "\"${to_colorized}\""
-        elif [ "$DRY_RUN" == "false" ]; then
-            num_dirs_renamed=$((num_dirs_renamed + 1))
-            printf "%3u: %s %70s %70s\n" $dir_num \
-            "mv" "\"${from_colorized}\"" "\"${to_colorized}\""
-            # Now actually DO the renames since it is NOT a dry run!
-            mv "$from" "$to"
+            parentdir="$(dirname "$dirname")"
+            dir="$(basename "$dirname")"
+
+            from="${parentdir}/${dir}"
+            to="${parentdir}/${rename_to}"
+            from_colorized="$(echo "$from" | grep --color=always -E "$regex_from")"
+            to_colorized="$(echo "$to" | grep --color=always -E "$regex_to")"
+
+            if [ "$DRY_RUN" == "true" ]; then
+                printf "DRY RUN: %3u: %s %-70s %-70s\n" $dir_num \
+                "mv" "\"${from_colorized}\"" "\"${to_colorized}\""
+            elif [ "$DRY_RUN" == "false" ]; then
+                num_dirs_renamed=$((num_dirs_renamed + 1))
+                printf "%3u: %s %-70s %-70s\n" $dir_num \
+                "mv" "\"${from_colorized}\"" "\"${to_colorized}\""
+                # Now actually DO the renames since it is NOT a dry run!
+                mv "$from" "$to"
+            fi
         fi
     done
 
@@ -211,6 +220,7 @@ main() {
     DOTDOTGIT="/\.\.git$" # matches "/..git" at the end of a line
     EITHERGIT="/(\.|\.\.)git$" # matches "/.git" and "/..git" at the end of a line
 
+    list_only="false"
     if [ "$CMD" == "--on" ]; then
         echo "Renaming all \"/.git\" directories --> \"/..git\""
         regex_from="$DOTGIT"
@@ -225,7 +235,9 @@ main() {
         dotdotgit
     elif [ "$CMD" == "--list" ]; then
         echo "listing all \".git\" and \"..git\" directories:"
-        find . -type d | grep --color=always -E "$EITHERGIT"
+        regex_from="$EITHERGIT"
+        list_only="true"
+        dotdotgit
     fi
 
     echo "Done!"
