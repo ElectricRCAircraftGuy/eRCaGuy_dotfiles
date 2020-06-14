@@ -101,7 +101,11 @@ print_help_piped_to_less() {
     # -R = interpret ANSI color codes (in case I decide to add any in the future)
     # -F = quit immediately if the output takes up less than one screen
     # -X = do NOT clear the screen when less exits
-    echo "$HELP_STR" | less -RFX
+    print_help | less -RFX
+}
+
+print_see_help() {
+    echo "See '$SCRIPT_NAME -h' for proper usage and help."
 }
 
 print_version() {
@@ -113,13 +117,13 @@ print_version() {
 parse_args() {
     if [ $# -lt 1 ]; then
         echo "ERROR: Not enough arguments supplied ($# supplied, 1 required)"
-        print_help
+        print_see_help
         exit $EXIT_ERROR
     fi
 
     if [ $# -gt 1 ]; then
         echo "ERROR: Too many arguments supplied ($# supplied, 1 required)"
-        print_help
+        print_see_help
         exit $EXIT_ERROR
     fi
 
@@ -158,8 +162,9 @@ parse_args() {
             DRY_RUN="false"
         fi
     else 
-        echo "ERROR: Invalid Parameter. You entered \"$1\". Valid parameters are shown below."
-        print_help
+        echo "ERROR: Invalid Parameter. You entered \"$1\"."
+        echo "       Valid parameters are shown in the help menu."
+        print_see_help
         exit $EXIT_ERROR
     fi
 } # parse_args()
@@ -237,19 +242,19 @@ main() {
 
     list_only="false"
     if [ "$CMD" == "--on" ]; then
-        echo "Renaming all \"/.git\" directories --> \"/..git\""
+        echo "Temporarily disabling all git repos by renaming all \"/.git\" directories --> \"/..git\""
         regex_from="$DOTGIT"
         regex_to="$DOTDOTGIT"
         rename_to="..git"
         disable-all-repos
     elif [ "$CMD" == "--off" ]; then
-        echo "Renaming all \"/..git\" directories back to --> \"/.git\""
+        echo "Re-enabling all git repos by renaming all \"/..git\" directories back to --> \"/.git\""
         regex_from="$DOTDOTGIT"
         regex_to="$DOTGIT"
         rename_to=".git"
         disable-all-repos
     elif [ "$CMD" == "--list" ]; then
-        echo "listing all \".git\" and \"..git\" directories:"
+        echo "Showing all nested git repos by listing all \".git\" and \"..git\" directories:"
         regex_from="$EITHERGIT"
         list_only="true"
         disable-all-repos
