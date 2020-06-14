@@ -2,40 +2,42 @@
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# Status: Work in Progress (WIP)
+# Status: It works! It's ready for full usage anywhere.
 
 # Author: Gabriel Staples
 # www.ElectricRCAircraftGuy.com 
 
-# DESCRIPTION:
-# I want to archive a bunch of small git repos inside a single, larger repo, which I will back up on 
-# GitHub until I have time to manually pull out each small, nested repo into its own stand-alone
-# GitHub repo. To do this, however, `git` in the outer, parent repo must NOT KNOW that the inner
-# git repos are git repos! The easiest way to do this is to just rename all inner, nested `.git` 
-# folders to anything else, such as to `..git`, so that git won't recognize them as stand-alone
-# repositories, and so that it will just treat their contents like any other normal directory
-# and allow you to back it all up! Thus, this project is born. It will allow you to quickly
-# "toggle" the naming of any folder from `.git` to `..git`, or vice versa. Hence the name of this
-# project: "git-dotdotgit". 
-# See my answer here: 
-# https://stackoverflow.com/questions/47008290/how-to-make-outer-repository-and-embedded-repository-work-as-common-standalone-r/62368415#62368415
+DESCRIPTION="
+I want to archive a bunch of small git repos inside a single, larger repo, which I will back up on 
+GitHub until I have time to manually pull out each small, nested repo into its own stand-alone
+GitHub repo. To do this, however, 'git' in the outer, parent repo must NOT KNOW that the inner
+git repos are git repos! The easiest way to do this is to just rename all inner, nested '.git' 
+folders to anything else, such as to '..git', so that git won't recognize them as stand-alone
+repositories, and so that it will just treat their contents like any other normal directory
+and allow you to back it all up! Thus, this project is born. It will allow you to quickly
+"toggle" the naming of any folder from '.git' to '..git', or vice versa. Hence the name of this
+project: "git-disable-all-repos". 
+See my answer here: 
+https://stackoverflow.com/questions/47008290/how-to-make-outer-repository-and-embedded-repository-work-as-common-standalone-r/62368415#62368415
+"
 
 # INSTALLATION INSTRUCTIONS:
-# 1. Create a symlink in ~/bin to this script so you can run it from anywhere as `git dotdotgit` OR
-#    as `git-dotdotgit` OR as `gs_git-dotdotgit` OR as `git gs_dotdotgit`. Note that "gs" is my initials. 
-#    I do these versions with "gs_" in them so I can find all scripts I've written really easily 
-#    by simply typing "gs_" + Tab + Tab, or "git gs_" + Tab + Tab. 
+# 1. Create a symlink in ~/bin to this script so you can run it from anywhere as 
+#    `git disable-all-repos` OR as `git-disable-all-repos` OR as `gs_git-disable-all-repos` 
+#    OR as `git gs_disable-all-repos`. Note that "gs" is my initials. I do these 
+#    versions with "gs_" in them so I can find all scripts I've written really easily by
+#    simply typing "gs_" + Tab + Tab, or "git gs_" + Tab + Tab. 
 #       cd /path/to/here
 #       mkdir -p ~/bin
-#       ln -si "${PWD}/git-dotdotgit.sh" ~/bin/git-dotdotgit     # required
-#       ln -si "${PWD}/git-dotdotgit.sh" ~/bin/git-gs_dotdotgit  # optional; replace "gs" with your initials
-#       ln -si "${PWD}/git-dotdotgit.sh" ~/bin/gs_git-dotdotgit  # optional; replace "gs" with your initials
+#       ln -si "${PWD}/git-disable-all-repos.sh" ~/bin/git-disable-all-repos     # required
+#       ln -si "${PWD}/git-disable-all-repos.sh" ~/bin/git-gs_disable-all-repos  # optional; replace "gs" with your initials
+#       ln -si "${PWD}/git-disable-all-repos.sh" ~/bin/gs_git-disable-all-repos  # optional; replace "gs" with your initials
 # 2. Now you can use this command directly anywhere you like in any of these 5 ways:
-#   1. `git dotdotgit`  <=== my preferred way to use this program
-#   2. `git-dotdotgit`
-#   3. `git gs_dotdotgit`
-#   4. `git-gs_dotdotgit`
-#   3. `gs_git-dotdotgit`
+#   1. `git disable-all-repos`  <=== my preferred way to use this program
+#   2. `git-disable-all-repos`
+#   3. `git gs_disable-all-repos`
+#   4. `git-gs_disable-all-repos`
+#   3. `gs_git-disable-all-repos`
 
 # FUTURE WORK/TODO:
 # 1. NA
@@ -43,26 +45,27 @@
 # References:
 # 1. https://stackoverflow.com/questions/47008290/how-to-make-outer-repository-and-embedded-repository-work-as-common-standalone-r/62368415#62368415
 
-VERSION="0.1.0"
+VERSION="0.2.0"
 AUTHOR="Gabriel Staples"
 
 EXIT_SUCCESS=0
 EXIT_ERROR=1
 
-# SCRIPT_NAME="$(basename "$0")"
-SCRIPT_NAME="git dotdotgit"
+# SCRIPT_NAME="$(basename "$0")" # automatically obtain it from whatever program the user just ran
+SCRIPT_NAME="git disable-all-repos" # just manually specify it
 NAME_AND_VERSION_STR="'$SCRIPT_NAME' version $VERSION"
 
 HELP_STR="
 $NAME_AND_VERSION_STR
-  - Rename all \".git\" subdirectories in the current directory to \"..git\" so that they can be 
-    easily added to a parent git repo as if they weren't git repos themselves 
-    (\".git\" <--> \"..git\").
-  - Why? See: https://stackoverflow.com/a/62368415/4561887
+  - Rename all \".git\" subdirectories in the current directory to \"..git\" to temporarily
+    \"disable\" them so that they can be easily added to a parent git repo as if they weren't 
+    git repos themselves (\".git\" <--> \"..git\").
+  - Why? See my StackOverflow answer here: https://stackoverflow.com/a/62368415/4561887
+  - See also the \"Long Description\" below.
 
 Usage: '$SCRIPT_NAME [positional_parameters]'
   Positional Parameters:
-    '-h' OR '-?'        = print this help menu
+    '-h' OR '-?'        = print this help menu, piped to the 'less' page viewer
     '-v' OR '--version' = print the author and version
     '--on'              = rename all \".git\" subdirectories --> \"..git\"
     '--on_dryrun'       = dry run of the above
@@ -78,15 +81,27 @@ Usage: '$SCRIPT_NAME [positional_parameters]'
 
 Common Usage Example:
   - To rename all '.git' subdirectories to '..git' **except for** the one immediately in the current 
-    directory, so as to not disable the parent repo's .git dir, run this:
+    directory, so as to not disable the parent repo's .git dir (assuming you are in the parent 
+    repo's root dir), run this:
 
-        git dotdotgit --on && mv ..git .git
+        $SCRIPT_NAME --on && mv ..git .git
 
+Long Description: $DESCRIPTION
 This program is part of: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 "
 
 print_help() {
     echo "$HELP_STR"
+}
+
+print_help_piped_to_less() {
+    # Note: I borrowed the "less" options below from my
+    # "eRCaGuy_dotfiles/useful_scripts/git-diffn.sh" script. `-RFX` produces the same "less" 
+    # behavior as `git diff`, for instance. 
+    # -R = interpret ANSI color codes (in case I decide to add any in the future)
+    # -F = quit immediately if the output takes up less than one screen
+    # -X = do NOT clear the screen when less exits
+    echo "$HELP_STR" | less -RFX
 }
 
 print_version() {
@@ -109,12 +124,12 @@ parse_args() {
     fi
 
     # Help menu
-    # Note: if running this command as `git dotdotgit` rather than `git-dotdotgit`, you can NOT
+    # Note: if running this command as `git disable-all-repos` rather than `git-disable-all-repos`, you can NOT
     # pass it a '--help' parameter, because `git` intercepts this parameter and tries to print its
     # own help or man pages for the given command. Nevertheless, let's leave in the '--help' option
     # for those who wish to run the command with the '-' in it vs without the '-' in it. 
     if [ "$1" == "-h" ] || [ "$1" == "-?" ] || [ "$1" == "--help" ]; then
-        print_help
+        print_help_piped_to_less
         exit $EXIT_SUCCESS
     fi
 
@@ -150,7 +165,7 @@ parse_args() {
 } # parse_args()
 
 # Actually do the renaming here (".git" <--> "..git")
-dotdotgit() {
+disable-all-repos() {
     # BORROWED FROM MY "eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh" script:
 
     # Obtain a long multi-line string of paths to all dirs whose names match the `regex_from`
@@ -226,18 +241,18 @@ main() {
         regex_from="$DOTGIT"
         regex_to="$DOTDOTGIT"
         rename_to="..git"
-        dotdotgit
+        disable-all-repos
     elif [ "$CMD" == "--off" ]; then
         echo "Renaming all \"/..git\" directories back to --> \"/.git\""
         regex_from="$DOTDOTGIT"
         regex_to="$DOTGIT"
         rename_to=".git"
-        dotdotgit
+        disable-all-repos
     elif [ "$CMD" == "--list" ]; then
         echo "listing all \".git\" and \"..git\" directories:"
         regex_from="$EITHERGIT"
         list_only="true"
-        dotdotgit
+        disable-all-repos
     fi
 
     echo "Done!"
