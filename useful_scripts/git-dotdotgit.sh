@@ -56,7 +56,8 @@ NAME_AND_VERSION_STR="'$SCRIPT_NAME' version $VERSION"
 HELP_STR="
 $NAME_AND_VERSION_STR
   - Rename all \".git\" subdirectories in the current directory to \"..git\" so that they can be 
-    easily added to a parent git repo as if they weren't git repos themselves. 
+    easily added to a parent git repo as if they weren't git repos themselves 
+    (\".git\" <--> \"..git\").
   - Why? See: https://stackoverflow.com/a/62368415/4561887
 
 Usage: '$SCRIPT_NAME [positional_parameters]'
@@ -64,6 +65,7 @@ Usage: '$SCRIPT_NAME [positional_parameters]'
     '-h' OR '-?'        = print this help menu
     '-v' OR '--version' = print the author and version
     '--on'              = rename all \".git\" subdirectories --> \"..git\"
+    '--on_dryrun'       = dry run of the above
     '--off'             = rename all \"..git\" subdirectories --> \".git\"
         So, once you do '$SCRIPT_NAME --off' Now you can then do 
         'cd path/to/parent/repo && mv ..git .git && git add -A' to add all files and folders to 
@@ -71,7 +73,14 @@ Usage: '$SCRIPT_NAME [positional_parameters]'
         '$SCRIPT_NAME', git would not have allowed this since it won't natively let 
         you add sub-repos to a repo, and it recognizes sub-repos by the existence of their
         \".git\" directories.  
+    '--off_dryrun'      = dry run of the above
     '--list'            = list all \".git\" and \"..git\" subdirectories
+
+Common Usage Example:
+  - To rename all '.git' subdirectories to '..git' **except for** the one immediately in the current 
+    directory, so as to not disable the parent repo's .git dir, run this:
+
+        git dotdotgit --on && mv ..git .git
 
 This program is part of: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 "
@@ -116,8 +125,23 @@ parse_args() {
     fi
 
     # All other commands
-    if [ "$1" == "--on" ] || [ "$1" == "--off" ] || [ "$1" == "--list" ]; then
+
+    # WARNING: default to the SAFE STATE, which is to do a dry run, *NOT* the unsafe state, which
+    # is to do real renames!
+    DRY_RUN="true" 
+    if [ "$1" == "--on" ] || [ "$1" == "--on_dryrun" ] || \
+       [ "$1" == "--off" ] || [ "$1" == "--off_dryrun" ] || \
+       [ "$1" == "--list" ]; then
+
         CMD="$1"
+        if [ "$CMD" == "--on_dryrun" ]; then
+            CMD="--on"
+        elif [ "$CMD" == "--off_dryrun" ]; then
+            CMD="--off"
+        elif [ "$CMD" == "--on" ] || [ "$CMD" == "--off" ]; then
+            # disable the dry run setting for real runs
+            DRY_RUN="false"
+        fi
     else 
         echo "ERROR: Invalid Parameter. You entered \"$1\". Valid parameters are shown below."
         print_help
@@ -125,9 +149,76 @@ parse_args() {
     fi
 } # parse_args()
 
-main() {
-    echo "CMD = $CMD" # for debugging
+# Actually do the renaming here (".git" <--> "..git")
+dotdotgit() {
+    # BORROWED FROM MY "eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh" script:
 
+    # Obtain a long multi-line string of paths to all dirs whose names match the `find_regex`
+    # regular expression; there will be one line per filename path. It is important that we run
+    # the `find` command ONLY ONCE, since it takes the longest amoung of time of all of the 
+    # commands we use in this script! So, we must run it once & store its output into a variable.
+    dirnames="$(find . -type d | grep -E "$find_regex" | sort -V)"
+    echo -e "===============\ndirnames = \n${dirnames}\n===============" # for debugging
+
+    # Count the number of dirs by counting the number of lines in the `dirnames` variable, since
+    # there is one line per filename path
+    num_dirs="$(echo "$dirnames" | wc -l)"
+    echo "number of directories found = $num_dirs"
+
+    # Convert the long `dirnames` string to a Bash array, separated by new-line chars; see:
+    # 1. https://stackoverflow.com/questions/24628076/bash-convert-n-delimited-strings-into-array/24628676#24628676
+    # 2. https://unix.stackexchange.com/questions/184863/what-is-the-meaning-of-ifs-n-in-bash-scripting/184867#184867
+    SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
+    IFS=$'\n'      # Change IFS to new line
+    dirnames_array=($dirnames) # split long string into array, separating by IFS (newline chars)
+    IFS=$SAVEIFS   # Restore IFS
+
+    dir_num=0
+    num_dirs_renamed=0
+    for dirname in ${dirnames_array[@]}; do
+        dir_num=$((dir_num + 1))
+
+        parentdir="$(dirname "$dirname")"
+        dir="$(basename "$dirname")"
+
+        if [ "$DRY_RUN" == "true" ]; then
+            printf "DRY RUN: %3u: %s\n" $dir_num \
+            "mv \"${parentdir}/${dir}\" \"${parentdir}/${rename_to}\""
+        elif [ "$DRY_RUN" == "false" ]; then
+            num_dirs_renamed=$((num_dirs_renamed + 1))
+            printf "%3u: %s\n" $dir_num \
+            "mv \"${parentdir}/${dir}\" \"${parentdir}/${rename_to}\""
+            # Now actually DO the renames since it is NOT a dry run!
+            mv "${parentdir}/${dir}" "${parentdir}/${rename_to}"
+        fi
+    done
+
+    echo "number of directories renamed = $num_dirs_renamed"
+}
+
+main() {
+    # echo "CMD = $CMD" # for debugging
+
+    if [ "$CMD" == "--on" ]; then
+        echo "Renaming all \".git\" directories --> \"..git\""
+        # WARNING: DO *NOT* FORGET THE `\./` AT THE BEGINNING AND THE `$` AT THE END!
+        find_regex="\./\.git$" # matches "./.git" at the end of a line
+        rename_to="..git"
+        dotdotgit
+    elif [ "$CMD" == "--off" ]; then
+        echo "Renaming all \"..git\" directories back to --> \".git\""
+        # WARNING: DO *NOT* FORGET THE `\./` AT THE BEGINNING AND THE `$` AT THE END!
+        find_regex="\./\.\.git$" # matches "./..git" at the end of a line
+        rename_to=".git"
+        dotdotgit
+    elif [ "$CMD" == "--list" ]; then
+        echo "listing all \".git\" and \"..git\" directories:"
+        # Do not forget the `\./` at the beginning and the `$` at the end.
+        # - matches "./.git" and "./..git" at the end of a line
+        find . -type d | grep --color=always -E "\./(\.|\.\.)git$" 
+    fi
+
+    echo "Done!"
 } # main()
 
 
@@ -136,5 +227,5 @@ main() {
 # ----------------------------------------------------------------------------------------------------------------------
 
 parse_args "$@"
-time main # run main, while also timing how long it takes
-
+# time main # run main, while also timing how long it takes
+main
