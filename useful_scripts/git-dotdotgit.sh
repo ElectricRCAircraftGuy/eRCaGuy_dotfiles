@@ -182,12 +182,12 @@ dotdotgit() {
         dir="$(basename "$dirname")"
 
         if [ "$DRY_RUN" == "true" ]; then
-            printf "DRY RUN: %3u: %s\n" $dir_num \
-            "mv \"${parentdir}/${dir}\" \"${parentdir}/${rename_to}\""
+            printf "DRY RUN: %3u: %s %50s %50s\n" $dir_num \
+            "mv" "\"${parentdir}/${dir}\"" "\"${parentdir}/${rename_to}\""
         elif [ "$DRY_RUN" == "false" ]; then
             num_dirs_renamed=$((num_dirs_renamed + 1))
-            printf "%3u: %s\n" $dir_num \
-            "mv \"${parentdir}/${dir}\" \"${parentdir}/${rename_to}\""
+            printf "%3u: %s %50s %50s\n" $dir_num \
+            "mv" "\"${parentdir}/${dir}\"" "\"${parentdir}/${rename_to}\""
             # Now actually DO the renames since it is NOT a dry run!
             mv "${parentdir}/${dir}" "${parentdir}/${rename_to}"
         fi
