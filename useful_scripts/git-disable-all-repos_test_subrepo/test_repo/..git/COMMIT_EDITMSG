@@ -1,0 +1,11 @@
+Add a few new files
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch master
+# Changes to be committed:
+#	deleted:    new LibreOffice Writer doc.odt
+#	new file:   new text file (another copy).txt
+#	new file:   new text file (copy).txt
+#	new file:   new text file.txt
+#
