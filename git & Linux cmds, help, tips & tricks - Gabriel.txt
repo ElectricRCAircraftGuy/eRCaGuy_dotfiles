@@ -1032,6 +1032,37 @@ qpdf --decrypt in.pdf out.pdf = "decrypt"/unlock (cannot truly decrypt/unlock if
 
 
 ====================================================================================================
+= Image and video compression and conversion: = 
+====================================================================================================
+[keywords: compressing videos, compressing images, compressing pictures, image/picture compression, video conversion, image conversion, picture conversion, converting videos, converting images, converting pictures]
+
+== find large files: ==
+[this is adjacently related to video conversion, as GitHub doesn't allow files > 100 MB in size (see: https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com/59479166#59479166), so you may need to find all files > 100 MB, then convert them down to a smaller size using `ffmpeg` as shown below if they are videos!]
+
+find . -type f -size +100M = find all files in the current directory that are larger than 100 MB! See: https://superuser.com/questions/204564/how-can-i-find-files-that-are-bigger-smaller-than-x-bytes/204571#204571
+
+== PDF to images: ==
+
+pdftoppm
+See: [MY OWN ANS!] https://stackoverflow.com/questions/43085889/how-to-convert-a-pdf-into-jpg-with-commandline-in-linux/61700520#61700520
+
+== Image compression: ==
+
+See: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF
+ex:
+jpegoptim --size=500k dir_of_imgs/*.jpg = compress the whole dir of images!
+
+== Video compression: ==
+
+See: https://unix.stackexchange.com/questions/28803/how-can-i-reduce-a-videos-size-with-ffmpeg/38380#38380
+ex:
+time ffmpeg -i input.mp4 -vcodec libx265 -crf 28 output.mp4 = convert input.mp4 to output.mp4 using the modern H.265 video format, which has EXCELLENT size vs quality! Reasonable compression (-crf) values for this libx265 (H.265) format may be as high as 24 to 30 (28 is good), with LOWER CRF values yielding HIGHER bitrates, and hence HIGHER quality videos! <============= WORKS REALLY WELL! ==============
+- Using the above command:
+    - a 110 MB 15 min video might take 25 minutes to convert (1/0.6 time factor to convert), and drop to as little as 35 MB!, and
+    - a 125 MB 1min40sec video might take 5~6 minutes to convert (1/0.3 time factor to convert) and drop to as little as 5 MB!
+
+
+====================================================================================================
 = flowcharts and drawing tools, graphics, emojis, unicode chars & icons, etc.: = 
 ====================================================================================================
 
