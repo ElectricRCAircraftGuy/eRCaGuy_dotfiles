@@ -16,28 +16,28 @@ folders to anything else, such as to '..git', so that git won't recognize them a
 repositories, and so that it will just treat their contents like any other normal directory
 and allow you to back it all up! Thus, this project is born. It will allow you to quickly
 "toggle" the naming of any folder from '.git' to '..git', or vice versa. Hence the name of this
-project: "git-disable-all-repos". 
+project: "git-disable-repos". 
 See my answer here: 
 https://stackoverflow.com/questions/47008290/how-to-make-outer-repository-and-embedded-repository-work-as-common-standalone-r/62368415#62368415
 "
 
 # INSTALLATION INSTRUCTIONS:
 # 1. Create a symlink in ~/bin to this script so you can run it from anywhere as 
-#    `git disable-all-repos` OR as `git-disable-all-repos` OR as `gs_git-disable-all-repos` 
-#    OR as `git gs_disable-all-repos`. Note that "gs" is my initials. I do these 
+#    `git disable-repos` OR as `git-disable-repos` OR as `gs_git-disable-repos` 
+#    OR as `git gs_disable-repos`. Note that "gs" is my initials. I do these 
 #    versions with "gs_" in them so I can find all scripts I've written really easily by
 #    simply typing "gs_" + Tab + Tab, or "git gs_" + Tab + Tab. 
 #       cd /path/to/here
 #       mkdir -p ~/bin
-#       ln -si "${PWD}/git-disable-all-repos.sh" ~/bin/git-disable-all-repos     # required
-#       ln -si "${PWD}/git-disable-all-repos.sh" ~/bin/git-gs_disable-all-repos  # optional; replace "gs" with your initials
-#       ln -si "${PWD}/git-disable-all-repos.sh" ~/bin/gs_git-disable-all-repos  # optional; replace "gs" with your initials
+#       ln -si "${PWD}/git-disable-repos.sh" ~/bin/git-disable-repos     # required
+#       ln -si "${PWD}/git-disable-repos.sh" ~/bin/git-gs_disable-repos  # optional; replace "gs" with your initials
+#       ln -si "${PWD}/git-disable-repos.sh" ~/bin/gs_git-disable-repos  # optional; replace "gs" with your initials
 # 2. Now you can use this command directly anywhere you like in any of these 5 ways:
-#   1. `git disable-all-repos`  <=== my preferred way to use this program
-#   2. `git-disable-all-repos`
-#   3. `git gs_disable-all-repos`
-#   4. `git-gs_disable-all-repos`
-#   3. `gs_git-disable-all-repos`
+#   1. `git disable-repos`  <=== my preferred way to use this program
+#   2. `git-disable-repos`
+#   3. `git gs_disable-repos`
+#   4. `git-gs_disable-repos`
+#   3. `gs_git-disable-repos`
 
 # FUTURE WORK/TODO:
 # 1. NA
@@ -52,7 +52,7 @@ EXIT_SUCCESS=0
 EXIT_ERROR=1
 
 # SCRIPT_NAME="$(basename "$0")" # automatically obtain it from whatever program the user just ran
-SCRIPT_NAME="git disable-all-repos" # just manually specify it
+SCRIPT_NAME="git disable-repos" # just manually specify it
 NAME_AND_VERSION_STR="'$SCRIPT_NAME' version $VERSION"
 
 HELP_STR="
@@ -84,7 +84,7 @@ Common Usage Example:
     directory, so as to not disable the parent repo's .git dir (assuming you are in the parent 
     repo's root dir when running this command), run this:
 
-        $SCRIPT_NAME --true  # disable all git repos from this dir and below
+        $SCRIPT_NAME --true  # disable all git repos in this dir and below
         mv ..git .git        # re-enable just the parent repo
 
     Be sure to do a dry run first for safety, to ensure it will do what you expect:
@@ -139,7 +139,7 @@ parse_args() {
     fi
 
     # Help menu
-    # Note: if running this command as `git disable-all-repos` rather than `git-disable-all-repos`, you can NOT
+    # Note: if running this command as `git disable-repos` rather than `git-disable-repos`, you can NOT
     # pass it a '--help' parameter, because `git` intercepts this parameter and tries to print its
     # own help or man pages for the given command. Nevertheless, let's leave in the '--help' option
     # for those who wish to run the command with the '-' in it vs without the '-' in it. 
@@ -181,7 +181,7 @@ parse_args() {
 } # parse_args()
 
 # Actually do the renaming (disabling/enabling of git repos) here: (".git" <--> "..git")
-disable-all-repos() {
+disable-repos() {
     # BORROWED FROM MY "eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh" script:
 
     # Obtain a long multi-line string of paths to all dirs whose names match the `regex_from`
@@ -261,18 +261,18 @@ main() {
         regex_from="$DOTGIT"
         regex_to="$DOTDOTGIT"
         rename_to="..git"
-        disable-all-repos
+        disable-repos
     elif [ "$CMD" == "--false" ]; then
         echo "Re-enabling all git repos by renaming all \"/..git\" directories back to --> \"/.git\"."
         regex_from="$DOTDOTGIT"
         regex_to="$DOTGIT"
         rename_to=".git"
-        disable-all-repos
+        disable-repos
     elif [ "$CMD" == "--list" ]; then
         echo "Showing all nested git repos by listing all \".git\" and \"..git\" directories:"
         regex_from="$EITHERGIT"
         list_only="true"
-        disable-all-repos
+        disable-repos
     fi
 
     echo "Done!"
