@@ -159,15 +159,17 @@ main() {
 
     # Debugging: print all filename paths one by one to make sure this worked
     # See here for how to print a Bash array: 
-    # https://opensource.com/article/18/5/you-dont-know-bash-intro-bash-arrays
-    # for filename in ${filenames_array[@]}; do
+    # https://stackoverflow.com/questions/8880603/loop-through-an-array-of-strings-in-bash/8880633#8880633
+    # for filename in "${filenames_array[@]}"; do
     #     echo "  filename = \"${filename}\""
     # done
 
     # Count the number of string replacements by grepping for the STRING_REGEX in each of these 
     # files
     num_matches_total=0
-    for filename in ${filenames_array[@]}; do
+    # For how to loop through an array of strings in bash, see:
+    # https://stackoverflow.com/questions/8880603/loop-through-an-array-of-strings-in-bash/8880633#8880633
+    for filename in "${filenames_array[@]}"; do
 
         num_lines_matched=$(grep -c -E "$STRING_REGEX" "$filename")
         # echo "num_lines_matched = $num_lines_matched" # for debugging
