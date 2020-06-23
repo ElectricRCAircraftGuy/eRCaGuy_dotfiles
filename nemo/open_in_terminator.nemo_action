@@ -1,0 +1,47 @@
+# --------------------------------------------------------------------------------------------------
+# This file added to eRCaGuy_dotfiles by Gabriel Staples, and modified by Gabriel Staples
+
+# Original Author: @BanAnanas (https://unix.stackexchange.com/a/582462/114401)
+
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# Source: https://unix.stackexchange.com/questions/336368/how-to-configure-nemos-right-click-open-in-terminal-to-launch-gnome-terminal/582462#582462
+# --------------------------------------------------------------------------------------------------
+
+# Other References:
+# 1. Nemo action file example: see: "/usr/share/nemo/actions/sample.nemo_action"
+# 1. See your custom actions and scripts in nemo by going to Edit --> "Plugins"! By going here
+#    you can also quickly see if the `Icon-Name` you have set below is working properly!
+
+# INSTALLATION:
+# 1. Ensure nemo is installed. Follow my detailed instructions here:
+#    https://askubuntu.com/questions/1066752/how-to-set-nemo-as-the-default-file-manager-in-ubuntu-18-04/1173861#1173861
+# 2. Install terminator
+#           sudo apt install terminator
+# 3. (Recommended) To install this right-click menu item for all users, create a symbolic link to 
+#    it in "/usr/share/nemo/actions":
+#           cd "/path/to/here"
+#           sudo ln -si "${PWD}/open_in_terminator.nemo_action" /usr/share/nemo/actions 
+#  OR (No need to do this if you do the above) To install this right-click menu item for just your 
+#    user, create a symbolic link to it in "/home/$USER/.local/share/nemo/actions"
+#           cd "/path/to/here"
+#           ln -si "${PWD}/open_in_terminator.nemo_action" /home/$USER/.local/share/nemo/actions
+# 4. To get the change to take effect, either: 
+#   A) navigate to the destination folder where you just copied the symbolic link above, and 
+#      press F5 to refresh the screen, OR 
+#   B) (easier) close and re-open nemo. 
+# 5. Done! You will now see this new shortcut option available in your right-click menu!
+
+# Usage:
+# Right-Click on any folder name or inside any folder in nemo --> "Open in Terminator"
+
+# See "/usr/share/nemo/actions/sample.nemo_action" for descriptions of all the options below!
+
+[Nemo Action]
+
+Name=Open in Terminator
+Comment=Open the 'terminator' terminal in the selected folder
+Exec=terminator --working-directory=%F
+Icon-Name=terminator
+Selection=any
+Extensions=dir;
