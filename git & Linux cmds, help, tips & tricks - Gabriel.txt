@@ -1046,7 +1046,14 @@ find . -type f -size +100M = find all files in the current directory that are la
 pdftoppm
 See: [MY OWN ANS!] https://stackoverflow.com/questions/43085889/how-to-convert-a-pdf-into-jpg-with-commandline-in-linux/61700520#61700520
 
+== Image resizing: ==
+[resize image, resize picture, picture resizing]
+
+convert in.png -resize 600x400 out.jpg = resize to make the dimensions max 600x400, while still retaining proportional dimensions to the original image, while also converting from the (uncompressed I think?) PNG format to the compressed JPEG format. See: https://askubuntu.com/questions/271776/how-to-resize-an-image-through-the-terminal/271797#271797
+convert in.png -resize 800x800 out.jpg = same as above, but make the max dimension on either the x or y axis 800 pixels
+
 == Image compression: ==
+[picture compression]
 
 See: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF
 ex:
@@ -1054,12 +1061,29 @@ jpegoptim --size=500k dir_of_imgs/*.jpg = compress the whole dir of images!
 
 == Video compression: ==
 
+sudo apt install ffmpeg = install ffmpeg (required below)
+sudo apt install vlc = install the VLC media player GUI application to play the converted videos below
+
+SUMMARY:
+- libx265 (H.265) format crf values may be as high as 24 to 30 (higher values are lower quality).
+- Note that HIGHER crf settings below yield SMALLER files because they are *lower* quality!
+
+    # For "large" output files (usu. < 100 MB):
+    time ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4   <====== BEST FOR SLIGHTLY HIGHER QUALITY =======
+
+    # For "small" output files (usu. < 50 MB):
+    time ffmpeg -i input.mp4 -vcodec libx265 -crf 28 output.mp4   <=========== BEST FOR SMALLER FILES ============
+
+DETAILS:
 See: https://unix.stackexchange.com/questions/28803/how-can-i-reduce-a-videos-size-with-ffmpeg/38380#38380
 ex:
-time ffmpeg -i input.mp4 -vcodec libx265 -crf 28 output.mp4 = convert input.mp4 to output.mp4 using the modern H.265 video format, which has EXCELLENT size vs quality! Reasonable compression (-crf) values for this libx265 (H.265) format may be as high as 24 to 30 (28 is good), with LOWER CRF values yielding HIGHER bitrates, and hence HIGHER quality videos! <============= WORKS REALLY WELL! ==============
-- Using the above command:
+time ffmpeg -i input.mp4 -vcodec libx265 -crf 28 output.mp4 = [PRODUCE "SMALL" VIDEO OUTPUT FILES!] convert input.mp4 to output.mp4 using the modern H.265 video format, which has EXCELLENT size vs quality! Reasonable compression (-crf) values for this libx265 (H.265) format may be as high as 24 to 30 (28 is good to make very small videos, but to get a touch more quality, use 24 instead!), with LOWER CRF values yielding HIGHER bitrates, and hence HIGHER quality videos! <============= WORKS REALLY WELL! ==============
+- Using the above command: <============= MY FAVORITE TO GET VERY SMALL SIZES IN VIDEO OUTPUTS! ==================
     - a 110 MB 15 min video might take 25 minutes to convert (1/0.6 time factor to convert), and drop to as little as 35 MB!, and
     - a 125 MB 1min40sec video might take 5~6 minutes to convert (1/0.3 time factor to convert) and drop to as little as 5 MB!
+    - a 503 MB 6 min .mov video might take 60 minutes to convert (on a slow computer [2-core/4-thread, Pentium i3 or similar], ~1/0.1, or 10x time factor to convert) and take as little as 32 MB when done! 32MB/503MB = ~6% of original size, or about 100% - 6% = 94% compression ratio!
+        - Note: on a faster, modern computer [4-core/8-thread or 6-core/12-thread, Pentium i7 or similar] the whole conversion process might take only 4 to 10 minutes instead of 60 minutes! So, buy a nice computer.
+time ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4 = [PRODUCE "LARGE" VIDEO OUTPUT FILES!] exact same as above except with CRF of 24 instead of 28 in order to get a touch **higher quality** out of the video! <============ MY FAVORITE FOR SLIGHTLY HIGHER QUALITY! ===========
 
 
 ====================================================================================================
