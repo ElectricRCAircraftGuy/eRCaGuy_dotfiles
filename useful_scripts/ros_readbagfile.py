@@ -4,7 +4,6 @@
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 Author: Gabriel Staples
-June 2020 
 
 INSTALLATION INSTRUCTIONS:
 0. Install dependencies:
@@ -155,6 +154,9 @@ def printMsgsInBagFile(args):
         print("NO MESSAGES FOUND IN THESE TOPICS")
 
     print("Total messages found = {}.".format(total_count))
+    ##### TODO: PRINT MESSAGE COUNT FOR EACH MSG TYPE TOO! ie: just print all key/value pairs in the 
+    # `msg_counters` dict. What order to print them in? Probably just alphabetical.
+
     print("DONE.")
 
 
