@@ -9,7 +9,7 @@ https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 This project started out as just a few helpful nuggets I like to put in my `~/.bashrc` file, for example, as well as some scripts and other configuration files, but I decided to make it a place I put all sorts of reference scripts, files, shortcuts, Linux tips & tricks, Eclipse documentation, etc, I've built up over the years. 
 
 ## Here's some of the contents contained herein:
-1. `git diffn` drop-in-replacement program to show `git diff` with line 'n'umbers. As a thin `awk`-language-based wrapper around `git diff` it supports ALL options and features that `git diff` does! Screenshot:
+1. `git diffn` drop-in-replacement program to show `git diff` with line 'n'umbers. As a thin `awk`-language-based wrapper around `git diff` it supports ALL options and features that `git diff` does! Learn [how to install and use it here](useful_scripts/README_git-diffn.md). Screenshot:
     1. ![`git diffn` screenshot](useful_scripts/git-diffn_screenshot_cropped.png)
 1. .bashrc file which contains:
     1. `ls` aliases such as `ll`, `la`, & `l`
@@ -49,6 +49,10 @@ _However, it's still a good idea to back up your home directory first before run
 2. Many directories contain readmes, and some contain install scripts, such as my scripts to help install **.desktop** files. 
 3. If a readme exists in a subfolder, take a look at it too for more install help or other usage information. 
 4. Essentially, just read the readmes, headers, & other comments and it will become self-explanatory how to use or "install" something. If not, open up an issue or pull request and I'll address it. 
+
+# Useful Applications
+Good applications to install right after you install Linux.  
+See: [useful_apps/README.md](useful_apps/README.md).
 
 # Useful Scripts 
 ## See [useful_scripts/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts#ercaguy_dotfilesuseful_scripts)
