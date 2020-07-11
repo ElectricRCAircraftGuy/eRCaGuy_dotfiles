@@ -57,13 +57,18 @@ EXIT_ERROR=1
 HELP_STR="
 Usage: git changes <common_base> <backup_branch> [any other args to pass to git difftool]
 
+I recommend you also have a 'git difftool' configured. I use 'meld'. It is amazing. To install it,
+see my instrucitons here: 
+https://stackoverflow.com/questions/14821358/git-mergetool-with-meld-on-windows/48979939#48979939
+
 git-changes.sh
 - quickly compare a newly-rebased branch (your currently-checked-out branch) against its
   backup branch you should have manually created just before doing the rebase
 - this *requires* that you should have manually created a backup branch before doing the
   rebase!
 - Here is the whole process:
-        # 1. ensure you have the latest upstream changes from master
+        # 1. ensure you have the latest upstream changes from the branch you would like to rebase
+        #    your feature branch **onto**. Let's assume that is 'master':
         git checkout master
         git pull origin master
         # 2. check out the branch you'd like to rebase onto the latest master
@@ -74,7 +79,7 @@ git-changes.sh
         # 4. rebase my_branch onto latest master; manually resolve any conflicts as 
         #    necessary
         git rebase master
-        # 5. now use 'git changes' to compare your newly-rebased my_branch against your
+        # 5. now use 'git changes' to compare your newly-rebased 'my_branch' against your
         #    backup branch from before the rebase, to ensure only valid changes made
         #    it in during the rebase, and no mistakes were made while rebasing!
         git changes master my_branch_BAK_20200605-2230hrs_about_to_rebase
@@ -108,5 +113,29 @@ echo "$files_changed"
 echo "------------------------------------------------------"
 echo "Checking only these files for differences between your backup branch and your current branch."
 
-git difftool $ARGS_3_AND_LATER $BACKUP_BRANCH $files_changed
+# Now, escape the filenames so that they can be used even if they have spaces or special characters,
+# such as single quotes (') in their filenames!
+# See: https://stackoverflow.com/questions/28109520/how-to-cope-with-spaces-in-file-names-when-iterating-results-from-git-diff-nam/28109890#28109890
+files_changed_escaped=""
+while IFS= read -r -d '' file; do
+    escaped_filename="$(printf "%q" "$file")"
+    files_changed_escaped="${files_changed_escaped}    ${escaped_filename}"
+done < <(git diff --name-only -z "$merge_base" $BACKUP_BRANCH)
 
+# # DEBUG PRINTS. COMMENT OUT WHEN DONE DEBUGGING.
+# echo "$files_changed_escaped"
+# echo "----------"
+# # print withOUT quotes to see if that changes things; ans: indeed, it does: this removes extra 
+# # spaces and I think will replace each true newline char (\n) with a single space as well 
+# echo $files_changed_escaped 
+# echo "=========="
+
+# NB: the `--` is REQUIRED before listing all of the files to search in, or else escaped files
+# that have a dash (-) in their filename confuse the `git diff` parser and the parser thinks they
+# are options! It will output this error:
+#       fatal: option '-\' must come before non-option arguments
+# Putting the list of all escaped filenames to check AFTER the `--` forces the parser to know
+# they cannot be options, because the `--` with nothing after it signifies the end of all optional
+# args.
+git difftool $ARGS_3_AND_LATER $BACKUP_BRANCH -- $files_changed_escaped
+echo "Done."
