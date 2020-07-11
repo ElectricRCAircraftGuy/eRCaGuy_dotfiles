@@ -19,7 +19,7 @@ CMD_PREFIX="gs_" # set to your initials
 # CMD_PREFIX="" # or use this one to use nothing
 
 # See my own ans here: https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself/60157372#60157372
-THIS_PATH="$(realpath $0)"
+THIS_PATH="$(realpath "$0")"
 echo "Full path to this install script = \"$THIS_PATH\""
 THIS_DIR="$(dirname "$THIS_PATH")"
 # echo "THIS_DIR = \"$THIS_DIR\"" # for debugging 

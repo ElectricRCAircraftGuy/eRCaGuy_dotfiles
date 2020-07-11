@@ -676,7 +676,7 @@ REFERENCES:
 1. https://www.shellcheck.net
 1. https://github.com/koalaman/shellcheck
 
-shellcheck -x file1.sh file2.sh file3.sh
+shellcheck -x file1.sh file2.sh file3.sh = check the shell program; the `-x` means "e'x'ternal sources", and apparently allows shellcheck to follow any file the script may source, thereby checking it as well [I think--I need to play around with this some more still].
 shellcheck --external-sources file1.sh file2.sh file3.sh = same as above
 optionally use `-e ERR_CODE1,ERR_CODE2,ERR_CODE3` to ignore ('e'xclude) certain 'e'rror codes that `shellcheck` might otherwise output, but that you don't care about; see `man shellcheck` for details! Ex:
 shellcheck -x -e CODE1,CODE2,CODE3 file1.sh file2.sh file3.sh = see explanation just above
@@ -1607,7 +1607,7 @@ gpg myfile.txt.gpg = decrypt myfile.txt.gpg back into myfile.txt; it will ask yo
 ====================================================================================================
 = Image and video compression and conversion: = 
 ====================================================================================================
-[keywords: compressing videos, compressing images, compressing pictures, image/picture compression, video conversion, image conversion, picture conversion, converting videos, converting images, converting pictures]
+[keywords: compressing videos, compressing images, compressing pictures, image/picture compression, compress images, compress videos, video conversion, image conversion, picture conversion, converting videos, converting images, converting pictures, convert pictures, convert images, convert videos]
 
 == find large files: ==
 [this is adjacently related to video conversion, as GitHub doesn't allow files > 100 MB in size (see: https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com/59479166#59479166), so you may need to find all files > 100 MB, then convert them down to a smaller size using `ffmpeg` as shown below if they are videos!]
@@ -1628,9 +1628,16 @@ convert in.png -resize 800x800 out.jpg = same as above, but make the max dimensi
 == Image compression: ==
 [picture compression]
 
+REFERENCES:
+1. https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF
+
+Compress all the images, then convert all of them to a single, searchable PDF:
 See: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF
-ex:
-jpegoptim --size=500k dir_of_imgs/*.jpg = compress the whole dir of images!
+
+    jpegoptim --size=500k dir_of_imgs/*.jpg # compress the whole dir of images!
+    pdf2searchablepdf dir_of_imgs           # now make 1 searchable pdf out of all of them!
+
+For my particular case, with 7 jpeg images originally in the 2.5 to 3MB size range, the end result withOUT running jpegoptim first was a 20 MB PDF, which is too large to email! By calling `jpegoptim --size=500k` as shown above first, it shrunk the image size to approx. 500kB each, which meant the final PDF size was about 3.5MB instead of 20MB! Big improvement! Now I can email the file, and the images still look pretty good!
 
 == Video compression: ==
 
