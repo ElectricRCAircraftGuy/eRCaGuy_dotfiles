@@ -1,0 +1,286 @@
+## For instruction on writing tutorials
+## http://www.ros.org/wiki/WritingTutorials
+####################################
+##FILL ME IN
+####################################
+## for a custom note with links:
+## note =
+## for the canned note of "This tutorial assumes that you have completed the previous tutorials:" just add the links 
+## note.0= [[rosbag/Tutorials/Recording and playing back data]]
+## descriptive title for the tutorial
+## title = Reading messages from a bag file
+## multi-line description to be displayed in search 
+## description = Learn two ways to read messages from desired topics in a bag file
+## the next tutorial description (optional)
+## next =
+## links to next tutorial (optional)
+## next.0.link=
+## next.1.link=
+## what level user is this tutorial for 
+## level= BeginnerCategory
+## keywords =
+####################################
+
+<<IncludeCSTemplate(TutorialCSHeaderTemplate)>>
+
+<<TableOfContents(4)>>
+
+First, you need a bag file. Either produce your own by following this tutorial ([[ROS/Tutorials/Recording and playing back data]]), or download the https://webviz.io demo one from here (https://open-source-webviz-ui.s3.amazonaws.com/demo.bag), using the `wget` command like this:
+
+{{{
+wget https://open-source-webviz-ui.s3.amazonaws.com/demo.bag
+}}}
+
+The rest of this tutorial will be done assuming you've downloaded the webviz.io demo bag file as shown just above. You will go through two options to read/extract messages from the bag file.
+
+''Note that in any of the commands below, the `time` command is prepended simply because it will print out how long each command takes, and since sometimes these commands can take a long time, it is useful to use the `time` command to gain an idea of how long a given command should take. If you don't want to use it, you may remove the `time` part of any of the commands below.''
+
+= Option 1: play back the messages immediately and look at the output in multiple terminals =
+
+[[https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt|Source: this material was adapted from instructions first published in this document here.]]
+
+  1. You need to know the ''exact'' topic names you'd like to read from the bag file. So, let's see what's in the bag file. In any terminal, manually inspect all published topics and how many messages were published to each topic with this command:
+  {{{
+time rosbag info demo.bag  
+# OR (if you know part of the topic names of interest before-hand):
+time rosbag info mybag.bag | grep -E "(topic1|topic2|topic3)"
+  }}}
+
+  Sample output:
+
+  {{{
+$ time rosbag info demo.bag  
+path:        demo.bag
+version:     2.0
+duration:    20.0s
+start:       Mar 21 2017 19:37:58.00 (1490150278.00)
+end:         Mar 21 2017 19:38:17.00 (1490150298.00)
+size:        696.2 MB
+messages:    5390
+compression: none [600/600 chunks]
+types:       bond/Status                      [eacc84bf5d65b6777d4c50f463dfb9c8]
+             diagnostic_msgs/DiagnosticArray  [60810da900de1dd6ddd437c3503511da]
+             diagnostic_msgs/DiagnosticStatus [d0ce08bc6e5ba34c7754f563a9cabaf1]
+             nav_msgs/Odometry                [cd5e73d190d741a2f92e81eda573aca7]
+             radar_driver/RadarTracks         [6a2de2f790cb8bb0e149d45d297462f8]
+             sensor_msgs/Image                [060021388200f6f0f447d0fcd9c64743]
+             sensor_msgs/NavSatFix            [2d3a8cd499b9b4a0249fb98fd05cfa48]
+             sensor_msgs/PointCloud2          [1158d486dd51d683ce2f1be655c3c181]
+             sensor_msgs/Range                [c005c34273dc426c67a020a87bc24148]
+             sensor_msgs/TimeReference        [fded64a0265108ba86c3d38fb11c0c16]
+             tf2_msgs/TFMessage               [94810edda583a504dfda3829e70d7eec]
+             velodyne_msgs/VelodyneScan       [50804fc9533a0e579e6322c04ae70566]
+topics:      /diagnostics                      140 msgs    : diagnostic_msgs/DiagnosticArray 
+             /diagnostics_agg                   40 msgs    : diagnostic_msgs/DiagnosticArray 
+             /diagnostics_toplevel_state        40 msgs    : diagnostic_msgs/DiagnosticStatus
+             /gps/fix                          146 msgs    : sensor_msgs/NavSatFix           
+             /gps/rtkfix                       200 msgs    : nav_msgs/Odometry               
+             /gps/time                         192 msgs    : sensor_msgs/TimeReference       
+             /image_raw                        600 msgs    : sensor_msgs/Image               
+             /obs1/gps/fix                      30 msgs    : sensor_msgs/NavSatFix           
+             /obs1/gps/rtkfix                  200 msgs    : nav_msgs/Odometry               
+             /obs1/gps/time                    136 msgs    : sensor_msgs/TimeReference       
+             /radar/points                     400 msgs    : sensor_msgs/PointCloud2         
+             /radar/range                      400 msgs    : sensor_msgs/Range               
+             /radar/tracks                     400 msgs    : radar_driver/RadarTracks        
+             /tf                              1986 msgs    : tf2_msgs/TFMessage              
+             /velodyne_nodelet_manager/bond     80 msgs    : bond/Status                     
+             /velodyne_packets                 200 msgs    : velodyne_msgs/VelodyneScan      
+             /velodyne_points                  200 msgs    : sensor_msgs/PointCloud2
+
+real    0m1.003s
+user    0m0.620s
+sys 0m0.283s
+  }}}
+
+  Notice that there are 30 messages published on topic `/obs1/gps/fix`, and 40 on topic `/diagnostics_agg`. Let's just extract those. 
+
+  1. In terminal 1 (this terminal, for example), start up a ros core, which runs the required ROS master node:
+  {{{
+roscore
+  }}}
+
+  1. Open up another terminal. Note: to open up another terminal tab in the same terminal window you can use '''Ctrl + Shift + T''' on Ubuntu. Subscribe to the `/obs1/gps/fix` topic, echoing (printing) everything published on this topic, while also `tee`ing it to a file for later review, all in yaml format:
+  {{{
+rostopic echo /obs1/gps/fix | tee topic1.yaml
+  }}}
+  You'll see:
+  {{{
+$ rostopic echo /obs1/gps/fix | tee topic1.yaml
+WARNING: topic [/obs1/gps/fix] does not appear to be published yet
+  }}}
+
+  1. Open up another terminal. Subscribe to the other topic: `/diagnostics_agg`. 
+  {{{
+rostopic echo /diagnostics_agg | tee topic2.yaml
+  }}}
+  You'll see:
+  {{{
+$ rostopic echo /diagnostics_agg | tee topic2.yaml
+WARNING: topic [/diagnostics_agg] does not appear to be published yet
+  }}}
+
+  1. Repeat this process for as many topics as you like. Each topic must have its own terminal. 
+
+  1. Open up another terminal to play the bag file. We will now play back the bag file as quickly as possible (using the `--immediate` option), publishing ONLY the topics of interest. The format is:
+  {{{
+time rosbag play --immediate demo.bag --topics /topic1 /topic2 /topic3 /topicN
+  }}}
+  So in our case, the command would be:
+  {{{
+time rosbag play --immediate demo.bag --topics /obs1/gps/fix /diagnostics_agg
+  }}}
+  You'll see:
+  {{{
+$ time rosbag play --immediate demo.bag --topics /obs1/gps/fix /diagnostics_agg
+[ INFO] [1591916465.758724557]: Opening demo.bag
+
+Waiting 0.2 seconds after advertising topics... done.
+
+Hit space to toggle paused, or 's' to step.
+ [RUNNING]  Bag Time: 1490150297.770734   Duration: 19.703405 / 19.703405               
+Done.
+
+real  0m1.570s
+user  0m0.663s
+sys 0m0.394s
+  }}}
+
+  1. Done! Now go look at your two terminals which were each subsribed to a topic, and you'll see the output of all messages for each topic type, in YAML format, with a `---` line between each message. Use a text editor of your choice, preferably with Syntax Highlighting for YAML file types (ex: Sublime Text 3) to view the messages in the files. The last two messages in '''topic1.yaml''', for instance, look like this:
+
+  {{{
+---
+header: 
+  seq: 4027
+  stamp: 
+    secs: 1490150296
+    nsecs:  66947432
+  frame_id: "gps"
+status: 
+  status: 0
+  service: 1
+latitude: 37.4008017844
+longitude: -122.108119889
+altitude: -6.4380177824
+position_covariance: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+position_covariance_type: 0
+---
+header: 
+  seq: 4028
+  stamp: 
+    secs: 1490150297
+    nsecs: 744347249
+  frame_id: "gps"
+status: 
+  status: 0
+  service: 1
+latitude: 37.4007565466
+longitude: -122.108159482
+altitude: -6.35130467023
+position_covariance: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+position_covariance_type: 0
+---
+  }}}
+
+  If for some reason one of your `rostopic` processes missed the messages, just kill its process with '''Ctrl + C''', restart it, and call the `rosbag play` command again.
+
+
+= Option 2 (much easier): use the `ros_readbagfile` script to easily extract the topics of interest =
+
+Source: [[https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt|this material was adapted from instructions first published in this document here]], and [[https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/ros_readbagfile.py|the Python script is from here: ros_readbag.py]].
+
+Note: you can kill any running processes. No `roscore`, for instance, is required. 
+
+  1. Download and install [[https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/ros_readbagfile.py|`ros_readbag.py`]] using these commands:
+
+  {{{
+# Download the file
+wget https://raw.githubusercontent.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/master/useful_scripts/ros_readbagfile.py
+# Make it executable
+chmod +x ros_readbagfile.py
+# Ensure you have the ~/bin directory for personal binaries
+mkdir -p ~/bin
+# Move this executable script into that directory as `ros_readbagfile`, so that it will
+# be available as that command
+mv ros_readbagfile.py ~/bin/ros_readbagfile
+# Re-source your ~/.bashrc file to ensure ~/bin is in your PATH, so you can use this
+# new `ros_readbagfile` command you just installed
+. ~/.bashrc
+  }}}
+
+  1. Determine the ''exact'' topic names you'd like to read from the bag file, by using `rosbag info`, as shown in Step 1 of Option 1 above. 
+
+  1. Now use `ros_readbagfile`. The general format is:
+  {{{
+ros_readbagfile <mybagfile.bag> [topic1] [topic2] [topic3] [...]
+  }}}
+
+  To read the same messages shown in Option 1 above, use:
+  {{{
+time ros_readbagfile demo.bag /obs1/gps/fix /diagnostics_agg | tee topics.yaml
+  }}}
+
+  That's it! You'll see it print out all 70 messages quickly. Here is what the last little bit of the terminal output looks like:
+  {{{
+        key: "Early diagnostic update count:"
+        value: "0"
+      - 
+        key: "Zero seen diagnostic update count:"
+        value: "0"
+=======================================
+topic:           /obs1/gps/fix
+msg #:           30
+timestamp (sec): 1490150297.770734310
+- - -
+header: 
+  seq: 4028
+  stamp: 
+    secs: 1490150297
+    nsecs: 744347249
+  frame_id: "gps"
+status: 
+  status: 0
+  service: 1
+latitude: 37.4007565466
+longitude: -122.108159482
+altitude: -6.35130467023
+position_covariance: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+position_covariance_type: 0
+=======================================
+Total messages found = 70.
+DONE.
+
+real  0m2.897s
+user  0m2.457s
+sys 0m0.355s
+  }}}
+
+  Now view '''topics.yaml''' with your preferred text editor to see all of the messages it extracted from the bag file.
+
+  ''Note that even though I've given this file a ".yaml" file extension, not all of it is true YAML format. Rather, each message stored in the file is valid YAML syntax, but the surrounding headers and line separators (ex: `=====`) between messages are not. Keep that in mind in case you ever try to parse the output as YAML. You could always modify the `ros_readbagfile` Python script yourself really easily to remove these non-YAML features if you like.''
+
+= Why use `ros_readbagfile` for this purpose instead of `rostopic echo -b`? =
+
+Answer: 
+  1. Because `rostopic` is '''extremley slow!''' 
+  This command, running on a fast computer (4-core/8-thread Pentium i7 w/m.2 SSD), for instance, takes '''11.5 minutes''' to read an 18 GB bag file!
+  {{{
+time rostopic echo -b large_bag_file.bag /topic1
+  }}}
+  The `ros_readbagfile` script, however, takes only '''1 min 37 sec''' on the same computer to read the same topic from the same 18 GB bag file! Therefore, `ros_readbagfile` is 11.5/(1+37/60) = '''~7x faster!'''
+  {{{
+time ros_readbagfile large_bag_file.bag /topic1
+  }}}
+
+  2. Because `rostopic` can only read '''1 single topic at a time''', whereas `ros_readbagfile` can read '''any number of topics at once!'''
+
+  {{{
+ros_readbagfile <mybagfile.bag> [topic1] [topic2] [topic3] [...] [topic1000]
+  }}}
+
+END.
+
+
+## AUTOGENERATED DO NOT DELETE 
+## TutorialCategory
+## FILL IN THE STACK TUTORIAL CATEGORY HERE

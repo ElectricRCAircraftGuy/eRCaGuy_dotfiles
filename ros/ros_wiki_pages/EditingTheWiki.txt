@@ -1,0 +1,120 @@
+##master-page:HomepageTemplate
+#format wiki
+#language en
+
+## Table of Contents up to 4 levels deep
+<<TOC(4)>>
+
+== Notes to ROS Wiki Editors: ==
+
+This page is linked-to from any ROS Wiki page which does not exist yet. Ex: http://wiki.ros.org/newPageThatDoesntExistYet.
+
+Please keep this and all other pages useful and refrain from messing up the ROS Wiki.
+
+If you need permissions to allow you to edit the ROS Wiki, please post your ROS Wiki username on this Github issue here: [[https://github.com/ros-infrastructure/roswiki/issues/258|Request to be added to ROS wiki whitelist v2 #258]].
+
+If you have other issues with the ROS Wiki, please open them up on Github here: https://github.com/ros-infrastructure/roswiki/issues --> "New Issue".
+
+A list of all personal user pages created by ROS Wiki editors can be found here: CategoryHomepage.
+
+== ROS Wiki Editing Intro. & Formatting ==
+
+The ROS Wiki uses the MoinMoin Wiki Engine (http://moinmo.in/). If you are familiar with the markdown language used on places like Stack Overflow or Github, or the Wikipedia wiki language, that will all be helpful. 
+
+A full description of the Moin Moin Wiki syntax is here: http://moinmo.in/HelpOnMoinWikiSyntax.
+
+To escape special characters, use their number codes: https://moinmo.in/SpecialCharacters.
+
+Special macros also exist, such as `<<TOC(4)>>` to indicate "place a Table of Contents here showing up to 4 levels deep."
+
+== How to Edit a ROS Wiki Page ==
+
+To get started editing the ROS Wiki, first Log in and create an account using the "Login" button at the right. Once you've done that, you must [[https://github.com/ros-infrastructure/roswiki/issues/258|Request to be added to ROS wiki whitelist here]]. Once you've been approved, simply click the "Edit" link at the right, a bit above where the "Login" link was, to edit a page. Be sure to be professional and maintain good formatting. 
+
+'''2 spaces''' are recommended before every bullet or number, and to indent each new level. Example:
+
+Use
+
+{{{
+  1. line one
+    1. sub-line one
+    2. sub-line two
+  1. line two
+  1. line three 
+}}}
+
+not
+
+{{{
+ 1. line one
+  1. sub-line one
+  2. sub-line two
+ 1. line two
+ 1. line three 
+}}}
+
+to produce:
+
+  1. line one
+    1. sub-line one
+    2. sub-line two
+  1. line two
+  1. line three 
+
+For headings, be sure to have ''no spaces after the ending `=` symbol'' or else they will not work!
+
+{{{
+= heading =
+
+no space is allowed after the trailing `=` above!
+}}}
+
+To add Note or IMPORTANT note boxes, you can do this:
+
+{{{{
+{{{#!wiki blue/solid
+'''Note:''' Some note.
+}}}
+}}}}
+
+to get this:
+
+{{{#!wiki blue/solid
+'''Note:''' Some note.
+}}}
+
+or this:
+
+{{{{
+{{{#!wiki blue/solid
+'''IMPORTANT:''' Some important note.
+}}}
+}}}}
+
+to get this:
+
+{{{#!wiki blue/solid
+'''IMPORTANT:''' Some important note.
+}}}
+
+or this:
+
+{{{{
+{{{#!wiki caution
+'''Some cautionary title'''
+
+Some cautionary note
+}}}
+}}}}
+
+to get this:
+
+{{{#!wiki caution
+'''Some cautionary title'''
+
+Some cautionary note
+}}}
+
+== How to Add a New Wiki Page ==
+
+TODO (someone who knows, please fill this in)
