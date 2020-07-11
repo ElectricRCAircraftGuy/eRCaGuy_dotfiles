@@ -3,6 +3,17 @@ Gabriel Staples
 
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+"I understand crossing your fingers is a form of debugging. If it doesn't pass, cross your fingers and try again."
+    - said nobody ever
+    (by Gabriel Staples, 25 June 2020)
+
+"You are making progress if each mistake is a new one."
+    - One of the many random quotes displayed on the Eclipse IDE startup splash screen when the "Darkest Dark Theme with DevStyle 2002.5.5" plugin is installed
+
+Me: "I am a documentation expert." Boss: "What about diagramming?" Me: "Oh...(foot in mouth)." [I'm great at documentation, just not drawing diagrams to demonstrate designs.]
+New assertion: Me: "I am a foot-in-mouth expert." Boss: "Yep."
+That should be a comic.
+
 
 ====================================================================================================
 = Doxygen: = 
@@ -114,10 +125,15 @@ And the more compact version of the above (assumes shorter parameter names, and 
 Good example to get started in Bazel: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice
 
 Config files:
-1. BUILD (deprecated)
-1. BUILD.bazel (new)
+1. BUILD (old, but still widely-used)
+1. BUILD.bazel (new, but still not widely-accepted, and is somewhat debated) [see note 1 below]
 1. WORKSPACE
 1. .bazelrc in your workspace directory (next to the main WORKSPACE file); see: https://docs.bazel.build/versions/master/guide.html#where-are-the-bazelrc-files
+
+Notes:
+[1] GS: for all new projects, I recommend using `BUILD.bazel` over `BUILD`. See here:
+    1. [In Docs: clarify BUILD vs. BUILD.bazel #4517](https://github.com/bazelbuild/bazel/issues/4517) - brings up the fact this is an on-going debate. 
+    1. https://docs.bazel.build/versions/master/build-ref.html#packages - shows both as valid options: `BUILD.bazel` and `BUILD`.
 
 Bazel Online Documentation:
 1. See all Bazel commands here (ie: `bazel --[startup options] <cmd> --[cmd options]`): https://docs.bazel.build/versions/master/command-line-reference.html#commands
@@ -152,7 +168,131 @@ Bazel Online Documentation:
             time bazel query --output=build //path/to/my/target/... > out.txt  # Store the expanded form of all macros/build rules into out.txt
             subl out.txt  # open out.txt in Sublime Text 3
     1. Creating a macro: https://docs.bazel.build/versions/master/skylark/tutorial-creating-a-macro.html
+1. Bazel "Make" Variables: *****https://docs.bazel.build/versions/master/be/make-variables.html
+    1. Ex: `my_attr = "prefix $(FOO) suffix"` = insert the Bazel "Make" (GNU Make-like) variable `FOO` into this attribute.
+    Bigger example, with a `genrule()` (https://docs.bazel.build/versions/master/be/general.html#genrule) which runs during `bazel build` to run some bash command-line call, during the build, to do something like auto-generate some files required as C++ `srcs` and headers later in the build, for example:
 
+        # =================================
+        # "src/module1/BUILD" file:
+        # =================================
+
+        # `py_binary()`: see: https://docs.bazel.build/versions/master/be/python.html#py_binary
+        py_binary(
+            name = "generate_files",
+            main = "scripts/generate_files.py",
+            srcs = [
+                "scripts/generate_files.py",
+                "scripts/do_xyz.py",
+            ],
+            deps = [
+                "//some/module:py_library_rule",
+            ],
+        )
+
+        # =================================
+        # "src/module2/BUILD" file:
+        # =================================
+
+        # The Python script run by the genrule below will need to read in and parse all of these files
+        filegroup(
+            name = "data_files_for_genrule",
+            srcs = [
+                "data/file1.txt",
+                "data/file2.csv",
+                "data/file3.py",
+                "yaml/yaml1.yaml",
+                ":another_file_group",
+            ],
+        )
+
+        # See what the variable-substituted version/output of this is with:
+        #       bazel query --output=build //src/module2:run_this_python_script_during_build
+        genrule(
+            name = "run_this_python_script_during_build", # <== (that's what a genrule does!)
+            srcs = [
+                ":data_files_for_genrule",  # a filegroup from this same BUILD file
+                "//some/package:another_filegroup",  # a filegroup from another package
+                "data/file10.txt",  # a local file; relative path from this BUILD file's dir
+            ],
+            # Files not in this `outs` Starlark (Python3-like) list will be deleted by Bazel after
+            # this genrule() runs, so any files which this script generates MUST be in this list
+            # for them to persist and be available for later parts of this build! So, add all 
+            # (generated-by-this-script) files to `outs` that you need to NOT be deleted by Bazel!
+            outs = [
+                "mymodule/autogen/file1.h",
+                "mymodule/autogen/file1.cpp",
+                "mymodule/autogen/file2.cpp",
+                "mymodule2/autogen/file1.csv",
+                "mymodule2/autogen/file1.yaml",
+            ],
+            # See meaning of `execpath`, used in this Bazel "Make" variable, here:
+            # https://docs.bazel.build/versions/master/be/make-variables.html#predefined_label_variables
+            cmd = (
+                '$(execpath //src/module1:generate_files) '
+                '--option1 "something" '
+                '--option2 "something else" '
+                '--option3 12973 '
+                # Pass in all `outs` items to the script itself, if desired, to process. `OUTS` here
+                # is a Bazel "Make" variable. 
+                # See: https://docs.bazel.build/versions/master/be/make-variables.html
+                '--bazel_outs "$(OUTS)" '
+                # Pass in the Bazel `srcs` list too via this Bazel "Make" variable. See link above.
+                '--bazel_srcs "$(SRCS)" '
+            ),
+            visibility = [
+                "//visibility:private",
+            ],
+        )
+
+    NOTES:
+    In the `genrule()` above, you could also do the command like this:
+            cmd = (
+                # I *think* this path relative to the project root dir would work:
+                '//src/module1/scripts/generate_files.py '
+                # OR if the file was local to this module, just call it with a path relative to this module:
+                'scripts/generate_files.py '
+                # Instead of this:
+                # '$(execpath //src/module1:generate_files) '
+                '--option1 "something" '
+                '--option2 "something else" '
+                '--option3 12973 '
+                '--bazel_outs "$(OUTS)" '
+                '--bazel_srcs "$(SRCS)" '
+            ),
+
+    ...or like this, if you wanted to join the command as a list of strings (joined by a single 
+    space) instead. Notice the deleted space before the ending single quote on each line, and the 
+    added comma after the single quote to make this a list of strings now instead of a 
+    continuous, multi-line string!
+            cmd = ' '.join([
+                '$(execpath //src/module1:generate_files)',
+                '--option1 "something"',
+                '--option2 "something else"',
+                '--option3 12973',
+                '--bazel_outs "$(OUTS)"',
+                '--bazel_srcs "$(SRCS)"',
+            ]),
+
+    REFERENCES FOR THE ABOVE EXAMPLE:
+    1. *****https://docs.bazel.build/versions/master/be/make-variables.html
+    1. https://docs.bazel.build/versions/master/be/python.html#py_binary
+    1. https://docs.bazel.build/versions/master/be/general.html#genrule
+    1. https://docs.bazel.build/versions/master/be/general.html#filegroup
+    1. EXAMPLE `genrule()` & BUILD file from Bazel, with a custom rule from a custom `defs.bzl` 
+       file!: https://github.com/bazelbuild/examples/blob/master/make-variables/testapp/BUILD
+
+1. `bazel query` example to show *exactly* what the above `genrule()` would look like AFTER full
+   variable substitution into it:
+        bazel query --output=build //src/module2:run_this_python_script_during_build
+1. See what predefined Bazel "Make", and Bazel environment variables exist for your Bazel build environment. 
+   See: https://docs.bazel.build/versions/master/be/make-variables.html#predefined_variables 
+        bazel info --show_make_env [build options] = shows all predefined "Make" variables in all caps at the top, and bazel environment variables in lowercase thereafter
+1. See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html
+   See also the `bazel info` commands just below!
+
+bazel info --show_make_env [optional: build options] = see just above! It shows all predefined Bazel "Make" variables in ALL CAPS at the very top, and then Bazel environment variables, such as genfiles, bin, etc. output and build paths right after that! See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html <==== VERY USEFUL TO BE ABLE TO SEE WHERE ALL BUILD OUTPUT WILL BE PLACED FOR A GIVEN SET OF BUILD SETTINGS! ====
+bazel info = similar to the above, but show JUST the Bazel environment variables (output/build dirs and things), and NOT the Bazel "Make" variables as well! <==== VERY USEFUL! ====  
+bazel info bazel-bin = show the full path to the bazel output "bin" directory
 
 time bazel build //... = build the whole project
 time bazel build //:all = (apparently) build only the build targets at the **top level** of the project (defined directly in the top-most BUILD or BUILD.bazel file), NOT recursing down and building all lower-level build targets too, like `bazel build //...` would do; see here for more info:
@@ -162,6 +302,82 @@ time bazel test //...
 bazel --version
 bazel help
 bazel help build
+
+== bazel query: ==
+References:
+1. *****[START HERE] https://docs.bazel.build/versions/master/query-how-to.html
+   Ex: see dependencies of a build target:
+        bazel query 'deps(//path/to/package:target)'
+1. *****https://docs.bazel.build/versions/master/query.html
+
+bazel query = invalid command (missing arguments); it will tell you to type `bazel help query` for help
+bazel help query = see the help for `bazel query`
+bazel help query | less -RFX = same as above, but see the output in the less viewer since it's so long
+bazel help --long query = show the long help menu
+bazel help --long query | less -RFX = same as above, but see the output in the less viewer since it's so long <====== GOOD HELP INFO =====
+
+FIND DEPENDENCIES OF A BUILD TARGET:
+bazel query "deps(//foo)"
+bazel query "deps(//some/path:my_target)"
+bazel query "deps(//some/path/...)"
+bazel query 'deps(//path/to/package:target)' = "find all dependencies of //path/to/package:target"
+
+FIND A DEPENDENCY PATH BETWEEN TWO BUILD TARGETS:
+bazel query 'somepath(//path/to/package:target, //dependency)' = "find a dependency path between //path/to/package:target and //dependency"
+
+== SUMMARY OF GOOD STARTUP OPTIONS (see above or below or online for details): ==
+bazel [startup_options] build //...
+    --host_jvm_args=-Xmx16g
+    --output_user_root="/path/to/custom/dir/bazel_cache"
+
+== SUMMARY OF GOOD BUILD OPTIONS (see above or below or online for details): ==
+bazel build [build_options] //...
+    --keep_going
+    --copt
+    --per_file_copt
+    --jobs
+
+== BUILD WITH DEBUG SYMBOLS ==
+[bazel debug builds; bazel build with gdb debug symbols; bazel gdb debug builds]
+
+(required to debug an executable with gdb or lldb, for instance):
+- gdb debugger: https://www.gnu.org/software/gdb/
+- lldb debugger: https://lldb.llvm.org/
+1) `--copt` build option:
+bazel build --copt="-ggdb" --copt="-O0" //... = add C build options for gdb debugging symbols and Optimization Level 0 for the entire build! See: 
+    1. *****+https://docs.bazel.build/versions/master/user-manual.html#flag--copt
+    2. https://docs.bazel.build/versions/master/command-line-reference.html#flag--copt and
+2) `copts` addition to the BUILD.bazel file:
+- Alternatively, just do this for individual build targets, as desired, in `copts` for cc_library() rules; see here: 
+https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library.copts
+Here is an example of how to use `copts`, partially pulled from the examples here:
+https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
+
+    cc_library(
+        name = "bar",
+        copts = [
+            "-ggdb",  # <=======
+            "-O0",    # <=======
+        ],
+        srcs = [
+            "bar.cc",
+            "bar-impl.h",
+        ],
+        hdrs = ["bar.h"],
+        deps = [":baz"],
+    )
+
+3) BEST OPTION: USE the `--per_file_copt` BAZEL BUILD OPTION INSTEAD!
+Documentation:
+1. *****+https://docs.bazel.build/versions/master/user-manual.html#flag--per_file_copt
+2. https://docs.bazel.build/versions/master/command-line-reference.html#flag--per_file_copt
+bazel build --per_file_copt=path/to/my/module/.*@-ggdb,-O0 //... = build everything, but anything which matches the regular expression `path/to/my/module/.*` will also be built with the appropriate gdb debug symbols (`-ggdb`) and with optimization level zero (`-O0`) for easy debugging! You may also need to add `--strip=never` to keep the linker from stripping debug symbols during linking, like this:
+bazel build --per_file_copt=path/to/my/module/.*@-ggdb,-O0 --strip=never //... = same as above, but never strip debugging symbols! See the link above, as well as this: https://docs.bazel.build/versions/master/user-manual.html#flag--strip
+- - - 
+More complicated, generic `--per_file_copt` example:
+--per_file_copt=//foo:.*\.cc,-//foo:file\.cc@-O0,-fprofile-arcs = adds the `-O0` and the `-fprofile-arcs` options to the command line of the C++ compiler for all `.cc` files in [the build *target* path] `//foo/` except `file.cc`.
+
+== == 
 
 time bazel query --output=build //path/to/my/target/... > out.txt = Store the expanded form of all macros/build rules into out.txt; see above; see this too for more on **expanding Bazel build macros**: https://docs.bazel.build/versions/master/skylark/macros.html#expanding-macros 
 
@@ -181,6 +397,8 @@ Other useful options:
 #) Now, putting it all together:
         bazel --output_user_root="/home/gabriels/.cache/bazel_cache" build --jobs 4 //...'     <============ VERY USEFUL TO KNOW ABOUT ============
 
+== BAZEL TEST OPTIONS: == 
+
 bazel test --test_output=errors //... = log all errors (failed test results) to stdout--in other words, you'll only see a long output from running the bazel test if it fails!--this is a good setting to use; for help, see: https://groups.google.com/forum/#!topic/bazel-discuss/2mJPklIaCeo; see also: `bazel help test` for other options!
 bazel test --test_output=summary //... = the default (doesn't show errors; just shows a summary)
 bazel test --test_output=all //... = prints ALL output to stdout, even for tests that pass!
@@ -188,8 +406,15 @@ bazel test --test_output=all //... = prints ALL output to stdout, even for tests
 *****BEST BAZEL TEST CMD (optionally add `--host_jvm_args=-Xmx16g` if needed too)*****
 time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
 
-`--keep_going` flag: useful when debugging--tells Bazel to keep going and build/run as much as possible, even if an error is encountered. See: https://docs.bazel.build/versions/master/command-line-reference.html#flag--keep_going. [keep going, keep building, continue building after errors, build through errors]
-time bazel build --keep_going //... = keep going/building during a Bazel build/run error, so that you can get and see as many errors as possible at once to speed up the fix/build/test process as you try to debug build or test problems and get your code to work right. <========= VERY USEFUL!--ESP. WHEN DEBUGGING CODE THAT WON'T BUILD! ==========
+== Debugging Bazel Builds: ==
+[bazel debug; *debugging bazel builds*; debug bazel builds; bazel builds debugging; bazel debugging]
+
+`--keep_going` flag: useful when debugging--tells Bazel to keep going and build/run as much as possible, even if an error is encountered. See: https://docs.bazel.build/versions/master/command-line-reference.html#flag--keep_going. [keep going, keep building, continue building after errors, build through errors]. Ex usage:
+    time bazel build --keep_going //... = keep going/building during a Bazel build/run error, so that you can get and see as many errors as possible at once to speed up the fix/build/test process as you try to debug build or test problems and get your code to work right. <========= VERY USEFUL!--ESP. WHEN DEBUGGING CODE THAT WON'T BUILD! ==========
+`--sandbox_debug` flag: helps you see more build info. Ex usage:
+    time bazel build --sandbox_debug //...
+`-s` outputs all build commands [sort of like you might expect a "verbose" build option to do!?]; see: https://stackoverflow.com/questions/32823625/bazel-build-verbose-compiler-commands-logging/32837180#32837180. Ex usage:
+    time bazel build -s //...
 
 == Visualizing your Bazel build using dot/Graphviz ==
 See:
@@ -200,6 +425,134 @@ See:
     1. https://www.graphviz.org/
     1. [Drawing graphs with _dot_](https://www.graphviz.org/pdf/dotguide.pdf)
     1. https://en.wikipedia.org/wiki/DOT_(graph_description_language)
+
+
+====================================================================================================
+= gdb and gdbgui: = 
+====================================================================================================
+
+== General: ==
+
+1. If you need help locating your binary executable in your build output, try using `locate name_of_executable` to search your system for it.
+1. Be sure to buld with debug symbols on: `-ggdb` and `-O0`, for instance, are recommended. `-g` and `-g3` may also work. For Bazel, see the `--per_file_copt` option described above to easily add these C build options in while building. Ex:
+    time bazel build --per_file_copt=path/to/my/module/.*@-ggdb,-O0 --strip=never //...
+  OR
+    time bazel build --copt="-ggdb" --copt="-O0" --strip=never //...
+
+== gdb: ==
+
+References:
+1. https://www.gnu.org/software/gdb/
+1. https://en.wikipedia.org/wiki/GNU_Debugger
+1. https://www.onlinegdb.com/
+    1. http://www.gdbtutorial.com/ 
+    1. https://www.onlinegdb.com/blog/brief-guide-on-how-to-use-onlinegdb-debugger/
+
+Note: it is a good idea to launch gdb from your root source directory, ie: at the base directory where your source code begins, so that if your source code paths for your symbols are relative, gdb can automatically find your source code! Otherwise, it will say `No such file or directory.`
+
+Also google for "gdb cheatsheet" to find helpful resources online. Ex:
+[Google search for "gdb cheat sheet"](https://www.google.com/search?q=gdb+cheat+sheet&oq=gdb+cheat+&aqs=chrome.0.69i59j69i57j69i60l3.3061j0j4&sourceid=chrome&ie=UTF-8)
+1. *****https://darkdust.net/files/GDB%20Cheat%20Sheet.pdf
+
+TO LEARN:
+1. Google "how to run crash dumps with GDB"
+1. Google "core dump handler"
+
+GDB USAGE:
+1) Be sure to run gdb from the root of the source code so that all paths to the source code will work! Otherwise, paths may be broken and the source code may not be able to be displayed!
+        cd /path/to/root/of/source/code
+2) Run gdb, passing it the executable to load
+        gdb /path/to/root/of/source/code/path/to/executable/compiled/with/debug/symbols/on
+3) (Optional) Now press Ctrl + X, then A to enter the GUI/TUI (Textual User Interface) ncurses mode; see: https://undo.io/resources/gdb-watchpoint/5-ways-reduce-debugging-hours/
+   Press Ctrl + 2 to cycle through 2-view modes. Press Ctrl + 1 to go back to 1-view mode. Press Ctrl + X, then A to exit or re-enter the TUI mode.
+4) Add a breakpoint in main.cpp, at line 100 for instance
+        break main.cpp:100
+5) Run to that point, then wait about 3 to 5 seconds or whatever for it to run and stop at your break point
+        run
+6) Use gdb as desired; see the shortcuts and commands below and online on cheat sheets. The main ones are essentially this:
+break file.cpp:100, r = run (restart from beginning), c = continue (until next break point), Ctrl + C = pause (send SIGINT interrupt to gdb), n = next (step over), s = step into, fin = finish (step up)
+
+------------------------------------------------------
+gdb_short_cmd (or long_cmd) (gdbgui keyboard shortcut)
+------------------------------------------------------
+
+See: https://undo.io/resources/gdb-watchpoint/5-ways-reduce-debugging-hours/
+Ctrl + X, A = enter/exit ncurses user interface mode (TUI--Text User Interface)
+Ctrl + 2 = cycle through 2-window TUI modes
+Ctrl + 1 = return to 1-window TUI mode
+
+break main.cpp:100 = set a break point in main.cpp at line 100
+b main.cpp:100 = same as above
+bt = backtrace: display the program stack (AKA: stack trace or stack frames)
+up = go up to higher stack frame
+down = go down to lower stack frame
+
+r (or run) = run (start from beginning)
+c = continue until breakpoint
+Ctrl + C = send SIGINT interrupt signal to gdb to pause gdb and let you interact with it
+n (or right arrow) = next (step over)
+s (or down arrow) = step into
+fin (or finish) (u) (or up arrow) = step out or up out of a lower-level function or scope; see: 
+    https://unix.stackexchange.com/questions/297982/how-to-step-into-step-over-and-step-out-with-gdb and
+    https://stackoverflow.com/questions/24712690/step-out-of-current-function-with-gdb/24712736#24712736
+m = execute one machine instruction, stepping OVER function calls
+, = execute one machine instruction, stepping INTO function calls
+
+STILL NEED TO STUDY & LEARN THESE ONES:
+print <var_name>
+display <var_name>
+delete = delete all breakpoints?
+delete 1 = delete the 1st breakpoint
+
+== gdbgui: ==
+
+References:
+1. https://www.gdbgui.com/
+    1. Lots of great usage details in the screenshot tour! https://www.gdbgui.com/screenshots/
+    1. Examples: https://www.gdbgui.com/examples/
+    1. FAQ: https://www.gdbgui.com/faq/
+        - esp. see the section titled "How do I make program output appear in a different terminal?"
+1. GitHub: https://github.com/cs01/gdbgui/
+
+Installation:
+See: https://www.gdbgui.com/installation/
+In short:
+
+    python3 -m pip install --user pipx
+    python3 -m userpath append ~/.local/bin
+    pipx install gdbgui
+
+If you're missing any dependencies, you may get a warning. Install those as well. 
+
+To upgrade:
+
+    pipx upgrade gdbgui
+
+To uninstall:
+
+    pipx uninstall gdbgui
+
+Keyboard shortcuts: see (gdbgui keyboard shortcut) above.
+
+USAGE:
+- see the Examples in the References above.
+1) Load the gdbgui server
+gdbgui -h     = help menu
+gdbgui --help = help menu
+gdbgui = most basic usage; do auto-open a browser
+gdbgui -r --project="/path/to/root_execute_dir" --remap-sources='{"/old/base/path": "/path/to/root_execute_dir"}' --gdb-args="--tty=$(tty)" = run the gdbgui server on a remote machine (-r, so don't auto-open a browser), setting the root dir for all source (--project) files to "/path/to/root_execute_dir", and remapping all source code paths from "/old/base/path/whatever.cpp" to the correct source code location on the remote machine of "/path/to/root_execute_dir/whatever.cpp". The `--gdb-args="--tty=$(tty)"` part at the end is a work-around for a [bug](https://github.com/cs01/gdbgui/issues/333), to redirect all stdout (ex: from `printf()`-type statements) to the terminal in which you launch `gdbgui`, so that it won't get lost and not published in the `gdbgui` either. This is the bug report: https://github.com/cs01/gdbgui/issues/333. Just be sure to watch for all stdout messages in the terminal where you launched gdbgui instead of in the console in the gdbgui in the browser!
+2) In the "Load Binary" box at the top, type in the path to the binary (use the path from the *remote* machine's perspective if gdbgui is running on a remote machine): "/path/to/root_execute_dir/my/binary", and click "Load Binary". Now it will automatically load and display the source code, so long as you compiled it with `-g` (ok), `-g3` (better), or `-ggdb` (best I think), AND you properly set up your `--remap-sources` option, if required.  
+3) Click the "Run" button (the far left of the 6 buttons in the top-right of the browser window), and wait up to 5 or 6 seconds or so for the binary to begin executing. 
+4) Now debug with the 6 main buttons in the top-right, and be sure to watch the *terminal* from which you launched gdbgui for all stdout (`printf()`-like) output if you have used the `--gdb-args="--tty=$(tty)"` option. Otherwise, the output will be right inside the console at the bottom of the gdbgui. 
+
+Here's some gdbgui debug tips:
+- Learn more in the screenshot tour here: https://www.gdbgui.com/screenshots/
+- and in the FAQ here: 
+    1. Hover your mouse over the code to see clickable links and pop-up information on functions and variables and things. 
+    2. Use the search bar at the left to do a hash-table-based fuzzy search lookup of any source files, in order to load them. The root path it shows here is what your `--project=` option configured above.
+    3. Use the gdb input text bar at the very bottom of the screen to input any gdb command manually. This gives you FULL access to ALL gdb commands, even those which are not integrated into the gui otherwise. 
+    4. In the right-hand panel you have a bunch of options. You can select threads and view the stack trace of the threads, for instance.
+The gdbgui tool makes gdb much more intuitive and easy to use!
 
 
 ====================================================================================================
@@ -214,12 +567,28 @@ You can NOT rely on google tests to be run in any particular order. Also, the or
 
 
 ====================================================================================================
-= linter, clang-format: = 
+= linters, Static Code Analyzers, clang-format, etc.: = 
 ====================================================================================================
+[linters, clang-format]
+
+GENERAL LIST OF TOOLS:
+NAME                LANGUAGE
+------------        -------------
+clang-format        C/C++
+clang-tidy          C/C++
+clang sanitizers    C/C++
+shellcheck          Linux/Posix shell: bash/sh, etc. <=== really useful!
+flake8              Python
+black               Python (https://pypi.org/project/black/)
+pylint              Python (https://pypi.org/project/pylint/)
+roslint             Python (for ROS packages?) (http://wiki.ros.org/roslint)
+yamllint            YAML (https://yamllint.readthedocs.io/en/stable/quickstart.html) (http://www.yamllint.com/)
+buildifier          Bazel BUILD/*.bzl files (https://github.com/bazelbuild/buildtools/tree/master/buildifier)
 
 == clang-format: ==
+[C/C++]
 
-A source code automatic style formatting tool.
+A source code automatic style formatting tool for C and C++.
 
 References:
 1. Main documentation, setup, instructions, etc! https://clang.llvm.org/docs/ClangFormat.html
@@ -252,6 +621,11 @@ Example usages:
     clang-format -i --verbose --style=google my_file.cpp = same as above, but print the name of the file processed (particularly useful when you have a script which processes many files and you want the user to see as output a list of the files processed!)
   Use `--style=file` to "load style configuration from .clang-format file located in one of the parent directories of the source file (or current directory for stdin)".
     clang-format --verbose -i --style=file my_file.cpp = format my_file.cpp in place, using the .clang-format file located in one of the parent directories of the source file, printing the name(s) of the file(s) processed. <======= BEST OPTION FOR MANUALLY-SPECIFIED FILE(S)! =======
+    clang-format --verbose --style=file my_file.cpp | diff -u --color=always my_file.cpp - = do a PREVIEW of the command just above! ie: run the clang-formatter with the same commands, except NOT modifying the file 'i'n-place, and send the output to stdout (which is the default of clang-format), where it will then be piped via stdin to the `diff` command as the right file (-) to compare to the left file, which is the original my_file.cpp! In this way, you've manually created a means of PREVIEWING a clang-format change to see what changes WILL be made, withOUT actually making these changes! See the == diff: == section below for further details. <========= BEST **PREVIEW** COMMAND FOR CLANG-FORMAT! =========
+  See here for where I've used clang-format in a project before! 
+    https://github.com/AmboVent-1690-108/AmboVent/blob/master/3-Software/Arduino/run_clang-format.sh
+    And it's format file:
+    https://github.com/AmboVent-1690-108/AmboVent/blob/master/3-Software/Arduino/.clang-format
 
 Whenever I do a `git commit`, however, I'd like to format *all parts of all files I have touched*. To do this, you can see which files were changed between two commits like this:
     git diff --name-only commit1~..commit2  # Note that the tilde (~) is required to specify the commit *before* commit1, because otherwise commit1 would *not* be included in determining which files were changed.
@@ -259,6 +633,7 @@ Then you can manually clang-format all of those files, OR (I think--needs to be 
     clang-format --verbose -i --style=file $(git diff --name-only commit1~..commit2)  <======= NEEDS TO BE TESTED, BUT SHOULD BE THE BEST OPTION FOR AUTOMATICALLY-SPECIFIED FILES! ======
 
 == clang-tidy: ==
+[C/C++]
 
 A source code static analysis (programming errors, style, best practices, bug checker) tool.
 
@@ -266,6 +641,7 @@ References:
 1. https://clang.llvm.org/extra/clang-tidy/ 
 
 == clang sanitizers: ==
+[C/C++]
 
 Sanitizers are built into the clang (LLVM) compiler, and designed to find problems, such as undefined behavior. 
 
@@ -290,6 +666,58 @@ And now building the same project, but "sanitizing" for (looking for) undefined 
     ./a.out  # run it
     # Results: undefined behavior found while running the application!
     #       test.cc:3:5: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'
+
+== shellcheck: ==
+[Linux/Posix shell/sh/bash]
+- bash/shell script file checker/linter; 
+- **VERY HELPFUL** when writing bash (or other Linux shell) scripts!
+
+REFERENCES:
+1. https://www.shellcheck.net
+1. https://github.com/koalaman/shellcheck
+
+shellcheck -x file1.sh file2.sh file3.sh
+shellcheck --external-sources file1.sh file2.sh file3.sh = same as above
+optionally use `-e ERR_CODE1,ERR_CODE2,ERR_CODE3` to ignore ('e'xclude) certain 'e'rror codes that `shellcheck` might otherwise output, but that you don't care about; see `man shellcheck` for details! Ex:
+shellcheck -x -e CODE1,CODE2,CODE3 file1.sh file2.sh file3.sh = see explanation just above
+
+== Python linters (General): ==
+[Python]
+
+REFERENCES:
+1. https://realpython.com/python-code-quality/
+1. https://dbader.org/blog/python-code-linting
+
+== flake8: ==
+[Python]
+*****If in doubt, just start here when it comes to choosing a Python linter! It seems to be the most-recommended and the easiest to get started with.
+
+REFERENCES:
+1. https://flake8.pycqa.org/en/latest/
+
+python3 -m pip install flake8
+flake8 some/folder/myfile.py
+flake8 some/folder/
+
+== black: ==
+[Python]
+
+https://pypi.org/project/black/
+
+== yamllint: ==
+[yaml]
+
+REFERENCES:
+1. http://www.yamllint.com/
+1. https://yamllint.readthedocs.io/en/stable/quickstart.html
+1. https://yamllint.readthedocs.io/en/stable/configuration.html - learn how to set up your .yamllint configuration file here!
+
+yamllint myfile.yaml = lint myfile.yaml
+yamllint -c path/to/.yamllint myfile.yaml = lint myfile.yaml according to the config rules declared in your "path/to/.yamllint" config file; see more here for a default config file and info on how to use and configure it! https://yamllint.readthedocs.io/en/stable/configuration.html.
+yamllint -c .yamllint myfile.yaml = same as above, but specify the path to the ".yamllint" config file to be right here in the current directory we are in!
+yamllint -c myfile.yaml = same as above, but "look for a configuration file in the [default] locations (by order of preference)". See: https://yamllint.readthedocs.io/en/stable/configuration.html. The first place it looks is for a ".yamllint" file in the current working directory, for instance. 
+    UPDATE: actually, I think you must simply leave off the `-c` to get the default behavior it describes on where it will search for a config file. Sooo, do this instead (I think):
+yamllint myfile.yaml = correct form (I think) to get the default behavior described just above.
 
 
 ====================================================================================================
@@ -854,6 +1282,26 @@ Main Jinja2 References:
 ====================================================================================================
 = Linux (General): = 
 ====================================================================================================
+[general linux; linux general]
+
+Linux Terminal shortcuts: https://www.howtogeek.com/howto/ubuntu/keyboard-shortcuts-for-bash-command-shell-for-ubuntu-debian-suse-redhat-linux-etc/
+Ex:
+    Ctrl + A = go to beginning
+    Home = same as above
+    Ctrl + E = go to end
+    End = same as above
+    Ctrl + L = clear screen (same as typing `clear` command)
+
+== Linux terminal options: ==
+gnome-terminal = Ubuntu's default terminal
+tmux = [see "= tmux: = " section in this doc] terminal session manager 
+screen = [GNU screen] terminal session manager 
+terminator = *****a terminal program to EASILY allow 4 terminals (2x2) or even 16 terminals (4x4) all in one single window! Great for running ROS, for instance, since it requires so many stinking terminals open! 
+ - See here, **including my comments under the answer!** 
+   https://askubuntu.com/questions/612131/how-to-display-more-than-1-terminal-simultaneously/612139#612139
+ - See also: [eRCaGuy_dotfiles/useful_apps/README.md](useful_apps/README.md)
+
+== ==
 
 whoami = print your username (helps verify you are logged in under the correct user)
 sudo whoami = print your sudo username; it should say "root" since you ran it as `sudo`! This helps verify you have `sudo` access!--ie: that you are a member of the "sudo" group (run `groups` to check), and in the sudoers file (run `sudo visudo`--you should have an entry for your username at the bottom).
@@ -867,6 +1315,36 @@ du -h | tail -n 1 = same as above, except retain ONLY the *last line* so that yo
 du -h | tail -n 1 | awk '{print $1}' = same as the line just above, except also retain ONLY the *first column* so that you get rid of the extra dot (.) at the end which indicates "current directory". Sample output:
         100G
     See here for `awk` usage help which enabled me to retain only the 1st column above: https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
+
+== diff: ==
+
+diff file1.txt file2.txt = compare file1.txt and file2.txt for differences! (similar to `git diff`)
+diff -u file1.txt file2.txt = same as above, except showing 'u'nified context output, meaning: show 3 lines (by default) of "unified", or intermingled line-by-line, output to show the context around the differences between the left and right files!
+diff --unified file1.txt file2.txt = same as above
+diff -c file1.txt file2.txt = similar to the above, except show 3 lines for each file of **'c'opied** 'c'ontext instead of line-by-line unified context
+diff --context file1.txt file2.txt = same as above
+diff -u=10 file1.txt file2.txt = show 10 lines of 'u'nified context instead of the default 3 lines
+diff --color=always file1.txt file2.txt = show color output!
+diff -u --color=always file1.txt file2.txt = JUST LIKE `git diff`! SHOW COLOR, WITH UNIFIED LINE-BY-LINE CONTEXT, JUST LIKE git diff! <============== BEST ANSWER! [identical output to `git diff`] ===============
+diff -u --color=always left_file.txt right_file.txt = same as above, except accentuating the position of the "left" and "right" files <=============
+
+- Note that `man diff` shows that you can use `-` as one of the two files to read from stdinput for that file instead! It says, "FILES  are  'FILE1  FILE2' or 'DIR1 DIR2' or 'DIR FILE' or 'FILE DIR'.  If --from-file or --to-file is given, there are no restrictions on FILE(s).  If a FILE is '-', read standard input.  Exit status is 0 if inputs are the same, 1 if different, 2 if trouble." So, you can do this!:
+---
+cat left_file.txt | diff -u --color=always - right_file.txt = pipe content in from stdinput as the **left** file (marked by `-` in the `diff` command)!
+cat right_file.txt | diff -u --color=always left_file.txt - = pipe content in from stdinput as the **right** file (marked by `-` in the `diff` command)!
+
+- This allows you to do interesting things, such as show how clang-format changes a file, like this:
+clang-format myfile.cpp | diff -u --color=always myfile.cpp - = run clang-format on myfile.cpp, sending its clang-formatted output to stdout; pipe this formatted output to `diff`, however, showing 3 lines of 'u'nified output, with color on, comparing the original myfile.cpp on the left to the stdinput piped in as the file on the right. Therefore, the left is the original file and the right is the formatted file. Now, you can see the output of what changes WOULD be made withOUT actually making those formatting changes! It's a sort of clang-format "preview" to see what **would** be done without actually doing it! See the == clang-format: == section above for further details.
+
+== == 
+
+HASH SUM COMMANDS [hash sums, checksums, cryptography, cryptographic checksums, data integrity checksums]:
+sha256sum somefile.txt
+sha512sum somefile.txt
+md5sum somefile.txt = do an MD5 checksum of somefile.txt; note: according to my online research, MD5 checksums are NOT cryptographically sound, but are still ok for use as general-purpose data integrity checksums.
+shasum --algorithm 256 somefile.txt = same as `sha256sum somefile.txt`
+shasum -a 256 somefile.txt = same as above = same as `sha256sum somefile.txt`
+shasum -a 512 somefile.txt = same as `sha512sum somefile.txt`
 
 strings my_binary_file > temp_strings.txt = extract all ASCII strings from the binary file my_binary_file and store them into the text file temp_strings.txt.
 
@@ -882,7 +1360,52 @@ hexdump -C my_file = print all chars of the binary or ASCII file, my_file, in he
     ...
 
 gnome-system-monitor = CPU/RAM/network usage monitor GUI
-sudo baobab = disk usage GUI
+top = basic CLI competitor to gnome-system-monitor
+htop = much better (ncurses-based?) CLI competitor to gnome-system-monitor!
+
+LIST RUNNING PROCESSES AND THEIR PROCESS IDS (PIDs):
+(See `man ps` for details)
+ps aux = list all running processes on the system (using the BSD syntax) <====== MOST COMMON USAGE =====
+ps -A = list all running processes on the system (using the standard syntax)
+ps -eLf = get info about *threads*
+ps -ejH = print a process tree = very helpful to see **what process called what process(es)**!
+ps aux | grep "some_name" = find only processes named "some_name", or at least with "some_name" in their output line displayed by `ps aux`
+
+KILL RUNNING PROCESSES:
+(see `man kill` for details)
+kill -l = list all kill signal options; ex:
+    $ kill -l
+     1) SIGHUP      2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP
+     6) SIGABRT     7) SIGBUS       8) SIGFPE       9) SIGKILL      10) SIGUSR1
+    11) SIGSEGV     12) SIGUSR2     13) SIGPIPE     14) SIGALRM     15) SIGTERM
+    16) SIGSTKFLT   17) SIGCHLD     18) SIGCONT     19) SIGSTOP     20) SIGTSTP
+    21) SIGTTIN     22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ
+    26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO       30) SIGPWR
+    31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN+1  36) SIGRTMIN+2  37) SIGRTMIN+3
+    38) SIGRTMIN+4  39) SIGRTMIN+5  40) SIGRTMIN+6  41) SIGRTMIN+7  42) SIGRTMIN+8
+    43) SIGRTMIN+9  44) SIGRTMIN+10 45) SIGRTMIN+11 46) SIGRTMIN+12 47) SIGRTMIN+13
+    48) SIGRTMIN+14 49) SIGRTMIN+15 50) SIGRTMAX-14 51) SIGRTMAX-13 52) SIGRTMAX-12
+    53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9  56) SIGRTMAX-8  57) SIGRTMAX-7
+    58) SIGRTMAX-6  59) SIGRTMAX-5  60) SIGRTMAX-4  61) SIGRTMAX-3  62) SIGRTMAX-2
+kill -L = same as above
+kill -9 9999 = send KILL signal (#9 in the list above) to Process ID (PID) 9999  <======= VERY COMMON USAGE ========
+kill -KILL 9999 = same as above (KILL is #9 in the list above)
+kill -SIGKILL 9999 = exact same as above  <======= VERY COMMON USAGE ========
+kill -l KILL = look up the "KILL" signal in the list above to retrieve that it is signal "9"
+kill -l 9 = look up the number "9" signal in the list above to retrieve that it is signal "KILL" 
+kill 9999 8888 = kill both PIDs 9999 and 8888 (can list any number of pids to kill!); the general format is:
+kill pid1 pid2 pid3 ... pidn = send the default signal, SIGTERM (or TERM) to all these processes
+kill 123 543 2341 3453 = "send the default signal, SIGTERM, to all those processes" (see `man kill`); note that SIGTERM can also be written as TERM or 15.
+kill -TERM 123 543 2341 3453    = same as above
+kill -SIGTERM 123 543 2341 3453 = same as above  <======= VERY COMMON USAGE ========
+kill -15 123 543 2341 3453      = same as above
+
+[disk usage; disk free space; disk space usage]
+- See: https://www.ubuntupit.com/best-disk-analyzer-tools-for-linux-system/
+sudo baobab = disk usage analyzer GUI (now called simply "Disk Usage Analyzer" in Ubuntu, and it comes with Ubuntu!) 
+baobab = same as above, except it can't analyze root directories
+qdirstat = a direct competitor GUI tool to analyze disk usage--comparable to baobab/Disk Usage Analyzer
+ncdu [options] <dir> = an ncurses-based tool to analyze disk usage in directory "dir"; CLI-based; works ***really well*** and it is ***really fast***, and it also works over ssh!
 free -h = show memory and swap total, used, and free space!
 (sudo) swapon --show = show swap partition and swapfile status and sizes 
 df -h = show disk usage
@@ -890,18 +1413,52 @@ du -h my_folder = show folder usage
 How to make a Linux swapfile; see my own answer here! 
 https://stackoverflow.com/questions/55190272/java-lang-outofmemoryerror-when-running-bazel-build/60572662#60572662
 
+less -RFX myfile.txt = open up myfile.txt in the "less" stream viewer/pager, with the following options, which make it act **identically** to how the output from `git diff` acts! Note: I borrowed my explanations here from the bottom of my own "eRCaGuy_dotfiles/useful_scripts/git-diffn.sh" (`git diffn`) script I wrote herein. 
+-R = interpret ANSI color codes
+-F = quit immediately if the output takes up less than one screen
+-X = do NOT clear the screen when less exits
+See also:
+  1. https://stackoverflow.com/questions/2183900/how-do-i-prevent-git-diff-from-using-a-pager/14118014#14118014
+  2. https://unix.stackexchange.com/questions/38634/is-there-any-way-to-exit-less-without-clearing-the-screen/38638#38638
+
+watch -n INTERVAL_IN_SECONDS COMMAND = run COMMAND and display its output every INTERVAL_IN_SECONDS seconds! See: https://linuxize.com/post/linux-watch-command/; ex:
+watch -n 30 'du -h ~/.cache | tail -n 1' = display the disk usage in your ~/.cache dir every 30 sec! Very useful when you are watching a large bazel build cache grow, for instance! Ex:
+watch -n 30 'du -h ~/.cache/bazel | tail -n 1' = watch your bazel build cache (in ~/.cache/bazel) grow every 30 seconds--ex: during a large build; it can be useful to watch the directory grow as evidence that the build is progressing properly; note: you may need to use sudo in the command `watch` is running for it to check the size of *all* objects:
+watch -n 30 'sudo du -h ~/.cache/bazel | tail -n 1' = same as above, except with the subcommand, `du`, as root, so it can read *all* items, even those in your cache which may be owned by root
 
 == IP & Networking: ==
 
 ifconfig = show the internet & network configuration/connection information for your system and all of its network cards (both wireless (ex: WIFI) and wired (ex: Ethernet ports))
-ip a = show some kind of IP address & network interface info; NB: I don't really understand this command yet, but it looks useful, and seems to show a bunch of the same information as `ifconfig`.
+
+ip help = show the options and `OBJECT`s available for the `ip [OPTIONS] <OBJECT>` commands!
+- See also MY ANS HERE! https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
+ip address = show all configured network interfaces and their IP addresses & network interface info; NB: I don't really understand this command yet, but it looks useful, and seems to show a bunch of the same information as `ifconfig`.
+ip addres = same as above
+ip addre = same as above
+ip addr = same as above
+ip add = same as above
+ip ad = same as above
+ip a = same as above
+^^ Note the trend! So long as the command can be figured out and determined to be distinct from all other command possibilities, it is accepted! Therefore, you only need as many characters in the OBJECT as are required to make it distinct from all other OBJECT possibilities for this command!
+
+[virtual interfaces, virtual network interfaces, virtual network devices, virtual devices]
+Learn how to make **virtual network interfaces** here! 
+- Sometimes, you must create a virtual interface to simulate a connected hardware network card with a certain IP address so that software you have which is trying to open up a network socket to that specific device at that specific IP is able to do so, _even if the hardware isn't actually physically present on the PC you are running the software!_ Very useful, for instance, on hardware test platforms or HIL test systems. 
+  - [MY OWN ANS!] https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
+  - https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/152334#152334
+
 ssh -X -o "ServerAliveInterval 60" my_username@my_hostname_or_IP = ssh into hostname or IP address my_hostname_or_IP with username my_username, enabling X-window forwarding, and with the additional 'o'ption set to send a heartbeat signal (server "keep alive" message) every 60 seconds, so your session never disconnects automatically!
+
 hostname = show my hostname; ex: mypcname23-aa
 nslookup some_ip_address = use 'n'ame 's'erver lookup to try to find the hostname of a given IP address
 nslookup some_hostname = the exact reverse of the above: try to find the IP address from a given hostname 
 
 curl = some web utility for interaction with websites; need to learn how to use
 wget https://path.to.some.file.to.download = download a file at this URL; shows a nice progress bar and download stats (speed, total size to download, total size downloaded so far, etc.) the entire time!
+
+== CAN Bus and CAN Networking: ==
+
+TODO: need to add this information in here so I don't forget it.
 
 == `head` and `tail`: == 
 - Use `head` to output the first part of files
@@ -969,6 +1526,16 @@ References:
 
 == Find files and replace text in files: ==
 
+1)
+which <some_executable> = show the path to the executable in your path; ex: 
+    $ which locate
+    /usr/bin/locate
+2)
+locate <some_name> = find all files with "some_name" in their path or filename, searching EVERYWHERE, starting at the root dir (/)! Note: to search just in the current dir and below, use `find` instead:
+    find | grep <some_name>
+3)
+find = recursively find and print the relative path to all files and directories in the current directory and below
+
 find -type f = recursively find only files (NOT directories)
 
 find | grep "my_file" = find any file with "my_file" in its name
@@ -977,6 +1544,8 @@ find -L | grep "my_file" = same as above, but also follow symbolic links when se
 find | grep ".*\.txt$" = find any file which MUST END WITH .txt (the $ searches for an "end of line" character to ensure what's just before it is only at the very end of a string)
 
 find | grep -E ".*(\.ino|\.cpp|\.c|\.h|\.hpp|\.hh)" = find any file with one of these extensions
+
+find -L build/bin | grep -ni some_filename = quickly find a newly-built output file (such as an auto-generated source file created by some Bazel `genrule()`) inside of Bazel's output build dir, "build/bin". Note the `-L` to force `find` to follow symbolic links. This is required since Bazel makes all dirs in "build", such as "bin", simlinks. <======== VERY HELPFUL TO QUICKLY FIND A BAZEL BUILD OUTPUT FILE! ==========
 
 `sed`:
 sed -i "s|regex_pattern_to_match|replacement_string|g" my_file.txt = 'g'lobally replace (ie: replace all matching occurrences) of "regex_pattern_to_match" 'i'n place in my_file.txt, replacing the matching pattern with "replacement_string"
@@ -1029,6 +1598,10 @@ ls /proc/*/task = list the threads in all multi-threaded processes!
 
 qpdf --decrypt in.pdf out.pdf = "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups! 
 - Once I do this, I like to rename "out.pdf" to "some useful name [`qpdf --decrypt`ed]" so I can remember right in the name itself how I did this!
+
+gpg -c myfile.txt = encrypt myfile.txt with a passphrase (symmetric 'c'ipher); a GUI window will pop up, asking you for a password to encrypt the file; enter a password, then it will ask you again; once you enter the password again it will encrypt the file and create a new file called myfile.txt.gpg. You will need to manually delete the old file. 
+gpg myfile.txt.gpg = decrypt myfile.txt.gpg back into myfile.txt; it will ask you for the password which was originally used to encrypt it!
+- See here for details and where I learned this! https://www.lifewire.com/encrypt-decrypt-password-protect-files-linux-4582604
 
 
 ====================================================================================================
@@ -1139,8 +1712,9 @@ Every piece of software is benefited by flowcharts, diagrams, and drawings to sh
 ====================================================================================================
 = ros: = 
 ====================================================================================================
-ROS = Robot Operating System
-https://www.ros.org/
+ROS = Robot Operating System  
+https://www.ros.org/  
+For more of my information on ROS, see my ROS folder here: [eRCaGuy_dotfiles/ros](ros).  
 
 References:
 1. https://www.ros.org/
@@ -1238,28 +1812,28 @@ Play them live as quickly as possible, and look at the output in various termina
 Pros: runs QUICKLY (~10 sec, for instance, once you get all the terminals set up).
 Cons: requires a bunch of separate terminals and processes and a `roscore` running, and is a bit of a pain to set up.
 
-    # In any terminal, ensure you know the topic names *exactly*.
-    # manually inspect all published topics and how many messages were published to each topic
+    # 0. In any terminal, ensure you know the topic names *exactly*.
+    # A) manually inspect all published topics and how many messages were published to each topic
     time rosbag info mybag.bag  
-    # OR, grep for some keywords you're looking for which you know make up the topic names
+    # OR, B) grep for some keywords you're looking for which you know make up the topic names
     time rosbag info mybag.bag | grep -E "(topic1|topic2|topic3)"
 
-    # In terminal 1, start up a ros core, which runs the required ROS master node
+    # 1. In terminal 1, start up a ros core, which runs the required ROS master node
     roscore
 
-    # In terminal 2, subscribe to /topic1, echoing (printing) everything published on this topic,
+    # 2. In terminal 2, subscribe to /topic1, echoing (printing) everything published on this topic,
     # while also teeing it to a file for later review, all in yaml format
     rostopic echo /topic1 | tee topic1.yaml
 
-    # In terminal 3, subscribe to /topic2...
+    # 3. In terminal 3, subscribe to /topic2...
     rostopic echo /topic2 | tee topic2.yaml
 
-    # In terminal 4, subscribe to /topic3...
+    # 4. In terminal 4, subscribe to /topic3...
     rostopic echo /topic3 | tee topic3.yaml
 
-    # In terminal 5, play back the bag file now as quickly as possible, publishing ONLY the topics
-    # of interest. Note: on a 10GB~20GB or so sized bag file, this might take 10 or so seconds 
-    # on a high-speed SSD, so it is really quite fast! The underlying functionality must be 
+    # 5. In terminal 5, play back the bag file now as quickly as possible, publishing ONLY the
+    # topics of interest. Note: on a 10GB~20GB or so sized bag file, this might take 10 or so
+    # seconds on a high-speed SSD, so it is really quite fast! The underlying functionality must be
     # implemented in C++, as I think the Python implementation would take more like 1~2 minutes at
     # least.
     # Play back (publish) just these topics as quickly as possible!
@@ -1276,7 +1850,77 @@ Pros: really easy to use; requires only 1 terminal, and NO `roscore` running.
 Cons: this Python implementation runs ~13x slower than the one above, so it might take up to 1 to 2+ minutes to process an entire bag file.
 TODO: convert the below Python script to a C++ program using the [C++ rosbag API](http://wiki.ros.org/rosbag/Code%20API#cpp_api).
 
+    # 0. Do step 0 from above (OPTION 1) to ensure you know the topic names *exactly*.
+    time rosbag info mybag.bag  
+    # OR
+    time rosbag info mybag.bag | grep -E "(topic1|topic2|topic3)"
+
+    # 1. Run this script to print all messages on the specified topics from this bag file.
+    # This script can be found in the "useful_scripts" folder herein. 
     python2 ros_readbagfile.py <mybagfile.bag> [topic1] [topic2] [topic3] [...]
+
+== C++ Debugging prints in ROS: ==
+[ROS debug prints, ROS logger, ROS printing, ROS console]
+
+References (in this order):
+1. https://answers.ros.org/question/108646/print-out-the-contents-of-a-string-using-ros_info/
+2. http://wiki.ros.org/Verbosity%20Levels
+3. http://wiki.ros.org/roscpp/Overview/Logging
+4. http://wiki.ros.org/rosconsole
+5. https://github.com/ros/rosconsole/tree/noetic-devel/include/ros
+    1. https://github.com/ros/rosconsole/blob/noetic-devel/include/ros/console.h
+    2. https://github.com/ros/rosconsole/blob/noetic-devel/include/rosconsole/macros_generated.h
+6. ROS `std_msgs::`
+    1. https://github.com/ros/std_msgs/tree/kinetic-devel/msg
+    2. https://github.com/ros/std_msgs/tree/kinetic-devel/include/std_msgs
+
+C++ example debug/info prints in ROS:
+
+    // Note: this header file automatically includes `#include "rosconsole/macros_generated.h"` at 
+    // the end
+    #include <ros/console.h> 
+
+    #include <std_msgs/String.h>
+    #include <std_msgs/Header.h>
+
+    std_msgs::String str;
+    std_msgs::Header header;
+    std_msgs::Header msg1;
+    std_msgs::String msg2;
+
+    // Use like C printf() with standard C types:
+    ROS_INFO("my_unsigned_int = %u", my_unsigned_int);
+    // Use like C++ cout with ROS messages and streams:
+    ROS_INFO_STREAM("header = \n" << header);
+    ROS_INFO_STREAM("msg1 = \n" << msg1);
+    ROS_INFO_STREAM("msg2 = \n" << msg2);
+    // ...etc.
+
+    /*
+    See: 
+    1. http://wiki.ros.org/Verbosity%20Levels
+    2. http://wiki.ros.org/roscpp/Overview/Logging
+    3. See also the table under the "Output" section here: 
+       http://wiki.ros.org/roscpp/Overview/Logging#Output
+
+    The 5 options include:
+    
+    ROS_DEBUG()
+    ROS_INFO() // normally use this one!
+    ROS_WARN()
+    ROS_ERROR()
+    ROS_FATAL()
+
+    ROS_DEBUG_STREAM()
+    ROS_INFO_STREAM() // normally use this one!
+    ROS_WARN_STREAM()
+    ROS_ERROR_STREAM()
+    ROS_FATAL_STREAM()
+
+    DEBUG and INFO print to stdout, whereas WARN, ERRO, and FATAL all print to stderr! See the
+    table under the "Output" section here: http://wiki.ros.org/roscpp/Overview/Logging#Output
+
+    */
 
 == == 
 
@@ -1313,4 +1957,7 @@ Now, store them into two separate variables, recombine them into one variable, s
 Update: use this as a starting point instead!
   1. https://stackoverflow.com/questions/24455377/git-diff-with-line-numbers-git-log-with-line-numbers/33249416#33249416
   1. See also my question here: https://stackoverflow.com/questions/61932427/git-diff-with-line-numbers-and-proper-code-alignment-indentation
+
+
+
 
