@@ -166,6 +166,8 @@ sync_pc1_to_remote_branch () {
     echo "Preparing to push current branch with all changes (including staged, unstaged, & untracked files)"
     echo "  to remote sync branch."
 
+    synced_commit_hash="NONE"
+
     create_temp_and_check_for_changes
 
     # Commit uncommitted changes (if any exist) into a temporary commit we will uncommit later
@@ -227,7 +229,11 @@ sync_pc1_to_remote_branch () {
         git commit -m "$commit_msg"
     fi
 
-    echo "Force pushing to remote \"$SYNC_BRANCH\" branch."
+    # Print out and store current commit hash; how to get hash of current commit:
+    # see: https://stackoverflow.com/questions/949314/how-to-retrieve-the-hash-for-the-current-commit-in-git/949391#949391
+    synced_commit_hash="$(git rev-parse HEAD)"
+
+    echo "Force pushing commit ${synced_commit_hash} to remote \"$SYNC_BRANCH\" branch."
     echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
     echo "  (w/'ssh-add <my_github_key>') OR ELSE THIS WILL FAIL!"
     # TODO: figure out if origin is even available (ex: via a ping or something), and if not, error out right here!
@@ -355,6 +361,13 @@ main () {
     # (optional, but not a bad habit) cd back to where we started in case we ever add additional code after this
     # and expect to be in the dir where we started
     cd "$DIR_START"
+
+    echo "=========================================================================================="
+    echo "SUMMARY:"
+    echo "=========================================================================================="
+    echo "  Commit hash synced: ${synced_commit_hash}"
+    echo "  From PC: ${USER}@${HOSTNAME}"
+    echo "  To PC:   ${PC2_SSH_USERNAME}@${PC2_SSH_HOST}:${PC2_GIT_REPO_TARGET_DIR}"
 
     echo "END!"
 }
