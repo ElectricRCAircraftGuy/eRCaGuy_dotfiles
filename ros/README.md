@@ -6,7 +6,7 @@ By Gabriel Staples
 ROS = Robot Operating System
 
 TODO: this link is broken; fix it:  
-For more of my notes on ROS, see the **"= ros: = "** section in my document titled [eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt](../git-&-Linux-cmds,-help,-tips-&-tricks---Gabriel.txt).
+For more of my notes on ROS, see the **"= ros: = "** section in my document titled [eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt](../git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt).
 
 ## Wiki pages I wrote
 
