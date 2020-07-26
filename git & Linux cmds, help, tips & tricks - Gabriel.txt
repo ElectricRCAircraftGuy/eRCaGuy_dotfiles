@@ -16,6 +16,56 @@ That should be a comic.
 
 
 ====================================================================================================
+= Time Estimation of Projects/Tasks/Tickets/Pull-Requests: = 
+====================================================================================================
+
+THE PROBLEM:
+I find that I am pretty bad at time estimations, so I want to jot down some notes here to help me think about the problem better. I'm frequently off by as much as a factor of 2x to 5x, which is horrible. Ex: I estimate a certain task will take 2 days. I forget, however, that that is **ideal**, uninterrupted, "in the zone" time, and even then it's optimistic because I'm **hoping** to get it done sooner by just working really hard, or really long hours. So, that ends up being two 13 or 14 hour days, which sucks and is unsustainable, and that's only to get my project prototyped and pushed for review, NOT to get it also tested, approved, or merged, or in the case of free-lance work, polished off and fully handed over and paid for.
+
+THE FIX:
+Have realistic time estimates. So, if I think to myself "this'll take 2 days," then I need to remind myself: "Oh, wait, that's 2 **ideal** days, possibly even 13 hours each day. This isn't BattleBots anymore. I can't work like that." "Ok, so this is really 4 days + 1 day for testing. ===> This'll take 5 days. <=== SOLVED!"
+
+A programming task/project might take:
+
+  * 2 ideal "Battlebots" prep/build days of work. That means 13-hour days with no human interaction, little food, no showers, and pure focus. This isn't practical, and definitely doesn't work in a corporate environment, **especially** where others control your work and determine whether or not it's "good enough" (or, more frequently: it must meet their subjective standards) to land on the code base. 
+
+So, the REAL ESTIMATE IS:   <======== THIS! ======= (2 days is actually 5 days--possibly even 6)
+
+  * 2 normal human (8 hrs.) days of work for me to do the main coding (bug fix or new feature)
+  * + 2 days for writing unit tests, doing bench or field testing, etc.
+  * + 1 day *minimum* for review, fixing, merging the code, etc.
+  = 5 days total. You may even throw in a 6th day (ie: 1 more day) for researching, as that is inevitably required if there are a lot of unknowns or you are not already **intimately** familiar with the code, project, technology, libraries, code base, etc. 
+  - AND THEN, ***ON TOP OF THIS***, you must assume that these 5 days of work will be done at 60% efficiency, due to meetings and things, meaning it will actually take 5/0.6 = 8.33 days, or 1 week 3.33 days, assuming 5-day work weeks and 8-hr work days. 
+  **************************************************************************************************
+  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+  So...in actual, real-life timeline days for project planning and making Gant charts and finding critical paths and things, "2 days" of work (according to how I used to think about work in my BattleBots-mentality build days) will take **1 week 3.33 days** in the corporate environment or work-place, where you work 5-day work weeks, 8~9-hr. days, at 60% time efficiency. <===== THIS IS THE KEY TAKEAWAY! ===
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  **************************************************************************************************
+
+***Start multiplying all your estimates by 2.5 from now on*** until you can get this cemented into your brain about how real-world projects go, especially when you're working on a team or working with others, and even more-so when you don't own the project and get to make every executive decision by yourself like your own little project dictator. This is the reality of corporate programming/software development, and probably how it would be in the true customer-focused world as well, where you are not essentially your own customer and micro-dictator. 
+
+ANOTHER WAY TO LOOK AT IT:
+(ESTIMATING EXAMPLE/COMPARATIVE ANALYSIS):
+(In parenthesis is an example number of days for each task for relative comparison between these tasks):
+  1. (2 days) doing the actual coding work and pushing my code change for review, considering 8 hr. days where I might only be productive for 4 or 5 of those hrs., or ~60% max efficiency due to meetings and things.
+  2. (1 day) fixing broken modules or having to dig into things I didn't expect, due to large, complex projects; this might include having to do additional research and things
+  3. (2 days) writing unit tests and doing testing; ex: bench, running and fixing unit tests, etc.
+  4. (1 day) code review and merging, assuming ideal conditions (this could easily be 2 to 6+ days if a bunch of changes are requested)
+
+  Total = 2 + 1 + 2 + 1 = 6 days of actual work for a task which I might take only 2 days to do if it was a 100% self-owned project I am familiar with, in my personal time. And...if big changes are requested during code review, these 6 days quickly become 7 to 11+ days, especially if new bench and field testing and new unit tests are required for a major change or re-architecture as well.
+  BREAKDOWN:
+    1. 2/6 days = 1/3 = 33% of my total time is actually coding up the new feature or bug fix.
+    2. 1/6 days = 17% might be just researching new tools or code syntax or modules or tools or whatever, again, in ideal conditions. In completely brand-new conditions this could be as high as 2 or 3 up to 5 or 6+ days.
+    3. 2/6 days = 1/3 = 33% is writing new tests or doing testing
+    4. 1/6 days = 17% is getting review, writing descriptions and updating documentation, and that's assuming NO or MINIMAL changes are requested. If they request an entire re-architecture or rip-up, this could easily expand to 2 or 3+ days just to go back and repeat step 1 above ALONE, which originally took 2 days. Then, you'd have to redo steps 2 to 4 as well which would take ANOTHER 4+ DAYS ON TOP OF THAT. So, if major re-architecture is required, this is a good time to notify your boss (or customer, if you are your own boss/a freelancer or sole proprietor), and inform him/her of the delay, request more time, and re-evaluate how code review and new design is handled and discussed on the team, as it *may* (but doesn't necessarily) indicate a failure to plan ahead and communicate in advance, which could need addressing at a procedural/systemic level.
+
+I talked to a smart guy who said, ***"no ticket [task] takes less than 2 hrs."*** He said, "If I have a task to send an email, I schedule 2 hours"..."because inevitably you will be interrupted or something will happen and that 2 hours will quickly be filled up."  
+KEY TAKE-AWAY: scheduling *at least* 2 hours for even the most minute of tasks is required if you hope to become a person who can (quote/un-quote) "get things done 'on time'". <====== KEY TAKEAWAY! ======
+
+So, ***NEVER SCHEDULE LESS THAN 2 HRS FOR ANYTHING--NOT EVEN THE MOST TRIVIAL OF TASKS AT WORK (OR ON OTHER PAID OR SCHEDULE-BASED PROJECTS)!*** AND IF SOMETHING MUST LAND ON A LARGE CODE BASE WHERE LOTS OF OTHER PEOPLE ARE INVOLVED, MAKE IT NO LESS THAN 4 HRS.! <========== REMEMBER THIS! ==========
+
+
+====================================================================================================
 = Doxygen: = 
 ====================================================================================================
 
@@ -119,6 +169,56 @@ And the more compact version of the above (assumes shorter parameter names, and 
 
 
 ====================================================================================================
+= Python Docstrings: = 
+====================================================================================================
+
+Useful for documenting Python functions and classes. Python docstrings are like the "doxygen" of Python. ~GS
+
+References:
+1. https://stackoverflow.com/questions/3898572/what-is-the-standard-python-docstring-format
+1. My own examples from my own code: https://github.com/ElectricRCAircraftGuy/git-tree/blob/master/git-tree.py
+
+General format:
+
+    def my_func(self, param1, param2, param3, param4):
+        """
+        Function to do whaterver.
+
+        Parameters:
+            param1 (string): string to do ___
+            param2 (int):    integer between the range of __ and __ to be used for __
+            param3 (list of MyClass objects):  list of myClass objects for __
+            param4 (dict of string:string key:values): map from something1 to something2, to be used
+                for __ and __ in order to __
+
+        Returns:
+            dict of string:MyClass key:value pairs mapping a name string to a MyClass object
+        """
+
+Another random "Returns" example:
+        """
+        Returns:
+            (string, list of dicts, list of numbers) tuple
+        """
+
+Example from my own code (see my git-tree.py link above):
+
+    def __init__(self, name, parent = None):
+        """
+        Constructor to create a new Node.
+
+        Parameters:
+            name (string):  the name of this node
+            parent (Node):  the parent node of the node being created; note: obviously the parent node must already
+                exist in order to be passed in as a parameter here
+            
+        Returns:
+            NA
+        """
+        # Do constructor stuff here
+
+
+====================================================================================================
 = bazel: =
 ====================================================================================================
 
@@ -168,7 +268,7 @@ Bazel Online Documentation:
             time bazel query --output=build //path/to/my/target/... > out.txt  # Store the expanded form of all macros/build rules into out.txt
             subl out.txt  # open out.txt in Sublime Text 3
     1. Creating a macro: https://docs.bazel.build/versions/master/skylark/tutorial-creating-a-macro.html
-1. Bazel "Make" Variables: *****https://docs.bazel.build/versions/master/be/make-variables.html
+1. Bazel "Make" Variables [bazel make variables]: *****https://docs.bazel.build/versions/master/be/make-variables.html
     1. Ex: `my_attr = "prefix $(FOO) suffix"` = insert the Bazel "Make" (GNU Make-like) variable `FOO` into this attribute.
     Bigger example, with a `genrule()` (https://docs.bazel.build/versions/master/be/general.html#genrule) which runs during `bazel build` to run some bash command-line call, during the build, to do something like auto-generate some files required as C++ `srcs` and headers later in the build, for example:
 
@@ -290,7 +390,7 @@ Bazel Online Documentation:
 1. See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html
    See also the `bazel info` commands just below!
 
-bazel info --show_make_env [optional: build options] = see just above! It shows all predefined Bazel "Make" variables in ALL CAPS at the very top, and then Bazel environment variables, such as genfiles, bin, etc. output and build paths right after that! See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html <==== VERY USEFUL TO BE ABLE TO SEE WHERE ALL BUILD OUTPUT WILL BE PLACED FOR A GIVEN SET OF BUILD SETTINGS! ====
+bazel info --show_make_env [optional: build options] = see just above! It shows all predefined Bazel "Make" variables [bazel make variables] in ALL CAPS at the very top, and then Bazel environment variables, such as genfiles, bin, etc. output and build paths right after that! See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html <==== VERY USEFUL TO BE ABLE TO SEE WHERE ALL BUILD OUTPUT WILL BE PLACED FOR A GIVEN SET OF BUILD SETTINGS! ====
 bazel info = similar to the above, but show JUST the Bazel environment variables (output/build dirs and things), and NOT the Bazel "Make" variables as well! <==== VERY USEFUL! ====  
 bazel info bazel-bin = show the full path to the bazel output "bin" directory
 
@@ -796,10 +896,25 @@ git difftool --cached = same as above, except view the changes in your "git diff
 git diff --name-only commit_hash = only see a list of changed files by filename
 git diff --name-status commit_hash = [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
 
+OTHER WAYS TO LOOK AT THE CHANGES
+See: https://stackoverflow.com/questions/1552340/how-to-list-only-the-file-names-that-changed-between-two-commits
+git diff --name-only   commit_hash
+git diff --name-status commit_hash
+git diff --stat        commit_hash = graphical +++--- representation of changes, with color! Very nice!
+git diff --numstat     commit_hash
+git diff --shortstat   commit_hash
+
 git log = show the git log history
-git lg = show the git log history in a condensed form, with graphics lines to show forks, branches, and merges
+git log --oneline = show each commit as a single line only
+git lg = show the git log history in a condensed form, with graphics lines to show forks, branches, and merges; this is VERY USEFUL! <========
     See: "eRCaGuy_dotfiles/home/.gitconfig" for how to create this `lg` alias for git, and 
     https://coderwall.com/p/euwpig/a-better-git-log for where I originally got it from!
+
+FIND ALL GIT COMMITS WHICH ARE ON ONE BRANCH BUT NOT ON ANOTHER!
+git log --no-merges branch1 ^branch2 ^branch3 = show all commits which are ONLY on branch1, but NOT on branch2 or branch3, omitting all merge commits since they aren't new changes! See: https://stackoverflow.com/questions/1710894/using-git-show-all-commits-that-are-in-one-branch-but-not-the-others/4207176#4207176 <========== SUPER USEFUL TO SEE WHAT CHANGES A BRANCH CONTAINS ON IT! ============
+This is VERY USEFUL to see, for instance, what are all of the feature commits we've added to a long-running release branch named "branch1", into which which we have periodically been merging the latest master. Now, with a simple command of `git log --no-merges branch1 ^master` we can se all NON-merge commits in branch1 which are NOT in master!
+git log --oneline --no-merges branch1 ^branch2 ^branch3 = same as above, but show only one line per commit! <======= EXCELLENT! (& SIMPLEST) ========
+git lg --no-merges branch1 ^branch2 ^branch3 = same as above, but using the `git lg` git alias instead, to show condensed (one-line) output with extra information! <======= BEST! (perhaps) ========
 
 git log --follow <one_single_filename> = [VERY USEFUL!] Show the `git log` history which affected JUST THIS ONE SINGLE FILE YOU TOLD IT TO FOLLOW! This is VERY helpful to track and follow all of the commits which touched a certain file, in order to go back commit by commit until you find out **which commit** introduced the changes to that file that you care about! 
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/ and `man git log` (then search for "--follow")
@@ -850,7 +965,7 @@ git log --author="name or email regex search pattern" = show an abridged git log
 git show <commit_hash> = show the commit message that was stored, as well as a `git diff` of the changes this commit introduced, and to which files! 
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/
 
-git cherry-pick <commit_hash> = cherry-pick (apply) commit_hash onto your currently-checked-out branch
+git cherry-pick <commit_hash> = cherry-pick (apply) commit_hash onto your currently-checked-out branch; if there are any conflicts, resolve them manually, use `git add` on the files you manually fixed, and then run `git cherry-pick --continue` to finish the cherry-pick and apply the commit with the original commit message (giving you a chance to edit it first, however, before it is applied)!
 git cherry-pick <commit_start>..<commit_end> = cherry-pick (apply) the range of commits from commit_start (NOT including this commit) to commit_end (including this commit); very useful in place of a rebase onto latest master once you have landed/merged some upstream commits into master and don't want to have to unnecessarily deconflict them via the `git rebase` process now instead; see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
 git cherry-pick commit_start~..commit_end = same as above, except **inclusive**! ie: cherry-pick (apply) the range of commits from commit_start (including this commit) to commit_end (also including this commit); see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
 git cherry-pick commit_start^..commit_end = alternative form of the above line--does the exact same thing
@@ -926,7 +1041,7 @@ git commit --date "Wed Jan 01 23:00:00 2020 -0700"
 git push origin my_local_branchname:my_remote_branchname = push my_local_branchname to origin/my_remote_branchname; normally `git push`ing only allows pushing to a remote branch of the *same* branch name, so this is the work-around! See: https://stackoverflow.com/questions/13897717/push-commits-to-another-branch/13897766#13897766.
 
 == To *locally* view, review, and compare changes from a GitHub PR, in the (fantastic) "meld" file comparison tool: ==  
-[keywords: github review PR, github local review in meld, local github review in meld, github review locally, locally review github PR, local github PR review in meld]  
+[keywords: github review PR, github local review in meld, local github review in meld, github review locally, locally review github PR, local github PR review in meld, github PR review, PR review in github, github meld pr, github pr review in meld, meld github pr review]  
 Note: despite being able to locally view the changes, you'll still have to use the GitHub interface for all comments and things in the review process. 
 
 A) *Locally* look at changes in meld from a GitHub PR:  <========= VERY USEFUL FOR REVIEWING GITHUB PRs! ===========
@@ -1265,6 +1380,27 @@ find -type f | grep -v \.xml | xargs grep --color=always my_regex_search = find 
 
 find some/path/ -maxdepth 1 -type d | grep "_messages$" = find only 'd'irectories (`-type d`) in some/path/, only 1 layer deep (`-maxdepth 1`), which have names that end in (`$` indicates a line end) "_messages"
 
+====================================================================================================
+= ripgrep: = 
+====================================================================================================
+(better/faster than `grep`, `git grep`, etc.)
+
+References:
+1. *****+[EXCELLENT USAGE INFO AND EXAMPLES!] [ripgrep is faster than {grep, ag, git grep, ucg, pt, sift}](https://blog.burntsushi.net/ripgrep/)
+    1. See also the usage example titled "Search and replace"!
+1. *****https://github.com/BurntSushi/ripgrep
+    1. Installation (see the section for "Debian"/"Ubuntu"): https://github.com/BurntSushi/ripgrep#installation
+1. https://mariusschulz.com/blog/fast-searching-with-ripgrep
+
+rg 'regex_search' = ripgrep search for pattern 'regex_search'
+rg -L 'regex_search' = ripgrep search for pattern 'regex_search', FOLLOWING SYMBOLIC 'L'INKS [symbolic links] while traversing directories! <=========== VERY USEFUL! ========== 
+rg 'regex_search' -g '*.h' = search for pattern 'regex_search' while searching ONLY in files/paths which match Linux/Unix file glob pattern '*.h'. Source: from the creater of ripgrep himself! https://unix.stackexchange.com/questions/503161/ripgrep-path-pattern/503170#503170 <========== ALSO VERY USEFUL ==========
+
+== Comparison of `grep` to `rg` (ripgrep): ==
+[grep to ripgrep, grep to rg command comparison]
+grep -Rn regex_search some/path/to/search/ = search for `regex_search`, 'R'ecursively (following symlinks), only in path "some/path/to/search/", while showing line 'n'umbers where a match is found
+rg -L regex_search some/path/to/search/ = exact same as above, except using ripgrep, which is much faster!
+
 
 ====================================================================================================
 = Jinja2: = 
@@ -1291,6 +1427,8 @@ Ex:
     Ctrl + E = go to end
     End = same as above
     Ctrl + L = clear screen (same as typing `clear` command)
+    reset = reset the terminal back to its default state (useful in case it's corrupted and you can't even see what you're typing, for instance)
+    . ~/.bashrc = re-source your bash startup file (~/.bashrc), which also automatically re-sources your bash aliases file (~/.bash_aliases), if it exists. Doing this resets all environment variables, terminal prompt string, terminal text colors, custom aliases or bash functions included in either of those two files, etc.
 
 == Linux terminal options: ==
 gnome-terminal = Ubuntu's default terminal
