@@ -1429,6 +1429,19 @@ watch -n 30 'sudo du -h ~/.cache/bazel | tail -n 1' = same as above, except with
 == IP & Networking: ==
 
 ifconfig = show the internet & network configuration/connection information for your system and all of its network cards (both wireless (ex: WIFI) and wired (ex: Ethernet ports))
+TURN NETWORK INTERFACES ON AND OFF (up or down, respectively)
+See: https://askubuntu.com/questions/168032/how-to-disable-built-in-wifi-and-use-only-usb-wifi-card/204536#204536
+ifconfig = list ALL network interfaces; note: see more on "virtual interfaces" and how to create them farther below
+iwconfig = list all wireless network interfaces (see more on this cmd below)
+sudo ifconfig INTERFACE_NAME up = turn network interface INTERFACE_NAME on; ex:
+sudo ifconfig wlan0 up = turn network interface wlan0 ON
+sudo ifconfig INTERFACE_NAME down = turn network interface INTERFACE_NAME off; ex:
+sudo ifconfig wlan0 down = turn network interface wlan0 OFF
+
+iwconfig = 'w'ireless network 'i'nterface configuration tool of some sort (stands for 'i'nterface 'w'ireless perhaps?); see `man iwconfig` and also here for a little more info: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895
+iwconfig = list wireless network interfaces
+iwlist INTERFACE_NAME freq = list the available wireless frequencies of interface INTERFACE_NAME; see: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895; ex:
+iwlist wlan0 freq = list the available wireless frequencies of wireless network interface `wlan0`
 
 ip help = show the options and `OBJECT`s available for the `ip [OPTIONS] <OBJECT>` commands!
 - See also MY ANS HERE! https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
@@ -1459,6 +1472,42 @@ wget https://path.to.some.file.to.download = download a file at this URL; shows 
 == CAN Bus and CAN Networking: ==
 
 TODO: need to add this information in here so I don't forget it.
+
+== USB, serial, devices, etc.: ==
+
+dmesg = print all messages from the Linux kernel ring buffer, which includes all entries for USB enumeration and stuff, including entries for each time you plug in or unplug any USB device, USB HID keyboard or mouse or gamepad or similar, USB to serial UARTs/converters (on nearly all Arduino boards), etc.
+dmesg | tail = just show the last 10 entries from the Linux kernel dmesg ring buffer
+dmesg | tail -n 10 = same as above! (10 is the default `-n` setting for `tail`)
+dmesg | tail -n 30 = show just the last 30 entries from the Linux kernel dmesg ring buffer [very useful to see what USB device you just plugged in or unplugged! It will show the device's USB ID, vendor ID, vendor name, manufacturer, serial number, etc. etc.] <===== EXCELLENT! =====
+
+lsusb = list ('l'i's't) all USB devices which are plugged in
+
+ls /dev = list ('l'i's't) all devices in the Linux "/dev" folder (device tree)
+
+Note: an excellent way to get as much info. as possible about a device you just plugged in, and to see how it enumerates and what kind of device it is, is as follows:
+    # 1. Start with the device NOT plugged in, then run:
+    ls /dev > ~/temp/dev1.txt
+    lsusb > ~/temp/lsusb1.txt
+    
+    # 2. plug it in now, then run:
+    ls /dev > ~/temp/dev2.txt
+    lsusb > ~/temp/lsusb2.txt
+    # A. Compare the before and after files with `meld`:
+    meld ~/temp/dev1.txt ~/temp/dev2.txt      # compare the before and after of what's in "/dev"
+    meld ~/temp/lsusb1.txt ~/temp/lsusb2.txt  # compare the before and after of the `lsusb` output
+    # OR B. compare the files above using `diff`, but with the same look (incl. coloring, 
+    #   surrounding line context, and line number info.) as `git diff`, as shown below.
+    #   Note: for more context still, use `--unified=10` instead of just `-u` below. See `man diff` 
+    #   for details. 
+    diff -u --color=always ~/temp/dev1.txt ~/temp/dev2.txt 
+    diff -u --color=always ~/temp/lsusb1.txt ~/temp/lsusb2.txt
+    # look at the recent Linux kernel ring buffer messages to see what was just plugged in
+    dmesg | tail -n 30  
+    
+    # 3. Unplug it again then run `dmesg` one more time to see the messages of what was 
+    #    just UNplugged!
+    dmesg | tail -n 30
+
 
 == `head` and `tail`: == 
 - Use `head` to output the first part of files
@@ -1525,6 +1574,7 @@ References:
 2. https://en.wikipedia.org/wiki/Mosh_(software)
 
 == Find files and replace text in files: ==
+[find and replace, text replacement in files]
 
 1)
 which <some_executable> = show the path to the executable in your path; ex: 
@@ -1566,6 +1616,14 @@ To match whole words, use the regex `\b` word boundaries!
 find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pattern\b|replacement_string|g" = same as above, except with `\b` `\b` to make it a whole word search! <======= BEST WHOLE-WORD MULTI-FILE SEARCH & REPLACE =====
 EXAMPLE:
 find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
+
+Ripgrep can find and replace too! 
+[rg, ripgrep, rip-grep]
+See "Andrew Gallant's Blog", the post titled [ripgrep is faster than {grep, ag, git grep, ucg, pt, sift}](https://blog.burntsushi.net/ripgrep/). Ex:
+rg '([A-Z][a-z]+)\s+([A-Z][a-z]+)' --replace '$2, $1' = find all strings which match the pattern in single quotes (''), and replace them with the matching groups in the format '$2, $1', where `$2` is the 2nd matching group (2nd set of parenthesis in the main regular expression), and `$1` is the 1st matching group (1st set of parenthesis in the main regular expression).
+
+eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh: usage:
+find_and_replace <path> <filename_regex> <string_regex> <replacement_str> [-w] = find and replace `string_regex` with `replacement_str` for all filenames which match `filename_regex` in path `path`. See `gs_find_and_replace -h` for help and more examples!
 
 == sed: == 
 sed = "'s'tream 'ed'itor for filtering and transforming text" [stream editor]
