@@ -66,6 +66,39 @@ So, ***NEVER SCHEDULE LESS THAN 2 HRS FOR ANYTHING--NOT EVEN THE MOST TRIVIAL OF
 
 
 ====================================================================================================
+= Stack Overflow and Other Stack Exchange Sites: = 
+====================================================================================================
+
+== How to NOT get suspended from Stack Exchange sites: ==
+
+1. Follow the **Full Disclosure rule:** EVERY time you post ANYTHING to a personal or professional site, project, tool, or product to which you are affiliated, ESPECIALLY when you solicit donations, have ads, sell it, or otherwise might many money from it, even if only $1 over the course of a year, EXPLICITLY STATE YOUR AFFILIATION! Ex: 
+
+    "Full Disclosure: I wrote/helped write/build/help build/maintain/help maintain this [tool] which can do ___."
+
+  Or perhaps just:
+
+    "Full Disclosure: I wrote this." 
+
+  Then state how and why it is useful and relevant to the Original Poster's exact question, and not just a random act of self-promotion or spam.
+
+2. "**You have to show your tool/library actually solves the problem:** that means you have to write the 10 lines of code that call your library, and it is helpful if you **show an actual result,** and even better if you [show] a result based on the code in [the OP’s (Original Poster's) example code]." Source: direct quote from __undisclosed__.
+
+  My own summary of this quote: _provide an actual example, **including output or screenshots**, of your external tool, library, or resource. Preferably make it exactly specific to the question at hand._
+
+  This demonstrates your tool 1) actually works, and 2) actually solves the OP's problem and hence isn't just random spam or random self-promotion.
+
+=== Related References, Sources, and Resources: ===
+1. [How to not be a spammer](https://arduino.stackexchange.com/help/promotion) - very important link which backs up the above two main rules! Two key takeaways are: 1) "you _must_ disclose your affiliation in your answers", and 2) "Don't tell - show!"..."demonstrate a solution rather than simply asserting the problem can be solved." They also have other great points, such as "always solve the asker's problem," and "avoid poorly-written questions", because a well-written answer to a poorly-worded question looks even more spammy to many other people than a poorly-worded answer to a poorly-worded question, oddly enough (personal note: this is an example of the conundrum of "if it looks like you tried too hard, it's probably because you're getting paid to do it" [and therefore what you say isn't as true or as valid], which is asinine and ridiculous but this is what "normal" people think apparently).
+2. https://arduino.stackexchange.com/help/behavior
+3. [very interesting real-life case] https://meta.stackexchange.com/questions/57497/limits-for-self-promotion-in-answers/59302#59302
+4. [my own question] https://meta.stackexchange.com/questions/351349/is-the-new-software-recommendations-stack-exchange-a-trap-to-catch-people-who?noredirect=1#comment1176694_351349
+
+See also:
+1. https://stackoverflow.com/help/deleted-answers
+2. https://stackoverflow.com/help/locked-posts
+
+
+====================================================================================================
 = Doxygen: = 
 ====================================================================================================
 
