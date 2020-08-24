@@ -70,6 +70,7 @@ So, ***NEVER SCHEDULE LESS THAN 2 HRS FOR ANYTHING--NOT EVEN THE MOST TRIVIAL OF
 ====================================================================================================
 
 == How to NOT get suspended from Stack Exchange sites: ==
+[SEE ALSO THE UPDATE/OFFICIAL CORRESPONDENCE BELOW!]
 
 1. Follow the **Full Disclosure rule:** EVERY time you post ANYTHING to a personal or professional site, project, tool, or product to which you are affiliated, ESPECIALLY when you solicit donations, have ads, sell it, or otherwise might many money from it, even if only $1 over the course of a year, EXPLICITLY STATE YOUR AFFILIATION! Ex: 
 
@@ -96,6 +97,30 @@ So, ***NEVER SCHEDULE LESS THAN 2 HRS FOR ANYTHING--NOT EVEN THE MOST TRIVIAL OF
 See also:
 1. https://stackoverflow.com/help/deleted-answers
 2. https://stackoverflow.com/help/locked-posts
+
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+== UPDATE: Official and personal correspondence with me from a Stack Overflow employee (not moderator, but actual, paid employee): ==
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+> In terms of official guidance regarding your personal website links being included, I would recommend you to read these two answers:
+> 
+> 1. [What is the exact definition of “spam” for Stack Overflow?](https://meta.stackoverflow.com/questions/260638/what-is-the-exact-definition-of-spam-for-stack-overflow/260641#260641)
+> 2. [What are the “spam” and “rude or abusive” (offensive) flags, and how do they work?](https://meta.stackexchange.com/questions/58032/what-are-the-spam-and-rude-or-abusive-offensive-flags-and-how-do-they-wor/58035#58035)
+> 
+> You can include links to your site, but please be careful with that and make sure that:
+> 
+> 1. The person can understand the answer fully without having to follow the link.
+> 2. You disclose that it is your personal website. [My notes: according to the 2nd link he gave me just above, "a simple 'my' may suffice", so simply saying something like this (emphasis added): "refer to **my website** here for more information on ___" is perfectly acceptable].
+
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+== How to appeal a Code of Conduct violation or suspension if you ever get wrongfully suspended from a Stack Exchange/Stack Overflow Site: ==
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Examples:
+
+1. From any page on https://arduino.stackexchange.com/: scroll to the bottom of the page --> click the "Contact" link (https://arduino.stackexchange.com/contact) --> click the "What can we help you with?" dropdown menu --> choose the "I want to appeal a Code of Conduct violation" option --> politely explain your situation and submit it. Note that your description must be < 5000 chars, which apparently includes any HTML/XHTML/XML? post-formatting they add to your description, so that gives you about 4800~4900 or so chars to write your description. This will be sent to a paid Stack Overflow employee, *not* an unpaid community moderator, a Jira ticket will be opened for your case, you will be sent an email with instructions to open a Jira account to monitor and reply to your case, and they will work on it over the next 3 to 4 or so weeks. 
+
+2. From any page on https://stackoverflow.com/: scroll to the bottom of the page --> click the "Contact Us" link (https://stackoverflow.com/company/contact) --> click the "contact us" link now at the top of the page under the "Support & Feedback" heading (https://stackoverflow.com/contact?referrer=https%3a%2f%2fstackoverflow.com%2f) --> --> click the "What can we help you with?" dropdown menu --> choose the "I want to appeal a Code of Conduct violation" option --> politely explain your situation and submit it (see above for more details and notes about the character limits for the description section).
 
 
 ====================================================================================================
