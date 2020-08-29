@@ -87,22 +87,54 @@ Usage: '$SCRIPT_NAME [positional_parameters]'
     '--false_dryrun'     = dry run of the above
     '--list'             = list all \".git\" and \"..git\" subdirectories
 
-Common Usage Example:
-  - To rename all '.git' subdirectories to '..git' **except for** the one immediately in the current 
+Common Usage Examples:
+ 1. To rename all '.git' subdirectories to '..git' **except for** the one immediately in the current 
     directory, so as to not disable the parent repo's .git dir (assuming you are in the parent 
     repo's root dir when running this command), run this:
 
         $SCRIPT_NAME --true  # disable all git repos in this dir and below
-        mv ..git .git        # re-enable just the parent repo
+        mv ..git .git             # re-enable just the parent repo
 
     Be sure to do a dry run first for safety, to ensure it will do what you expect:
 
         $SCRIPT_NAME --true_dryrun
 
-  - To recursively list all git repos within a given folder, run this command from within the 
+ 2. To recursively list all git repos within a given folder, run this command from within the 
     folder of interest:
 
         $SCRIPT_NAME --list
+
+ 3. Assuming you tried to add a sub-repo to your main git repo previously, BEFORE you deleted or 
+    renamed the sub-repo's .git dir to disable the sub-repo, this is the process to disable 
+    the sub-repo, remove it from your main repo's tracking index, and now re-add it to your 
+    main repo as a regular directory, including all of its sub-files and things:
+
+    Description: remove sub-repo as a sub-repo, add it as a normal directory, and commit
+    all of its files to your main repo:
+
+    Minimum Set of Commands (just gets the job done without printing extra info.):
+
+        $SCRIPT_NAME --true  # disable all repos in this dir and below 
+        mv ..git .git             # re-enable just the main repo
+        # quit tracking the subrepo as a single file
+        git rm --cached path/to/subrepo
+        # start tracking the subrepo as a normal folder
+        git add -A
+        git commit
+
+    Full Set of Commands (let's you see more info. during the process):
+    
+        $SCRIPT_NAME --true  # disable all repos in this dir and below 
+        mv ..git .git             # re-enable just the main repo
+        git ls-files path/to/subrepo  # see what is currently tracked in the subrepo dir 
+        # quit tracking the subrepo as a single file
+        git rm --cached path/to/subrepo
+        git status
+        # start tracking the subrepo as a normal folder
+        git add -A
+        git status
+        git commit
+
 
 Long Description: $DESCRIPTION
 This program is part of: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
