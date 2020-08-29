@@ -251,8 +251,19 @@ disable-repos() {
     done
 
     echo "Number of directories actually renamed = ${num_dirs_renamed} of ${num_dirs}."
+    echo ""
     echo "**To re-enable just a single repo (ex: the parent repo), simply rename its '..git'"
-    echo "dir back to '.git' like this: 'mv ..git .git'.**"
+    echo "dir back to '.git' like this:**" 
+    echo "      mv ..git .git"
+    echo ""
+    echo "NB:"
+    echo "1. If your sub-repo's dir is already being tracked in your git repo, accidentally,"
+    echo "stop tracking it with this cmd:"
+    echo "      git rm --cached path/to/subrepo/dir"
+    echo "...in order to be able to start tracking it again fully, as a normal directory, after"
+    echo "disabling it as a sub-repo with this script."
+    echo "2. To view all tracked files in your repo, use:"
+    echo "      git ls-files"
 }
 
 main() {
