@@ -63,7 +63,7 @@ $NAME_AND_VERSION_STR
   - Why? See my StackOverflow answer here: https://stackoverflow.com/a/62368415/4561887
   - See also the \"Long Description\" below.
   - NB: if your sub-repo's dir is already being tracked in your git repo, accidentally, stop 
-    tracking it with this cmd: 'git rm --cached path/to/subrepo/dir' in order to be able to 
+    tracking it with this cmd: 'git rm --cached path/to/subrepo' in order to be able to 
     start tracking it again fully, as a normal directory, after disabling it as a sub-repo 
     with this script. To view all tracked files in your repo, use 'git ls-files'. 
       - References: 
@@ -259,11 +259,13 @@ disable-repos() {
     echo "NB:"
     echo "1. If your sub-repo's dir is already being tracked in your git repo, accidentally,"
     echo "stop tracking it with this cmd:"
-    echo "      git rm --cached path/to/subrepo/dir"
+    echo "      git rm --cached path/to/subrepo"
     echo "...in order to be able to start tracking it again fully, as a normal directory, after"
     echo "disabling it as a sub-repo with this script."
     echo "2. To view all tracked files in your repo, use:"
     echo "      git ls-files"
+    echo "Or, to just see what is or isn't being tracked in your sub-repo directory:"
+    echo "      git ls-files path/to/subrepo"
 }
 
 main() {
