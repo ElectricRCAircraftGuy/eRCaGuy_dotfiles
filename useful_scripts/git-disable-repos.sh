@@ -62,6 +62,14 @@ $NAME_AND_VERSION_STR
     git repos themselves (\".git\" <--> \"..git\").
   - Why? See my StackOverflow answer here: https://stackoverflow.com/a/62368415/4561887
   - See also the \"Long Description\" below.
+  - NB: if your sub-repo's dir is already being tracked in your git repo, accidentally, stop 
+    tracking it with this cmd: 'git rm --cached path/to/subrepo/dir' in order to be able to 
+    start tracking it again fully, as a normal directory, after disabling it as a sub-repo 
+    with this script. To view all tracked files in your repo, use 'git ls-files'. 
+      - References: 
+        1. https://stackoverflow.com/questions/1274057/how-to-make-git-forget-about-a-file-that-was-tracked-but-is-now-in-gitignore/1274447#1274447
+        2. https://stackoverflow.com/questions/27403278/add-subproject-as-usual-folder-to-repository/27416839#27416839
+        3. https://stackoverflow.com/questions/8533202/list-files-in-local-git-repo/14406253#14406253
 
 Usage: '$SCRIPT_NAME [positional_parameters]'
   Positional Parameters:
@@ -243,6 +251,8 @@ disable-repos() {
     done
 
     echo "Number of directories actually renamed = ${num_dirs_renamed} of ${num_dirs}."
+    echo "**To re-enable just a single repo (ex: the parent repo), simply rename its '..git'"
+    echo "dir back to '.git' like this: 'mv ..git .git'.**"
 }
 
 main() {
