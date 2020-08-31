@@ -41,7 +41,9 @@
 
 Name=Open in Terminator
 Comment=Open the 'terminator' terminal in the selected folder
-Exec=terminator --working-directory=%F
+# Don't forget the double quotes ("") around the "%F" or else the "Open in Terminator" action won't
+# work from within any folder which has spaces in its path.
+Exec=terminator --working-directory="%F"
 Icon-Name=terminator
 Selection=any
 Extensions=dir;
