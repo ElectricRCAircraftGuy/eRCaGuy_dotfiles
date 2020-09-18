@@ -1679,6 +1679,22 @@ nslookup some_hostname = the exact reverse of the above: try to find the IP addr
 curl = some web utility for interaction with websites; need to learn how to use
 wget https://path.to.some.file.to.download = download a file at this URL; shows a nice progress bar and download stats (speed, total size to download, total size downloaded so far, etc.) the entire time!
 
+
+== rsync: ==
+[keywords: copy, copies, copying, copying with progress bar]
+
+References:
+1. [my ans 1] https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
+1. [my ans 2] https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264 - includes info. on FreeFileSync (FFSync; Free File Sync) too!
+
+time rsync -rah --dry-run --info=progress2 --stats source destination
+    My favorite command; **dry run** copy
+
+time rsync -rah --info=progress2 --stats source destination
+    My favorite command; **real copy** (Important! Do a dry run first and read the output summary to ensure you're copying what you intend!) <========= MY FAVORITE RSYNC COMMAND ==========
+    See my ans: https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
+
+
 == CAN Bus and CAN Networking: ==
 
 TODO: need to add this information in here so I don't forget it.
