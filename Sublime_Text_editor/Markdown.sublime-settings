@@ -1,0 +1,8 @@
+// These settings override both User and Default settings for the Markdown syntax
+
+// To "install" these settings, just copy this whole file to this dir:
+// "/home/$USER/.config/sublime-text-3/Packages/User/"
+
+{
+    "trim_trailing_white_space_on_save": false,
+}
