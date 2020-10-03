@@ -1,0 +1,4 @@
+// These settings override both User and Default settings for the Plain text syntax
+{
+    "trim_trailing_white_space_on_save": false,
+}
