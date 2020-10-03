@@ -2,7 +2,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 # Sublime Text Settings:
 
-To install the main `Preferences.sublime-settings` file, as well as all other syntax-specific/file-extension-specific `*.sublime-settings` preference files, simply copy them to the Sublime Text 3 `/home/$USER/.config/sublime-text-3/Packages/User/` dir.
+To install the main `Preferences.sublime-settings` file, as well as all other syntax-specific/file-extension-specific `*.sublime-settings` preference files _which override that main preferences file for their respective file types_, simply copy them all to the Sublime Text 3 `/home/$USER/.config/sublime-text-3/Packages/User/` directory!
 
 # Packages to install
 
