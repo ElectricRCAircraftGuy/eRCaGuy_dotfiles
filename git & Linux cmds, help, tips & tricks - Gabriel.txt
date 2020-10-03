@@ -3,20 +3,66 @@ Gabriel Staples
 
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+====================================================================================================
+= Quotes: =
+====================================================================================================
+
 "I understand crossing your fingers is a form of debugging. If it doesn't pass, cross your fingers and try again."
     - said nobody ever
     (by Gabriel Staples, 25 June 2020)
 
 "You are making progress if each mistake is a new one."
-    - One of the many random quotes displayed on the Eclipse IDE startup splash screen when the "Darkest Dark Theme with DevStyle 2002.5.5" plugin is installed
+    - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
+
+"Programming isn't what you know; it's what you can figure out."
+    - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
+
+"Cost of copying code from Stack Overflow: $1. Cost of knowing which code to copy from Stack Overflow: $100~$300k/year."
+    - This is my rewording of a quote from Jessica Su, CS PhD student at Stanford (see: https://www.linkedin.com/posts/stevenouri_datascience-machinelearning-programming-activity-6696689805528571904-BIxM).
 
 Me: "I am a documentation expert." Boss: "What about diagramming?" Me: "Oh...(foot in mouth)." [I'm great at documentation, just not drawing diagrams to demonstrate designs.]
 New assertion: Me: "I am a foot-in-mouth expert." Boss: "Yep."
 That should be a comic.
 
+====================================================================================================
+= My Thoughts on C++: =
+====================================================================================================
+
+17 Sept. 2020
+
+As compared to C, or even better, "C+" (more on this later), I personally dislike the "hard-core" C++ "type-safety-first" mentality common to modern application-level C++.
+
+But, I'm still forming an opinion, and have much to learn.
+
+As an embedded software developer first, I definitely prefer a more C-like style, which I call "C with classes", or "C+", when programming with the C++ compiler. This consists of using many C styles but with a C++ compiler and with C++ classes, C++ features like default values in function prototypes and structs, function overloading, etc. I think C++ has many wonderful things to offer, but is just too huge. Using only C, on the other hand, is just too redundant and limiting. The C++ compiler has many beautiful and wonderful features which can make programming a true joy, when done in the "C+" style I describe above.
+
+Since I speak multiple languages (English, Spanish, + quite a bit of French, and I read and write Arabic) and have a passion for learning and studying foreign languages and cultures, I frequently make the following analogy to foreign languages:
+
+    Imagine **C is Spanish**. It is well-defined, well-scoped, and follows nice, fixed rules and patterns in its syntax. Its syntax follows rules very well, and when there are exceptions to these rules, you can write them out in a list and that's it! Those are the rules, and those are the exceptions to those rules! Done! At the architectural level, many options exist, but a few well-accepted architectures have arisen.
+
+    **C++ is Spanish, German, French, English, Italian and Portuguese** all rolled into one. The problem is that if you write perfect Spanish in C++, the (Portuguese + French)ers in C++ will tell you how horrible your code is because it looks like Spanish, even if the Spanish you wrote and compiled with the C++ compiler is perfect, flawless, bug-free, functional C++, **since C++ includes Spanish**. C++ is HUGE. You have many many ways to use C++, and no matter how long you study it, you have never even covered all of its _syntax_, let alone its extensive libraries and multiplicitous architectural options.
+
+In C, architecturally, I am quite familiar with and fond of "object-based C". I have written a thorough example of this architectural style here: https://stackoverflow.com/questions/3965279/opaque-c-structs-how-should-they-be-declared/54488289#54488289. An alternative "object-based C" style exists which allows static memory allocation instead, for your "objects", and I'd probably prefer this more over what's in my answer, but what's in my answer happened to be what I was more familiar with. This "object-based" C style does not prohibit procedural code and functions mixed throughout.
+
+In programming paradigms, I am fond mostly of **procedural** programming, which is a subset of **imperative** programming. Here's what I wrote in a comment [under this answer](https://stackoverflow.com/questions/6295148/what-is-the-opposite-of-oop/6295260#6295260) to the question of, "What is the opposite of OOP? [Object-Oriented Programming]":
+
+    > I'd say based on what the asker is after, **procedural** is the opposite of **object-oriented** programming. Procedural is a subset of **imperative**, but more narrowly defined as being imperative + relying on blocks & scope (source: https://en.wikipedia.org/wiki/Procedural_programming#Imperative_programming). With this in mind, in a sense, C (a primarily procedural programming language) is the opposite of C++ (a primarily object-oriented programming language).
+
+So, I prefer **procedural** programming to pure OOP.  If taken too far, OOP gets huge, ugly, and utterly obnoxious to use. This contributes to my occasional hatred towards C++, when all I want to use is "C+." C++, for instance, can make better and cleaner and more beautiful **procedural** code than C could ever dream of. Some of the aspects of C++, like function overloading and setting default members in structs, are wonderful to use. Regarding the uggliness of OOP, however, which for some reason is the dominant form of C++ even when it doesn't make any sense for the problem being solved and ends up creating a dozen singleton classes everywhere, Joe Armstrong, crator of Erlang, had the following to say:
+
+    > I think the lack of reusability comes in object-oriented languages, not functional languages. Because the problem with object-oriented languages is they’ve got all this implicit environment that they carry around with them. **You wanted a banana but what you got was a gorilla holding the banana and the entire jungle.**
+
+    > If you have referentially transparent code, if you have pure functions — all the data comes in its input arguments and everything goes out and leave no state behind — it’s incredibly reusable.
+
+    (Source: ["Coders at Work" book](https://amzn.to/2LUe3aO), requoted by John D. Cook, PhD, here: https://www.johndcook.com/blog/2011/07/19/you-wanted-banana/)
+
+So, when using the C++ compiler, please, I don't need the whole gorilla holding the banana, and the entire jungle too! Sometimes, simplicity is best. Step back for a moment and consider trying to create something a little less OOP, a little less type-safe (because the extreme complexity of overly-type-safe code can be very dangerous too!), a little more simple and usable and procedural, and in fine, a litte more "C+".
+
+Also, I think my core skillset and interests lie in the realm of programming on microcontrollers, and that paradigm is inherently bad for use with the STL and is tightly coupled with and benefited by the use of raw pointers, raw structs, raw buffers, and register memory mapping. I am generally opposed to increased type safety at the cost of reduced simplicity / greater verbosity and greater complexity. This frequently puts me at odds with many other C++ developers, but when I look at the massively-complex systems produced by choosing type-safety first, it leaves a lot to be desired, and the increased mental overload, potentially-increased propensity for human errors, and decreased speed isn't worth the cost. I hypothesize that reducing complexity and choosing simplicity over type-safety will ultimately make your code cleaner and safer, more efficient, easier to maintain, less expensive, and better all around.
+
 
 ====================================================================================================
-= Time Estimation of Projects/Tasks/Tickets/Pull-Requests: = 
+= Time Estimation of Projects/Tasks/Tickets/Pull-Requests: =
 ====================================================================================================
 
 THE PROBLEM:
@@ -27,22 +73,22 @@ Have realistic time estimates. So, if I think to myself "this'll take 2 days," t
 
 A programming task/project might take:
 
-  * 2 ideal "Battlebots" prep/build days of work. That means 13-hour days with no human interaction, little food, no showers, and pure focus. This isn't practical, and definitely doesn't work in a corporate environment, **especially** where others control your work and determine whether or not it's "good enough" (or, more frequently: it must meet their subjective standards) to land on the code base. 
+  * 2 ideal "Battlebots" prep/build days of work. That means 13-hour days with no human interaction, little food, no showers, and pure focus. This isn't practical, and definitely doesn't work in a corporate environment, **especially** where others control your work and determine whether or not it's "good enough" (or, more frequently: it must meet their subjective standards) to land on the code base.
 
 So, the REAL ESTIMATE IS:   <======== THIS! ======= (2 days is actually 5 days--possibly even 6)
 
   * 2 normal human (8 hrs.) days of work for me to do the main coding (bug fix or new feature)
   * + 2 days for writing unit tests, doing bench or field testing, etc.
   * + 1 day *minimum* for review, fixing, merging the code, etc.
-  = 5 days total. You may even throw in a 6th day (ie: 1 more day) for researching, as that is inevitably required if there are a lot of unknowns or you are not already **intimately** familiar with the code, project, technology, libraries, code base, etc. 
-  - AND THEN, ***ON TOP OF THIS***, you must assume that these 5 days of work will be done at 60% efficiency, due to meetings and things, meaning it will actually take 5/0.6 = 8.33 days, or 1 week 3.33 days, assuming 5-day work weeks and 8-hr work days. 
+  = 5 days total. You may even throw in a 6th day (ie: 1 more day) for researching, as that is inevitably required if there are a lot of unknowns or you are not already **intimately** familiar with the code, project, technology, libraries, code base, etc.
+  - AND THEN, ***ON TOP OF THIS***, you must assume that these 5 days of work will be done at 60% efficiency, due to meetings and things, meaning it will actually take 5/0.6 = 8.33 days, or 1 week 3.33 days, assuming 5-day work weeks and 8-hr work days.
   **************************************************************************************************
   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   So...in actual, real-life timeline days for project planning and making Gant charts and finding critical paths and things, "2 days" of work (according to how I used to think about work in my BattleBots-mentality build days) will take **1 week 3.33 days** in the corporate environment or work-place, where you work 5-day work weeks, 8~9-hr. days, at 60% time efficiency. <===== THIS IS THE KEY TAKEAWAY! ===
   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   **************************************************************************************************
 
-***Start multiplying all your estimates by 2.5 from now on*** until you can get this cemented into your brain about how real-world projects go, especially when you're working on a team or working with others, and even more-so when you don't own the project and get to make every executive decision by yourself like your own little project dictator. This is the reality of corporate programming/software development, and probably how it would be in the true customer-focused world as well, where you are not essentially your own customer and micro-dictator. 
+***Start multiplying all your estimates by 2.5 from now on*** until you can get this cemented into your brain about how real-world projects go, especially when you're working on a team or working with others, and even more-so when you don't own the project and get to make every executive decision by yourself like your own little project dictator. This is the reality of corporate programming/software development, and probably how it would be in the true customer-focused world as well, where you are not essentially your own customer and micro-dictator.
 
 ANOTHER WAY TO LOOK AT IT:
 (ESTIMATING EXAMPLE/COMPARATIVE ANALYSIS):
@@ -59,30 +105,31 @@ ANOTHER WAY TO LOOK AT IT:
     3. 2/6 days = 1/3 = 33% is writing new tests or doing testing
     4. 1/6 days = 17% is getting review, writing descriptions and updating documentation, and that's assuming NO or MINIMAL changes are requested. If they request an entire re-architecture or rip-up, this could easily expand to 2 or 3+ days just to go back and repeat step 1 above ALONE, which originally took 2 days. Then, you'd have to redo steps 2 to 4 as well which would take ANOTHER 4+ DAYS ON TOP OF THAT. So, if major re-architecture is required, this is a good time to notify your boss (or customer, if you are your own boss/a freelancer or sole proprietor), and inform him/her of the delay, request more time, and re-evaluate how code review and new design is handled and discussed on the team, as it *may* (but doesn't necessarily) indicate a failure to plan ahead and communicate in advance, which could need addressing at a procedural/systemic level.
 
-I talked to a smart guy who said, ***"no ticket [task] takes less than 2 hrs."*** He said, "If I have a task to send an email, I schedule 2 hours"..."because inevitably you will be interrupted or something will happen and that 2 hours will quickly be filled up."  
+I talked to a smart guy who said, ***"no ticket [task] takes less than 2 hrs."*** He said, "If I have a task to send an email, I schedule 2 hours"..."because inevitably you will be interrupted or something will happen and that 2 hours will quickly be filled up."
 KEY TAKE-AWAY: scheduling *at least* 2 hours for even the most minute of tasks is required if you hope to become a person who can (quote/un-quote) "get things done 'on time'". <====== KEY TAKEAWAY! ======
 
 So, ***NEVER SCHEDULE LESS THAN 2 HRS FOR ANYTHING--NOT EVEN THE MOST TRIVIAL OF TASKS AT WORK (OR ON OTHER PAID OR SCHEDULE-BASED PROJECTS)!*** AND IF SOMETHING MUST LAND ON A LARGE CODE BASE WHERE LOTS OF OTHER PEOPLE ARE INVOLVED, MAKE IT NO LESS THAN 4 HRS.! <========== REMEMBER THIS! ==========
 
 
 ====================================================================================================
-= Stack Overflow and Other Stack Exchange Sites: = 
+= Stack Overflow and Other Stack Exchange Sites: =
 ====================================================================================================
 
 == How to NOT get suspended from Stack Exchange sites: ==
 [SEE ALSO THE UPDATE/OFFICIAL CORRESPONDENCE BELOW!]
 
-1. Follow the **Full Disclosure rule:** EVERY time you post ANYTHING to a personal or professional site, project, tool, or product to which you are affiliated, ESPECIALLY when you solicit donations, have ads, sell it, or otherwise might many money from it, even if only $1 over the course of a year, EXPLICITLY STATE YOUR AFFILIATION! Ex: 
+1. Follow the **Full Disclosure rule:** EVERY time you post ANYTHING to a personal or professional site, project, tool, or product to which you are affiliated, ESPECIALLY when you solicit donations, have ads, sell it, or otherwise might many money from it, even if only $1 over the course of a year, EXPLICITLY STATE YOUR AFFILIATION! Ex:
 
     "Full Disclosure: I wrote/helped write/build/help build/maintain/help maintain this [tool] which can do ___."
 
   Or perhaps just:
 
-    "Full Disclosure: I wrote this." 
+    "Full Disclosure: I wrote this."
 
   Then state how and why it is useful and relevant to the Original Poster's exact question, and not just a random act of self-promotion or spam.
 
-2. "**You have to show your tool/library actually solves the problem:** that means you have to write the 10 lines of code that call your library, and it is helpful if you **show an actual result,** and even better if you [show] a result based on the code in [the OP’s (Original Poster's) example code]." Source: direct quote from __undisclosed__.
+2. "**You have to show your tool/library actually solves the problem:** that means you have to write the 10 lines of code that call your library, and it is helpful if you **show an actual result,** and even better if you [show] a result based on the code in [the OP’s (Original Poster's) example code]."
+  ~Source: direct quote from Ira Baxter (this quote isn't from here, but here's who he is: https://stackoverflow.com/users/120163/ira-baxter).
 
   My own summary of this quote: _provide an actual example, **including output or screenshots**, of your external tool, library, or resource. Preferably make it exactly specific to the question at hand._
 
@@ -124,7 +171,7 @@ Examples:
 
 
 ====================================================================================================
-= Doxygen: = 
+= Doxygen: =
 ====================================================================================================
 
 See other examples here:
@@ -149,7 +196,7 @@ Full Doxygen function header example:
     /// \param[out]     var3            Description of variable three, an output (usu. via a pointer
     ///                                 to a variable)
     /// \param[in,out]  var4            Description of variable four, an input/output (usu. via a
-    ///                                 pointer) since its initial value is read and used, but then 
+    ///                                 pointer) since its initial value is read and used, but then
     ///                                 it is also updated by the function at some point
     /// \return         Description of return types. It may be an enum, with these
     ///                 possible values:
@@ -159,9 +206,9 @@ Full Doxygen function header example:
     my_enum_t myFunc(int var1, int var2, int* var3, int* var4)
     {
         // function implementation here
-        
+
         my_enum_t error = ENUM_VALUE_1;
-        
+
         // Check for NULL pointers
         if (!var3 || !var4)
         {
@@ -188,7 +235,7 @@ You may also use `@` instead of `\`:
     /// @param[out]     var3            Description of variable three, an output (usu. via a pointer
     ///                                 to a variable)
     /// @param[in,out]  var4            Description of variable four, an input/output (usu. via a
-    ///                                 pointer) since its initial value is read and used, but then 
+    ///                                 pointer) since its initial value is read and used, but then
     ///                                 it is also updated by the function at some point
     /// @return         None
     void myFunc(int var1, int var2, int* var3, int* var4)
@@ -204,7 +251,7 @@ And here's this shorter version again now with `\` again instead of `@`:
     /// \param[out]     var3            Description of variable three, an output (usu. via a pointer
     ///                                 to a variable)
     /// \param[in,out]  var4            Description of variable four, an input/output (usu. via a
-    ///                                 pointer) since its initial value is read and used, but then 
+    ///                                 pointer) since its initial value is read and used, but then
     ///                                 it is also updated by the function at some point
     /// \return         None
     void myFunc(int var1, int var2, int* var3, int* var4)
@@ -227,7 +274,7 @@ And the more compact version of the above (assumes shorter parameter names, and 
 
 
 ====================================================================================================
-= Python Docstrings: = 
+= Python Docstrings: =
 ====================================================================================================
 
 Useful for documenting Python functions and classes. Python docstrings are like the "doxygen" of Python. ~GS
@@ -269,7 +316,7 @@ Example from my own code (see my git-tree.py link above):
             name (string):  the name of this node
             parent (Node):  the parent node of the node being created; note: obviously the parent node must already
                 exist in order to be passed in as a parameter here
-            
+
         Returns:
             NA
         """
@@ -287,10 +334,11 @@ Config files:
 1. BUILD.bazel (new, but still not widely-accepted, and is somewhat debated) [see note 1 below]
 1. WORKSPACE
 1. .bazelrc in your workspace directory (next to the main WORKSPACE file); see: https://docs.bazel.build/versions/master/guide.html#where-are-the-bazelrc-files
+    1. user.bazelrc in your workspace directory (next to the main .bazelrc file); see: https://docs.bazel.build/versions/master/best-practices.html#bazelrc. Add an entry for `user.bazelrc` to your ".gitignore" file for your git repo, so that this becomes a custom user bazelrc file which does NOT get checked-in to the main git repo! Then, in your main git repo's ".bazelrc" file, add the command `try-import user.bazelrc` at the end to automatically import a user's custom "user.bazelrc" file if it exists!
 
 Notes:
 [1] GS: for all new projects, I recommend using `BUILD.bazel` over `BUILD`. See here:
-    1. [In Docs: clarify BUILD vs. BUILD.bazel #4517](https://github.com/bazelbuild/bazel/issues/4517) - brings up the fact this is an on-going debate. 
+    1. [In Docs: clarify BUILD vs. BUILD.bazel #4517](https://github.com/bazelbuild/bazel/issues/4517) - brings up the fact this is an on-going debate.
     1. https://docs.bazel.build/versions/master/build-ref.html#packages - shows both as valid options: `BUILD.bazel` and `BUILD`.
 
 Bazel Online Documentation:
@@ -318,7 +366,7 @@ Bazel Online Documentation:
        Ex:
             bazel --output_user_root="/home/some_other_user/.cache/bazel" build //...
 1. "A user's guide to Bazel" - https://docs.bazel.build/versions/master/guide.html
-    1. Specifying targets to build (`bazel build //...` [build the whole project], `bazel build //:all` [build just the top-level build targets], etc.) - 
+    1. Specifying targets to build (`bazel build //...` [build the whole project], `bazel build //:all` [build just the top-level build targets], etc.) -
        https://docs.bazel.build/versions/master/guide.html#specifying-targets-to-build
 1. Macros (Bazel build rule macros--used to generate build targets):
     1. Macros: https://docs.bazel.build/versions/master/skylark/macros.html
@@ -374,7 +422,7 @@ Bazel Online Documentation:
             ],
             # Files not in this `outs` Starlark (Python3-like) list will be deleted by Bazel after
             # this genrule() runs, so any files which this script generates MUST be in this list
-            # for them to persist and be available for later parts of this build! So, add all 
+            # for them to persist and be available for later parts of this build! So, add all
             # (generated-by-this-script) files to `outs` that you need to NOT be deleted by Bazel!
             outs = [
                 "mymodule/autogen/file1.h",
@@ -391,7 +439,7 @@ Bazel Online Documentation:
                 '--option2 "something else" '
                 '--option3 12973 '
                 # Pass in all `outs` items to the script itself, if desired, to process. `OUTS` here
-                # is a Bazel "Make" variable. 
+                # is a Bazel "Make" variable.
                 # See: https://docs.bazel.build/versions/master/be/make-variables.html
                 '--bazel_outs "$(OUTS)" '
                 # Pass in the Bazel `srcs` list too via this Bazel "Make" variable. See link above.
@@ -418,9 +466,9 @@ Bazel Online Documentation:
                 '--bazel_srcs "$(SRCS)" '
             ),
 
-    ...or like this, if you wanted to join the command as a list of strings (joined by a single 
-    space) instead. Notice the deleted space before the ending single quote on each line, and the 
-    added comma after the single quote to make this a list of strings now instead of a 
+    ...or like this, if you wanted to join the command as a list of strings (joined by a single
+    space) instead. Notice the deleted space before the ending single quote on each line, and the
+    added comma after the single quote to make this a list of strings now instead of a
     continuous, multi-line string!
             cmd = ' '.join([
                 '$(execpath //src/module1:generate_files)',
@@ -436,20 +484,20 @@ Bazel Online Documentation:
     1. https://docs.bazel.build/versions/master/be/python.html#py_binary
     1. https://docs.bazel.build/versions/master/be/general.html#genrule
     1. https://docs.bazel.build/versions/master/be/general.html#filegroup
-    1. EXAMPLE `genrule()` & BUILD file from Bazel, with a custom rule from a custom `defs.bzl` 
+    1. EXAMPLE `genrule()` & BUILD file from Bazel, with a custom rule from a custom `defs.bzl`
        file!: https://github.com/bazelbuild/examples/blob/master/make-variables/testapp/BUILD
 
 1. `bazel query` example to show *exactly* what the above `genrule()` would look like AFTER full
    variable substitution into it:
         bazel query --output=build //src/module2:run_this_python_script_during_build
-1. See what predefined Bazel "Make", and Bazel environment variables exist for your Bazel build environment. 
-   See: https://docs.bazel.build/versions/master/be/make-variables.html#predefined_variables 
+1. See what predefined Bazel "Make", and Bazel environment variables exist for your Bazel build environment.
+   See: https://docs.bazel.build/versions/master/be/make-variables.html#predefined_variables
         bazel info --show_make_env [build options] = shows all predefined "Make" variables in all caps at the top, and bazel environment variables in lowercase thereafter
 1. See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html
    See also the `bazel info` commands just below!
 
 bazel info --show_make_env [optional: build options] = see just above! It shows all predefined Bazel "Make" variables [bazel make variables] in ALL CAPS at the very top, and then Bazel environment variables, such as genfiles, bin, etc. output and build paths right after that! See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html <==== VERY USEFUL TO BE ABLE TO SEE WHERE ALL BUILD OUTPUT WILL BE PLACED FOR A GIVEN SET OF BUILD SETTINGS! ====
-bazel info = similar to the above, but show JUST the Bazel environment variables (output/build dirs and things), and NOT the Bazel "Make" variables as well! <==== VERY USEFUL! ====  
+bazel info = similar to the above, but show JUST the Bazel environment variables (output/build dirs and things), and NOT the Bazel "Make" variables as well! <==== VERY USEFUL! ====
 bazel info bazel-bin = show the full path to the bazel output "bin" directory
 
 time bazel build //... = build the whole project
@@ -501,12 +549,19 @@ bazel build [build_options] //...
 (required to debug an executable with gdb or lldb, for instance):
 - gdb debugger: https://www.gnu.org/software/gdb/
 - lldb debugger: https://lldb.llvm.org/
-1) `--copt` build option:
-bazel build --copt="-ggdb" --copt="-O0" //... = add C build options for gdb debugging symbols and Optimization Level 0 for the entire build! See: 
+1) BEST OPTION: use the `--copt` build option:
+bazel build --copt="-ggdb" --copt="-Og" //... = add C build options for gdb debugging symbols and Optimization Level "debu'g'" for the entire build! Or, even better, just do it for the taget you care about most:
+time bazel build --copt=-ggdb --copt=-Og //path/to/my/target_dir/... = build my required target with the appropriate debug options!
+time bazel build --copt=-ggdb --copt=-O0 --strip=never //path/to/my/target_dir/... = [UPDATE: PREFER `-O0` OVER `-Og`! See my ans.: https://stackoverflow.com/a/63386263/4561887] same as above, but also ensure Bazel **never** strips debug information, just to be sure! <=========== BEST DEBUG BUILD OPTIONS! (esp. for the repetitive edit-compile-debug development cycle!) ==========
+  See:
     1. *****+https://docs.bazel.build/versions/master/user-manual.html#flag--copt
-    2. https://docs.bazel.build/versions/master/command-line-reference.html#flag--copt and
+    2. https://docs.bazel.build/versions/master/command-line-reference.html#flag--copt
+    3. [MY OWN Q&A: I discovered it is preferred to use option `-Og` over `-O0` when debugging!] What's the difference between a compiler's `-O0` option and `-Og` option? - https://stackoverflow.com/questions/63386189/whats-the-difference-between-a-compilers-o0-option-and-og-option/63386263
+        1. See the official manual here!: https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#Optimize-Options
+        2. [UPDATE: PREFER `-O0` OVER `-Og`! See my ans.: https://stackoverflow.com/a/63386263/4561887]
+    4. `--strip=never` info: https://docs.bazel.build/versions/master/user-manual.html#flag--strip
 2) `copts` addition to the BUILD.bazel file:
-- Alternatively, just do this for individual build targets, as desired, in `copts` for cc_library() rules; see here: 
+- Alternatively, just do this for individual build targets, as desired, in `copts` for cc_library() rules; see here:
 https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library.copts
 Here is an example of how to use `copts`, partially pulled from the examples here:
 https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
@@ -525,21 +580,26 @@ https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
         deps = [":baz"],
     )
 
-3) BEST OPTION: USE the `--per_file_copt` BAZEL BUILD OPTION INSTEAD!
+3) Use the `--per_file_copt` Bazel build option instead. NB: this is NOT the best option, and it may even **malfunction** and make full debugging NOT WORK [or perhaps I simply needed to add `--strip=never` too to fix this!?--NEED TO TEST!]! So, prefer the `--copt=` option above instead! See my answer describing this here: https://stackoverflow.com/questions/3758614/gdb-no-symbol-i-in-current-context/63386031#63386031.
 Documentation:
 1. *****+https://docs.bazel.build/versions/master/user-manual.html#flag--per_file_copt
 2. https://docs.bazel.build/versions/master/command-line-reference.html#flag--per_file_copt
-bazel build --per_file_copt=path/to/my/module/.*@-ggdb,-O0 //... = build everything, but anything which matches the regular expression `path/to/my/module/.*` will also be built with the appropriate gdb debug symbols (`-ggdb`) and with optimization level zero (`-O0`) for easy debugging! You may also need to add `--strip=never` to keep the linker from stripping debug symbols during linking, like this:
-bazel build --per_file_copt=path/to/my/module/.*@-ggdb,-O0 --strip=never //... = same as above, but never strip debugging symbols! See the link above, as well as this: https://docs.bazel.build/versions/master/user-manual.html#flag--strip
-- - - 
+
+    bazel build --per_file_copt=path/to/my/module/.*@-ggdb,-Og //... = build everything, but anything which matches the regular expression `path/to/my/module/.*` will also be built with the appropriate gdb debug symbols (`-ggdb`) and with optimization level debu'g' (`-Og`) for easy debugging! You may also need to add `--strip=never` to keep the linker from stripping debug symbols during linking, like this:
+
+    bazel build --per_file_copt=path/to/my/module/.*@-ggdb,-Og --strip=never //... = same as above, but never strip debugging symbols! See the link above, as well as this: https://docs.bazel.build/versions/master/user-manual.html#flag--strip
+- - -
 More complicated, generic `--per_file_copt` example:
---per_file_copt=//foo:.*\.cc,-//foo:file\.cc@-O0,-fprofile-arcs = adds the `-O0` and the `-fprofile-arcs` options to the command line of the C++ compiler for all `.cc` files in [the build *target* path] `//foo/` except `file.cc`.
 
-== == 
+    --per_file_copt=//foo:.*\.cc,-//foo:file\.cc@-Og,-fprofile-arcs = adds the `-Og` and the `-fprofile-arcs` options to the command line of the C++ compiler for all `.cc` files in [the build *target* path] `//foo/` except `file.cc`.
 
-time bazel query --output=build //path/to/my/target/... > out.txt = Store the expanded form of all macros/build rules into out.txt; see above; see this too for more on **expanding Bazel build macros**: https://docs.bazel.build/versions/master/skylark/macros.html#expanding-macros 
+CLANG/LLVM COMPILER NOTE: to optimize debugging output for clang's lldb debugger instead of GNU's gdb debugger, use option `-glldb` instead of `-ggdb`; see here: https://clang.llvm.org/docs/UsersManual.html#cmdoption-ggdb. Still prefer `-Og` over `-O0` for both options, however. See my ans. here: https://stackoverflow.com/questions/63386189/whats-the-difference-between-a-compilers-o0-option-and-og-option/63386263#63386263, and the official manual here: https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#Optimize-Options. [UPDATE: PREFER `-O0` OVER `-Og`! See my ans.: https://stackoverflow.com/a/63386263/4561887].
 
-bazel --host_jvm_args=-Xmx16g build //... = set max java heap size to 16g then build everything; see here for the command above, as well as for how to make a Linux swapfile! 
+== ==
+
+time bazel query --output=build //path/to/my/target/... > out.txt = Store the expanded form of all macros/build rules into out.txt; see above; see this too for more on **expanding Bazel build macros**: https://docs.bazel.build/versions/master/skylark/macros.html#expanding-macros
+
+bazel --host_jvm_args=-Xmx16g build //... = set max java heap size to 16g then build everything; see here for the command above, as well as for how to make a Linux swapfile!
 https://stackoverflow.com/questions/55190272/java-lang-outofmemoryerror-when-running-bazel-build/60572662#60572662
 
 *****BEST BAZEL BUILD CMD*****
@@ -555,8 +615,9 @@ Other useful options:
 #) Now, putting it all together:
         bazel --output_user_root="/home/gabriels/.cache/bazel_cache" build --jobs 4 //...'     <============ VERY USEFUL TO KNOW ABOUT ============
 
-== BAZEL TEST OPTIONS: == 
+== BAZEL TEST OPTIONS: ==
 
+[print test output always]
 bazel test --test_output=errors //... = log all errors (failed test results) to stdout--in other words, you'll only see a long output from running the bazel test if it fails!--this is a good setting to use; for help, see: https://groups.google.com/forum/#!topic/bazel-discuss/2mJPklIaCeo; see also: `bazel help test` for other options!
 bazel test --test_output=summary //... = the default (doesn't show errors; just shows a summary)
 bazel test --test_output=all //... = prints ALL output to stdout, even for tests that pass!
@@ -586,16 +647,59 @@ See:
 
 
 ====================================================================================================
-= gdb and gdbgui: = 
+= gdb and gdbgui: =
 ====================================================================================================
 
-== General: ==
+== General Debugging Advice: ==
+
+> The general debugging methodology for segfaults:
+> 1) Run it in a debugger, print a backtrace, fix the issue.
+> 2) If (1) doesn't work add debug symbols and other stuff and try again.
+> 3) If (2) doesn't work, run it under the sanitizers + Valgrind and fix the issue.
+> 4) If (3) doesn't work, start to bisect the program until all that is left is the bug.
+> Another powerful methodology is just to step through the program with a debugger. That will give you a coarse idea of where the issue is.
+    ~ [Victor Robertson](https://github.com/vmrob)
+
+My notes:
+1. Use gdb or lldb to "run it in a debugger". Start (`run`) the program to completion until the segfault or other error occurs which crashes the program. With the program crashed, run `bt` (in either gdb OR lldb) to print the backtrace and see what happened from there.
+1. The "other sanitizers" include LLVM's `asan`, `tsan`, `ubsan`, etc. You can see this list at the top of slide 2 here: https://llvm.org/devmtg/2015-10/slides/SerebryanyCollingbourne-BeyondSanitizers.pdf. Just Google for "llvm asan", for instance, for more info.
+    1. Apparently, asan is an "address sanitizer" and looks for memory bugs where you're accessing "out of bounds" memory. It can potentially tell you the exactly where the out-of-bounds memory read/write bug is, including file and line number. (I need to look into this more and verify if this is all correct, or perhaps if it's one of the other LLVM sanitizers that can do this). Either way, I need to check out and learn how to use the LLVM sanitizers--I've never used them before.
+        1. See also:
+            1. https://stackoverflow.com/questions/57733527/how-to-configure-bazel-to-run-address-memory-sanitizer
+                Ex:
+                        bazel build -c dbg --config=asan path/to/module:target
+
+                1. https://docs.bazel.build/versions/0.26.0/bazel-container.html
+                1. https://github.com/bazelment/trunk/blob/master/tools/bazel.rc
+            1. https://github.com/google/sanitizers/wiki/AddressSanitizer
+1. Note that if your crash is a "signal SIGSEGV" "invalid address" and shows that all of your stack frames are 0s and at address 0, it may be because you are _writing outside of bounds of your memory pool or array or whatever_, corrupting the stack frame pointer and other debugging info with a bunch of 0x00s! Here's a sample crash printed in lldb when this happened:
+
+        * thread #1, name = 'my_executable', stop reason = signal SIGSEGV: invalid address (fault address: 0x0)
+            frame #0: 0x0000000000000000
+        error: memory read failed for 0x0
+
+    And here's a sample lldb backtrace (bt) printout from when this happened:
+
+        (lldb) bt
+        * thread #1, name = 'my_executable', stop reason = signal SIGSEGV: invalid address (fault address: 0x0)
+          * frame #0: 0x0000000000000000
+
+    So, look for these types of problems with your backtrace as signs that your bug may be that you are writing outside of your allocated (statically or dynamically) memory blocks, arrays, buffers, or other variables or objects. That's what my bug turned out to be in this case. <========== THIS! ==========
+
+1. "Bisecting" the code (Victor's #4 above) means:
+    A. (if at all possible) using `git bisect` to identify which commit introduced the change that caused the bug, or
+    B. (if just looking at a large chunk of code that doesn't contain smaller, intermediate git commits) simply commenting out large sections of code half at a time, as able (in a binary search, or "bisecting" manner), until you get the bug. This can be really challenging in C or C++ where so much depends on each other, but if that's what you've got to do, that's what you've got to do! In languages like HTML this is much easier to do.
+
+== General Debugger Setup: ==
 
 1. If you need help locating your binary executable in your build output, try using `locate name_of_executable` to search your system for it.
-1. Be sure to buld with debug symbols on: `-ggdb` and `-O0`, for instance, are recommended. `-g` and `-g3` may also work. For Bazel, see the `--per_file_copt` option described above to easily add these C build options in while building. Ex:
-    time bazel build --per_file_copt=path/to/my/module/.*@-ggdb,-O0 --strip=never //...
-  OR
-    time bazel build --copt="-ggdb" --copt="-O0" --strip=never //...
+1. Be sure to buld with debug symbols on: `-ggdb` (or `-glldb` for LLVM/clang's `lldb` debugger) and `-Og`, for instance, are recommended. `-g` and `-g3` may also work in place of `-ggdb`, but `-ggdb` is the best. Also, `-O0` may work in place of `-Og`, but the official gcc user manual recommends `-Og` over `-O0` for debugging. See my ans. here: https://stackoverflow.com/questions/63386189/whats-the-difference-between-a-compilers-o0-option-and-og-option/63386263#63386263, and the official manual here: https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#Optimize-Options. [UPDATE: PREFER `-O0` OVER `-Og`! See my ans.: https://stackoverflow.com/a/63386263/4561887]. For Bazel, see the `--copt` option described above to easily add these C build options in while building. Ex:
+
+    time bazel build --copt=-ggdb --copt=-O0 --strip=never //path/to/my/target_dir/...  <=========== BEST DEBUG BUILD OPTIONS! (esp. for the repetitive edit-compile-debug development cycle!) ==========
+
+  OR to build ALL:
+
+    time bazel build --copt=-ggdb --copt=-O0 --strip=never //...
 
 == gdb: ==
 
@@ -603,8 +707,13 @@ References:
 1. https://www.gnu.org/software/gdb/
 1. https://en.wikipedia.org/wiki/GNU_Debugger
 1. https://www.onlinegdb.com/
-    1. http://www.gdbtutorial.com/ 
+    1. http://www.gdbtutorial.com/
     1. https://www.onlinegdb.com/blog/brief-guide-on-how-to-use-onlinegdb-debugger/
+1. "Watchpoints" (AKA: "data breakpoints"): https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html
+1. Google search for "gdb load relative path" [NEED TO STUDY!]: https://www.google.com/search?q=gdb+load+relative+path&oq=gdb+load+relative+path&aqs=chrome..69i57.3790j0j9&sourceid=chrome&ie=UTF-8
+    1. How to point GDB to your sources [NEED TO STUDY!] - https://alex.dzyoba.com/blog/gdb-source-path/
+1. Google "gdb tutorial" - https://www.google.com/search?q=gdb+tutorial&oq=gdb+tutorial&aqs=chrome.0.69i59l2j69i60j69i65l3.1554j0j7&sourceid=chrome&ie=UTF-8
+    1. Super simple GDB intro from U of Maryland: https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf
 
 Note: it is a good idea to launch gdb from your root source directory, ie: at the base directory where your source code begins, so that if your source code paths for your symbols are relative, gdb can automatically find your source code! Otherwise, it will say `No such file or directory.`
 
@@ -615,6 +724,7 @@ Also google for "gdb cheatsheet" to find helpful resources online. Ex:
 TO LEARN:
 1. Google "how to run crash dumps with GDB"
 1. Google "core dump handler"
+1. Google "gdb tutorial" - https://www.google.com/search?q=gdb+tutorial&oq=gdb+tutorial&aqs=chrome.0.69i59l2j69i60j69i65l3.1554j0j7&sourceid=chrome&ie=UTF-8
 
 GDB USAGE:
 1) Be sure to run gdb from the root of the source code so that all paths to the source code will work! Otherwise, paths may be broken and the source code may not be able to be displayed!
@@ -631,36 +741,317 @@ GDB USAGE:
 break file.cpp:100, r = run (restart from beginning), c = continue (until next break point), Ctrl + C = pause (send SIGINT interrupt to gdb), n = next (step over), s = step into, fin = finish (step up)
 
 ------------------------------------------------------
+GDB debugging steps example:
+- Full steps for how to build with Bazel, for example, then begin a gdb debug session!
+------------------------------------------------------
+[gdb example, full gdb debug example, full bazel gdb example, full bazel gdb debug example, example gdb debug, gdb debugging, gdb instructions, gdb demonstration]
+    # Build (or build then test: replace `build` with `test`) with gdb debug symbols
+    time bazel build --copt=-ggdb --copt=-O0 --strip=never //my/target_to_debug_1/... //my/target_to_debug_2/...; gs_alert
+    # cd to where the (post-processed and with-auto-generated-files-added, if applicable) source code is
+    cd ~/GS/dev/my_bazel_repo/build/my_bazel_repo
+    # start gdb
+    gdb
+    # load the executable file to debug (I *think* it requires an absolute path, but it does
+    # accept "~" just fine)
+    file ~/GS/dev/my_bazel_repo/build/bin/path_to_my_executable
+    # list first 10 lines of loaded source code
+    l
+    # (Optional) open the TUI (Text User Interface) window
+    Ctrl + X, A
+    # (Optional) switch the active window back to the gdb command prompt so arrow keys will
+    # work here to look up old commands from the command history and all
+    Ctrl + X, o
+    # set break points wherever you want them; ex: in file main.cpp on line 75
+    b main.cpp:75
+    # when done setting break points, run `info break` to see all that are set, and use
+    # `del <NUM>` to delete any you no longer need
+    info break
+    # run
+    r
+    # C'l'ear and refresh the screen in case any text printed by printf() or cout to stdout
+    # has occured
+    Ctrl + L
+    # See what frame and line number the code is currently on
+    frame
+    # Now use `bt` or `where` to get a current stack frame `backtrace` to see `where` we are!
+    # (ie: what calls exactly led to this location in the code).
+    bt
+    # C'l'ear and refresh the screen again when done studying the backtrace.
+    Ctrl + L
+    # Then use 'n'ext, 's'tep down, c'ontinue, 'fin'ish (step up), etc., as desired.
+    # You can also use 'watch <var_name>` to watch variables (thereby setting a "watchpoint",
+    # AKA "data breakpoint" to see when the variable changes), or 'print <var_name>' to print them,
+    # or `x &my_var` to e'x'amine the **memory** at the address of variable 'my_var',
+    # Etc. etc.
+    # NB: Many commands, such as 'n'ext, 'c'ontinue, 'l'ist, etc, can be repeated simply by
+    # pressing Enter again and again once you have typed the command the first time. This saves
+    # a lot of time and allows you to rapidly go through the code.
+
+------------------------------------------------------
 gdb_short_cmd (or long_cmd) (gdbgui keyboard shortcut)
 ------------------------------------------------------
 
-See: https://undo.io/resources/gdb-watchpoint/5-ways-reduce-debugging-hours/
+TUI (Text User Interface) shorcut keys ("Key Bindings")
+See:
+1. GDB User Manual: https://sourceware.org/gdb/current/onlinedocs/gdb/TUI-Keys.html
+2. https://undo.io/resources/gdb-watchpoint/5-ways-reduce-debugging-hours/
 Ctrl + X, A = enter/exit ncurses user interface mode (TUI--Text User Interface)
-Ctrl + 2 = cycle through 2-window TUI modes
-Ctrl + 1 = return to 1-window TUI mode
+Ctrl + X, 2 = cycle through 2-window TUI modes
+Ctrl + X, 1 = return to 1-window TUI mode
+Ctrl + X, o = change active window to the 'o'ther window; allows you to change active view between the gdb command prompt and the TUI code window so that the arrow keys will change from scrolling the code window to recycling old commands, or vice versa.
+Ctrl + L = refresh (c'l'ear and reload) the screen
+
+help = see in-application help
+help <cmd> = see help about command cmd; ex: `help watch`
+
+file path/to/my_prog_to_execute = execute my_prog_to_execute
+
+directory /path/to/my/source/code/rootdir = set the source code root dir to this path so gdb knows where to find the source code! See: https://alex.dzyoba.com/blog/gdb-source-path/.
+set substitute-path <from_path> <to_path> = see here: https://alex.dzyoba.com/blog/gdb-source-path/; ex:
+set substitute-path /home/avd/dev/cpython /usr/src/python
+[see also this cflag prefix option!]
+gcc -fdebug-prefix-map=$(pwd)=/usr/src/python = see here: https://alex.dzyoba.com/blog/gdb-source-path/; search for "" in `man gcc`:
+-fdebug-prefix-map=old=new
+    "When compiling files in directory old, record debugging information describing them as in new instead." [this makes them instantly debuggable in gdb because they know right where to look for the source code!]. See: https://alex.dzyoba.com/blog/gdb-source-path/.
+
+frame
+    See what frame and line number the code is currently on. See also `l -` below.
+list
+    List the code lines around the current frame, or based on the last list end point if we just called `list`.
+l
+    'l'ist (list; same as above)
+l <LINE_NUM>
+    list 10 lines of source code centered at <LINE_NUM>; ex: `l 97`; note: just keep pressing "Enter" to keep listing 10 more lines of source code again and again, essentially scrolling down the file!
+l -
+    List the current line you are on, apparently? (need to test). Similar to `frame` above I think. See also `frame` above.
+    Source: https://stackoverflow.com/questions/17480107/lldb-list-source-code.
+
+info sources = list all available source files; see: https://stackoverflow.com/questions/22821344/gdb-how-to-list-all-source-files-used-for-compilation/22821599#22821599
+info functions = list all available functions; see URL above
+[weird work-around to grep the above output]: https://stackoverflow.com/questions/41965454/gdb-grep-info-sources-files/41965636#41965636
+
+info break = show all break points (delete them with `del <NUM>`); see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
+del <NUM> = delete a break point based on its NUMber shown by `info break`
+del <NUM1> <NUM2> <NUM3> ... = same as above; notice you can delete multiple breakpoints at once
 
 break main.cpp:100 = set a break point in main.cpp at line 100
 b main.cpp:100 = same as above
+b 100 = set a break point **in the current file** at line 100
+clear main.cpp:100 = clear/remove/delete the breakpoint you previously set at line 100 of main.cpp; NB: you can also use `info break` and `del <NUM>`; see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
 bt = backtrace: display the program stack (AKA: stack trace or stack frames)
+where = similar to backtrace; print backtrace of current stack frames. "Same as backtrace; you can think of this version as
+working even when you’re still in the middle of the program" (Slide 15 of https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf).
 up = go up to higher stack frame
 down = go down to lower stack frame
 
-r (or run) = run (start from beginning)
-c = continue until breakpoint
+watch foo = set a "watchpoint" (AKA "data breakpoint") on variable `foo` to see when it changes! See: https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html
+info watchpoints
+
+----------------
+PRINT
+----------------
+print my_var
+    print current value of variable my_var (see Slide 12 of: https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf)
+print/x my_var
+    print value of variable my_var in hex format (slide 12 above)
+print/d my_var
+    print my_var as decimal (signed integer)
+print/u my_var
+    print my_var as unsigned integer
+print/<format> my_var
+    print my_var according to the general `printf()`-style format chars, <format>
+print my_ptr
+    print the value of my_ptr, which contains the address the pointer is holding
+    [See slides 20-21 of this intro. for the following use-cases: https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf]
+print &my_var
+    print the address of (pointer to) my_var
+print my_ptr->name
+    print the "name" member of this pointer, assuming it is a ptr to a struct or class which contains this member
+print my_ptr->value
+    print the "value" member of this pointer, assuming it is a ptr to a struct or class which contains this member
+print (*my_ptr).value
+    same as above; this is also valid C/C++ syntax
+print *my_ptr
+    print the entire contents of this pointer! (not so easy to do in C or C++)
+----------------
+PRINT ARRAYS:
+See my own ans: https://stackoverflow.com/questions/14502236/how-to-view-a-pointer-like-an-array-in-gdb/64055978#64055978
+----------------
+print *my_array@len
+    Print the first `len` elements of `my_array`. See my answer here!: https://stackoverflow.com/questions/14502236/how-to-view-a-pointer-like-an-array-in-gdb/64055978#64055978
+    Examples:
+p *byteArray@16
+    Print 16 bytes from `byteArray`. Result: `"\000\001\002\003\004\005\006\a\370\371\372\373\374\375\376\377"`
+print/x *byteArray@16
+    Print 16 bytes from `byteArray`, in hex format. Result: `{0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff}`
+print/d *byteArray@16
+    Print 16 bytes from `byteArray`, in signed integer format. Result: `{0, 1, 2, 3, 4, 5, 6, 7, -8, -7, -6, -5, -4, -3, -2, -1}`
+print/u *byteArray@16
+    Print 16 bytes from `byteArray`, in unsigned integer format. Result: `{0, 1, 2, 3, 4, 5, 6, 7, 248, 249, 250, 251, 252, 253, 254, 255}`
+
+OBTAIN TYPES
+ptype my_var
+    Returns things like `type = unsigned short`
+print &my_var
+    Returns things like `(uint16_t *) 0x7ffffffefc2c`, revealing the pointer type is `uint16_t *`, meaning the variable type is just `uint16_t`! See my ans. here: https://stackoverflow.com/questions/9568201/gdb-show-typeinfo-of-some-data/63404160#63404160.
+
+EXAMINE MEMORY
+x <memory_addr>
+    examine the memory at address memory_addr
+x &my_var
+    e'x'amine (examine) the memory at the address of variable 'my_var'! ie: see what bytes it contains!
+x my_var_p
+    same as above, assuming that my_var_p is already defined as a pointer to my_var.
+help x
+    learn more about the e'x'amine command.
+
+(commands in parenthesis are for gdbgui, not gdb directly)
+-----
+r [run] (or run) = run (start from beginning)
+c [continue] = continue until breakpoint
 Ctrl + C = send SIGINT interrupt signal to gdb to pause gdb and let you interact with it
-n (or right arrow) = next (step over)
-s (or down arrow) = step into
-fin (or finish) (u) (or up arrow) = step out or up out of a lower-level function or scope; see: 
+n [next] (or right arrow) = next (step over)
+s [step] (or down arrow) = step into
+fin [finish] (or finish) (u) (or up arrow) = step out or up out of a lower-level function or scope; see:
     https://unix.stackexchange.com/questions/297982/how-to-step-into-step-over-and-step-out-with-gdb and
     https://stackoverflow.com/questions/24712690/step-out-of-current-function-with-gdb/24712736#24712736
-m = execute one machine instruction, stepping OVER function calls
-, = execute one machine instruction, stepping INTO function calls
+(m) = execute one machine instruction, stepping OVER function calls (cmd in parens is for gdbgui)
+(,) = execute one machine instruction, stepping INTO function calls (cmd in parens is for gdbgui)
 
 STILL NEED TO STUDY & LEARN THESE ONES:
 print <var_name>
 display <var_name>
 delete = delete all breakpoints?
 delete 1 = delete the 1st breakpoint
+
+GDB LOGGING:
+[gdb log to file, gdb file logging, gdb logging to file, logging gdb to file, log gdb to file]
+See: https://sourceware.org/gdb/current/onlinedocs/gdb/Logging-Output.html
+set logging on
+set logging off
+set logging file <file>
+    default is gdb.txt
+set logging file ~/temp/gdb.txt
+    set to log here (then call `set logging on` to begin)
+show logging
+set trace-commands on
+    echo (and log if logging is on) the command itself too! See: https://stackoverflow.com/questions/37530271/how-to-include-gdb-commands-in-logging-file/52146678#52146678.
+flush
+    Call this if logging doesn't seem to be showing up live in the file
+----
+So, here's how I like to start the logger! See my own ans. here: https://stackoverflow.com/questions/37530271/how-to-include-gdb-commands-in-logging-file/63403856#63403856.
+----
+set logging file ~/temp/gdb.txt
+set logging on
+set trace-commands on
+show logging
+flush
+set pretty print on
+
+== lldb: ==
+
+References:
+1. *****+GDB to LLDB command map: https://lldb.llvm.org/use/map.html
+
+Best Bazel build command aliases to use the lldb debugger, assuming you have the `-glldb` build option available since you're using the clang compiler.
+(Note: if you were using the gcc compiler instead, all you'd have to change I think is from `--copt=-glldb` to `--copt=-ggdb` [even for use with lldb] or perhaps to `--copt=-g3` or something).:
+
+    ```bash
+    alias bazel_build_lldb='time bazel build --copt=-glldb --copt=-O0 --strip=never \
+    //my/target1/... //my/target2/...; gs_alert'
+    alias bazel_test_lldb='time bazel test --copt=-glldb --copt=-O0 --strip=never \
+    //my/target1/... //my/target2/...; gs_alert'
+
+    # where you also have:
+    alias gs_alert='gs_sound_bell; alert "task complete"'
+    alias gs_sound_bell='echo -e "\a"'
+    ```
+
+Sample workflow:
+
+    ```bash
+    # make a code change, then do the "build --> fix the code --> build again" cycle repeatedly
+    # until you get the build to pass:
+    bazel_build_lldb
+    # once it builds, run your unit tests:
+    bazel_test_lldb
+    # Oh no! A unit test fails but you can't figure out why! Go run `lldb` manually to investigate
+    # and debug it.
+    # Great, you found the bug! Make the code change, then build and run the tests again:
+    bazel_test_lldb
+    # Nice! All unit tests pass. Commit the code and create a GitHub PR (Pull Request) to bring
+    # it into the main code base.
+    ```
+
+LLDB COMMANDS:
+
+help cmd_name
+    See the help menu and more info for command `cmd_name`.
+
+breakpoint set -f main.cpp -l 100
+    Set a breakpoint in file main.cpp on line 100.
+    Same as `break main.cpp:100` in gdb.
+breakpoint list
+    Show all breakpoints.
+    Same as `info break` in gdb.
+br l
+    Same as above
+
+bt
+    backtrace (same cmd in gdb)
+
+frame select
+f
+    Show the current lines and frame again.
+    Same as `frame` (or perhaps `l -` too?) in gdb.
+    Source: https://stackoverflow.com/a/17484386/4561887 and [my ans]: https://stackoverflow.com/a/64165024/4561887.
+
+print
+p var_name
+    Pretty-print variable var_name. Can be used on structs, classes, other objects, etc. Its output looks really nice.
+
+==================================
+== gdb & lldb examples & notes: ==
+==================================
+
+GDB to LLDB command map: **REALLY** USEFUL!: https://lldb.llvm.org/use/map.html  <================= **REALLY USEFUL** GDB <--> LLDB COMMAND MAP! ===============
+
+REMEMBER: prefer optimization level `-O0` over `-Og` when debugging, as `-Og` may actually optimize out your ability to print certain variables! See my own answer here: https://stackoverflow.com/a/63386263/4561887.
+
+`gdb` has `set print pretty on` to make printing a little nicer, like lldb does by default. Run this in gdb:
+
+    set pretty print on
+    p my_class
+    p my_struct.whatever
+
+To print a couple variables in GDB:
+
+    time bazel build --copt=-ggdb --copt=-O0 --strip=never //path/to/target/...
+    cd path/to/full/source/code
+    gdb
+    file path/to/executable
+    Ctrl + X, A
+    Ctrl + X, o
+    break main.cpp:100
+    r
+    Ctrl + L
+    print my_var_1
+    print my_var_2
+
+To print a couple variables in LLDB
+(doing the same thing as above, but in LLDB):
+
+    time bazel build --copt=-glldb --copt=-O0 --strip=never //path/to/target/...
+    # [now start lldb here--I think this is just with `lldb`? Perhaps it has to be from the correct
+    # source code dir too!? Then I have to load the executable somehow?]
+    breakpoint set -f main.cpp -l 100
+    thread continue
+    print my_var_1  # or just `p my_var_1`
+    p my_var_2
+
+SUMMARY:
+Notice that lldb *automatically* pretty-prints all objects/classes/structs, whereas in gdb you have to call `set pretty print on` first to get a similar effect! LLDB is a bit more modern and looks a bit nicer overall. It can also easily do **syntax highlighting** in the code lines it outputs (gdb can too, but I think it requires more work/external plugin support to do this). However, LLDB does NOT have a GUI nor TUI mode, whereas gdb *does* have a TUI mode. Overall, though, this isn't a big detractor from lldb because I usually end up navigating around to look at the code in my main source code editor or IDE anyway, so the TUI really isn't all that useful, even though I do like having it.
+
 
 == gdbgui: ==
 
@@ -676,11 +1067,18 @@ Installation:
 See: https://www.gdbgui.com/installation/
 In short:
 
+    sudo apt install python3-pip
     python3 -m pip install --user pipx
     python3 -m userpath append ~/.local/bin
+    . ~/.bashrc  # re-source to make sure user PATH is up-to-date
     pipx install gdbgui
 
-If you're missing any dependencies, you may get a warning. Install those as well. 
+If you're missing any dependencies, you may get a warning. Install those as well, then try the `pipx install gdbgui` command again. Ex:
+
+    # Install missing dependencies
+    sudo apt install python3-venv
+    # Try gdbgui pipx install command again
+    pipx install gdbgui
 
 To upgrade:
 
@@ -699,33 +1097,33 @@ gdbgui -h     = help menu
 gdbgui --help = help menu
 gdbgui = most basic usage; do auto-open a browser
 gdbgui -r --project="/path/to/root_execute_dir" --remap-sources='{"/old/base/path": "/path/to/root_execute_dir"}' --gdb-args="--tty=$(tty)" = run the gdbgui server on a remote machine (-r, so don't auto-open a browser), setting the root dir for all source (--project) files to "/path/to/root_execute_dir", and remapping all source code paths from "/old/base/path/whatever.cpp" to the correct source code location on the remote machine of "/path/to/root_execute_dir/whatever.cpp". The `--gdb-args="--tty=$(tty)"` part at the end is a work-around for a [bug](https://github.com/cs01/gdbgui/issues/333), to redirect all stdout (ex: from `printf()`-type statements) to the terminal in which you launch `gdbgui`, so that it won't get lost and not published in the `gdbgui` either. This is the bug report: https://github.com/cs01/gdbgui/issues/333. Just be sure to watch for all stdout messages in the terminal where you launched gdbgui instead of in the console in the gdbgui in the browser!
-2) In the "Load Binary" box at the top, type in the path to the binary (use the path from the *remote* machine's perspective if gdbgui is running on a remote machine): "/path/to/root_execute_dir/my/binary", and click "Load Binary". Now it will automatically load and display the source code, so long as you compiled it with `-g` (ok), `-g3` (better), or `-ggdb` (best I think), AND you properly set up your `--remap-sources` option, if required.  
-3) Click the "Run" button (the far left of the 6 buttons in the top-right of the browser window), and wait up to 5 or 6 seconds or so for the binary to begin executing. 
-4) Now debug with the 6 main buttons in the top-right, and be sure to watch the *terminal* from which you launched gdbgui for all stdout (`printf()`-like) output if you have used the `--gdb-args="--tty=$(tty)"` option. Otherwise, the output will be right inside the console at the bottom of the gdbgui. 
+2) In the "Load Binary" box at the top, type in the path to the binary (use the path from the *remote* machine's perspective if gdbgui is running on a remote machine): "/path/to/root_execute_dir/my/binary", and click "Load Binary". Now it will automatically load and display the source code, so long as you compiled it with `-g` (ok), `-g3` (better), or `-ggdb` (best I think), AND you properly set up your `--remap-sources` option, if required.
+3) Click the "Run" button (the far left of the 6 buttons in the top-right of the browser window), and wait up to 5 or 6 seconds or so for the binary to begin executing.
+4) Now debug with the 6 main buttons in the top-right, and be sure to watch the *terminal* from which you launched gdbgui for all stdout (`printf()`-like) output if you have used the `--gdb-args="--tty=$(tty)"` option. Otherwise, the output will be right inside the console at the bottom of the gdbgui.
 
 Here's some gdbgui debug tips:
 - Learn more in the screenshot tour here: https://www.gdbgui.com/screenshots/
-- and in the FAQ here: 
-    1. Hover your mouse over the code to see clickable links and pop-up information on functions and variables and things. 
+- and in the FAQ here:
+    1. Hover your mouse over the code to see clickable links and pop-up information on functions and variables and things.
     2. Use the search bar at the left to do a hash-table-based fuzzy search lookup of any source files, in order to load them. The root path it shows here is what your `--project=` option configured above.
-    3. Use the gdb input text bar at the very bottom of the screen to input any gdb command manually. This gives you FULL access to ALL gdb commands, even those which are not integrated into the gui otherwise. 
+    3. Use the gdb input text bar at the very bottom of the screen to input any gdb command manually. This gives you FULL access to ALL gdb commands, even those which are not integrated into the gui otherwise.
     4. In the right-hand panel you have a bunch of options. You can select threads and view the stack trace of the threads, for instance.
 The gdbgui tool makes gdb much more intuitive and easy to use!
 
 
 ====================================================================================================
-= googletest (gtest) / googlemock (gmock): = 
+= googletest (gtest) / googlemock (gmock): =
 ====================================================================================================
 
 See the "eRCaGuy_dotfiles/googletest" directory, **especially** the "eRCaGuy_dotfiles/googletest/insights.md" file, which has a bunch of my own personal documentation, notes, and insights!
 
-== test (`TEST() {}`, `TEST_F() {}`) order: == 
+== test (`TEST() {}`, `TEST_F() {}`) order: ==
 
 You can NOT rely on google tests to be run in any particular order. Also, the order can be shuffled with `--gtest_shuffle`; see: https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#shuffling-the-tests
 
 
 ====================================================================================================
-= linters, Static Code Analyzers, clang-format, etc.: = 
+= linters, Static Code Analyzers, clang-format, etc.: =
 ====================================================================================================
 [linters, clang-format]
 
@@ -767,9 +1165,9 @@ To generate a .clang-format file as a starting point:
 
 Main clang-format tools & commands include:
     clang-format [options] [<file> ...] = the main command; see: https://clang.llvm.org/docs/ClangFormat.html
-    
+
     clang-format-diff = a python script that allows you to format a git diff patch; see: https://clang.llvm.org/docs/ClangFormat.html
-    
+
     git clang-format = a tool blended in with git to allow you to format just the lines you touched before you git commit them [GS: I don't like this work-flow; I'd rather do a commit and THEN go back and run a command to format *the entire file* for any file I touched, instead. Then, I'll make that format run a separate commit.]
 
 Example usages:
@@ -780,7 +1178,7 @@ Example usages:
   Use `--style=file` to "load style configuration from .clang-format file located in one of the parent directories of the source file (or current directory for stdin)".
     clang-format --verbose -i --style=file my_file.cpp = format my_file.cpp in place, using the .clang-format file located in one of the parent directories of the source file, printing the name(s) of the file(s) processed. <======= BEST OPTION FOR MANUALLY-SPECIFIED FILE(S)! =======
     clang-format --verbose --style=file my_file.cpp | diff -u --color=always my_file.cpp - = do a PREVIEW of the command just above! ie: run the clang-formatter with the same commands, except NOT modifying the file 'i'n-place, and send the output to stdout (which is the default of clang-format), where it will then be piped via stdin to the `diff` command as the right file (-) to compare to the left file, which is the original my_file.cpp! In this way, you've manually created a means of PREVIEWING a clang-format change to see what changes WILL be made, withOUT actually making these changes! See the == diff: == section below for further details. <========= BEST **PREVIEW** COMMAND FOR CLANG-FORMAT! =========
-  See here for where I've used clang-format in a project before! 
+  See here for where I've used clang-format in a project before!
     https://github.com/AmboVent-1690-108/AmboVent/blob/master/3-Software/Arduino/run_clang-format.sh
     And it's format file:
     https://github.com/AmboVent-1690-108/AmboVent/blob/master/3-Software/Arduino/.clang-format
@@ -796,12 +1194,12 @@ Then you can manually clang-format all of those files, OR (I think--needs to be 
 A source code static analysis (programming errors, style, best practices, bug checker) tool.
 
 References:
-1. https://clang.llvm.org/extra/clang-tidy/ 
+1. https://clang.llvm.org/extra/clang-tidy/
 
 == clang sanitizers: ==
 [C/C++]
 
-Sanitizers are built into the clang (LLVM) compiler, and designed to find problems, such as undefined behavior. 
+Sanitizers are built into the clang (LLVM) compiler, and designed to find problems, such as undefined behavior.
 
 1. There are a bunch of sanitizers; see them all here: https://clang.llvm.org/docs/index.html; search this page for "sanitizer"; ex:
     1. https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
@@ -809,7 +1207,7 @@ Sanitizers are built into the clang (LLVM) compiler, and designed to find proble
     1. https://clang.llvm.org/docs/AddressSanitizer.html
         1. Finds address problems, such as use after free, out of bounds access, double free, etc.
     1. https://clang.llvm.org/docs/ThreadSanitizer.html
-        1. Detects data races. 
+        1. Detects data races.
     1. https://clang.llvm.org/docs/MemorySanitizer.html
         1. Detects uninitialized reads.
     1. etc.
@@ -827,7 +1225,7 @@ And now building the same project, but "sanitizing" for (looking for) undefined 
 
 == shellcheck: ==
 [Linux/Posix shell/sh/bash]
-- bash/shell script file checker/linter; 
+- bash/shell script file checker/linter;
 - **VERY HELPFUL** when writing bash (or other Linux shell) scripts!
 
 REFERENCES:
@@ -873,13 +1271,13 @@ REFERENCES:
 yamllint myfile.yaml = lint myfile.yaml
 yamllint -c path/to/.yamllint myfile.yaml = lint myfile.yaml according to the config rules declared in your "path/to/.yamllint" config file; see more here for a default config file and info on how to use and configure it! https://yamllint.readthedocs.io/en/stable/configuration.html.
 yamllint -c .yamllint myfile.yaml = same as above, but specify the path to the ".yamllint" config file to be right here in the current directory we are in!
-yamllint -c myfile.yaml = same as above, but "look for a configuration file in the [default] locations (by order of preference)". See: https://yamllint.readthedocs.io/en/stable/configuration.html. The first place it looks is for a ".yamllint" file in the current working directory, for instance. 
+yamllint -c myfile.yaml = same as above, but "look for a configuration file in the [default] locations (by order of preference)". See: https://yamllint.readthedocs.io/en/stable/configuration.html. The first place it looks is for a ".yamllint" file in the current working directory, for instance.
     UPDATE: actually, I think you must simply leave off the `-c` to get the default behavior it describes on where it will search for a config file. Sooo, do this instead (I think):
 yamllint myfile.yaml = correct form (I think) to get the default behavior described just above.
 
 
 ====================================================================================================
-= tmux: = 
+= tmux: =
 ====================================================================================================
 
 EXCELLENT how-to video! https://www.youtube.com/watch?time_continue=5&v=BHhA_ZKjyxo&feature=emb_logo
@@ -894,7 +1292,7 @@ tmux attach -t <session_num> = re-attach back to 't'arget session session_num!  
 tmux a -t <session_num> = same as above ("a" is an alias for "attach")
 tmux a = attach the only available session (assuming only one is available) <======= MY MOST COMMON USAGE!
 tmux kill-session -t <session_name_or_num> = kill this session! (or, you can just attach to it then type `exit` repeatedly until it's all exited/killed)
-tmux rename-session [-t current_name] [new_name] = rename a tmux session! See: https://superuser.com/questions/428016/how-do-i-rename-a-session-in-tmux/428025#428025 
+tmux rename-session [-t current_name] [new_name] = rename a tmux session! See: https://superuser.com/questions/428016/how-do-i-rename-a-session-in-tmux/428025#428025
 
 exit = exit the window
 
@@ -921,12 +1319,17 @@ tmux source-file ~/.tmux.conf = (unconfirmed--maybe is the wrong command?) re-so
 tmux source ~/.tmux.conf = (try this instead maybe--looks more legitimate!) same as above apparently--need to try it out still; see here: https://unix.stackexchange.com/questions/66606/tmux-not-sourcing-my-tmux-conf/66607#66607; has lots of upvotes, so looks more legitimate
 
 ====================================================================================================
-= git: = 
+= git: =
 ====================================================================================================
 
 General References:
 1. Stack Overflow (do general searches)
 2. [GitHub git cheat sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet/)
+
+.gitignore
+    [a gitignore file for EVERYONE for just this repo!] a file commited into a repository to specify files to ignore and not commit in that repository; you can have multiple copies of this file by putting a different copy of the file in a sub-folder in your repo, to apply to only that folder and down
+.git/info/exclude
+    [a gitignore file JUST FOR ME for just this repo!] same as .gitignore, but does NOT get commited into the repo; therefore, it ONLY applies to your specific clone of the repo, which is nice if you have certain things you'd like to exclude but your teammates don't, so they don't want your list of exclusions commited into the main, shared .gitignore file in the repo; see: https://stackoverflow.com/questions/22906851/when-would-you-use-git-info-exclude-instead-of-gitignore-to-exclude-files/22906950#22906950
 
 git alias = print out all of your aliases you have defined in your config file(s), such as in "~/.gitconfig" (or locally in a single repo I think too, in "/path/to/myrepo/.git/config")
 
@@ -965,16 +1368,22 @@ git diff --shortstat   commit_hash
 git log = show the git log history
 git log --oneline = show each commit as a single line only
 git lg = show the git log history in a condensed form, with graphics lines to show forks, branches, and merges; this is VERY USEFUL! <========
-    See: "eRCaGuy_dotfiles/home/.gitconfig" for how to create this `lg` alias for git, and 
+    See: "eRCaGuy_dotfiles/home/.gitconfig" for how to create this `lg` alias for git, and
     https://coderwall.com/p/euwpig/a-better-git-log for where I originally got it from!
 
 FIND ALL GIT COMMITS WHICH ARE ON ONE BRANCH BUT NOT ON ANOTHER!
-git log --no-merges branch1 ^branch2 ^branch3 = show all commits which are ONLY on branch1, but NOT on branch2 or branch3, omitting all merge commits since they aren't new changes! See: https://stackoverflow.com/questions/1710894/using-git-show-all-commits-that-are-in-one-branch-but-not-the-others/4207176#4207176 <========== SUPER USEFUL TO SEE WHAT CHANGES A BRANCH CONTAINS ON IT! ============
-This is VERY USEFUL to see, for instance, what are all of the feature commits we've added to a long-running release branch named "branch1", into which which we have periodically been merging the latest master. Now, with a simple command of `git log --no-merges branch1 ^master` we can se all NON-merge commits in branch1 which are NOT in master!
-git log --oneline --no-merges branch1 ^branch2 ^branch3 = same as above, but show only one line per commit! <======= EXCELLENT! (& SIMPLEST) ========
-git lg --no-merges branch1 ^branch2 ^branch3 = same as above, but using the `git lg` git alias instead, to show condensed (one-line) output with extra information! <======= BEST! (perhaps) ========
+[keywords: git commits on one branch but not another, git commits not on branch, git commits in one branch but not another]
+git log --no-merges branch1 ^branch2 ^branch3
+    show all commits which are ONLY on branch1, but NOT on branch2 or branch3, omitting all merge commits since they aren't new changes! See: https://stackoverflow.com/questions/1710894/using-git-show-all-commits-that-are-in-one-branch-but-not-the-others/4207176#4207176 <========== SUPER USEFUL TO SEE WHAT CHANGES A BRANCH CONTAINS ON IT! ============
+    This is VERY USEFUL to see, for instance, what are all of the feature commits we've added to a long-running release branch named "branch1", into which which we have periodically been merging the latest master. Now, we can see which commits are in any given branch but not in master! Ex:
+git log --no-merges branch1 ^master
+    show all NON-merge commits in branch1 which are NOT in master!
+git log --oneline --no-merges branch1 ^branch2 ^branch3
+    same as above, but show only one line per commit! <======= EXCELLENT! (& SIMPLEST) ========
+git lg --no-merges branch1 ^branch2 ^branch3
+    same as above, but using the `git lg` git alias instead, to show condensed (one-line) output with extra information! <======= BEST! (perhaps) ========
 
-git log --follow <one_single_filename> = [VERY USEFUL!] Show the `git log` history which affected JUST THIS ONE SINGLE FILE YOU TOLD IT TO FOLLOW! This is VERY helpful to track and follow all of the commits which touched a certain file, in order to go back commit by commit until you find out **which commit** introduced the changes to that file that you care about! 
+git log --follow <one_single_filename> = [VERY USEFUL!] Show the `git log` history which affected JUST THIS ONE SINGLE FILE YOU TOLD IT TO FOLLOW! This is VERY helpful to track and follow all of the commits which touched a certain file, in order to go back commit by commit until you find out **which commit** introduced the changes to that file that you care about!
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/ and `man git log` (then search for "--follow")
     [keywords: show file history]
 git log --follow some/file/name | grep --color=always commit | head -n 10 = output just the FIRST 10 commits, hashes ONLY (ie: only the line containing the word "commit"), which have changed file some/file/name; ex:
@@ -1020,8 +1429,42 @@ git log --author="name or email regex search pattern" = show an abridged git log
     git log --author="Gabriel Staples"
     git log --author="some_email@gmail.com"
 
-git show <commit_hash> = show the commit message that was stored, as well as a `git diff` of the changes this commit introduced, and to which files! 
+git show <commit_hash> = show the commit message that was stored, as well as a `git diff` of the changes this commit introduced, and to which files!
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/
+
+git reset <commit_hash>
+    Uncommit your changes on this branch going back to commit `commit_hash`, but NOT including that commit. In other words, all changes AFTER commit `commit_hash` will be UNCOMMITED, but retained as unstaged changes in your repo.
+git reset --soft <commit_hash>
+    Same as above, except leave the changes all **staged** for commit (added).
+git reset --hard <commit_hash>
+    WARNING WARNING WARNING! ALL CHANGES YOU ARE UNCOMMITTING WILL BE **LOST**! Same as above, except DELETE the changes instead of just uncommitting and unstaging them. DANGER DANGER DANGER! This cannot be easily undone (you'd need to go back to a backup branch or use `git reflog` to find the HEAD you were on before calling this command), so be careful when doing this.
+
+REBASE AND SQUASH NOTES:
+[TWO DISTINCT "SQUASH" AND "REBASE" STYLES!]:
+There is no "squash" command in git. There *is* a "rebase" command in git, but "merging" or "cherry-picking" can also be used as a form of "rebasing". The concept of "squashing" and "rebasing" can mean multiple things. Here are two common work-flow styles and what "squashing" and "rebasing" means in each:
+1. In a merge-based-workflow-style where you are continually **merging the latest "master" branch** into your feature branch to keep your feature up-to-date with upstream changes in "master", you can "squash and rebase" like this (assuming "master" is already fully up-to-date with the latest upstream changes). First, we use `git reset --soft` to "squash" all feature branch commits into one, then we cherry-pick this onto the latest master!:
+
+        git checkout feature_branch
+        # "squash" all feature_branch changes into one single commit!
+        git reset --soft master && git commit
+        # create a new feature branch from latest master
+        git checkout -b feature_branch2 master
+        # cherry-pick your squashed commit onto this new branch
+        git cherry-pick feature_branch
+        # Resolve conflicts as required, then use `git add <file>` or `git add -A`, and
+        # `git cherry-pick --continue` to finish it up.
+
+2. But, in a rebase-based-workflow-style where you are continually **rebasing onto the latest "master" branch** to incorporate its upstream changes into your feature branch, you can "squash and rebase" like this (assuming "master" is already fully up-to-date with the latest upstream changes). First, we use `git rebase -i <commit_just_before_our_first_feature_branch_commit>` to "squash" all of our feature branch commits into one, then we do `git rebase master` to rebase this one, squashed commit onto the latest master. Rebasing only one commit vs many commits avoids merge conflict hell where you find yourself fixing the same conflicts again and again and again in a single rebase (once per commit, for instance) instead of just once (once per squashed commit which contains *all* commits). So, these are the steps for this workflow style:
+
+        git checkout feature_branch
+        # "squash" all feature_branch changes into one single commit!
+        git rebase -i $(git merge-base master HEAD)
+        # Now in the editor that comes up, change all but the first "pick" entry to "s" for
+        # "squash", then save and close the editor, and the "squash" will happen!
+        # Now rebase your single, squashed commit onto latest master:
+        git rebase master
+        # Resolve conflicts as required, then use `git add <file>` or `git add -A`, and
+        # `git rebase --continue` to finish it up.
 
 git cherry-pick <commit_hash> = cherry-pick (apply) commit_hash onto your currently-checked-out branch; if there are any conflicts, resolve them manually, use `git add` on the files you manually fixed, and then run `git cherry-pick --continue` to finish the cherry-pick and apply the commit with the original commit message (giving you a chance to edit it first, however, before it is applied)!
 git cherry-pick <commit_start>..<commit_end> = cherry-pick (apply) the range of commits from commit_start (NOT including this commit) to commit_end (including this commit); very useful in place of a rebase onto latest master once you have landed/merged some upstream commits into master and don't want to have to unnecessarily deconflict them via the `git rebase` process now instead; see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
@@ -1072,15 +1515,22 @@ git rev-list HEAD --max-count=10 = list only the last 10 commits in reverse-chro
 
 == ==
 
-git merge-base branch1 branch2 = find the common ancestor between branch1 and branch2; see: https://stackoverflow.com/questions/1549146/git-find-the-most-recent-common-ancestor-of-two-branches/1549155#1549155
+git merge-base branch1 branch2
+    find the common ancestor between branch1 and branch2; see: https://stackoverflow.com/questions/1549146/git-find-the-most-recent-common-ancestor-of-two-branches/1549155#1549155
+git checkout branch1 && git merge -X theirs branch2
+    merge branch2 into branch1, ACCEPTING ALL OF branch2's CHANGES IN THE EVENT OF ANY MERGE CONFLICTS! The `-X theirs` flag says to always accept the changes from the branch we are *not* on, in the event of conflicts! This can be very useful to run if you first run `git merge branch2` alone and see you have like 10 to 20+ files with conflicts, for ALL (100%) OF WHICH YOU NEED TO KEEP THE CHANGES FROM branch2 and NOT from branch1! You can then cancel the merge with `git merge --abort` and go back and run `git merge -X theirs branch2` to just accept all of their changes.
+    See: 1) https://stackoverflow.com/questions/50991701/merging-two-branches-how-do-i-accept-one-branch-for-all-conflicts/50994582#50994582.
+    *****2) My work-around described in my question here!: https://stackoverflow.com/questions/63623581/how-do-i-accept-git-merge-conflicts-from-their-branch-for-only-a-certain-direc
+git merge -X theirs <branch_or_commit>
+    merge <branch_or_commit> into the currently-checked-out branch. In the event of conflict, accept ALL changes from the <branch_or_commit>, NOT from your currently-checked-out branch (HEAD). See just above for details and links.
 
 Assuming you just did this to rebase your feature branch onto latest master:
     git checkout master
     git pull origin master
     git checkout my_branch
     git rebase master  # or `git rebase -i master` to do it interactively
-THEN HERE'S HOW TO COMPARE A JUST-REBASED BRANCH (`my_branch`) TO ITS OLD BACKUP (`my_brank_BAK`) FROM BEFORE REBASING (or rebasing + cherry-picking):  
-[keywords: post-rebase compare, after-rebase compare, after rebase compare, compare files after rebase]  
+THEN HERE'S HOW TO COMPARE A JUST-REBASED BRANCH (`my_branch`) TO ITS OLD BACKUP (`my_brank_BAK`) FROM BEFORE REBASING (or rebasing + cherry-picking):
+[keywords: post-rebase compare, after-rebase compare, after rebase compare, compare files after rebase]
 (Assuming you're still on the newly-rebased branch `my_branch`):
     git difftool my_branch_BAK $(git diff --name-only $(git merge-base my_branch_BAK master) my_branch_BAK) = description: the inner-most $() finds the merge-base between the backup branch and the old master, and the outer $() finds the *list of filenames* which changed from that merge-base to the backup branch. This way, we end up `difftool`ing between the backup branch and the rebased branch, ONLY LOOKING AT THE FILES WE KNOW WE HAD PREVIOUSLY CHANGED!
   Better (easier to read):
@@ -1098,24 +1548,34 @@ git commit --date "Wed Jan 01 23:00:00 2020 -0700"
 
 git push origin my_local_branchname:my_remote_branchname = push my_local_branchname to origin/my_remote_branchname; normally `git push`ing only allows pushing to a remote branch of the *same* branch name, so this is the work-around! See: https://stackoverflow.com/questions/13897717/push-commits-to-another-branch/13897766#13897766.
 
-== To *locally* view, review, and compare changes from a GitHub PR, in the (fantastic) "meld" file comparison tool: ==  
-[keywords: github review PR, github local review in meld, local github review in meld, github review locally, locally review github PR, local github PR review in meld, github PR review, PR review in github, github meld pr, github pr review in meld, meld github pr review]  
-Note: despite being able to locally view the changes, you'll still have to use the GitHub interface for all comments and things in the review process. 
+== To *locally* view, review, and compare changes from a GitHub PR, in the (fantastic) "meld" file comparison tool: ==
+[keywords: github review PR, github local review in meld, local github review in meld, github review locally, locally review github PR, local github PR review in meld, github PR review, PR review in github, github meld pr, github pr review in meld, meld github pr review]
+Note: despite being able to locally view the changes, you'll still have to use the GitHub interface for all comments and things in the review process.
 
 A) *Locally* look at changes in meld from a GitHub PR:  <========= VERY USEFUL FOR REVIEWING GITHUB PRs! ===========
 1. Set up `meld` as your `git difftool`: https://stackoverflow.com/questions/14821358/git-mergetool-with-meld-on-windows/48979939#48979939
 2. See the changes in meld as your `git difftool`:
-    # 1) 
+    # 1)
     git fetch --all
     # OR, if on a HUGE repo with thousands of branches, `git fetch --all` can take a long time (1 to 2+ minutes), so instead just fetch the 2 branches you need to check out: 1) the remote branch of interest from the GitHub PR, and 2) the latest remote master
     git fetch origin branch_from_github_PR master
     # 2) Then check out this remote GitHub branch locally (ie: check out your locally-stored remote-tracking branch [of this branch] which just got updated by the `fit fetch` above!)
     git checkout branch_from_github_PR
-    # 3) This allows you to see all changes introduced by this feature branch, as compared to the 
+    # 3) This allows you to see all changes introduced by this feature branch, as compared to the
     # original origin/master the author last rebased against or merged into their feature branch!
-    git difftool $(git merge-base origin/master HEAD)   <========= VERY USEFUL FOR REVIEWING GITHUB PRs *in meld*! =========== 
+    git difftool $(git merge-base origin/master HEAD)   <========= VERY USEFUL FOR REVIEWING GITHUB PRs *in meld*! ===========
     # OR: more explicitly stated, and required to be this way in case the GitHub PR is trying to merge into a different base:
-    MERGE_INTO=origin/master && git difftool $(git merge-base $MERGE_INTO HEAD)   <========= VERY USEFUL FOR REVIEWING GITHUB PRs *in meld*! =========== 
+    MERGE_INTO=origin/master && git difftool $(git merge-base $MERGE_INTO HEAD)   <========= VERY USEFUL FOR REVIEWING GITHUB PRs *in meld*! ===========
+
+    # OR <========= EASIEST! ===========
+    # [WORKS!]
+    git difftool origin/master...HEAD   # <============== NOTICE THE 3-DOT SYNTAX! ==============
+        SEE HERE: https://stackoverflow.com/questions/7251477/what-are-the-differences-between-double-dot-and-triple-dot-in-git-dif/7252067#7252067
+    git difftool origin/master...       # <======== BEST & SHORTEST! =======
+        Also works! This is the same as above!
+    git difftool $(git merge-base origin/master HEAD) HEAD
+        (The longer and more-explicit version). EXACT SAME THING AS ABOVE! So, use the git 3-dot (...) syntax above instead!
+
 - Optionally, see the *names of files changed* with this:
     git difftool --name-only $(git merge-base origin/master HEAD)
 - And the *number of files changed* with this:
@@ -1124,20 +1584,20 @@ A) *Locally* look at changes in meld from a GitHub PR:  <========= VERY USEFUL F
     git cherry $(git merge-base origin/master HEAD) HEAD
 - And the *commit hashes PLUS commit message subject lines* for all commits that created the feature branch, add `-v`:
     git cherry -v $(git merge-base origin/master HEAD) HEAD
-- Why do the `git merge-base` part of the above? Because if you don't, then the `origin/master` that they recently merged into their PR to fix merge conflicts may NOT be the same `origin/master` you just pulled (yours is *newer*). If your `origin/master` you just pulled contains a bunch of newly-landed PRs from other people working simultaneously, for instance, then doing `git difftool master` alone, or `git difftool origin/master`, will be IN THE FUTURE, and you'll be `git diff`ing against FUTURE CHANGES that the PR in question doesn't even know about! Therefore, instead of seeing the true 5 or 10 files changed or whatever, you could see hundreds or even thousands of files changed from these future commits which occurred AFTER the PR requester last merged origin/master into their feature branch. 
--- To verify this and get more insight into it, you can manually `git merge origin/master` into their feature branch on your local machine, and then `git difftool origin/master` will work correctly, and so long as you did a `git merge-base origin/master branch_from_github_PR` BEFORE merging the latest origin/master into their feature branch (and copied and saved the output hash for your future reference), `git lg` will allow you to track back to that merge-base (manually search for it in `git lg` with the forward slash tool (/)), and you'll be able to see what's going on in all of the forks and splits and how far into the FUTURE `git difftool origin/master` was looking! 
+- Why do the `git merge-base` part of the above? Because if you don't, then the `origin/master` that they recently merged into their PR to fix merge conflicts may NOT be the same `origin/master` you just pulled (yours is *newer*). If your `origin/master` you just pulled contains a bunch of newly-landed PRs from other people working simultaneously, for instance, then doing `git difftool master` alone, or `git difftool origin/master`, will be IN THE FUTURE, and you'll be `git diff`ing against FUTURE CHANGES that the PR in question doesn't even know about! Therefore, instead of seeing the true 5 or 10 files changed or whatever, you could see hundreds or even thousands of files changed from these future commits which occurred AFTER the PR requester last merged origin/master into their feature branch.
+-- To verify this and get more insight into it, you can manually `git merge origin/master` into their feature branch on your local machine, and then `git difftool origin/master` will work correctly, and so long as you did a `git merge-base origin/master branch_from_github_PR` BEFORE merging the latest origin/master into their feature branch (and copied and saved the output hash for your future reference), `git lg` will allow you to track back to that merge-base (manually search for it in `git lg` with the forward slash tool (/)), and you'll be able to see what's going on in all of the forks and splits and how far into the FUTURE `git difftool origin/master` was looking!
 -- So, to just avoid all this hassle in the first place, just use the `git difftool $(git merge-base origin/master HEAD)` command every time instead!
 
 B) You may also do the comparison withOUT checking out the branch from the PR as follows:
-Note: this has the benefit of allowing you to do the comparison withOUT checking out the branch first! This means you can keep open whatever work you currently had open. The downside, of course, is that you can't `git grep`, `grep`, or otherwise search the code base in the modified state, nor use your IDE or editor to explore the changes. Therefore, I highly recommend just doing option A above instead! 
+Note: this has the benefit of allowing you to do the comparison withOUT checking out the branch first! This means you can keep open whatever work you currently had open. The downside, of course, is that you can't `git grep`, `grep`, or otherwise search the code base in the modified state, nor use your IDE or editor to explore the changes. Therefore, I highly recommend just doing option A above instead!
     git fetch origin/branch_from_github_PR  # update your locally-stored remote-tracking branch to origin/branch_from_github_PR
     git difftool $(git merge-base origin/master origin/branch_from_github_PR)
 
-== To move a chunk of commits to a new branch after a merge as though they were squashed & then cherry-picked instead: == 
+== To move a chunk of commits to a new branch after a merge as though they were squashed & then cherry-picked instead: ==
 See the section titled "How to use a patch file as a much easier replacement for squashing", here: https://stackoverflow.com/questions/7566416/how-to-see-which-commits-in-one-branch-arent-in-the-other/60731900#60731900
 
-=== In short: how to use patch files: ===  
-[keywords: git patch files, git patch-files, using git patch files, patching commits, moving commits from branch to branch en-masse]  
+=== In short: how to use patch files: ===
+[keywords: git patch files, git patch-files, using git patch files, patching commits, moving commits from branch to branch en-masse]
 (Copy/pasted from my answer here: https://stackoverflow.com/questions/7566416/how-to-see-which-commits-in-one-branch-arent-in-the-other/60731900#60731900, and then edited)
 
     ## How to use a patch file as a much easier replacement for squashing:
@@ -1146,7 +1606,7 @@ See the section titled "How to use a patch file as a much easier replacement for
 
         git checkout feature_branch
         # ensure I have the latest changes from master merged into feature_branch
-        git merge master 
+        git merge master
         # Obtain a patch file, which is the equivalent of a squash of my 30 commits into 1 commit:
         git diff master..feature_branch > mypatch.patch
         git checkout master
@@ -1163,13 +1623,13 @@ See the section titled "How to use a patch file as a much easier replacement for
 
     Alternatively, just commit the whole patch/chunk as one commit and be done if your goal is simply to apply all of these changes to this new branch!
 
-== To compare file changes after a major rebase or rebase + cherry-pick: ==  
+== To compare file changes after a major rebase or rebase + cherry-pick: ==
 0. Back up your branch and do the rebase onto latest master (this is overly-simplified, but makes the general point):
     git branch mybranch_bak     # make a backup copy of mybranch called mybranch_bak *before* doing the rebase, just in case you mess up the rebase!
     git rebase -i master        # rebase mybranch onto latest master
 1. Figure out which files mybranch_bak changed:
     MERGE_BASE=$(git merge-base master mybranch_bak) && git diff --name-only $MERGE_BASE..mybranch_bak > file_list.txt
-2. Now look at any changes, ***in just these files**, between your rebased branch and your backed-up branch, to see how your rebase you just did affected these files you previously had worked in and changed: 
+2. Now look at any changes, ***in just these files**, between your rebased branch and your backed-up branch, to see how your rebase you just did affected these files you previously had worked in and changed:
     git checkout mybranch       # Ensure you are in your branch you just rebased
     git difftool branch_bak $(cat file_list.txt)    # Look at the files of interest to see how the rebase affected them; ensure no errors exist or were introduced in the rebase!
 [THIS SINGLE-LINE CMD IS BROKEN! JUST USE THE 2-STEP CMD SEQUENCE ABOVE FOR NOW INTEAD.] OR, do it all in one single command!
@@ -1180,21 +1640,21 @@ See the section titled "How to use a patch file as a much easier replacement for
 Source: https://stackoverflow.com/questions/28192623/create-patch-or-diff-file-from-git-repository-and-apply-it-to-another-different/28193089#28193089
 git diff tag1..tag2 > mypatch.patch = produce a patch file with the differences from tag1 to tag2
 git apply mypatch.patch = apply all the changes detailed in mypatch.patch
-git add -A && git commit = add and commit the changes just applied via the patch command above 
+git add -A && git commit = add and commit the changes just applied via the patch command above
 SEE ALSO MY ANSWER HERE ABOUT OBTAINING A PATCH FILE WHICH IS THE EQUIVALENT OF A BIG SQUASH AFTER A MERGE!
-  https://stackoverflow.com/questions/7566416/how-to-see-which-commits-in-one-branch-arent-in-the-other/60731900#60731900 
+  https://stackoverflow.com/questions/7566416/how-to-see-which-commits-in-one-branch-arent-in-the-other/60731900#60731900
 BREAKING UP A BIG DIFF! ^^ See the link to my answer just above!
 
-git branch --edit-description = edit a description of your branch stored in your project's local ".git/config" file; see: https://stackoverflow.com/questions/2108405/branch-descriptions-in-git/8858853#8858853 
+git branch --edit-description = edit a description of your branch stored in your project's local ".git/config" file; see: https://stackoverflow.com/questions/2108405/branch-descriptions-in-git/8858853#8858853
 See also: https://github.com/bahmutov/git-branches
     git branch --edit-description
     git config branch.master.description "description text"  <=======
     git config branch.master.description
 And: https://glebbahmutov.com/blog/git-branches-with-descriptions/#disqus_thread
 
-git clean -fd = WARNING WARNING WARNING THIS IS *DESTRUCTIVE*!!! REMOVE ALL UNTRACKED FILES AND DIRECTORIES; see: https://stackoverflow.com/questions/61212/how-to-remove-local-untracked-files-from-the-current-git-working-tree/64966#64966 
+git clean -fd = WARNING WARNING WARNING THIS IS *DESTRUCTIVE*!!! REMOVE ALL UNTRACKED FILES AND DIRECTORIES; see: https://stackoverflow.com/questions/61212/how-to-remove-local-untracked-files-from-the-current-git-working-tree/64966#64966
 
-== to delete a branch: == 
+== to delete a branch: ==
 
 There are actually **3 different branches to delete!**. Read more here: https://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-locally-and-remotely/23961231#23961231
 1. Deleting a **local branch**:
@@ -1212,7 +1672,7 @@ There are actually **3 different branches to delete!**. Read more here: https://
     git fetch --prune <remote> # Delete multiple obsolete remote-tracking branches; ie: "Before fetching, remove any remote-tracking references that no longer exist on the remote."--see `man git fetch` then search for "prune"
     git fetch -p <remote>      # Shorter version of the above
 
-== other: == 
+== other: ==
 
 git rev-parse HEAD = obtain the git hash for HEAD; see: https://stackoverflow.com/questions/949314/how-to-retrieve-the-hash-for-the-current-commit-in-git/949391#949391
 git rev-parse HEAD~4 = obtain the git hash 4 commits prior to HEAD; this is REALLY USEFUL, for instance, when trying to figure out which commit is N commits back when there have been multiple merges and it's confusing which commit was on which fork of those branches when looking at just `git log`. `git lg`, therefore, becomes much more important and useful as well, as it graphically shows these forks, branches, and merges in tree form!
@@ -1221,15 +1681,15 @@ git checkout -- my_file.txt = [WARNING: DESTRUCTIVE OF LOCAL COPY!] check out my
 
 git diff --name-only <commit_hash1>..<commit_hash2> | wc -l = see how many files were changed between commit_hash1 and commit_hash2
 
-== Changing commit history author info (name and email address): == 
+== Changing commit history author info (name and email address): ==
 See: https://help.github.com/en/github/using-git/changing-author-info
 
-In case you made a mistake and had your name and/or email wrong while pushing commits, there's a way to go back and rewrite the history of your entire repo, fixing the author info. 
+In case you made a mistake and had your name and/or email wrong while pushing commits, there's a way to go back and rewrite the history of your entire repo, fixing the author info.
 CAUTION: this rewrites the whole history of your repo, meaning ALL (I believe) commit hashes IN ALL BRANCHES IN THE ENTIRE REPO will be changed when done, which means NO common merge-base will exist with any prior, unmerged branches or commits, and anyone who has forked your repo will no longer be able to merge into it without conflicts until they do a *hard reset* to reset their repo back on top of your changed repo, like this:
 
 - Perform a hard reset of your local `master` branch onto the latest `upstream/master` branch:
 
-    git fetch --all 
+    git fetch --all
     git checkout master
     # reset their local `master` branch onto your latest, rewritten, upstream master branch (as
     # stored locally on their PC as remote-tracking-branch `upstream/master`)
@@ -1282,9 +1742,9 @@ So, here's how to rewrite the history. See GitHub's instructions here: https://h
 8. [GS-added] Now update your local ".git/config" file in this repo, OR your user-level "~/.gitconfig" file in your user home directory, ***to ensure your new name and email are correct SO THAT ALL FUTURE COMMITS YOU MAKE in this repo will have your new, correct name and email as well!***
 
     # assuming you're in your repo of interest, run this to open the editor and edit this repo's
-    # git config file (alternatively, edit your user-level git config file with 
+    # git config file (alternatively, edit your user-level git config file with
     # `gedit ~/.gitconfig`)
-    gedit .git/config  
+    gedit .git/config
 
   Then, ensure the following is somewhere in the file. If it isn't, add it to the bottom!
 
@@ -1294,12 +1754,12 @@ So, here's how to rewrite the history. See GitHub's instructions here: https://h
 
 
 ====================================================================================================
-= github: = 
+= github: =
 ====================================================================================================
 
 - This is mostly to describe things like doing searches on GitHub. For `git` commands related to GitHub, see the "= git: =" section above instead.
 
-== GitHub search: == 
+== GitHub search: ==
 1. See my longer answer and "GitHub search quick-reference cheat sheet" here: https://stackoverflow.com/questions/29136057/can-i-search-github-labels-with-logical-operator-or/61618255#61618255
 1. See my shorter answer here. This is a summary of what to expect when using the GitHub global search bar versus the GitHub Pull Request search bar: https://webapps.stackexchange.com/questions/57933/how-to-search-with-logic-operators-on-github/142071#142071
 
@@ -1309,13 +1769,13 @@ The following content is my own content that I wrote, originally copy/pasted fro
 Reminder: [read here](https://webapps.stackexchange.com/questions/57933/how-to-search-with-logic-operators-on-github/142071#142071) for a quick refresher/summary of what to expect when using the GitHub global search bar versus the GitHub Pull Request search bar.
 
 ## DEFAULT GITHUB PULL REQUEST (PR) SEARCHES:
-1. All open PRs created by me: 
-    1. https://github.com --> click "Pull requests" at the *very top*. 
+1. All open PRs created by me:
+    1. https://github.com --> click "Pull requests" at the *very top*.
     1. Direct link: https://github.com/pulls
-1. All open PRs assigned to me: 
+1. All open PRs assigned to me:
     1. https://github.com --> "Pull requests" --> "Assigned".
     1. Direct link: https://github.com/pulls/assigned
-1. All open PRs which mention me in a comment (via @my-username): 
+1. All open PRs which mention me in a comment (via @my-username):
     1. https://github.com --> "Pull requests" --> "Mentioned".
     1. Direct link: https://github.com/pulls/mentioned
 1. All open PRs for which my review is requested:
@@ -1328,14 +1788,14 @@ Reminder: [read here](https://webapps.stackexchange.com/questions/57933/how-to-s
 Sample Chrome bookmark to create to one of these URLs: "PRS BY AUTHOR--Username 1"
 -----------------------------------------
     1. Using the Pull request search bar:
-        1. https://github.com --> click "Pull requests" at the *very top*. 
+        1. https://github.com --> click "Pull requests" at the *very top*.
         1. Direct link: https://github.com/pulls
         1. Now use the search bar at the top-center/top-right.
         1. _Note that this search bar is limited to only one author at a time:_
 
                 is:open is:pr archived:false author:username-1
-                is:open is:pr archived:false author:username-2 
-                is:open is:pr archived:false author:username-3 
+                is:open is:pr archived:false author:username-2
+                is:open is:pr archived:false author:username-3
                 is:open is:pr archived:false author:username-4
 
         1. Here is a sample URL for the first of the 4 searches just above: https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+author%3Ausername-1
@@ -1354,7 +1814,7 @@ Sample Chrome bookmark to create to one of these URLs: "PRS BY AUTHOR--Username 
 Sample Chrome bookmark to create to one of these URLs: "REVIEW REQUESTED BY--Username 1"
 -----------------------------------------
     1. Using the Pull request search bar:
-        - Note that this search bar is limited to only one author at a time: 
+        - Note that this search bar is limited to only one author at a time:
 
                 is:open is:pr archived:false review-requested:my-username author:username-1
                 is:open is:pr archived:false review-requested:my-username author:username-2
@@ -1374,14 +1834,14 @@ Sample Chrome bookmark to create to one of these URLs: "REVIEW REQUESTED BY--Use
 
 
 ====================================================================================================
-= ssh: = 
+= ssh: =
 ====================================================================================================
 [incl: sshfs, ssh, putty, etc.]
 
-== ssh keys: == 
+== ssh keys: ==
 - including for use with GitHub
 
-Key setup: see: 
+Key setup: see:
 1. https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/connecting-to-github-with-ssh
 1. Generating a key: https://help.github.com/en/enterprise/2.20/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 
@@ -1425,14 +1885,14 @@ sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 username@server_
 
 
 ====================================================================================================
-= grep: = 
+= grep: =
 ====================================================================================================
 
 *****See my own answer here, for instance, for `grep` & `git grep` examples: https://stackoverflow.com/questions/60843047/locating-a-function-in-a-git-repository/60843055#60843055
 
-time git grep -E -n "\bmyFuncName\b" = do a *whole word search* (hence the \b surrounding the search string) for "myFuncName", displaying li'n'e 'n'umbers (`-n`) too 
+time git grep -E -n "\bmyFuncName\b" = do a *whole word search* (hence the \b surrounding the search string) for "myFuncName", displaying li'n'e 'n'umbers (`-n`) too
 
-== Exlude a word: == 
+== Exlude a word: ==
 Use the `-v`, or `--invert-match` option! See:
 1. https://stackoverflow.com/questions/4538253/how-can-i-exclude-one-word-with-grep/4538335#4538335
 1. https://stackoverflow.com/questions/10411616/grep-regex-not-containing-string/10411661#10411661
@@ -1453,7 +1913,7 @@ find -type f | grep -v \.xml | xargs grep --color=always my_regex_search = find 
 find some/path/ -maxdepth 1 -type d | grep "_messages$" = find only 'd'irectories (`-type d`) in some/path/, only 1 layer deep (`-maxdepth 1`), which have names that end in (`$` indicates a line end) "_messages"
 
 ====================================================================================================
-= ripgrep: = 
+= ripgrep: =
 ====================================================================================================
 (better/faster than `grep`, `git grep`, etc.)
 
@@ -1465,7 +1925,7 @@ References:
 1. https://mariusschulz.com/blog/fast-searching-with-ripgrep
 
 rg 'regex_search' = ripgrep search for pattern 'regex_search'
-rg -L 'regex_search' = ripgrep search for pattern 'regex_search', FOLLOWING SYMBOLIC 'L'INKS [symbolic links] while traversing directories! <=========== VERY USEFUL! ========== 
+rg -L 'regex_search' = ripgrep search for pattern 'regex_search', FOLLOWING SYMBOLIC 'L'INKS [symbolic links] while traversing directories! <=========== VERY USEFUL! ==========
 rg 'regex_search' -g '*.h' = search for pattern 'regex_search' while searching ONLY in files/paths which match Linux/Unix file glob pattern '*.h'. Source: from the creater of ripgrep himself! https://unix.stackexchange.com/questions/503161/ripgrep-path-pattern/503170#503170 <========== ALSO VERY USEFUL ==========
 
 == Comparison of `grep` to `rg` (ripgrep): ==
@@ -1475,7 +1935,7 @@ rg -L regex_search some/path/to/search/ = exact same as above, except using ripg
 
 
 ====================================================================================================
-= Jinja2: = 
+= Jinja2: =
 ====================================================================================================
 
 - a template-based automatic code/file generator (think string formatter/replacer for an entire text file).
@@ -1488,7 +1948,71 @@ Main Jinja2 References:
 
 
 ====================================================================================================
-= Linux (General): = 
+= Binutils & other developer tools: =
+====================================================================================================
+
+objdump, ld, nm, size, strings, etc.
+
+References:
+1. https://www.gnu.org/software/binutils/
+2. [my own Q!] [How do I find out at compile time how much of an STM32's Flash memory and dynamic memory (SRAM) is used up?](https://electronics.stackexchange.com/questions/363931/how-do-i-find-out-at-compile-time-how-much-of-an-stm32s-flash-memory-and-dynami)
+3. ***** [EXCELLENT INFO! An "object file" IS an "executable"! This also has definitions for "VMA" and "LMA"] https://sourceware.org/binutils/docs/ld/Basic-Script-Concepts.html#Basic-Script-Concepts
+1. MY DETAILED ANSWERS HERE!:
+    1. [on Stack Overflow](https://stackoverflow.com/questions/64073080/convert-binutils-size-output-from-sysv-format-size-format-sysv-my-execut/64080798#64080798) and here:
+    1. [on Electronics Stack Exchange](https://electronics.stackexchange.com/questions/363931/how-do-i-find-out-at-compile-time-how-much-of-an-stm32s-flash-memory-and-dynami/523439#523439).
+
+nm <objfiles>
+    "List symbols from object files" (see `man nm`). GS note: "object files" simply means executables, such as `a.out`! See here: https://sourceware.org/binutils/docs/ld/Basic-Script-Concepts.html#Basic-Script-Concepts.
+objdump -t <objfiles>
+    Show symbols in an object file (very similar to the `nm` command just above!). See reference 3 above!
+objdump -h <objfiles>
+    Show output sections in an object file (executable). See reference 3 above! See also the `size --format=sysv /bin/ls` command below.
+size -h
+    See help menu for `size` cmd. See also: `man size`.
+size <objfiles>
+    "Lists the section sizes of an object or archive file [ie: an executable output file from building with gcc]." (See link 1 above, and also my Q and the Ans. at link 2 above). See also `man size`. If no object files are specified, "the file a.out will be used".
+size a.out
+    List size info. for the "a.out" executable object file. (Note: this [a.out] is the default executable output file name which gcc produces if no other name is specified to gcc via the `-o executable_name` option).
+size /bin/ls
+    Show (berkeley-formatted [short info]) size info. on the `ls` command.
+    Sample output:
+            $ size /bin/ls
+               text    data     bss     dec     hex filename
+             124042    4728    4832  133602   209e2 /bin/ls
+    **Note:** `text` is program space, `data` is non-zero-initialized (ie: initialized with something OTHER than zero) static or global variables, `bss` is zero-initialized (or uninitialized) static or global variables, and `dec` and `hex` are both the sums of `text + data + bss`, in decimal and hex format, respectively.
+    See here for where I got a lot of my information below: https://electronics.stackexchange.com/questions/363931/how-do-i-find-out-at-compile-time-how-much-of-an-stm32s-flash-memory-and-dynami/363932#363932.
+      FOR A MICROCONTROLLER:
+        1. Here's the breakdown for what takes up Flash memory vs RAM:
+            1. text takes up flash memory.
+            2. data takes up both flash memory AND RAM, since the values must be stored in flash to be copied into RAM during startup.
+            3. bss takes up RAM only, since the instructions in flash for bss memory just needs to store how many variables and what sizes need to be allocated in RAM, and whether to zero-initialize them or not, but the instructions for bss memory do NOT need to store any actual values for these variables.
+            (4.) GS note: there's also a linker script `.rodata` section, which is for "read-only data". This is **constant static or global variables**, and on STM32 mcus, is automatically placed into flash memory and therefore takes up flash only, since these variables are constant and do not need to be in RAM to be written to.
+        1. "RAM used by static or global variables" (as reported by the Arduino IDE, for instance) = data + bss.
+            1. So, this means that "RAM remaining for local variables" (ie: the **stack**) and for dynamic memory allocation (the **heap**) = RAM_total - "RAM used by static or global variables" = RAM_total - (data + bss).
+        1. Program space (flash memory) used (as reported by the Arduino IDE, for instance) = text + data.
+        1. I have to assume that since ".rodata" is NOT shown by this default `size` command, but IS shown by the `size --format=berkeley` version of the command below, then ".rodata" must already be included in the "text" section shown above, but I need to do some research to be sure, and to see how to go from the "sysv" format to the default "berkely" format!
+            1. UPDATE: THIS IS CORRECT! `.rodata` is marked as `READONLY` in the `objdump -h <objfile>` output section output, meaning it goes into the `text` section. You can also tell this from the LMA and VMA memory addresses in that output.
+            1. ===> SEE MY DETAILED ANSWERS HERE!: <===
+                1. [on Stack Overflow](https://stackoverflow.com/questions/64073080/convert-binutils-size-output-from-sysv-format-size-format-sysv-my-execut/64080798#64080798) and here:
+                1. [on Electronics Stack Exchange](https://electronics.stackexchange.com/questions/363931/how-do-i-find-out-at-compile-time-how-much-of-an-stm32s-flash-memory-and-dynami/523439#523439).
+size --format=berkeley /bin/ls
+    Same as above, because "berkeley" is the default format.
+size -B /bin/ls
+    Same as above (berkeley format). See `size -h`.
+size --format=sysv /bin/ls
+    Show sysv (much longer and more-detailed) size info. on the `ls` command.
+size -A /bin/ls
+    Same as above (sysv format). See `size -h`.
+size -A --radix=16 /bin/ls
+    Show `size` info in sysv format (`-A`) and in hex (`--radix=16`) number format!
+size -A -x /bin/ls
+    Same as above! Display in hex (`-x`) format. Options include octal (`-o`), decimal (`-d`), or hex (`-x`). See `size -h`.
+objdump -h /bin/ls
+    Show output sections in an object file (executable). Very similar to the above (`size --format=sysv /bin/ls`), except even more-detailed! See: https://sourceware.org/binutils/docs/ld/Basic-Script-Concepts.html#Basic-Script-Concepts.
+
+
+====================================================================================================
+= Linux (General): =
 ====================================================================================================
 [general linux; linux general]
 
@@ -1504,25 +2028,40 @@ Ex:
 
 == Linux terminal options: ==
 gnome-terminal = Ubuntu's default terminal
-tmux = [see "= tmux: = " section in this doc] terminal session manager 
-screen = [GNU screen] terminal session manager 
-terminator = *****a terminal program to EASILY allow 4 terminals (2x2) or even 16 terminals (4x4) all in one single window! Great for running ROS, for instance, since it requires so many stinking terminals open! 
- - See here, **including my comments under the answer!** 
+tmux = [see "= tmux: = " section in this doc] terminal session manager
+screen = [GNU screen] terminal session manager
+terminator = *****a terminal program to EASILY allow 4 terminals (2x2) or even 16 terminals (4x4) all in one single window! Great for running ROS, for instance, since it requires so many stinking terminals open!
+ - See here, **including my comments under the answer!**
    https://askubuntu.com/questions/612131/how-to-display-more-than-1-terminal-simultaneously/612139#612139
  - See also: [eRCaGuy_dotfiles/useful_apps/README.md](useful_apps/README.md)
 
 == ==
 
-whoami = print your username (helps verify you are logged in under the correct user)
-sudo whoami = print your sudo username; it should say "root" since you ran it as `sudo`! This helps verify you have `sudo` access!--ie: that you are a member of the "sudo" group (run `groups` to check), and in the sudoers file (run `sudo visudo`--you should have an entry for your username at the bottom).
-w = "Show who is logged on and what they are doing"; great command to ensure you're the only one remotely logged on to a PC, for instance!
+whoami
+    print your username (helps verify you are logged in under the correct user)
+sudo whoami
+    print your sudo username; it should say "root" since you ran it as `sudo`! This helps verify you have `sudo` access!--ie: that you are a member of the "sudo" group (run `groups` to check), and in the sudoers file (run `sudo visudo`--you should have an entry for your username at the bottom).
+w
+    "Show who is logged on and what they are doing"; great command to ensure you're the only one remotely logged on to a PC, for instance!
 
-df -h = show 'd'isk 'f'ile usage to see how much hard drive/SSD space you have total, used, and remaining
-free -h = look at RAM and swap file/swap partition usage [memory free, ram free, swap free]
-du -h = see file space usage of every item (file? and folder) in your current directory; NB: just look at the very last line to see the total usage of your current directory!
-du -h | tail -n 1 = same as above, except retain ONLY the *last line* so that you can immediately see the total usage of this directory! Sample output:
+
+df -h
+    show 'd'isk 'f'ile usage to see how much hard drive/SSD space you have total, used, and remaining
+free -h
+    look at RAM and swap file/swap partition usage [memory free, ram free, swap free]
+swapon --show
+    show which swap files or partitions are in use; see my own answer here!: https://askubuntu.com/questions/927854/how-do-i-increase-the-size-of-swapfile-without-removing-it-in-the-terminal/1177620#1177620; you can also do:
+cat /proc/meminfo | grep -B 1000 -A 1000 -i swap
+    examine the "/proc/meminfo" file for entries named "swap", such as the "SwapTotal" line; see my own answer linked-to just above!
+du -h
+    see file space usage of every item (file? and folder) in your current directory; NB: just look at the very last line to see the total usage of your current directory!
+du -h | tail -n 1
+    same as above, except retain ONLY the *last line* so that you can immediately see the total usage of this directory! Sample output:
         100G .
-du -h | tail -n 1 | awk '{print $1}' = same as the line just above, except also retain ONLY the *first column* so that you get rid of the extra dot (.) at the end which indicates "current directory". Sample output:
+du -sh
+    same as above! The `-s` says to 's'ummarize, which means to just output the last line! The output is **exactly identical** to what you get with `du -h | tail -n 1`.
+du -h | tail -n 1 | awk '{print $1}'
+    same as the line just above, except also retain ONLY the *first column* so that you get rid of the extra dot (.) at the end which indicates "current directory". Sample output:
         100G
     See here for `awk` usage help which enabled me to retain only the 1st column above: https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
 
@@ -1546,7 +2085,7 @@ cat right_file.txt | diff -u --color=always left_file.txt - = pipe content in fr
 - This allows you to do interesting things, such as show how clang-format changes a file, like this:
 clang-format myfile.cpp | diff -u --color=always myfile.cpp - = run clang-format on myfile.cpp, sending its clang-formatted output to stdout; pipe this formatted output to `diff`, however, showing 3 lines of 'u'nified output, with color on, comparing the original myfile.cpp on the left to the stdinput piped in as the file on the right. Therefore, the left is the original file and the right is the formatted file. Now, you can see the output of what changes WOULD be made withOUT actually making those formatting changes! It's a sort of clang-format "preview" to see what **would** be done without actually doing it! See the == clang-format: == section above for further details.
 
-== == 
+== ==
 
 HASH SUM COMMANDS [hash sums, checksums, cryptography, cryptographic checksums, data integrity checksums]:
 sha256sum somefile.txt
@@ -1559,7 +2098,7 @@ shasum -a 512 somefile.txt = same as `sha512sum somefile.txt`
 strings my_binary_file > temp_strings.txt = extract all ASCII strings from the binary file my_binary_file and store them into the text file temp_strings.txt.
 
 hexdump -C my_file = print all chars of the binary or ASCII file, my_file, in hex+ASCII mode (`-C` means "'C'anonical hex+ASCII display"). Ex:
-    $ hexdump -C temp_strings.txt 
+    $ hexdump -C temp_strings.txt
     00000000  6f 22 6c 69 6e 6b 22 64  68 74 74 70 73 3a 2f 2f  |o"link"dhttps://|
     00000010  77 77 77 2e 72 65 64 64  69 74 2e 63 6f 6d 2f 72  |www.reddit.com/r|
     00000020  2f 41 73 6b 52 65 64 64  69 74 2f 63 6f 6d 6d 65  |/AskReddit/comme|
@@ -1602,7 +2141,7 @@ kill -9 9999 = send KILL signal (#9 in the list above) to Process ID (PID) 9999 
 kill -KILL 9999 = same as above (KILL is #9 in the list above)
 kill -SIGKILL 9999 = exact same as above  <======= VERY COMMON USAGE ========
 kill -l KILL = look up the "KILL" signal in the list above to retrieve that it is signal "9"
-kill -l 9 = look up the number "9" signal in the list above to retrieve that it is signal "KILL" 
+kill -l 9 = look up the number "9" signal in the list above to retrieve that it is signal "KILL"
 kill 9999 8888 = kill both PIDs 9999 and 8888 (can list any number of pids to kill!); the general format is:
 kill pid1 pid2 pid3 ... pidn = send the default signal, SIGTERM (or TERM) to all these processes
 kill 123 543 2341 3453 = "send the default signal, SIGTERM, to all those processes" (see `man kill`); note that SIGTERM can also be written as TERM or 15.
@@ -1612,18 +2151,18 @@ kill -15 123 543 2341 3453      = same as above
 
 [disk usage; disk free space; disk space usage]
 - See: https://www.ubuntupit.com/best-disk-analyzer-tools-for-linux-system/
-sudo baobab = disk usage analyzer GUI (now called simply "Disk Usage Analyzer" in Ubuntu, and it comes with Ubuntu!) 
+sudo baobab = disk usage analyzer GUI (now called simply "Disk Usage Analyzer" in Ubuntu, and it comes with Ubuntu!)
 baobab = same as above, except it can't analyze root directories
 qdirstat = a direct competitor GUI tool to analyze disk usage--comparable to baobab/Disk Usage Analyzer
 ncdu [options] <dir> = an ncurses-based tool to analyze disk usage in directory "dir"; CLI-based; works ***really well*** and it is ***really fast***, and it also works over ssh!
 free -h = show memory and swap total, used, and free space!
-(sudo) swapon --show = show swap partition and swapfile status and sizes 
+(sudo) swapon --show = show swap partition and swapfile status and sizes
 df -h = show disk usage
 du -h my_folder = show folder usage
-How to make a Linux swapfile; see my own answer here! 
+How to make a Linux swapfile; see my own answer here!
 https://stackoverflow.com/questions/55190272/java-lang-outofmemoryerror-when-running-bazel-build/60572662#60572662
 
-less -RFX myfile.txt = open up myfile.txt in the "less" stream viewer/pager, with the following options, which make it act **identically** to how the output from `git diff` acts! Note: I borrowed my explanations here from the bottom of my own "eRCaGuy_dotfiles/useful_scripts/git-diffn.sh" (`git diffn`) script I wrote herein. 
+less -RFX myfile.txt = open up myfile.txt in the "less" stream viewer/pager, with the following options, which make it act **identically** to how the output from `git diff` acts! Note: I borrowed my explanations here from the bottom of my own "eRCaGuy_dotfiles/useful_scripts/git-diffn.sh" (`git diffn`) script I wrote herein.
 -R = interpret ANSI color codes
 -F = quit immediately if the output takes up less than one screen
 -X = do NOT clear the screen when less exits
@@ -1648,10 +2187,19 @@ sudo ifconfig wlan0 up = turn network interface wlan0 ON
 sudo ifconfig INTERFACE_NAME down = turn network interface INTERFACE_NAME off; ex:
 sudo ifconfig wlan0 down = turn network interface wlan0 OFF
 
-iwconfig = 'w'ireless network 'i'nterface configuration tool of some sort (stands for 'i'nterface 'w'ireless perhaps?); see `man iwconfig` and also here for a little more info: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895
-iwconfig = list wireless network interfaces
-iwlist INTERFACE_NAME freq = list the available wireless frequencies of interface INTERFACE_NAME; see: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895; ex:
-iwlist wlan0 freq = list the available wireless frequencies of wireless network interface `wlan0`
+iwconfig
+    'w'ireless network 'i'nterface configuration tool of some sort (stands for 'i'nterface 'w'ireless perhaps?); see `man iwconfig` and also here for a little more info: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895
+iwconfig
+    list wireless network interfaces
+iwlist INTERFACE_NAME freq
+    list the available wireless frequencies of interface INTERFACE_NAME; see: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895; ex:
+iwlist wlan0 freq
+    list the available wireless frequencies of wireless network interface `wlan0`
+iwlist wlan0 scanning | grep -C5 -i '\"my_network_name\"'
+    See all channels and frequencies "my_network_name" is broadcasting on, on both 2.4GHz *and* 5GHz frequencies!
+    - See my comment under this answer here: https://askubuntu.com/questions/202288/how-do-i-require-use-of-the-5-ghz-band-when-connecting-to-a-wireless-n-access-po/261410#261410.
+    - Note that **2.4GHz channels** include `01`, `02`, `03`, etc. through `11`, and **5GHz channels** are just `36`, `40`, `44`, and `48` (this is based on looking at my Orbi mesh router settings).
+    - Also, I first learned this `iwlist` command from here: https://askubuntu.com/questions/183525/how-to-set-wifi-driver-settings-to-prefer-5-ghz-channel-above-2-4-ghz/631329#631329.
 
 ip help = show the options and `OBJECT`s available for the `ip [OPTIONS] <OBJECT>` commands!
 - See also MY ANS HERE! https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
@@ -1665,8 +2213,8 @@ ip a = same as above
 ^^ Note the trend! So long as the command can be figured out and determined to be distinct from all other command possibilities, it is accepted! Therefore, you only need as many characters in the OBJECT as are required to make it distinct from all other OBJECT possibilities for this command!
 
 [virtual interfaces, virtual network interfaces, virtual network devices, virtual devices]
-Learn how to make **virtual network interfaces** here! 
-- Sometimes, you must create a virtual interface to simulate a connected hardware network card with a certain IP address so that software you have which is trying to open up a network socket to that specific device at that specific IP is able to do so, _even if the hardware isn't actually physically present on the PC you are running the software!_ Very useful, for instance, on hardware test platforms or HIL test systems. 
+Learn how to make **virtual network interfaces** here!
+- Sometimes, you must create a virtual interface to simulate a connected hardware network card with a certain IP address so that software you have which is trying to open up a network socket to that specific device at that specific IP is able to do so, _even if the hardware isn't actually physically present on the PC you are running the software!_ Very useful, for instance, on hardware test platforms or HIL test systems.
   - [MY OWN ANS!] https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
   - https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/152334#152334
 
@@ -1674,7 +2222,7 @@ ssh -X -o "ServerAliveInterval 60" my_username@my_hostname_or_IP = ssh into host
 
 hostname = show my hostname; ex: mypcname23-aa
 nslookup some_ip_address = use 'n'ame 's'erver lookup to try to find the hostname of a given IP address
-nslookup some_hostname = the exact reverse of the above: try to find the IP address from a given hostname 
+nslookup some_hostname = the exact reverse of the above: try to find the IP address from a given hostname
 
 curl = some web utility for interaction with websites; need to learn how to use
 wget https://path.to.some.file.to.download = download a file at this URL; shows a nice progress bar and download stats (speed, total size to download, total size downloaded so far, etc.) the entire time!
@@ -1705,6 +2253,7 @@ dmesg = print all messages from the Linux kernel ring buffer, which includes all
 dmesg | tail = just show the last 10 entries from the Linux kernel dmesg ring buffer
 dmesg | tail -n 10 = same as above! (10 is the default `-n` setting for `tail`)
 dmesg | tail -n 30 = show just the last 30 entries from the Linux kernel dmesg ring buffer [very useful to see what USB device you just plugged in or unplugged! It will show the device's USB ID, vendor ID, vendor name, manufacturer, serial number, etc. etc.] <===== EXCELLENT! =====
+sudo dmesg --clear = clear the entire Linux kernel dmesg ring buffer (not recommended necessarily, but it allows you to easily isolate and see just the lines generated by unplugging or plugging in a certain USB device); better, I think, would be to simply look at the timestamps in the `dmesg` output to see what device or event is likely to have generated which lines. See `man dmesg` for details on this command.
 
 lsusb = list ('l'i's't) all USB devices which are plugged in
 
@@ -1714,47 +2263,47 @@ Note: an excellent way to get as much info. as possible about a device you just 
     # 1. Start with the device NOT plugged in, then run:
     ls /dev > ~/temp/dev1.txt
     lsusb > ~/temp/lsusb1.txt
-    
+
     # 2. plug it in now, then run:
     ls /dev > ~/temp/dev2.txt
     lsusb > ~/temp/lsusb2.txt
     # A. Compare the before and after files with `meld`:
     meld ~/temp/dev1.txt ~/temp/dev2.txt      # compare the before and after of what's in "/dev"
     meld ~/temp/lsusb1.txt ~/temp/lsusb2.txt  # compare the before and after of the `lsusb` output
-    # OR B. compare the files above using `diff`, but with the same look (incl. coloring, 
+    # OR B. compare the files above using `diff`, but with the same look (incl. coloring,
     #   surrounding line context, and line number info.) as `git diff`, as shown below.
-    #   Note: for more context still, use `--unified=10` instead of just `-u` below. See `man diff` 
-    #   for details. 
-    diff -u --color=always ~/temp/dev1.txt ~/temp/dev2.txt 
+    #   Note: for more context still, use `--unified=10` instead of just `-u` below. See `man diff`
+    #   for details.
+    diff -u --color=always ~/temp/dev1.txt ~/temp/dev2.txt
     diff -u --color=always ~/temp/lsusb1.txt ~/temp/lsusb2.txt
     # look at the recent Linux kernel ring buffer messages to see what was just plugged in
-    dmesg | tail -n 30  
-    
-    # 3. Unplug it again then run `dmesg` one more time to see the messages of what was 
+    dmesg | tail -n 30
+
+    # 3. Unplug it again then run `dmesg` one more time to see the messages of what was
     #    just UNplugged!
     dmesg | tail -n 30
 
 
-== `head` and `tail`: == 
+== `head` and `tail`: ==
 - Use `head` to output the first part of files
 - Use `tail` to output the last part of files
 - This works great for piping `grep` output to one of these too!
 
 echo -e "1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \n10" | head -n 3 = output just the FIRST 3 lines:
     $ echo -e "1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \n10" | head -n 3
-    1 
-    2 
-    3 
+    1
+    2
+    3
 echo -e "1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \n10" | tail -n 3 = output just the LAST 3 lines:
-    $ echo -e "1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \n10" | tail -n 3 
-    8 
-    9 
+    $ echo -e "1 \n2 \n3 \n4 \n5 \n6 \n7 \n8 \n9 \n10" | tail -n 3
+    8
+    9
     10
 
 grep -rni --color=always "some search expression" | head -n 50 = output just the FIRST 50 occurrences I find!
 grep -rni --color=always "some search expression" | tail -n 50 = output just the LAST 50 occurrences I find!
 
-== awk: == 
+== awk: ==
 Use `awk` to select only certain columns of textual output--see:
 1. https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
 1. and https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/7315716#7315716
@@ -1767,7 +2316,7 @@ Ex:
 
 For a full `awk` program example, see the "eRCaGuy_dotfiles/useful_scripts/git-diffn.sh" program, which is written almost entirely in awk!
 
-== Limit CPU usage: == 
+== Limit CPU usage: ==
 [throttle cpu usage]
 Limit CPU usage of a process in Linux: https://linoxide.com/linux-how-to/limit-cpu-usage-processes-linux/; ex:
     cpulimit -p 3185 -l 40 = limit Process ID (PID) 3185 to 40% ***of 1 CPU*** max CPU usage; so, for a multi-core machine (ex: 8 cores), to get a total of 40% of all cores you would need to use 0.4*(100/core * 8 cores) = 0.4*800 = 320, like this:
@@ -1803,7 +2352,7 @@ References:
 [find and replace, text replacement in files]
 
 1)
-which <some_executable> = show the path to the executable in your path; ex: 
+which <some_executable> = show the path to the executable in your path; ex:
     $ which locate
     /usr/bin/locate
 2)
@@ -1843,7 +2392,7 @@ find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pat
 EXAMPLE:
 find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
 
-Ripgrep can find and replace too! 
+Ripgrep can find and replace too!
 [rg, ripgrep, rip-grep]
 See "Andrew Gallant's Blog", the post titled [ripgrep is faster than {grep, ag, git grep, ucg, pt, sift}](https://blog.burntsushi.net/ripgrep/). Ex:
 rg '([A-Z][a-z]+)\s+([A-Z][a-z]+)' --replace '$2, $1' = find all strings which match the pattern in single quotes (''), and replace them with the matching groups in the format '$2, $1', where `$2` is the 2nd matching group (2nd set of parenthesis in the main regular expression), and `$1` is the 1st matching group (1st set of parenthesis in the main regular expression).
@@ -1851,7 +2400,7 @@ rg '([A-Z][a-z]+)\s+([A-Z][a-z]+)' --replace '$2, $1' = find all strings which m
 eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh: usage:
 find_and_replace <path> <filename_regex> <string_regex> <replacement_str> [-w] = find and replace `string_regex` with `replacement_str` for all filenames which match `filename_regex` in path `path`. See `gs_find_and_replace -h` for help and more examples!
 
-== sed: == 
+== sed: ==
 sed = "'s'tream 'ed'itor for filtering and transforming text" [stream editor]
 See also the `sed -i` examples just above!
 
@@ -1863,7 +2412,7 @@ See also the 4 References for sed just above, underneath "PUTTING IT ALL TOGETHE
 Basic usage:
 sed -E 's/regexp_search/replacement_str/g' my_file.txt = in my_file.txt, do a 'g'lobal 's'tring replacement, replacing all matches of regular expression regexp_search with "replacement_str".
 
-== wc: == 
+== wc: ==
 wc = 'w'ord 'c'ount
 
 find | wc -l = count and return the number of 'l'ines returned by find, which corresponds to the number of files and folders in a directory and its sub-directories.
@@ -1878,20 +2427,20 @@ cat /proc/<process_ID>/sched = show some profiling/scheduler stats for this proc
 ls /proc/<process_ID>/task/ = list the threads in this process!
 ls /proc/*/task = list the threads in all multi-threaded processes!
 
-== == 
+== ==
 
-qpdf --decrypt in.pdf out.pdf = "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups! 
+qpdf --decrypt in.pdf out.pdf = "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups!
 - Once I do this, I like to rename "out.pdf" to "some useful name [`qpdf --decrypt`ed]" so I can remember right in the name itself how I did this!
 
-gpg -c myfile.txt = encrypt myfile.txt with a passphrase (symmetric 'c'ipher); a GUI window will pop up, asking you for a password to encrypt the file; enter a password, then it will ask you again; once you enter the password again it will encrypt the file and create a new file called myfile.txt.gpg. You will need to manually delete the old file. 
+gpg -c myfile.txt = encrypt myfile.txt with a passphrase (symmetric 'c'ipher); a GUI window will pop up, asking you for a password to encrypt the file; enter a password, then it will ask you again; once you enter the password again it will encrypt the file and create a new file called myfile.txt.gpg. You will need to manually delete the old file.
 gpg myfile.txt.gpg = decrypt myfile.txt.gpg back into myfile.txt; it will ask you for the password which was originally used to encrypt it!
 - See here for details and where I learned this! https://www.lifewire.com/encrypt-decrypt-password-protect-files-linux-4582604
 
 
 ====================================================================================================
-= Image and video compression and conversion: = 
+= Image and video compression and conversion: =
 ====================================================================================================
-[keywords: compressing videos, compressing images, compressing pictures, image/picture compression, compress images, compress videos, video conversion, image conversion, picture conversion, converting videos, converting images, converting pictures, convert pictures, convert images, convert videos]
+[keywords: compressing videos, compressing images, compressing pictures, image/picture compression, compress images, compress photos, compressing photos, photo compression, compress videos, video compression, convert videos, converting videos, video conversion, image conversion, picture conversion, converting videos, converting images, converting pictures, convert pictures, convert images, convert videos, shrink pictures, shrink images]
 
 == find large files: ==
 [this is adjacently related to video conversion, as GitHub doesn't allow files > 100 MB in size (see: https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com/59479166#59479166), so you may need to find all files > 100 MB, then convert them down to a smaller size using `ffmpeg` as shown below if they are videos!]
@@ -1951,7 +2500,21 @@ time ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4 = [PRODUCE "LARGE" V
 
 
 ====================================================================================================
-= flowcharts and drawing tools, graphics, emojis, unicode chars & icons, etc.: = 
+= PDFs and PDF Manipulation: =
+====================================================================================================
+[PDFs:, pdf combine, combine pdfs, merge pdfs, make PDFs have searchable text, PDF OCR, PDF Optical Character Recognition, OCR in PDFs, OCR pdfs, etc.]
+
+pdfunite in1.pdf in2.pdf in3.pdf out.pdf
+    Combine multiple PDFs into one! CAUTION: the last pdf argument MUST BE a new pdf name, such as out.pdf, or else you'll be accidentally overwriting an input, ruining it! Source for this cmd: see: https://stackoverflow.com/questions/2507766/merge-convert-multiple-pdf-files-into-one-pdf/11280219#11280219
+
+pdf2searchablepdf <input.pdf | dir_of_imgs> [lang]`
+    [My own project] "If the 1st argument is to an input pdf, then convert input.pdf to input_searchable.pdf using language"lang" for OCR. Otherwise, if the 1st argument is a path to a directory containing a bunch of images, convert the whole directory of images into a single PDF, using language "lang" for OCR!" See: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF.
+pdf2searchablepdf -h
+    Show the help menu for this program!
+
+
+====================================================================================================
+= flowcharts and drawing tools, graphics, emojis, unicode chars & icons, etc.: =
 ====================================================================================================
 
 Every piece of software is benefited by flowcharts, diagrams, and drawings to show how it works and how the data flows. Here are a few popular options:
@@ -1962,19 +2525,19 @@ Every piece of software is benefited by flowcharts, diagrams, and drawings to sh
     1. A bit simplistic, but works
 1. ***LibreOffice Draw
 1. *****+AsciiFlow: http://asciiflow.com/; and on GitHub: https://github.com/lewish/asciiflow2
-    1. Probably my favorite! 
+    1. Probably my favorite!
     1. Super simple, ASCII-text-based drawing tool for easily pasting ASCII flow chart drawings into text files such as readmes or as comments/documentation inside actual code files.
     1. Looks great inside GitHub markdown readmes when pasted as though it was a code snippet!
-    1. For inserting symbols, emojis, specialty icons, etc, as unicode chars, just copy and paste from one of the nice lists shown below: 
+    1. For inserting symbols, emojis, specialty icons, etc, as unicode chars, just copy and paste from one of the nice lists shown below:
 1. *****For other ASCII-based drawing options, see here! https://unix.stackexchange.com/questions/126630/creating-diagrams-in-ascii
 1. Dot (a scripted flow-chart drawing tool) & GraphViz
 
-== Unicode icons/chars/emojis: == 
+== Unicode icons/chars/emojis: ==
 
 1. Graphics available on GitHub, apparently: https://gist.github.com/rxaviers/7360908
     Ex: `:goat:`, `:rooster:`, `:+1:`, etc.
 2. A ton of unicode chars, including with color graphics: https://gist.github.com/endolith/157796
-    Ex: 
+    Ex:
     🎃 Jack-O-Lantern
     🎄 Christmas Tree
     🎅 Father Christmas
@@ -2001,11 +2564,11 @@ Every piece of software is benefited by flowcharts, diagrams, and drawings to sh
 
 
 ====================================================================================================
-= ros: = 
+= ros: =
 ====================================================================================================
-ROS = Robot Operating System  
-https://www.ros.org/  
-For more of my information on ROS, see my ROS folder here: [eRCaGuy_dotfiles/ros](ros).  
+ROS = Robot Operating System
+https://www.ros.org/
+For more of my information on ROS, see my ROS folder here: [eRCaGuy_dotfiles/ros](ros).
 
 References:
 1. https://www.ros.org/
@@ -2029,12 +2592,12 @@ References:
             pip3 install pyrosbag
                 import pyrosbag # in python code
 1. *****rostopic: http://wiki.ros.org/rostopic
-1. *****++ EXCELLENT CHEAT SHEET: 
+1. *****++ EXCELLENT CHEAT SHEET:
     1. Google search for "ros cheat sheet" - https://www.google.com/search?q=ros+cheat+sheet&oq=ros+chea&aqs=chrome.0.69i59j69i57j69i60l3.1626j0j4&sourceid=chrome&ie=UTF-8
-    1. EXCELLENT CHEAT SHEET! - https://w3.cs.jmu.edu/spragunr/CS354_S19/handouts/ROSCheatsheet.pdf 
+    1. EXCELLENT CHEAT SHEET! - https://w3.cs.jmu.edu/spragunr/CS354_S19/handouts/ROSCheatsheet.pdf
 
 == roscore ==
-- See: 
+- See:
     - http://wiki.ros.org/rosbag/Tutorials/Recording%20and%20playing%20back%20data#Recording_data_.28creating_a_bag_file.29
     - http://wiki.ros.org/roscore
 roscore -h = help menu
@@ -2096,16 +2659,16 @@ rostopic list -h = help menu
 rostopic list -v = list full details ('v'erbose mode) about each topic currently being played/published! See: http://wiki.ros.org/rosbag/Tutorials/Recording%20and%20playing%20back%20data#Recording_all_published_topics and the `rostopic list -h` help menu.
 
 == HOW TO READ MESSAGES FROM DESIRED TOPICS IN A BAG FILE ==
-- Let's say I want to see all messages on topic1, topic2, and topic3 in a huge (could be many GB) bag file; how do I read them? 
+- Let's say I want to see all messages on topic1, topic2, and topic3 in a huge (could be many GB) bag file; how do I read them?
 
-OPTION 1: 
+OPTION 1:
 Play them live as quickly as possible, and look at the output in various terminals.
 Pros: runs QUICKLY (~10 sec, for instance, once you get all the terminals set up).
 Cons: requires a bunch of separate terminals and processes and a `roscore` running, and is a bit of a pain to set up.
 
     # 0. In any terminal, ensure you know the topic names *exactly*.
     # A) manually inspect all published topics and how many messages were published to each topic
-    time rosbag info mybag.bag  
+    time rosbag info mybag.bag
     # OR, B) grep for some keywords you're looking for which you know make up the topic names
     time rosbag info mybag.bag | grep -E "(topic1|topic2|topic3)"
 
@@ -2131,7 +2694,7 @@ Cons: requires a bunch of separate terminals and processes and a `roscore` runni
     time rosbag play --immediate mybag.bag --topics /topic1 /topic2 /topic3
 
 OPTION 2 [my preferred approach!]:
-Run a short Python program to output just what you want. 
+Run a short Python program to output just what you want.
 See here for starters: http://wiki.ros.org/rosbag/Cookbook
 Main `rosbag` API info pg. (C++ and Python): http://wiki.ros.org/rosbag/Code%20API
 Python2 `rosbag` Code API documentation: https://docs.ros.org/api/rosbag/html/python/
@@ -2142,12 +2705,12 @@ Cons: this Python implementation runs ~13x slower than the one above, so it migh
 TODO: convert the below Python script to a C++ program using the [C++ rosbag API](http://wiki.ros.org/rosbag/Code%20API#cpp_api).
 
     # 0. Do step 0 from above (OPTION 1) to ensure you know the topic names *exactly*.
-    time rosbag info mybag.bag  
+    time rosbag info mybag.bag
     # OR
     time rosbag info mybag.bag | grep -E "(topic1|topic2|topic3)"
 
     # 1. Run this script to print all messages on the specified topics from this bag file.
-    # This script can be found in the "useful_scripts" folder herein. 
+    # This script can be found in the "useful_scripts" folder herein.
     python2 ros_readbagfile.py <mybagfile.bag> [topic1] [topic2] [topic3] [...]
 
 == C++ Debugging prints in ROS: ==
@@ -2167,9 +2730,9 @@ References (in this order):
 
 C++ example debug/info prints in ROS:
 
-    // Note: this header file automatically includes `#include "rosconsole/macros_generated.h"` at 
+    // Note: this header file automatically includes `#include "rosconsole/macros_generated.h"` at
     // the end
-    #include <ros/console.h> 
+    #include <ros/console.h>
 
     #include <std_msgs/String.h>
     #include <std_msgs/Header.h>
@@ -2188,14 +2751,14 @@ C++ example debug/info prints in ROS:
     // ...etc.
 
     /*
-    See: 
+    See:
     1. http://wiki.ros.org/Verbosity%20Levels
     2. http://wiki.ros.org/roscpp/Overview/Logging
-    3. See also the table under the "Output" section here: 
+    3. See also the table under the "Output" section here:
        http://wiki.ros.org/roscpp/Overview/Logging#Output
 
     The 5 options include:
-    
+
     ROS_DEBUG()
     ROS_INFO() // normally use this one!
     ROS_WARN()
@@ -2213,11 +2776,11 @@ C++ example debug/info prints in ROS:
 
     */
 
-== == 
+== ==
 
 
 ====================================================================================================
-= Scratch Work/Work in Progress (WIP): = 
+= Scratch Work/Work in Progress (WIP): =
 ====================================================================================================
 
 WORK IN PROGRESS (WIP)
