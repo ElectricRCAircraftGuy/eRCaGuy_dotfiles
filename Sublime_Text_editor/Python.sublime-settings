@@ -1,0 +1,12 @@
+{
+	"extensions":
+	[
+		"WORKSPACE",
+		"bazel",
+		"BUILD",
+		"bzl",
+		"msg",
+		"bmr",
+		"saved"
+	]
+}

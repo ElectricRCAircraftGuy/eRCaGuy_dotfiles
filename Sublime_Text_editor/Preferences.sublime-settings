@@ -54,12 +54,13 @@
     "wrap_width": 0,
 
     // Set to true to removing trailing white space on save.
-    // BUT, WATCH OUT! Markdown (*.md) files require 2 spaces at the end of a line where another
-    // line immediately follows it on a new line in order to force the 2nd line to be on a new
-    // line, rather than getting concatenated with the first line. Therefore, though this option
-    // is *good* for most files, it is BAD for markdown files, and can break the formatting
-    // of markdown files!
-    // - See this Issue I opened up here: https://github.com/sublimehq/sublime_text/issues/3563
+    // You should override this setting via Syntax Specific settings for Markdown (*.md) files
+    // for sure, and for text files (*.txt) perhaps. See my GitHub issue and my own solution
+    // here: https://github.com/sublimehq/sublime_text/issues/3563#issuecomment-673741407.
+    //
+    // It should be overridden for Markdown files since they require 2 trailing spaces at the end of
+    // a line where another line immediately follows it on a new line, in order to force the 2nd
+    // line to be on a new line, rather than getting concatenated with the first line.
     "trim_trailing_white_space_on_save": true,
 
     // Set to true to ensure the last line of the file ends in a newline
