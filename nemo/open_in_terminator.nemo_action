@@ -18,18 +18,18 @@
 #    https://askubuntu.com/questions/1066752/how-to-set-nemo-as-the-default-file-manager-in-ubuntu-18-04/1173861#1173861
 # 2. Install terminator
 #           sudo apt install terminator
-# 3. (Recommended) To install this right-click menu item for all users, create a symbolic link to 
+# 3. (Recommended) To install this right-click menu item for all users, create a symbolic link to
 #    it in "/usr/share/nemo/actions":
 #           cd "/path/to/here"
-#           sudo ln -si "${PWD}/open_in_terminator.nemo_action" /usr/share/nemo/actions 
-#  OR (No need to do this if you do the above) To install this right-click menu item for just your 
-#    user, create a symbolic link to it in "/home/$USER/.local/share/nemo/actions"
+#           sudo ln -si "${PWD}/open_in_terminator.nemo_action" /usr/share/nemo/actions
+#  OR (No need to do this if you do the above) To install this right-click menu item for just your
+#    user, create a symbolic link to it in "~/.local/share/nemo/actions"
 #           cd "/path/to/here"
-#           ln -si "${PWD}/open_in_terminator.nemo_action" /home/$USER/.local/share/nemo/actions
-# 4. To get the change to take effect, either: 
-#   A) navigate to the destination folder where you just copied the symbolic link above, and 
-#      press F5 to refresh the screen, OR 
-#   B) (easier) close and re-open nemo. 
+#           ln -si "${PWD}/open_in_terminator.nemo_action" ~/.local/share/nemo/actions
+# 4. To get the change to take effect, either:
+#   A) navigate to the destination folder where you just copied the symbolic link above, and
+#      press F5 to refresh the screen, OR
+#   B) (easier) close and re-open nemo.
 # 5. Done! You will now see this new shortcut option available in your right-click menu!
 
 # Usage:
