@@ -3,6 +3,9 @@
 // Git editor (such as the editor used for commit messages) settings
 // - For Sublime Text Project Format settings help see here: https://www.sublimetext.com/docs/3/projects.html 
 
+// See also my answer here!: 
+// https://stackoverflow.com/questions/2596805/how-do-i-make-git-use-the-editor-of-my-choice-for-commits/48212377#48212377
+
 // INSTRUCTIONS:
 // Edit as desired, then copy entire file to user Home dir: `cp -i .git_editor.sublime-project ~`
 

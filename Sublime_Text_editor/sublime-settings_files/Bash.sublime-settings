@@ -1,0 +1,10 @@
+{
+	"extensions":
+	[
+		".imwheelrc",
+		"desktop",
+		".sync_git_repo",
+		".bazelrc",
+		"nemo_action"
+	]
+}

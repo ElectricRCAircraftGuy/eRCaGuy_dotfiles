@@ -108,3 +108,28 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
     └── *****touchpad_toggle.sh
 
     2 directories, 34 files
+
+# Misc. Install Instructions:
+
+1. Install `speedtest` by Ookla:
+    1. Go here: https://www.speedtest.net/apps/cli --> scroll to the bottom and click "Download for Linux" --> right-click on the correct architecture option from the download menu dropdown list which shows up, and go to "Copy link address". This is the address used in the `wget` line below. Here, I show it for the `x86_64` (64-bit processor) option.
+
+    ```bash
+    # Tested in Ubuntu 18.04
+    mkdir -p ~/Downloads/Install_Files/speedtest--ookla
+    cd ~/Downloads/Install_Files/speedtest--ookla
+    wget https://bintray.com/ookla/download/download_file?file_path=ookla-speedtest-1.0.0-x86_64-linux.tgz
+    mv 'download_file?file_path=ookla-speedtest-1.0.0-x86_64-linux.tgz' ookla-speedtest-1.0.0-x86_64-linux.tgz
+    mkdir -p ookla-speedtest-1.0.0-x86_64-linux
+    tar -xvzf ookla-speedtest-1.0.0-x86_64-linux.tgz --directory=ookla-speedtest-1.0.0-x86_64-linux
+    cd ookla-speedtest-1.0.0-x86_64-linux
+    mkdir -p ~/bin
+    ln -si "$(pwd)/speedtest" ~/bin/speedtest
+    # log out and log back in now if this is the first time you've created and used the 
+    # ~/bin dir, as this will automatically add it to your $PATH variable in Ubuntu.
+    # Otherwise, `speedtest` is ready to use immediately.
+    ```
+
+    1. After extracting `speedtest` as shown above, a markdown readme for it is found in "**~/Downloads/Install_Files/speedtest--ookla/ookla-speedtest-1.0.0-x86_64-linux/speedtest.md**".
+
+
