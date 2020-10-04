@@ -1648,10 +1648,16 @@ sudo ifconfig wlan0 up = turn network interface wlan0 ON
 sudo ifconfig INTERFACE_NAME down = turn network interface INTERFACE_NAME off; ex:
 sudo ifconfig wlan0 down = turn network interface wlan0 OFF
 
-iwconfig = 'w'ireless network 'i'nterface configuration tool of some sort (stands for 'i'nterface 'w'ireless perhaps?); see `man iwconfig` and also here for a little more info: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895
-iwconfig = list wireless network interfaces
-iwlist INTERFACE_NAME freq = list the available wireless frequencies of interface INTERFACE_NAME; see: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895; ex:
-iwlist wlan0 freq = list the available wireless frequencies of wireless network interface `wlan0`
+iwconfig
+    'w'ireless network 'i'nterface configuration tool of some sort (stands for 'i'nterface 'w'ireless perhaps?); see `man iwconfig` and also here for a little more info: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895
+iwconfig
+    list wireless network interfaces
+iwlist INTERFACE_NAME freq
+    list the available wireless frequencies of interface INTERFACE_NAME; see: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895; ex:
+iwlist wlan0 freq
+    list the available wireless frequencies of wireless network interface `wlan0`
+
+
 
 ip help = show the options and `OBJECT`s available for the `ip [OPTIONS] <OBJECT>` commands!
 - See also MY ANS HERE! https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
