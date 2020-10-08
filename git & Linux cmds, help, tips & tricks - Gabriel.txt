@@ -2236,10 +2236,13 @@ References:
 1. [my ans 2] https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264 - includes info. on FreeFileSync (FFSync; Free File Sync) too!
 
 time rsync -rah --dry-run --info=progress2 --stats source destination
-    My favorite command; **dry run** copy
-
+    My favorite `--dry-run` command; do a **dry run** "archival" copy (ie: including all Linux file/folder permissions) from source to destination. <========= MY FAVORITE **DRY-RUN** RSYNC COMMAND ==========
+time rsync -rah --dry-run --info=progress2 --stats source/ destination/
+    [version WITH trailing slashes! (`/`)] Dry-run copy the **contents of** "source/" dir to be within the **contents of** "destination/" dir, rather than creating a new folder in the destination dir at path "destination/source", as would be done with_out_ the trailing slashes (`/`)!
 time rsync -rah --info=progress2 --stats source destination
-    My favorite command; **real copy** (Important! Do a dry run first and read the output summary to ensure you're copying what you intend!) <========= MY FAVORITE RSYNC COMMAND ==========
+    Do an "archival" copy (ie: including all Linux file/folder permissions) from source to destination.
+    (Important! Do a dry run first, as shown above, and read the output summary to ensure you're copying what you intend!)
+    My favorite command, AFTER running the `--dry-run` version just above first!; do a **real copy**.  <========= MY FAVORITE RSYNC COMMAND ==========
     See my ans: https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
 
 
