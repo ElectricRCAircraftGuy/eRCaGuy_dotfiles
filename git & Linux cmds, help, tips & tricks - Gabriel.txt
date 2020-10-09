@@ -24,6 +24,10 @@ Me: "I am a documentation expert." Boss: "What about diagramming?" Me: "Oh...(fo
 New assertion: Me: "I am a foot-in-mouth expert." Boss: "Yep."
 That should be a comic.
 
+"There are two ways to code bug-free; only the third one works."
+    - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
+
+
 ====================================================================================================
 = My Thoughts on C++: =
 ====================================================================================================
@@ -1341,6 +1345,14 @@ git branch -r = show ONLY 'r'emote branches
 git branch -r | grep gabriel.staples = show all of my remote branches (which, by my convention, begin with "gabriel.staples_")
 git branch -d -r origin/mybranch = delete remote branch; see: https://stackoverflow.com/questions/5094293/git-remote-branch-deleted-but-still-it-appears-in-branch-a/5096739#5096739
 git branch -rd origin/mybranch = same as above
+
+git fetch <remote> <srcBranch>:<destBranch>
+    Fetch and pull the latest `srcBranch` from `remote` to both `origin/srcBranch` AND to local `destBranch`, withOUT checking out `destBranch` first! 
+    See: https://stackoverflow.com/questions/18857570/git-pull-without-checkout/25776415#25776415
+    Ex:
+git fetch origin master:master
+    Fetch and pull (merge) the latest `master` branch from remote `origin` to both `origin/master` AND to local `master` withOUT checking out `master` first!
+    See source from above: https://stackoverflow.com/questions/18857570/git-pull-without-checkout/25776415#25776415
 
 git add -A = add (stage changes for) all changes and files, including new files or actions to delete files
 git add . = add (stage changes for) only those files which are already tracked (have been previously commited)

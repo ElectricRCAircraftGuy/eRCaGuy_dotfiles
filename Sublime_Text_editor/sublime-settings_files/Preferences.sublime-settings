@@ -66,4 +66,28 @@
     // Set to true to ensure the last line of the file ends in a newline
     // character when saving
     "ensure_newline_at_eof_on_save": true,
+
+    // Spell Checking
+    // - See: https://www.sublimetext.com/docs/3/spell_checking.html
+    // - Other, 3rd-party (OpenOffice) dictionaries: https://github.com/titoBouzout/Dictionaries
+    // Set to true to turn spell checking on by default
+    "spell_check": true,
+    // Word list to use for spell checking; only override if you need to
+    // "dictionary": "Packages/Language - English/en_US.dic",
+    // Custom words to add to the spell-check dictionary:
+    "added_words":
+    [
+        // "added_word1",
+        // "added_word2",
+        "https",
+        "www",
+        "github",
+        "accessor",
+    ],
+    // Custom words to ignore and NOT spell-check:
+    "ignored_words":
+    [
+        // "ignored_word1",
+        // "ignored_word2",
+    ],
 }
