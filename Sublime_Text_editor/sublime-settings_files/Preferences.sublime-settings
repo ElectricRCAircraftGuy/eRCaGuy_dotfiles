@@ -90,4 +90,13 @@
         // "ignored_word1",
         // "ignored_word2",
     ],
+
+    // "Smooth scrolling" speed. (0 is OFF). "Smooth scrolling" refers to the scrolling
+    // **animation effect** speed which occurs when you press PgUp or PgDown to scroll.
+    // - NB: THIS SETTING IS FOR PG-UP/PG-DOWN SCROLLING ONLY, **NOT** FOR MOUSE WHEEL SCROLLING!
+    // - To increase **mouse wheel scrolling**, use `imwheel` in Linux instead. See this file
+    //   for details, installation, and configuration: "home/.imwheelrc".
+    // - Set to 0 to disable smooth scrolling. Set to a value between 0 and 1 to
+    //   scroll slower, or set to larger than 1 to scroll faster.
+    "scroll_speed": 1.0, // Default is 1.0.
 }

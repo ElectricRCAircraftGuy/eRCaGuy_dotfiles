@@ -1,15 +1,46 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# INSTRUCTIONS: 
-# Read & follow the instructions at link below. Edit the two numbers at the top-right below to set the mouse scroll speed.
-# Copy this file to ~/.imwheelrc: `cp -i .imwheelrc ~`
+# DESCRIPTION:
+# imwheel configuration settings to speed up the scroll speed for these applications, as a
+# multiplier by the numerical integer value at the end of the first two rows of each block.
 
-# Instructions & help: https://askubuntu.com/questions/254367/permanently-fix-chrome-scroll-speed/991680#991680
-# Don't forget:
-#   sudo apt update
-#   sudo apt install imwheel
+# INSTRUCTIONS:
+# 1. Install imwheel:
+#       sudo apt update
+#       sudo apt install imwheel
+# 2. Read & follow the instructions at the link below. Edit the two numbers at the top-right of each
+# configuration block below to set the mouse scroll speed. Copy this file to ~/.imwheelrc:
+#       cp -i .imwheelrc ~
 
-".*-chrome*"
+# Note: to get an idea for what name to use for each application, as specified at the top of each
+# configuration block below, open the application of interest to get its process(es) running, then
+# search for its name among all running processes like this:
+#       ps aux | grep 'application_name'
+
+# Further instructions & help: see my answer here!:
+# https://askubuntu.com/questions/254367/permanently-fix-chrome-scroll-speed/991680#991680
+
+
+# For `google-chrome`
+"-chrome"
+None,      Up,   Button4, 3
+None,      Down, Button5, 3
+Control_L, Up,   Control_L|Button4
+Control_L, Down, Control_L|Button5
+Shift_L,   Up,   Shift_L|Button4
+Shift_L,   Down, Shift_L|Button5
+
+# For `slack`
+"slack"
+None,      Up,   Button4, 3
+None,      Down, Button5, 3
+Control_L, Up,   Control_L|Button4
+Control_L, Down, Control_L|Button5
+Shift_L,   Up,   Shift_L|Button4
+Shift_L,   Down, Shift_L|Button5
+
+# For Sublime Text 3
+"sublime_text"
 None,      Up,   Button4, 3
 None,      Down, Button5, 3
 Control_L, Up,   Control_L|Button4
