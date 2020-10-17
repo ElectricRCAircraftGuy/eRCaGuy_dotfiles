@@ -995,11 +995,15 @@ help cmd_name
 breakpoint set -f main.cpp -l 100
     Set a breakpoint in file main.cpp on line 100.
     Same as `break main.cpp:100` in gdb.
+br set -f main.cpp -l 100
+    Same as the `breakpoint set` cmd above.
 breakpoint list
     Show all breakpoints.
     Same as `info break` in gdb.
 br l
-    Same as above
+    Same as the `breakpoint list` cmd above.
+br delete
+    Delete all breakpoints! See: https://gist.github.com/ryanchang/a2f738f0c3cc6fbd71fa#gistcomment-2137933.
 
 bt
     backtrace (same cmd in gdb)
@@ -1016,6 +1020,7 @@ p var_name
 
 ==================================
 == gdb & lldb examples & notes: ==
+== gdb: == lldb: ==
 ==================================
 
 GDB to LLDB command map: **REALLY** USEFUL!: https://lldb.llvm.org/use/map.html  <================= **REALLY USEFUL** GDB <--> LLDB COMMAND MAP! ===============
@@ -1366,8 +1371,12 @@ git difftool = same as above, except view the changes in your "git difftool" (ex
 git diff --cached = look at just the **staged** changes (those added with `git add`)
 git difftool --cached = same as above, except view the changes in your "git difftool" (ex: meld) instead of via the `git diff` command line
 
-git diff --name-only commit_hash = only see a list of changed files by filename
-git diff --name-status commit_hash = [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
+git diff --name-only commit_hash
+    only see a list of changed files by filename
+git diff --name-status commit_hash
+    [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
+git diff --name-only --diff-filter=d commit_hash
+    Do NOT include (ie: filter out) all 'd'eleted files! See `man git diff` and search for "--diff-filter=".
 
 OTHER WAYS TO LOOK AT THE CHANGES
 See: https://stackoverflow.com/questions/1552340/how-to-list-only-the-file-names-that-changed-between-two-commits
