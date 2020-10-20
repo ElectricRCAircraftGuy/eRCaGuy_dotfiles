@@ -1487,11 +1487,16 @@ There is no "squash" command in git. There *is* a "rebase" command in git, but "
         # Resolve conflicts as required, then use `git add <file>` or `git add -A`, and
         # `git rebase --continue` to finish it up.
 
-git cherry-pick <commit_hash> = cherry-pick (apply) commit_hash onto your currently-checked-out branch; if there are any conflicts, resolve them manually, use `git add` on the files you manually fixed, and then run `git cherry-pick --continue` to finish the cherry-pick and apply the commit with the original commit message (giving you a chance to edit it first, however, before it is applied)!
-git cherry-pick <commit_start>..<commit_end> = cherry-pick (apply) the range of commits from commit_start (NOT including this commit) to commit_end (including this commit); very useful in place of a rebase onto latest master once you have landed/merged some upstream commits into master and don't want to have to unnecessarily deconflict them via the `git rebase` process now instead; see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
-git cherry-pick commit_start~..commit_end = same as above, except **inclusive**! ie: cherry-pick (apply) the range of commits from commit_start (including this commit) to commit_end (also including this commit); see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
-git cherry-pick commit_start^..commit_end = alternative form of the above line--does the exact same thing
-git cherry-pick commit1 commit2 commit3 = cherry-pick these commits (up to any number--add as many commit hashes as you want!) onto the current branch; NOT the same as using commit1..commit2, which selects a **range** of commits from 1 commit after commit1, through commit2!
+git cherry-pick <commit_hash>
+    cherry-pick (apply) commit_hash onto your currently-checked-out branch; if there are any conflicts, resolve them manually, use `git add` on the files you manually fixed, and then run `git cherry-pick --continue` to finish the cherry-pick and apply the commit with the original commit message (giving you a chance to edit it first, however, before it is applied)!
+git cherry-pick <commit_start>..<commit_end>
+    cherry-pick (apply) the range of commits from commit_start (NOT including this commit) to commit_end (including this commit); very useful in place of a rebase onto latest master once you have landed/merged some upstream commits into master and don't want to have to unnecessarily deconflict them via the `git rebase` process now instead; see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
+git cherry-pick commit_start~..commit_end
+    same as above, except **inclusive**! ie: cherry-pick (apply) the range of commits from commit_start (including this commit) to commit_end (also including this commit); see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
+git cherry-pick commit_start^..commit_end
+    alternative form of the above line--does the exact same thing
+git cherry-pick commit1 commit2 commit3
+    cherry-pick these commits (up to any number--add as many commit hashes as you want!) onto the current branch; NOT the same as using commit1..commit2, which selects a **range** of commits from 1 commit after commit1, through commit2!
 
 == `git ls-files` and `git ls-tree`: ==
 
