@@ -7,6 +7,10 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 = Quotes: =
 ====================================================================================================
 
+"Document what you know when you know it."
+    - [Great advice that I truly take to heart!]
+    - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
+
 "I understand crossing your fingers is a form of debugging. If it doesn't pass, cross your fingers and try again."
     - said nobody ever
     (by Gabriel Staples, 25 June 2020)
@@ -810,12 +814,15 @@ help <cmd> = see help about command cmd; ex: `help watch`
 
 file path/to/my_prog_to_execute = execute my_prog_to_execute
 
-directory /path/to/my/source/code/rootdir = set the source code root dir to this path so gdb knows where to find the source code! See: https://alex.dzyoba.com/blog/gdb-source-path/.
-set substitute-path <from_path> <to_path> = see here: https://alex.dzyoba.com/blog/gdb-source-path/; ex:
+directory /path/to/my/source/code/rootdir
+    set the source code root dir to this path so gdb knows where to find the source code! See: https://alex.dzyoba.com/blog/gdb-source-path/.
+set substitute-path <from_path> <to_path>
+    see here: https://alex.dzyoba.com/blog/gdb-source-path/; ex:
 set substitute-path /home/avd/dev/cpython /usr/src/python
-[see also this cflag prefix option!]
-gcc -fdebug-prefix-map=$(pwd)=/usr/src/python = see here: https://alex.dzyoba.com/blog/gdb-source-path/; search for "" in `man gcc`:
--fdebug-prefix-map=old=new
+    [see also this cflag prefix option!]
+gcc -fdebug-prefix-map=$(pwd)=/usr/src/python
+    see here: https://alex.dzyoba.com/blog/gdb-source-path/; search for "" in `man gcc`:
+  -fdebug-prefix-map=old=new
     "When compiling files in directory old, record debugging information describing them as in new instead." [this makes them instantly debuggable in gdb because they know right where to look for the source code!]. See: https://alex.dzyoba.com/blog/gdb-source-path/.
 
 frame
@@ -830,25 +837,38 @@ l -
     List the current line you are on, apparently? (need to test). Similar to `frame` above I think. See also `frame` above.
     Source: https://stackoverflow.com/questions/17480107/lldb-list-source-code.
 
-info sources = list all available source files; see: https://stackoverflow.com/questions/22821344/gdb-how-to-list-all-source-files-used-for-compilation/22821599#22821599
-info functions = list all available functions; see URL above
-[weird work-around to grep the above output]: https://stackoverflow.com/questions/41965454/gdb-grep-info-sources-files/41965636#41965636
+info sources
+    list all available source files; see: https://stackoverflow.com/questions/22821344/gdb-how-to-list-all-source-files-used-for-compilation/22821599#22821599
+info functions
+    list all available functions; see URL above
+    [weird work-around to grep the above output]: https://stackoverflow.com/questions/41965454/gdb-grep-info-sources-files/41965636#41965636
 
-info break = show all break points (delete them with `del <NUM>`); see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
-del <NUM> = delete a break point based on its NUMber shown by `info break`
-del <NUM1> <NUM2> <NUM3> ... = same as above; notice you can delete multiple breakpoints at once
+info break
+    show all break points (delete them with `del <NUM>`); see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
+del <NUM>
+    delete a break point based on its NUMber shown by `info break`
+del <NUM1> <NUM2> <NUM3> ...
+    same as above; notice you can delete multiple breakpoints at once
 
-break main.cpp:100 = set a break point in main.cpp at line 100
-b main.cpp:100 = same as above
-b 100 = set a break point **in the current file** at line 100
-clear main.cpp:100 = clear/remove/delete the breakpoint you previously set at line 100 of main.cpp; NB: you can also use `info break` and `del <NUM>`; see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
-bt = backtrace: display the program stack (AKA: stack trace or stack frames)
-where = similar to backtrace; print backtrace of current stack frames. "Same as backtrace; you can think of this version as
-working even when you’re still in the middle of the program" (Slide 15 of https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf).
-up = go up to higher stack frame
-down = go down to lower stack frame
+break main.cpp:100
+    set a break point in main.cpp at line 100
+b main.cpp:100
+    same as above
+b 100
+    set a break point **in the current file** at line 100
+clear main.cpp:100
+    clear/remove/delete the breakpoint you previously set at line 100 of main.cpp; NB: you can also use `info break` and `del <NUM>`; see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
+bt
+    backtrace: display the program stack (AKA: stack trace or stack frames)
+where
+    similar to backtrace; print backtrace of current stack frames. "Same as backtrace; you can think of this version as working even when you’re still in the middle of the program" (Slide 15 of https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf).
+up
+    go up to higher stack frame
+down
+    go down to lower stack frame
 
-watch foo = set a "watchpoint" (AKA "data breakpoint") on variable `foo` to see when it changes! See: https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html
+watch foo
+    set a "watchpoint" (AKA "data breakpoint") on variable `foo` to see when it changes! See: https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html
 info watchpoints
 
 ----------------
@@ -911,26 +931,38 @@ help x
 
 (commands in parenthesis are for gdbgui, not gdb directly)
 -----
-r [run] (or run) = run (start from beginning)
-c [continue] = continue until breakpoint
-Ctrl + C = send SIGINT interrupt signal to gdb to pause gdb and let you interact with it
-n [next] (or right arrow) = next (step over)
-s [step] (or down arrow) = step into
-fin [finish] (or finish) (u) (or up arrow) = step out or up out of a lower-level function or scope; see:
-    https://unix.stackexchange.com/questions/297982/how-to-step-into-step-over-and-step-out-with-gdb and
-    https://stackoverflow.com/questions/24712690/step-out-of-current-function-with-gdb/24712736#24712736
-(m) = execute one machine instruction, stepping OVER function calls (cmd in parens is for gdbgui)
-(,) = execute one machine instruction, stepping INTO function calls (cmd in parens is for gdbgui)
+r [run] (or run)
+    run (start from beginning)
+c [continue]
+    continue until breakpoint
+Ctrl + C
+    send SIGINT interrupt signal to gdb to pause gdb and let you interact with it
+n [next] (or right arrow)
+    next (step over)
+s [step] (or down arrow)
+    step into
+fin [finish] (or finish) (u) (or up arrow)
+    step out or up out of a lower-level function or scope; 
+    see:
+    - https://unix.stackexchange.com/questions/297982/how-to-step-into-step-over-and-step-out-with-gdb and
+    - https://stackoverflow.com/questions/24712690/step-out-of-current-function-with-gdb/24712736#24712736
+(m)
+    execute one machine instruction, stepping OVER function calls (cmd in parens is for gdbgui)
+(,)
+    execute one machine instruction, stepping INTO function calls (cmd in parens is for gdbgui)
 
 STILL NEED TO STUDY & LEARN THESE ONES:
 print <var_name>
 display <var_name>
-delete = delete all breakpoints?
-delete 1 = delete the 1st breakpoint
+delete
+    delete all breakpoints?
+delete 1
+    delete the 1st breakpoint
 
 GDB LOGGING:
 [gdb log to file, gdb file logging, gdb logging to file, logging gdb to file, log gdb to file]
 See: https://sourceware.org/gdb/current/onlinedocs/gdb/Logging-Output.html
+
 set logging on
 set logging off
 set logging file <file>
