@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 """
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
@@ -132,7 +132,7 @@ def printMsgsInBagFile(args):
         total_count += 1
         no_msgs_found = False
         # Keep track of individual message counters for each message type
-        if msg_counters.has_key(topic) == False:
+        if topic not in msg_counters:
             msg_counters[topic] = 1;
         else:
             msg_counters[topic] += 1;
