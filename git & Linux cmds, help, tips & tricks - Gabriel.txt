@@ -36,7 +36,25 @@ That should be a comic.
 = My Thoughts on C++: =
 ====================================================================================================
 
-17 Sept. 2020
+"Every chance you get, eliminate a template. If you can write _clean_ code without using a template, do so. Simplicity is better."
+    - Gabriel Staples, 22 Oct. 2020
+
+23 Oct. 2020:
+
+Note: the above quote does NOT mean: "don't use templates". If you have a function that truly needs to work for many data types, that is a good use for a template, so _use a template!_ BUT, if you can simply reduce your plethora of types and go back to a little more simplicity, something more like _modern_ C (1), between old-school C and modern "go-nuts" C++, you are better off. It seems to me the simplicity will pay off dividends in the long run, enabling you ultimately to have fewer hurdles for new developers to contribute, faster progress for the whole team, and safer code because it is understandable and more likely to be correct and do what you want it to do. 
+
+This is my hypothesis. I am still testing it, but right now, that's what I recommend: "every chance you get, eliminate a template."
+
+(1) For some examples of code I've written where I demonstrate aspects of what I mean when I say "modern C", and/or "simple C++", see here:
+    1. [my answer] https://stackoverflow.com/questions/3965279/opaque-c-structs-how-should-they-be-declared/54488289#54488289
+    2. [my answer] https://stackoverflow.com/questions/34196663/stm32-how-to-get-last-reset-status/54728664#54728664
+    3. [my answer] https://stackoverflow.com/questions/21856025/getting-an-accurate-execution-time-in-c-micro-seconds/49066369#49066369
+        - NB: this is C++, but this is a **great** illustration of what I mean when I say "simpler types" with fewer templates! Instead of this craziness: `std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()`, PLEASE just use `uint64_t microseconds` or `uint64_t us` instead!
+        - See also my comments underneath my answer. 
+        - This is also an **excellent** demonstration of what I mean when I say I aim to "have fewer hurdles for new developers to contribute". The `std::chrono` library is a HUGE hurdle for someone to conquer when moving from C to C++! IT **ALONE** could set back an expert C developer from making strong C++ contributions **FOR _WEEKS_**! I say: "Every chance you get, eliminate a template. If you can write _clean_ code without using a template, do so. Simplicity is better."
+
+
+17 Sept. 2020:
 
 As compared to C, or even better, "C+" (more on this later), I personally dislike the "hard-core" C++ "type-safety-first" mentality common to modern application-level C++.
 
