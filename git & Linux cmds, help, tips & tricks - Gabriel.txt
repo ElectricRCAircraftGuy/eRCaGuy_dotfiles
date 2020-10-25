@@ -7,6 +7,10 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 = Quotes: =
 ====================================================================================================
 
+"Document what you know when you know it."
+    - [Great advice that I truly take to heart!]
+    - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
+
 "I understand crossing your fingers is a form of debugging. If it doesn't pass, cross your fingers and try again."
     - said nobody ever
     (by Gabriel Staples, 25 June 2020)
@@ -32,7 +36,25 @@ That should be a comic.
 = My Thoughts on C++: =
 ====================================================================================================
 
-17 Sept. 2020
+"Every chance you get, eliminate a template. If you can write _clean_ code without using a template, do so. Simplicity is better."
+    - Gabriel Staples, 22 Oct. 2020
+
+23 Oct. 2020:
+
+Note: the above quote does NOT mean: "don't use templates". If you have a function that truly needs to work for many data types, that is a good use for a template, so _use a template!_ BUT, if you can simply reduce your plethora of types and go back to a little more simplicity, something more like _modern_ C (1), between old-school C and modern "go-nuts" C++, you are better off. It seems to me the simplicity will pay off dividends in the long run, enabling you ultimately to have fewer hurdles for new developers to contribute, faster progress for the whole team, and safer code because it is understandable and more likely to be correct and do what you want it to do. 
+
+This is my hypothesis. I am still testing it, but right now, that's what I recommend: "every chance you get, eliminate a template."
+
+(1) For some examples of code I've written where I demonstrate aspects of what I mean when I say "modern C", and/or "simple C++", see here:
+    1. [my answer] https://stackoverflow.com/questions/3965279/opaque-c-structs-how-should-they-be-declared/54488289#54488289
+    2. [my answer] https://stackoverflow.com/questions/34196663/stm32-how-to-get-last-reset-status/54728664#54728664
+    3. [my answer] https://stackoverflow.com/questions/21856025/getting-an-accurate-execution-time-in-c-micro-seconds/49066369#49066369
+        - NB: this is C++, but this is a **great** illustration of what I mean when I say "simpler types" with fewer templates! Instead of this craziness: `std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count()`, PLEASE just use `uint64_t microseconds` or `uint64_t us` instead!
+        - See also my comments underneath my answer. 
+        - This is also an **excellent** demonstration of what I mean when I say I aim to "have fewer hurdles for new developers to contribute". The `std::chrono` library is a HUGE hurdle for someone to conquer when moving from C to C++! IT **ALONE** could set back an expert C developer from making strong C++ contributions **FOR _WEEKS_**! I say: "Every chance you get, eliminate a template. If you can write _clean_ code without using a template, do so. Simplicity is better."
+
+
+17 Sept. 2020:
 
 As compared to C, or even better, "C+" (more on this later), I personally dislike the "hard-core" C++ "type-safety-first" mentality common to modern application-level C++.
 
@@ -810,12 +832,15 @@ help <cmd> = see help about command cmd; ex: `help watch`
 
 file path/to/my_prog_to_execute = execute my_prog_to_execute
 
-directory /path/to/my/source/code/rootdir = set the source code root dir to this path so gdb knows where to find the source code! See: https://alex.dzyoba.com/blog/gdb-source-path/.
-set substitute-path <from_path> <to_path> = see here: https://alex.dzyoba.com/blog/gdb-source-path/; ex:
+directory /path/to/my/source/code/rootdir
+    set the source code root dir to this path so gdb knows where to find the source code! See: https://alex.dzyoba.com/blog/gdb-source-path/.
+set substitute-path <from_path> <to_path>
+    see here: https://alex.dzyoba.com/blog/gdb-source-path/; ex:
 set substitute-path /home/avd/dev/cpython /usr/src/python
-[see also this cflag prefix option!]
-gcc -fdebug-prefix-map=$(pwd)=/usr/src/python = see here: https://alex.dzyoba.com/blog/gdb-source-path/; search for "" in `man gcc`:
--fdebug-prefix-map=old=new
+    [see also this cflag prefix option!]
+gcc -fdebug-prefix-map=$(pwd)=/usr/src/python
+    see here: https://alex.dzyoba.com/blog/gdb-source-path/; search for "" in `man gcc`:
+  -fdebug-prefix-map=old=new
     "When compiling files in directory old, record debugging information describing them as in new instead." [this makes them instantly debuggable in gdb because they know right where to look for the source code!]. See: https://alex.dzyoba.com/blog/gdb-source-path/.
 
 frame
@@ -830,25 +855,38 @@ l -
     List the current line you are on, apparently? (need to test). Similar to `frame` above I think. See also `frame` above.
     Source: https://stackoverflow.com/questions/17480107/lldb-list-source-code.
 
-info sources = list all available source files; see: https://stackoverflow.com/questions/22821344/gdb-how-to-list-all-source-files-used-for-compilation/22821599#22821599
-info functions = list all available functions; see URL above
-[weird work-around to grep the above output]: https://stackoverflow.com/questions/41965454/gdb-grep-info-sources-files/41965636#41965636
+info sources
+    list all available source files; see: https://stackoverflow.com/questions/22821344/gdb-how-to-list-all-source-files-used-for-compilation/22821599#22821599
+info functions
+    list all available functions; see URL above
+    [weird work-around to grep the above output]: https://stackoverflow.com/questions/41965454/gdb-grep-info-sources-files/41965636#41965636
 
-info break = show all break points (delete them with `del <NUM>`); see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
-del <NUM> = delete a break point based on its NUMber shown by `info break`
-del <NUM1> <NUM2> <NUM3> ... = same as above; notice you can delete multiple breakpoints at once
+info break
+    show all break points (delete them with `del <NUM>`); see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
+del <NUM>
+    delete a break point based on its NUMber shown by `info break`
+del <NUM1> <NUM2> <NUM3> ...
+    same as above; notice you can delete multiple breakpoints at once
 
-break main.cpp:100 = set a break point in main.cpp at line 100
-b main.cpp:100 = same as above
-b 100 = set a break point **in the current file** at line 100
-clear main.cpp:100 = clear/remove/delete the breakpoint you previously set at line 100 of main.cpp; NB: you can also use `info break` and `del <NUM>`; see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
-bt = backtrace: display the program stack (AKA: stack trace or stack frames)
-where = similar to backtrace; print backtrace of current stack frames. "Same as backtrace; you can think of this version as
-working even when you’re still in the middle of the program" (Slide 15 of https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf).
-up = go up to higher stack frame
-down = go down to lower stack frame
+break main.cpp:100
+    set a break point in main.cpp at line 100
+b main.cpp:100
+    same as above
+b 100
+    set a break point **in the current file** at line 100
+clear main.cpp:100
+    clear/remove/delete the breakpoint you previously set at line 100 of main.cpp; NB: you can also use `info break` and `del <NUM>`; see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
+bt
+    backtrace: display the program stack (AKA: stack trace or stack frames)
+where
+    similar to backtrace; print backtrace of current stack frames. "Same as backtrace; you can think of this version as working even when you’re still in the middle of the program" (Slide 15 of https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf).
+up
+    go up to higher stack frame
+down
+    go down to lower stack frame
 
-watch foo = set a "watchpoint" (AKA "data breakpoint") on variable `foo` to see when it changes! See: https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html
+watch foo
+    set a "watchpoint" (AKA "data breakpoint") on variable `foo` to see when it changes! See: https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html
 info watchpoints
 
 ----------------
@@ -911,26 +949,38 @@ help x
 
 (commands in parenthesis are for gdbgui, not gdb directly)
 -----
-r [run] (or run) = run (start from beginning)
-c [continue] = continue until breakpoint
-Ctrl + C = send SIGINT interrupt signal to gdb to pause gdb and let you interact with it
-n [next] (or right arrow) = next (step over)
-s [step] (or down arrow) = step into
-fin [finish] (or finish) (u) (or up arrow) = step out or up out of a lower-level function or scope; see:
-    https://unix.stackexchange.com/questions/297982/how-to-step-into-step-over-and-step-out-with-gdb and
-    https://stackoverflow.com/questions/24712690/step-out-of-current-function-with-gdb/24712736#24712736
-(m) = execute one machine instruction, stepping OVER function calls (cmd in parens is for gdbgui)
-(,) = execute one machine instruction, stepping INTO function calls (cmd in parens is for gdbgui)
+r [run] (or run)
+    run (start from beginning)
+c [continue]
+    continue until breakpoint
+Ctrl + C
+    send SIGINT interrupt signal to gdb to pause gdb and let you interact with it
+n [next] (or right arrow)
+    next (step over)
+s [step] (or down arrow)
+    step into
+fin [finish] (or finish) (u) (or up arrow)
+    step out or up out of a lower-level function or scope; 
+    see:
+    - https://unix.stackexchange.com/questions/297982/how-to-step-into-step-over-and-step-out-with-gdb and
+    - https://stackoverflow.com/questions/24712690/step-out-of-current-function-with-gdb/24712736#24712736
+(m)
+    execute one machine instruction, stepping OVER function calls (cmd in parens is for gdbgui)
+(,)
+    execute one machine instruction, stepping INTO function calls (cmd in parens is for gdbgui)
 
 STILL NEED TO STUDY & LEARN THESE ONES:
 print <var_name>
 display <var_name>
-delete = delete all breakpoints?
-delete 1 = delete the 1st breakpoint
+delete
+    delete all breakpoints?
+delete 1
+    delete the 1st breakpoint
 
 GDB LOGGING:
 [gdb log to file, gdb file logging, gdb logging to file, logging gdb to file, log gdb to file]
 See: https://sourceware.org/gdb/current/onlinedocs/gdb/Logging-Output.html
+
 set logging on
 set logging off
 set logging file <file>
@@ -995,11 +1045,15 @@ help cmd_name
 breakpoint set -f main.cpp -l 100
     Set a breakpoint in file main.cpp on line 100.
     Same as `break main.cpp:100` in gdb.
+br set -f main.cpp -l 100
+    Same as the `breakpoint set` cmd above.
 breakpoint list
     Show all breakpoints.
     Same as `info break` in gdb.
 br l
-    Same as above
+    Same as the `breakpoint list` cmd above.
+br delete
+    Delete all breakpoints! See: https://gist.github.com/ryanchang/a2f738f0c3cc6fbd71fa#gistcomment-2137933.
 
 bt
     backtrace (same cmd in gdb)
@@ -1016,6 +1070,7 @@ p var_name
 
 ==================================
 == gdb & lldb examples & notes: ==
+== gdb: == lldb: ==
 ==================================
 
 GDB to LLDB command map: **REALLY** USEFUL!: https://lldb.llvm.org/use/map.html  <================= **REALLY USEFUL** GDB <--> LLDB COMMAND MAP! ===============
@@ -1366,8 +1421,12 @@ git difftool = same as above, except view the changes in your "git difftool" (ex
 git diff --cached = look at just the **staged** changes (those added with `git add`)
 git difftool --cached = same as above, except view the changes in your "git difftool" (ex: meld) instead of via the `git diff` command line
 
-git diff --name-only commit_hash = only see a list of changed files by filename
-git diff --name-status commit_hash = [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
+git diff --name-only commit_hash
+    only see a list of changed files by filename
+git diff --name-status commit_hash
+    [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
+git diff --name-only --diff-filter=d commit_hash
+    Do NOT include (ie: filter out) all 'd'eleted files! See `man git diff` and search for "--diff-filter=".
 
 OTHER WAYS TO LOOK AT THE CHANGES
 See: https://stackoverflow.com/questions/1552340/how-to-list-only-the-file-names-that-changed-between-two-commits
@@ -1478,11 +1537,16 @@ There is no "squash" command in git. There *is* a "rebase" command in git, but "
         # Resolve conflicts as required, then use `git add <file>` or `git add -A`, and
         # `git rebase --continue` to finish it up.
 
-git cherry-pick <commit_hash> = cherry-pick (apply) commit_hash onto your currently-checked-out branch; if there are any conflicts, resolve them manually, use `git add` on the files you manually fixed, and then run `git cherry-pick --continue` to finish the cherry-pick and apply the commit with the original commit message (giving you a chance to edit it first, however, before it is applied)!
-git cherry-pick <commit_start>..<commit_end> = cherry-pick (apply) the range of commits from commit_start (NOT including this commit) to commit_end (including this commit); very useful in place of a rebase onto latest master once you have landed/merged some upstream commits into master and don't want to have to unnecessarily deconflict them via the `git rebase` process now instead; see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
-git cherry-pick commit_start~..commit_end = same as above, except **inclusive**! ie: cherry-pick (apply) the range of commits from commit_start (including this commit) to commit_end (also including this commit); see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
-git cherry-pick commit_start^..commit_end = alternative form of the above line--does the exact same thing
-git cherry-pick commit1 commit2 commit3 = cherry-pick these commits (up to any number--add as many commit hashes as you want!) onto the current branch; NOT the same as using commit1..commit2, which selects a **range** of commits from 1 commit after commit1, through commit2!
+git cherry-pick <commit_hash>
+    cherry-pick (apply) commit_hash onto your currently-checked-out branch; if there are any conflicts, resolve them manually, use `git add` on the files you manually fixed, and then run `git cherry-pick --continue` to finish the cherry-pick and apply the commit with the original commit message (giving you a chance to edit it first, however, before it is applied)!
+git cherry-pick <commit_start>..<commit_end>
+    cherry-pick (apply) the range of commits from commit_start (NOT including this commit) to commit_end (including this commit); very useful in place of a rebase onto latest master once you have landed/merged some upstream commits into master and don't want to have to unnecessarily deconflict them via the `git rebase` process now instead; see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
+git cherry-pick commit_start~..commit_end
+    same as above, except **inclusive**! ie: cherry-pick (apply) the range of commits from commit_start (including this commit) to commit_end (also including this commit); see: https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch/1994491#1994491
+git cherry-pick commit_start^..commit_end
+    alternative form of the above line--does the exact same thing
+git cherry-pick commit1 commit2 commit3
+    cherry-pick these commits (up to any number--add as many commit hashes as you want!) onto the current branch; NOT the same as using commit1..commit2, which selects a **range** of commits from 1 commit after commit1, through commit2!
 
 == `git ls-files` and `git ls-tree`: ==
 
