@@ -2109,16 +2109,32 @@ shasum -a 512 somefile.txt = same as `sha512sum somefile.txt`
 
 strings my_binary_file > temp_strings.txt = extract all ASCII strings from the binary file my_binary_file and store them into the text file temp_strings.txt.
 
-hexdump -C my_file = print all chars of the binary or ASCII file, my_file, in hex+ASCII mode (`-C` means "'C'anonical hex+ASCII display"). Ex:
-    $ hexdump -C temp_strings.txt
-    00000000  6f 22 6c 69 6e 6b 22 64  68 74 74 70 73 3a 2f 2f  |o"link"dhttps://|
-    00000010  77 77 77 2e 72 65 64 64  69 74 2e 63 6f 6d 2f 72  |www.reddit.com/r|
-    00000020  2f 41 73 6b 52 65 64 64  69 74 2f 63 6f 6d 6d 65  |/AskReddit/comme|
-    00000030  6e 74 73 2f 65 73 74 32  62 34 2f 77 68 61 74 5f  |nts/est2b4/what_|
-    00000040  77 6f 75 6c 64 5f 62 65  5f 74 68 65 5f 77 6f 72  |would_be_the_wor|
-    00000050  73 74 5f 74 68 69 6e 67  5f 74 6f 5f 70 75 74 5f  |st_thing_to_put_|
-    00000060  69 6e 5f 61 5f 70 69 0a  61 74 61 2f 22 63 6f 72  |in_a_pi.ata/"cor|
-    ...
+hexdump -C my_file
+    print all chars of the binary or ASCII file, my_file, in hex+ASCII mode (`-C` means "'C'anonical hex+ASCII display"). 
+    Ex. 1:
+        $ hexdump -C temp_strings.txt
+        00000000  6f 22 6c 69 6e 6b 22 64  68 74 74 70 73 3a 2f 2f  |o"link"dhttps://|
+        00000010  77 77 77 2e 72 65 64 64  69 74 2e 63 6f 6d 2f 72  |www.reddit.com/r|
+        00000020  2f 41 73 6b 52 65 64 64  69 74 2f 63 6f 6d 6d 65  |/AskReddit/comme|
+        00000030  6e 74 73 2f 65 73 74 32  62 34 2f 77 68 61 74 5f  |nts/est2b4/what_|
+        00000040  77 6f 75 6c 64 5f 62 65  5f 74 68 65 5f 77 6f 72  |would_be_the_wor|
+        00000050  73 74 5f 74 68 69 6e 67  5f 74 6f 5f 70 75 74 5f  |st_thing_to_put_|
+        00000060  69 6e 5f 61 5f 70 69 0a  61 74 61 2f 22 63 6f 72  |in_a_pi.ata/"cor|
+        ...
+    Ex. 2:
+        $ hexdump -C d\:\\lineter.csv 
+        00000000  66 72 75 69 74 7c 71 75  61 6e 74 69 74 79 0d 61  |fruit|quantity.a|
+        00000010  70 70 6c 65 7c 35 0d 62  61 6e 61 6e 61 7c 37 0d  |pple|5.banana|7.|
+        00000020  6d 61 6e 67 6f 7c 38 0d                           |mango|8.|
+        00000028
+hexdump -c my_file
+    Also super useful! Prints the "One-byte character display", which means that a `\r` char gets printed as `\r` literally instead of as a hex `0d`! Sample output:
+    Correlary to Ex. 2 from above:
+        $ hexdump -c d\:\\lineter.csv 
+        0000000   f   r   u   i   t   |   q   u   a   n   t   i   t   y  \r   a
+        0000010   p   p   l   e   |   5  \r   b   a   n   a   n   a   |   7  \r
+        0000020   m   a   n   g   o   |   8  \r                                
+        0000028
 
 gnome-system-monitor = CPU/RAM/network usage monitor GUI
 top = basic CLI competitor to gnome-system-monitor
