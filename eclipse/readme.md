@@ -5,7 +5,7 @@ Jump down to instructions to [How to Install and Set Up Eclipse](#install-eclips
 # Screenshot of my Eclipse setup:
 
 <p align="left" width="100%">
-    <img width="75%" src="images/Eclipse_IDE _arduino_file.png"> 
+    <img width="100%" src="images/Eclipse_IDE _arduino_file.png"> 
 </p>
 
 
