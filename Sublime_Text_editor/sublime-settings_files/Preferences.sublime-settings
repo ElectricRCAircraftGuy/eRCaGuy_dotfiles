@@ -83,6 +83,7 @@
         "www",
         "github",
         "accessor",
+        "Arduino",
     ],
     // Custom words to ignore and NOT spell-check:
     "ignored_words":
