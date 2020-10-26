@@ -2,6 +2,9 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 Jump down to instructions to [How to Install and Set Up Eclipse](#install-eclipse).
 
+1. [Eclipse install instructions on Google Drive][install-eclipse-google-drive] [recommended--always the most up-to-date]
+1. [Eclipse install instructions PDF in this repo][install-eclipse-pdf] [manually generated periodically from the online source above]
+
 # Screenshot of my Eclipse setup:
 
 <p align="left" width="100%">
@@ -64,8 +67,11 @@ To build the Arduino source code, I just open up the regular IDE, set the prefer
 
 **To install and set up Eclipse, see my instructions here:**
 
-1. [On Google Drive online](https://docs.google.com/document/d/1LbuxOsDHfpMksGdpX5X-7l7o_TIIVFPkH2eD23cXUmA/edit?usp=sharing) [recommended--always the most up-to-date]
-1. [PDF](Eclipse%20setup%20instructions%20on%20a%20new%20Linux%20(or%20other%20OS)%20computer.pdf) [manually generated periodically from the online source above]
+1. [On Google Drive online][install-eclipse-google-drive] [recommended--always the most up-to-date]
+1. [PDF][install-eclipse-pdf] [manually generated periodically from the online source above]
 
 
 END
+
+  [install-eclipse-google-drive]: https://docs.google.com/document/d/1LbuxOsDHfpMksGdpX5X-7l7o_TIIVFPkH2eD23cXUmA/edit?usp=sharing
+  [install-eclipse-pdf]: Eclipse%20setup%20instructions%20on%20a%20new%20Linux%20(or%20other%20OS)%20computer.pdf
