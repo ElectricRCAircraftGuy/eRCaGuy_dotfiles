@@ -1,5 +1,11 @@
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+# Helpful Links:
+
+1. Main site: https://www.sublimetext.com/.
+    1. Download & Install: https://www.sublimetext.com/3.
+1. Learn to use it: spend a whole day or so carefully going through this 3rd-party "Sublime Tutor" tutorial: https://sublimetutor.com/.
+
 # Sublime Text Settings:
 
 To install the main `Preferences.sublime-settings` file, as well as all other syntax-specific/file-extension-specific `*.sublime-settings` preference files _which override that main preferences file for their respective file types_, simply copy them all to the Sublime Text 3 `/home/$USER/.config/sublime-text-3/Packages/User/` directory!
