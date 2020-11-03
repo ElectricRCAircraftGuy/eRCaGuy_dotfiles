@@ -1,0 +1,27 @@
+{
+  "defaults": {
+    "autoanchor": true,
+    "autolink": true,
+    "bracket": "round",
+    "levels": [1,2,3,4,5,6],
+    "indent": "\t",
+    "remove_image": true,
+    "link_prefix": "",
+    "bullets": ["-"],
+    "lowercase": "only_ascii",
+    "style": "ordered",
+    "uri_encoding": true,
+    "markdown_preview": ""
+  },
+  "id_replacements": [
+    {
+      "pattern": "\\s+",
+      "replacement": "-"
+    },
+    {
+      "pattern": "&lt;|&gt;|&amp;|&apos;|&quot;|&#60;|&#62;|&#38;|&#39;|&#34;|!|#|$|&|'|\\(|\\)|\\*|\\+|,|/|:|;|=|\\?|@|\\[|\\]|`|\"|\\.|\\\\|<|>|{|}|™|®|©|%",
+      "replacement": ""
+    }
+  ],
+  "logging": false
+}
