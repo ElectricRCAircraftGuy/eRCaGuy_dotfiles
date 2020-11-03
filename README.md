@@ -2,12 +2,33 @@ Gabriel Staples
 
 This project is well-maintained, highly-used by myself, and highly-functional. It's not experimental, it's what I use every day. Feel free to use or borrow from it yourself. 
 
+<details>
+<summary><b>Table of Contents</b> (click to open)</summary>
+<!-- MarkdownTOC -->
+
+1. [Project: eRCaGuy_dotfiles](#project-ercaguy_dotfiles)
+1. [Description of contents](#description-of-contents)
+    1. [Here's some of the contents contained herein:](#heres-some-of-the-contents-contained-herein)
+1. [Installation & Usage:](#installation--usage)
+1. [Useful Applications](#useful-applications)
+1. [Useful Scripts](#useful-scripts)
+    1. [See useful_scripts/README.md](#see-useful_scriptsreadmemd)
+1. [Misc. Install Instructions:](#misc-install-instructions)
+
+<!-- /MarkdownTOC -->
+</details>
+
+
+<a id="project-ercaguy_dotfiles"></a>
 # Project: eRCaGuy_dotfiles
 https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+
+<a id="description-of-contents"></a>
 # Description of contents
 This project started out as just a few helpful nuggets I like to put in my `~/.bashrc` file, for example, as well as some scripts and other configuration files, but I decided to make it a place I put all sorts of reference scripts, files, shortcuts, Linux tips & tricks, Eclipse documentation, etc, I've built up over the years. 
 
+<a id="heres-some-of-the-contents-contained-herein"></a>
 ## Here's some of the contents contained herein:
 1. [git & Linux cmds, help, tips & tricks - Gabriel.txt](git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt) - a general note-taking document where I jot down Linux commands, examples, notes about how to use `gdb`, `bazel`, various command-line tools, build tools, etc. 
     1. It's kind of a general place where I write down things I learn which I know I will need later and don't want to forget. _Correction: it's actually more correct to say I **know** I will forget them, so I write them down so I can come back and reference them later._
@@ -38,6 +59,8 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 1. Useful scripts: see [section below](#useful-scripts)
 1. etc.
 
+
+<a id="installation--usage"></a>
 # Installation & Usage:
 
     ./install_all.sh
@@ -53,11 +76,17 @@ _However, it's still a good idea to back up your home directory first before run
 3. If a readme exists in a subfolder, take a look at it too for more install help or other usage information. 
 4. Essentially, just read the readmes, headers, & other comments and it will become self-explanatory how to use or "install" something. If not, open up an issue or pull request and I'll address it. 
 
+
+<a id="useful-applications"></a>
 # Useful Applications
 Good applications to install right after you install Linux.  
 See: [useful_apps/README.md](useful_apps/README.md).
 
+
+<a id="useful-scripts"></a>
 # Useful Scripts 
+
+<a id="see-useful_scriptsreadmemd"></a>
 ## See [useful_scripts/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts#ercaguy_dotfilesuseful_scripts)
 
 Here is a list of all of the scripts provided in the "useful_scripts" directory. Some of these are so amazingly useful to me, and powerful, they deserve a section all on their own! 
@@ -109,6 +138,8 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
 
     2 directories, 34 files
 
+
+<a id="misc-install-instructions"></a>
 # Misc. Install Instructions:
 
 1. Install `speedtest` by Ookla:
