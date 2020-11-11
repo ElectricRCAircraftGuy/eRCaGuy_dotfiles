@@ -63,9 +63,13 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 <a id="installation--usage"></a>
 # Installation & Usage:
 
+**Note:** _the installation script isn't kept up-to-date very well._ It falls behind frequently as I add new features and useful scripts, then I periodically have to update it again. So, it's not a bad idea to run this installation command anyway, to let it install whatever it can, but then still _manually look into the [useful_scripts](useful_scripts) folder, the [home](home) folder, and elsewhere, for other scripts or tools in this repo which this install script doesn't yet install_. 
+
+**To run the install script for this _eRCaGuy_dotfiles_ project:**
+
     ./install_all.sh
 
-You can run the main installation script for this **eRCaGuy_dotfiles** project like this: `./install_all.sh`. Edit this script first if customization is desired. It's all interactive, however, so it won't overwrite anything without your permission. 
+Edit this script first if customization is desired. It's all interactive, however, so it won't overwrite anything without your permission. 
 
 _However, it's still a good idea to back up your home directory first before running the installation script and to: 1) read the installation prompts carefully as it asks you to for permission to overwrite something, and 2) make sure you back any of those files it's prompting you about before allowing it to overwrite them._
 
