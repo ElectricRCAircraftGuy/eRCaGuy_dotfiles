@@ -1419,30 +1419,78 @@ git gui = open the GUI tool to do things like stage hunks, lines, or files; very
 
 git diff = look at all **unstaged** changes (those NOT yet added with `git add`)
 git difftool = same as above, except view the changes in your "git difftool" (ex: meld) instead of via the `git diff` command line
-
 git diff --cached = look at just the **staged** changes (those added with `git add`)
 git difftool --cached = same as above, except view the changes in your "git difftool" (ex: meld) instead of via the `git diff` command line
-
-git diff --name-only commit_hash
-    only see a list of changed files by filename
+git diff --name-only   commit_hash
+    Only see a list of changed files by filename. See: https://stackoverflow.com/questions/1552340/how-to-list-only-the-file-names-that-changed-between-two-commits. 
+    Sample output:
+            $ git diff --name-only
+            file1.h
+            file2.h
+            file3.h
 git diff --name-status commit_hash
     [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
+    Sample output:
+            $ git diff --name-status
+            M       file1.h
+            M       file2.h
+            M       file3.h
 git diff --name-only --diff-filter=d commit_hash
     Do NOT include (ie: filter out) all 'd'eleted files! See `man git diff` and search for "--diff-filter=".
-
-OTHER WAYS TO LOOK AT THE CHANGES
-See: https://stackoverflow.com/questions/1552340/how-to-list-only-the-file-names-that-changed-between-two-commits
-git diff --name-only   commit_hash
-git diff --name-status commit_hash
 git diff --stat        commit_hash
     a graphical +++--- representation of changes, with color! Very nice! See the last line of this output for totals.
+    Sample output:
+            $ git diff --stat
+             file1.h      |  2 +-
+             file2.h      | 94 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
+             file3.h      |  9 ++++++++
+             3 files changed, 84 insertions(+), 21 deletions(-)
 git diff --numstat     commit_hash
-    if you sum all the numbers in both columns this outputs, you'll get the same results as `--shortstat` below, which is what GitHub uses to show the number of files changed, lines added, and lines deleted! See the last line of this output for that done for you. Sample output://///
+    if you sum all the numbers in both columns this outputs, you'll get the same results as `--shortstat` below, which is what GitHub uses to show the number of files changed, lines added, and lines deleted! See the last line of this output for that done for you. 
+    Sample output: 
+    (notice that the 1st column is _lines added_, and the 2nd column is _lines deleted_):
+            $ git diff --numstat
+            1       1       file1.h
+            74      20      file2.h
+            9       0       file3.h
 git diff --shortstat   commit_hash
     "Output only the last line of the --stat format containing total number of modified files, as well as number of added and deleted lines." (from `man git diff`). 
     A 1-line summary showing number of files changed, number of lines added ("insertions(+)"), and number of lines deleted ("deletions(-)"). This is how GitHub gets their +N_added/-N_substracted number summary for each PR! To see a more detailed view for each individual file, use `git diff --numstat` or `git diff --stat`!
+    Sample output:
+            $ git diff --shortstat
+             3 files changed, 84 insertions(+), 21 deletions(-)
 git diff --dirstat     commit_hash
     Show the percent of changes by directory.
+    Sample output:
+            $ git diff --dirstat
+              86.1% dir1/
+              12.6% dir2/
+git diff --word-diff
+    Highlight changes on a word-by-word basis, rather than a line-by-line basis
+git diff --word-diff=plain
+    Same as above (`plain` is the default word-diff _mode_).
+git diff --word-diff[=<mode>]
+    Optionally insert a mode: `color`, `plain` (default), `porcelain`, `none`
+git diff --word-diff=color
+    [nice for a human to look at] just use colors to distinguish added (green) and deleted (red) parts, rather than also including [-some deleted wods-] and {+some added words+} markers <=========== GOOD! ===========
+git diff --word-diff=porcelain
+    a good format to be parsed by computers/scripts
+git diff --word-diff-regex=<regex>
+    use a custom regex to define what a word is
+git diff --word-diff-regex=.
+    do a diff on a CHARACTER-BY-CHARACTER BASIS!--showing deleted chars in [-some chars-] and added ones in {+some chars+}
+    See: https://stackoverflow.com/questions/3231759/how-can-i-visualize-per-character-differences-in-a-unified-diff-file/7870727#7870727
+git diff --color-words=.
+    do a diff on a CHARACTER-BY-CHARACTER BASIS, except just showing COLORS only, instead of the [- -] and {+ +} symbols too! THIS IS THE BEST FOR CHAR-BY-CHAR COMPARISONS! DO THIS! <=========== BEST CHAR-BY-CHAR DIFFS! [this must be what meld uses under the hood] =============
+    See the comment under this answer: https://stackoverflow.com/questions/3231759/how-can-i-visualize-per-character-differences-in-a-unified-diff-file/7870727#7870727
+etc. etc.
+SUMMARY (see: https://makandracards.com/makandra/28067-git-diff-per-word-or-character):
+git diff
+    git diff **line-by-line** comparison  <===== LINE-BY-LINE! ======
+git diff --color-words
+    git dif **word-by-word** comparison   <===== WORD-BY-WORD! ======
+git diff --color-words=.
+    git diff **char-by-char** comparison  <===== CHAR-BY-CHAR! ======
 
 git log = show the git log history
 git log --oneline = show each commit as a single line only
