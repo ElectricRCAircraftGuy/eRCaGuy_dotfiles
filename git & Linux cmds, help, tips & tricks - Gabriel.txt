@@ -74,7 +74,7 @@ In programming paradigms, I am fond mostly of **procedural** programming, which 
 
     > I'd say based on what the asker is after, **procedural** is the opposite of **object-oriented** programming. Procedural is a subset of **imperative**, but more narrowly defined as being imperative + relying on blocks & scope (source: https://en.wikipedia.org/wiki/Procedural_programming#Imperative_programming). With this in mind, in a sense, C (a primarily procedural programming language) is the opposite of C++ (a primarily object-oriented programming language).
 
-So, I prefer **procedural** programming to pure OOP.  If taken too far, OOP gets huge, ugly, and utterly obnoxious to use. This contributes to my occasional hatred towards C++, when all I want to use is "C+." C++, for instance, can make better and cleaner and more beautiful **procedural** code than C could ever dream of. Some of the aspects of C++, like function overloading and setting default members in structs, are wonderful to use. Regarding the uggliness of OOP, however, which for some reason is the dominant form of C++ even when it doesn't make any sense for the problem being solved and ends up creating a dozen singleton classes everywhere, Joe Armstrong, crator of Erlang, had the following to say:
+So, I prefer **procedural** programming to pure OOP.  If taken too far, OOP gets huge, ugly, and utterly obnoxious to use. This contributes to my occasional hatred towards C++, when all I want to use is "C+." C++, for instance, can make better and cleaner and more beautiful **procedural** code than C could ever dream of. Some of the aspects of C++, like function overloading and setting default members in structs, are wonderful to use. Regarding the ugliness of OOP, however, which for some reason is the dominant form of C++ even when it doesn't make any sense for the problem being solved and ends up creating a dozen singleton classes everywhere, Joe Armstrong, creator of Erlang, had the following to say:
 
     > I think the lack of reusability comes in object-oriented languages, not functional languages. Because the problem with object-oriented languages is they’ve got all this implicit environment that they carry around with them. **You wanted a banana but what you got was a gorilla holding the banana and the entire jungle.**
 
@@ -396,9 +396,11 @@ Bazel Online Documentation:
        https://docs.bazel.build/versions/master/guide.html#specifying-targets-to-build
 1. Macros (Bazel build rule macros--used to generate build targets):
     1. Macros: https://docs.bazel.build/versions/master/skylark/macros.html
-        1. Expanding macros: https://docs.bazel.build/versions/master/skylark/macros.html#expanding-macros. To see their expanded forms:
+        1. Expanding macros [macro expansion in Bazel; Bazel macro expansion; expanding macros in Bazel; Bazel expanding macros]: https://docs.bazel.build/versions/master/skylark/macros.html#expanding-macros. To see their expanded forms:
+
             time bazel query --output=build //path/to/my/target/... > out.txt  # Store the expanded form of all macros/build rules into out.txt
             subl out.txt  # open out.txt in Sublime Text 3
+
     1. Creating a macro: https://docs.bazel.build/versions/master/skylark/tutorial-creating-a-macro.html
 1. Bazel "Make" Variables [bazel make variables]: *****https://docs.bazel.build/versions/master/be/make-variables.html
     1. Ex: `my_attr = "prefix $(FOO) suffix"` = insert the Bazel "Make" (GNU Make-like) variable `FOO` into this attribute.
@@ -1432,9 +1434,15 @@ OTHER WAYS TO LOOK AT THE CHANGES
 See: https://stackoverflow.com/questions/1552340/how-to-list-only-the-file-names-that-changed-between-two-commits
 git diff --name-only   commit_hash
 git diff --name-status commit_hash
-git diff --stat        commit_hash = graphical +++--- representation of changes, with color! Very nice!
+git diff --stat        commit_hash
+    a graphical +++--- representation of changes, with color! Very nice! See the last line of this output for totals.
 git diff --numstat     commit_hash
+    if you sum all the numbers in both columns this outputs, you'll get the same results as `--shortstat` below, which is what GitHub uses to show the number of files changed, lines added, and lines deleted! See the last line of this output for that done for you. Sample output://///
 git diff --shortstat   commit_hash
+    "Output only the last line of the --stat format containing total number of modified files, as well as number of added and deleted lines." (from `man git diff`). 
+    A 1-line summary showing number of files changed, number of lines added ("insertions(+)"), and number of lines deleted ("deletions(-)"). This is how GitHub gets their +N_added/-N_substracted number summary for each PR! To see a more detailed view for each individual file, use `git diff --numstat` or `git diff --stat`!
+git diff --dirstat     commit_hash
+    Show the percent of changes by directory.
 
 git log = show the git log history
 git log --oneline = show each commit as a single line only
