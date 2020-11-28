@@ -2,8 +2,9 @@ Gabriel Staples
 
 This project is well-maintained, highly-used by myself, and highly-functional. It's not experimental, it's what I use every day. Feel free to use or borrow from it yourself. 
 
+# Table of Contents
 <details>
-<summary><h1 style="display:inline-block;">Table of Contents <div style="display:inline;font-weight:normal;">(click to open)</div></h1></summary>
+<summary><b>(click to expand)</b></summary>
 <!-- MarkdownTOC -->
 
 1. [Project: eRCaGuy_dotfiles](#project-ercaguy_dotfiles)
