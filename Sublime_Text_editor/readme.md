@@ -1,7 +1,9 @@
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+
+# Table of Contents
 <details>
-<summary><b>Table of Contents</b> (click to open)</summary>
+<summary><b>(click to expand)</b></summary>
 <!-- MarkdownTOC -->
 
 1. [Helpful Links:](#helpful-links)
