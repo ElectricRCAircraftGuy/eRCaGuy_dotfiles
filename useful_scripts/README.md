@@ -8,4 +8,8 @@ Each script herein has detailed installation and usage information commented in 
 1. **PC-to-PC Git-based Folder/Project Sync Script**
     1. **[README_git-sync_repo_from_pc1_to_pc2.md](README_git-sync_repo_from_pc1_to_pc2.md)**
     1. git-based sync script to re-sync gigabytes of data over a cell phone hot spot in 1 minute and with 50 MB data usage
+1. **ros_readbagfile.py**
+    1. **[README_ros_readbagfile.md](README_ros_readbagfile.md)**
+    1. Read [ROS (Robot Operating System)](http://wiki.ros.org/) messages on certain topics from within a pre-recorded ROS bag file.
+        1. Tutorial I wrote: [Reading messages from a bag file](http://wiki.ros.org/ROS/Tutorials/reading%20msgs%20from%20a%20bag%20file)
 
