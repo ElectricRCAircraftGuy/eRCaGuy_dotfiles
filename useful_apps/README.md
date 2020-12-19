@@ -69,6 +69,11 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
 1. Remmina - for graphical remote desktop connections, including to Windows rdp hosts
 1. PuTTY - for tunneling, reverse tunneling, and SOCKS 5 proxy forwarding
     1. OpenSSH should also work fine (the default `ssh`-related series of terminal commands which [come pre-installed on Ubuntu](https://stackoverflow.com/questions/47079224/how-do-i-check-if-openssh-is-installed-on-ubuntu/58617302#58617302)), but sometimes the GUI setup in PuTTY is nice, even on Linux
-
+1. Shotcut - excellent video editor. Download the latest Linux portable tar or Linux AppImage straight from their website here: https://shotcut.org/.
+1. `mediainfo-gui` - very useful tool to quickly see video or audio file metadata, such as bitrates and sample rates of audio, and video resolution, as well as encoding information.
+    1. Install the GUI version with `sudo apt install mediainfo-gui`, or the CLI version with `sudo apt install mediainfo`. 
+    1. Then, right-click on any video or audio file in your file manager (ex: nemo) --> Open With --> MediaInfo. 
+    1. See here: https://www.fosslinux.com/1860/find-metadata-info-of-audio-and-video-files-using-mediainfo.htm
+    1. Note that for _images_ or _pictures_ in nemo, just use nemo's built-in photo properties information instead of mediainfo-gui. Just Right Click --> Properties --> click on the "Image" tab for image information.
 
 
