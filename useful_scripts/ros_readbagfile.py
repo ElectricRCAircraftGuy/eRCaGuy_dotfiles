@@ -95,6 +95,7 @@ def printArgs(args):
 
 
 def parseArgs():
+    print("# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     args = Args()
 
     if len(sys.argv) == 1:
@@ -121,8 +122,8 @@ def parseArgs():
         for topic in args.topics_to_read:
             print("#    {}".format(topic))
 
-    print("# =======================================")
-    print("# =======================================")
+    print("# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
     return args
 
 
@@ -133,6 +134,7 @@ def printMsgsInBagFile(args):
     total_count = 0
     bag_in = rosbag.Bag(args.bag_file_in)
     for topic, msg, t in bag_in.read_messages(args.topics_to_read):
+        print("\n# =======================================")
         total_count += 1
         no_msgs_found = False
         # Keep track of individual message counters for each message type
@@ -151,18 +153,19 @@ def printMsgsInBagFile(args):
 
         # Print the message
         print(msg)
-        print("# =======================================")
 
-    print("# =======================================")
+    print("")
+    print("# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
+    print("# Total messages found: {:>16}".format(total_count))
+    print("#")
+    for topic in msg_counters:
+        print("#    {:<30} {:>4}".format(topic + ":", msg_counters[topic]))
     if no_msgs_found:
         print("# NO MESSAGES FOUND IN THESE TOPICS")
-
-    print("# Total messages found = {}.".format(total_count))
-    ##### TODO: PRINT MESSAGE COUNT FOR EACH MSG TYPE TOO! ie: just print all key/value pairs in the
-    # `msg_counters` dict. What order to print them in? Probably just alphabetical.
-
+    print("#")
     print("# DONE.")
+    print("# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
 # If this file is called directly, as opposed to imported, run this:
