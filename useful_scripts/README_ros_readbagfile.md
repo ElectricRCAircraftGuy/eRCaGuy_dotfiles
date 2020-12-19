@@ -29,4 +29,4 @@ In short:
    time ros_readbagfile demo.bag /obs1/gps/fix /diagnostics_agg | tee topics.yaml
    ```
 
-Done.
+Done! Here is a sample `topics.yaml` output file obtained by running the commands above: [ros_readbagfile_sample_output/topics.yaml](ros_readbagfile_sample_output/topics.yaml).
