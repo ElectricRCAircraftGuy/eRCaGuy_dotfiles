@@ -7,6 +7,12 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 = Quotes: =
 ====================================================================================================
 
+"It's better to be done well and on time, than perfect and late."
+    - Gabriel Staples, ~2008, while studying at the US Air Force Academy and trying to figure out how to balance time
+
+"Done is good enough."
+    - Gabriel Staples (inspired by a conversation with Anton Scherbakov), 8 Dec. 2020; a variation to ["Done is better than perfect."](https://lifehacker.com/done-is-better-than-perfect-5870379).
+
 "Document what you know when you know it."
     - [Great advice that I truly take to heart!]
     - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
@@ -21,7 +27,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 "Programming isn't what you know; it's what you can figure out."
     - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
 
-"Cost of copying code from Stack Overflow: $1. Cost of knowing which code to copy from Stack Overflow: $100~$300k/year."
+"Cost of copying code from Stack Overflow: $1. Cost of knowing which code to copy from Stack Overflow: $100k~$300k/year."
     - This is my rewording of a quote from Jessica Su, CS PhD student at Stanford (see: https://www.linkedin.com/posts/stevenouri_datascience-machinelearning-programming-activity-6696689805528571904-BIxM).
 
 Me: "I am a documentation expert." Boss: "What about diagramming?" Me: "Oh...(foot in mouth)." [I'm great at documentation, just not drawing diagrams to demonstrate designs.]
@@ -177,8 +183,8 @@ vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 > In terms of official guidance regarding your personal website links being included, I would recommend you to read these two answers:
 > 
-> 1. [What is the exact definition of “spam” for Stack Overflow?](https://meta.stackoverflow.com/questions/260638/what-is-the-exact-definition-of-spam-for-stack-overflow/260641#260641)
-> 2. [What are the “spam” and “rude or abusive” (offensive) flags, and how do they work?](https://meta.stackexchange.com/questions/58032/what-are-the-spam-and-rude-or-abusive-offensive-flags-and-how-do-they-wor/58035#58035)
+> 1. [What is the exact definition of "spam" for Stack Overflow?](https://meta.stackoverflow.com/questions/260638/what-is-the-exact-definition-of-spam-for-stack-overflow/260641#260641)
+> 2. [What are the "spam" and "rude or abusive" (offensive) flags, and how do they work?](https://meta.stackexchange.com/questions/58032/what-are-the-spam-and-rude-or-abusive-offensive-flags-and-how-do-they-wor/58035#58035)
 > 
 > You can include links to your site, but please be careful with that and make sure that:
 > 
@@ -567,6 +573,9 @@ bazel [startup_options] build //...
 == SUMMARY OF GOOD BUILD OPTIONS (see above or below or online for details): ==
 bazel build [build_options] //...
     --keep_going
+        Continue building, despite build errors.
+    -k
+        Same as above.
     --copt
     --per_file_copt
     --jobs
@@ -654,14 +663,22 @@ bazel test --test_output=all //... = prints ALL output to stdout, even for tests
 time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
 
 == Debugging Bazel Builds: ==
-[bazel debug; *debugging bazel builds*; debug bazel builds; bazel builds debugging; bazel debugging]
+[keywords: bazel debug build flags; bazel build debug flags; *debugging bazel builds*; debug bazel builds; bazel builds debugging; bazel debugging]
 
-`--keep_going` flag: useful when debugging--tells Bazel to keep going and build/run as much as possible, even if an error is encountered. See: https://docs.bazel.build/versions/master/command-line-reference.html#flag--keep_going. [keep going, keep building, continue building after errors, build through errors]. Ex usage:
-    time bazel build --keep_going //... = keep going/building during a Bazel build/run error, so that you can get and see as many errors as possible at once to speed up the fix/build/test process as you try to debug build or test problems and get your code to work right. <========= VERY USEFUL!--ESP. WHEN DEBUGGING CODE THAT WON'T BUILD! ==========
-`--sandbox_debug` flag: helps you see more build info. Ex usage:
-    time bazel build --sandbox_debug //...
-`-s` outputs all build commands [sort of like you might expect a "verbose" build option to do!?]; see: https://stackoverflow.com/questions/32823625/bazel-build-verbose-compiler-commands-logging/32837180#32837180. Ex usage:
-    time bazel build -s //...
+--keep_going, -k
+    Useful when debugging--tells Bazel to keep going and build/run as much as possible, even if an error is encountered. See: https://docs.bazel.build/versions/master/command-line-reference.html#flag--keep_going. [keep going, keep building, continue building after errors, build through errors]. Ex usage:
+time bazel build --keep_going //...
+    Keep going/building during a Bazel build/run error, so that you can get and see as many errors as possible at once to speed up the fix/build/test process as you try to debug build or test problems and get your code to work right. <========= VERY USEFUL!--ESP. WHEN DEBUGGING CODE THAT WON'T BUILD! ==========
+time bazel build -k //...
+    Same as above.
+bazel help build | grep '\-k'
+    Find the brief `--keep_going` (`-k`) description in the `bazel build` help menu.
+--sandbox_debug
+    Helps you see more build info. Ex usage:
+            time bazel build --sandbox_debug //...
+-s
+    Outputs all build commands [sort of like you might expect a "verbose" build option to do!?]; see: https://stackoverflow.com/questions/32823625/bazel-build-verbose-compiler-commands-logging/32837180#32837180. Ex usage:
+            time bazel build -s //...
 
 == Visualizing your Bazel build using dot/Graphviz ==
 See:
@@ -1397,11 +1414,26 @@ git alias = print out all of your aliases you have defined in your config file(s
 "git-" + [TAB] [TAB] = see all programs or commands in your PATH (from git directly OR custom or 3rd-party git programs) whose names begin with "git-" (convention: name + the dash symbol), such as "git-alias". These programs can automatically be run withOUT the dash, because git automatically searches your PATH for this naming convention and makes them available. Therefore, a program named "git-alias", for example, can be run as `git alias`, withOUT the dash! [git-whatever]
 See here for where I first learned this: http://barkas.com/2018/git-alias-bash-functions-with-arguments/#git-alias-in-your-path
 
+git config <variable_name> [value]
+    Read and write git variables. Read and print the value of the git variable `variable_name`, optionally setting it to `value`. 
+    From `man git config`: "Get and set repository or global options."
+    Ex:
+git config merge.renameLimit
+    Read the value of the `merge.renameLimit` variable, if it is set. 
+git config merge.renameLimit 10000
+    Set the value of the `merge.renameLimit` git variable to `10000`. 
+    See my comment under this answer, where I do this: https://stackoverflow.com/questions/7830728/warning-on-diff-renamelimit-variable-when-doing-git-push/28064699#28064699.
+
 git branch -a = show ALL branches, even remote-only branches
 git branch -r = show ONLY 'r'emote branches
 git branch -r | grep gabriel.staples = show all of my remote branches (which, by my convention, begin with "gabriel.staples_")
 git branch -d -r origin/mybranch = delete remote branch; see: https://stackoverflow.com/questions/5094293/git-remote-branch-deleted-but-still-it-appears-in-branch-a/5096739#5096739
 git branch -rd origin/mybranch = same as above
+
+git checkout <branch_name> -- <paths>
+    Check out just the file or files in `<paths>` from branch or commit hash `<branch_name>`.
+    See: original source: http://nicolasgallagher.com/git-checkout-specific-files-from-another-branch/
+    [my ans] https://stackoverflow.com/questions/2364147/how-to-get-just-one-file-from-another-branch/65258783#65258783
 
 git fetch <remote> <srcBranch>:<destBranch>
     Fetch and pull the latest `srcBranch` from `remote` to both `origin/srcBranch` AND to local `destBranch`, withOUT checking out `destBranch` first! 
@@ -1445,6 +1477,7 @@ git diff --stat        commit_hash
              file2.h      | 94 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
              file3.h      |  9 ++++++++
              3 files changed, 84 insertions(+), 21 deletions(-)
+    <======= MY FAVORITE DETAILED STATUS I THINK (^^^) =======
 git diff --numstat     commit_hash
     if you sum all the numbers in both columns this outputs, you'll get the same results as `--shortstat` below, which is what GitHub uses to show the number of files changed, lines added, and lines deleted! See the last line of this output for that done for you. 
     Sample output: 
@@ -1459,6 +1492,7 @@ git diff --shortstat   commit_hash
     Sample output:
             $ git diff --shortstat
              3 files changed, 84 insertions(+), 21 deletions(-)
+    <======= MY FAVORITE SHORT STATUS I THINK (^^^) =======
 git diff --dirstat     commit_hash
     Show the percent of changes by directory.
     Sample output:
@@ -2169,13 +2203,17 @@ terminator = *****a terminal program to EASILY allow 4 terminals (2x2) or even 1
 
 == ==
 
+uptime
+    show how long the computer has been on (since last reboot), how many users are currently logged-in, etc.
+who
+    show who is currently logged-in 
+    [keywords: who is logged in, linux who is logged in, linux open ssh sessions, linux ssh users logged in, linux open login sessions, linux open sessions of users logged-in, linux users logged in, linux sessions, linux users currently logged in]
+w
+    "Show who is logged on and what they are doing"; great command to ensure you're the only one remotely logged on to a PC, for instance!
 whoami
     print your username (helps verify you are logged in under the correct user)
 sudo whoami
     print your sudo username; it should say "root" since you ran it as `sudo`! This helps verify you have `sudo` access!--ie: that you are a member of the "sudo" group (run `groups` to check), and in the sudoers file (run `sudo visudo`--you should have an entry for your username at the bottom).
-w
-    "Show who is logged on and what they are doing"; great command to ensure you're the only one remotely logged on to a PC, for instance!
-
 
 df -h
     show 'd'isk 'f'ile usage to see how much hard drive/SSD space you have total, used, and remaining
