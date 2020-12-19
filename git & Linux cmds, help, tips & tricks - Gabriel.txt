@@ -7,6 +7,11 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 = Quotes: =
 ====================================================================================================
 
+"If you love it, you'll teach yourself. If you don't love it, others teach you."
+    - Yukitaka Yamaguchi, the "Tuna King", Youtube video: "The Tuna King Reigns at Tsukiji Fish Market — Omakase Japan", [11:33](https://youtu.be/trbl4RNgKO0?t=693)
+"I have a great love for programming, so I taught myself."
+    - Gabriel Staples, 18 Dec. 2020
+
 "It's better to be done well and on time, than perfect and late."
     - Gabriel Staples, ~2008, while studying at the US Air Force Academy and trying to figure out how to balance time
 
