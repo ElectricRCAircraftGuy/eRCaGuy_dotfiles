@@ -75,5 +75,8 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
     1. Then, right-click on any video or audio file in your file manager (ex: nemo) --> Open With --> MediaInfo. 
     1. See here: https://www.fosslinux.com/1860/find-metadata-info-of-audio-and-video-files-using-mediainfo.htm
     1. Note that for _images_ or _pictures_ in nemo, just use nemo's built-in photo properties information instead of mediainfo-gui. Just Right Click --> Properties --> click on the "Image" tab for image information.
-
+1. `exiftool` - useful CLI tool to read, write, and update the metadata of various file types, including PDF, audio, video, and images. See: https://linuxhint.com/get_filea_metadata_exif_tool/.
+    1. Install: `sudo apt install libimage-exiftool-perl`
+    1. Use: `exiftool <filename>`. Ex: `exiftool my_video.mp4`.
+    1. This tool shows far more information than `mediainfo-gui` above!
 
