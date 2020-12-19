@@ -7,34 +7,36 @@ Author: Gabriel Staples
 
 INSTALLATION INSTRUCTIONS:
 0. Install dependencies:
-        sudo apt install python-rosbag 
+    Source: https://zoomadmin.com/HowToInstall/UbuntuPackage/python-rosbag
+        sudo apt install python-rosbag   # for python2 (deprecated)
+        sudo apt install python3-rosbag  # for python3 (required now) <===
 1. Create a symlink in ~/bin to this script so you can run it from anywhere:
         cd /path/to/here
         mkdir -p ~/bin
         ln -si "${PWD}/ros_readbagfile.py" ~/bin/gs_ros_readbagfile
-2. Now you can use the `gs_ros_readbagfile` command directly anywhere you like.
+        ln -si "${PWD}/ros_readbagfile.py" ~/bin/ros_readbagfile
+2. Now you can use the command `gs_ros_readbagfile` OR `ros_readbagfile` directly
+   anywhere you like.
+
+TUTORIAL DEMO:
+For a usage demo, see this ROS tutorial I wrote here: "Reading messages from a bag file":
+http://wiki.ros.org/ROS/Tutorials/reading%20msgs%20from%20a%20bag%20file
 
 References:
 1. http://wiki.ros.org/rosbag/Cookbook
 1. https://pypi.org/project/pyrosbag/
 1. Python2 `rosbag` Code API documentation: https://docs.ros.org/api/rosbag/html/python/
-- `read_messages()` API documentation: 
+- `read_messages()` API documentation:
    https://docs.ros.org/api/rosbag/html/python/rosbag.bag.Bag-class.html#read_messages
 1. http://wiki.ros.org/rospy/Overview/Time
 1. https://www.geeksforgeeks.org/python-exit-commands-quit-exit-sys-exit-and-os-_exit/
 
-Install Dependencies:
-Source: https://zoomadmin.com/HowToInstall/UbuntuPackage/python-rosbag
-    sudo apt install python-rosbag 
-
-Note: as far as I can tell, rosbag runs only in Python2, not Python3 :(
-
 Pros of this script: really easy to use; requires only 1 terminal, and NO `roscore` running.
-Cons: this Python implementation runs ~13x slower than "OPTION 1", as described in 
-"eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt", so it might take up to 
+Cons: this Python implementation runs ~13x slower than "OPTION 1", as described in
+"eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt", so it might take up to
 1 to 2+ minutes to process an entire bag file instead of only like 5 to 10 seconds.
 
-TODO: 
+TODO:
 1. convert this entire Python script to a C++ program using the [C++ rosbag
 API](http://wiki.ros.org/rosbag/Code%20API#cpp_api), to hopefully achieve a speed-up of ~13x
 or so.
@@ -59,14 +61,14 @@ Usage: {} <mybagfile.bag> [topic1] [topic2] [topic3] [...topicN]
 Reads and prints all messages published on the specified topics from the specified ROS bag file. If
 no topics are specified, it will print ALL messages published on ALL topics found in the bag file.
 For large bag files, on the order of 10 to 20 GB or so, expect the script to take on the order of
-1 to 4 minutes or so assuming you have a fast Solid-State Drive (SSD). 
+1 to 4 minutes or so assuming you have a fast Solid-State Drive (SSD).
 
 TODO: converting this script from Python to C++ could potentially speed this up by an estimated
 factor of 13x or so, decreasing the processing time from a couple minutes to perhaps a dozen
 seconds.
 
-Examples: 
-1. Print all messages published to the "/speed", "/vel", and "/dist" topics and stored in the 
+Examples:
+1. Print all messages published to the "/speed", "/vel", and "/dist" topics and stored in the
 "mybagfile.bag" ROS bag file to the screen:
     {} mybagfile.bag /speed /vel /dist
 2. Same as above, except also stores the printed output into an output file, "output.txt" as well:
@@ -98,14 +100,14 @@ def parseArgs():
         print("ERROR: no input args; 1 minimum required.")
         printHelp()
         sys.exit()
-    
+
     if len(sys.argv) >= 2:
         if sys.argv[1] == "-h" or sys.argv[1] == "--help":
             printHelp()
             sys.exit()
 
-        args.bag_file_in = sys.argv[1] 
-    
+        args.bag_file_in = sys.argv[1]
+
     if len(sys.argv) >= 3:
         args.topics_to_read = sys.argv[2:]
 
@@ -143,7 +145,7 @@ def printMsgsInBagFile(args):
         # the comma at the end prevents the newline char being printed at the end in Python2; see:
         # https://www.geeksforgeeks.org/print-without-newline-python/
         print("timestamp (sec):"),
-        print("%.9f" % t.to_sec()) 
+        print("%.9f" % t.to_sec())
         print("- - -")
 
         # Print the message
@@ -154,7 +156,7 @@ def printMsgsInBagFile(args):
         print("NO MESSAGES FOUND IN THESE TOPICS")
 
     print("Total messages found = {}.".format(total_count))
-    ##### TODO: PRINT MESSAGE COUNT FOR EACH MSG TYPE TOO! ie: just print all key/value pairs in the 
+    ##### TODO: PRINT MESSAGE COUNT FOR EACH MSG TYPE TOO! ie: just print all key/value pairs in the
     # `msg_counters` dict. What order to print them in? Probably just alphabetical.
 
     print("DONE.")
