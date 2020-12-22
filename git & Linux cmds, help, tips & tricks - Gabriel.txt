@@ -2240,6 +2240,33 @@ du -h | tail -n 1 | awk '{print $1}'
         100G
     See here for `awk` usage help which enabled me to retain only the 1st column above: https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
 
+chown
+    Change the owner of files and directories. 
+
+chmod
+    'Ch'ange the file permissions "mode" ('mod'e) for files and directories. Examples:
+chmod -R 700 ~/.ssh
+    'R'ecursively set mode 700 (`u+rwx,g-rwx,o-rwx`--see: https://en.wikipedia.org/wiki/Chmod#Command_line_examples) for the directory ~/.ssh and all files and folders recursively within it.
+chmod 600 ~/.ssh/*
+    Set mode 600 (`u+rw,g-rwx,o-rwx`) for all files and directories (`/*`) directly within (but NOT recursively in sub-directories within) in the dir "~/.ssh/".
+chmod -R a-x+X my_dir
+    For 'a'll users (user, group, other), recursively (`-R`) remove e'x'ecutable privileges on EVERYTHING (all files and directories), then put it back (`+X`) for all **directories** only, so that these dirs can be opened and browsed!
+    - See: https://superuser.com/questions/454795/how-can-i-do-a-recursive-chmod-only-on-directories/454807#454807
+    <====== VERY USEFUL TO KNOW ABOUT +/-X! ==========
+chmod -R 700 ~/.ssh && chmod -R u-x+X ~/.ssh
+    Recusively (`-R`) set mode 700 (`u+rwx,g-rwx,o-rwx`) for all files and folders in ~/.ssh, then recursively remove e'x'ecutable privileges on all files and folders (`-R u-x`), recursively adding back executable privileges only on dirs (`-R u+X`), so they can be opened/navigated.
+chmod -R u+rw,g-rwx,o-rwx ~/.ssh
+    A much cleaner way to do the above! Recursively (`-R`) turn off ALL privileges for 'g'roup and 'o'ther users, while ensuring the owner ('u'ser) recursively has 'r'ead and 'w'rite privileges on all files and folders within ~/.ssh.
+    <====== BEST! =======
+chmod -R u-x+rwX,g-rwx,o-rwx ~/.ssh
+    A slightly-altered version of the above to remove e'x'ecutable privileges on all files and directories (`-x`) within ~/.ssh, while then adding them back for all directories (`+X`), to fix things in the event you accidentally previously added `+x` to all files, but didn't mean to.
+    <====== GOOD! MAY BE NEEDED TO FIX THINGS! ======
+chmod 700 ~/.ssh
+    Ensure only the 'u'ser (owner) can read, write, or execute (open/navigate to) the ~/.ssh dir. 
+    <====== THIS IS A GOOD IDEA FOR SECURITY! ======
+chmod 777 some_file_or_dir
+    Set the mode on some_file_or_dir to 777 (`u+rwx,g+rwx,o+rwx`), which means FULL PRIVILEGES for all! Note: watch out! This is _very rarely desired_, for security reasons, as it gives all privileges to all users to this file or dir. 
+
 == diff: ==
 
 diff file1.txt file2.txt = compare file1.txt and file2.txt for differences! (similar to `git diff`)
