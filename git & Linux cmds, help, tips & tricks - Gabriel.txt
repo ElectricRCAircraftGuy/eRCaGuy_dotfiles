@@ -2767,12 +2767,36 @@ pdf2searchablepdf -h
 pdftk input.pdf cat 10-12 output output.pdf
     Extract pgs 10 to 12, inclusive, from input.pdf and save them into output.pdf. Works great!
     - See: https://askubuntu.com/questions/221962/how-can-i-extract-a-page-range-a-part-of-a-pdf/672001#672001
+    - Install (tested in Ubuntu 20.04): `sudo apt install pdftk-java`.
     [keywords: extract pgs from pdf, extract pages from pdf, split pdf]
 
 == Compress PDFs: ==
 [pdf compression]
 
-TODO. See: https://askubuntu.com/questions/113544/how-can-i-reduce-the-file-size-of-a-scanned-pdf-file/243753#243753
+For Ghostscript (`gs`) commands, or `ps2pdf` commands (part of Ghostscript), see:
+1. `gs`:        https://askubuntu.com/questions/113544/how-can-i-reduce-the-file-size-of-a-scanned-pdf-file/256449#256449
+2. `ps2pdf`:    https://askubuntu.com/questions/113544/how-can-i-reduce-the-file-size-of-a-scanned-pdf-file/243753#243753
+1. [MY ANSWER]: https://askubuntu.com/questions/113544/how-can-i-reduce-the-file-size-of-a-scanned-pdf-file/1303196#1303196
+
+[3 Main levels of compression:]
+[Use Ghostscript (`gs`) to compress input.pdf into output.pdf.]
+[You may also add `-dQUIET` to suppress all output to stdout. See: https://www.ghostscript.com/doc/current/Use.htm]
+gs -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -dNOPAUSE -dBATCH -sOutputFile=output.pdf input.pdf
+    1: LOW compression: **300 dpi** (large file size)
+gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook -dNOPAUSE -dBATCH -sOutputFile=output.pdf input.pdf
+    2: MEDIUM compression (recommended): **150 dpi** (medium file size)
+    <========= BEST ^^^ ========
+    See: [my answer]https://askubuntu.com/questions/113544/how-can-i-reduce-the-file-size-of-a-scanned-pdf-file/1303196#1303196
+gs -sDEVICE=pdfwrite -dPDFSETTINGS=/screen -dNOPAUSE -dBATCH -sOutputFile=output.pdf input.pdf
+    3: HIGH compression: **72 dpi** (small file size)
+
+[You can also use `ps2pdf`, which is a wrapper around `gs`, and produces very similar, but not exactly identical, results:]
+ps2pdf -dPDFSETTINGS=/printer input.pdf output.pdf
+    1: LOW compression: **300 dpi** (large file size)
+ps2pdf -dPDFSETTINGS=/ebook   input.pdf output.pdf
+    2: MEDIUM compression (recommended): **150 dpi** (medium file size)
+ps2pdf -dPDFSETTINGS=/screen  input.pdf output.pdf
+    3: HIGH compression: **72 dpi** (small file size)
 
 
 ====================================================================================================
