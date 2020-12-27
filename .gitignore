@@ -1,26 +1,26 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # INSTRUCTIONS:
-# Edit as desired, then copy this file to any git repository you desire. 
+# Edit as desired, then copy this file to any git repository you desire.
 # Ex: `cp -i .gitignore /path/to/my/git/repo/`
 
 # Copied from this project: eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
-# 
-# Gitignore File Formatting Notes: 
-# - add a / *after* a name to indicate a folder, and leave it off to indicate a file; 
+#
+# Gitignore File Formatting Notes:
+# - add a / *after* a name to indicate a folder, and leave it off to indicate a file;
 #   - example usage: `folder/`, `file`
-# - Add a / *before* a name to indicate it is an absolute-style path starting at the "root" directory where this very 
-#   .gitignore file is located; note this "root" directory is NOT necessarily this git repo's root directory where 
-#   the ".git" folder is located, but rather, it is the directory where this .gitignore file is located; 
+# - Add a / *before* a name to indicate it is an absolute-style path starting at the "root" directory where this very
+#   .gitignore file is located; note this "root" directory is NOT necessarily this git repo's root directory where
+#   the ".git" folder is located, but rather, it is the directory where this .gitignore file is located;
 #   - example usage: `/folder/`, `/file`
 #   - See: https://stackoverflow.com/questions/43555850/git-gitignore-to-ignore-only-folder-in-root-directory/43555863#43555863
 # - Use asterisks (*) for wildcards; ex: `/mydir/*/*.cpp`
-# - Add an exclamanation mark (!) *before* a path to indicate you do NOT want it ignored, even if it otherwise matches 
-#   a path to ignore; example: 
+# - Add an exclamation mark (!) *before* a path to indicate you do NOT want it ignored, even if it otherwise matches
+#   a path to ignore; example:
 #   ```
 #   /ignored_dir/                           # ignore this dir
 #   !/ignored_dir/special_file_to_include   # EXCEPT for this file--DO include it!
-#   ``` 
+#   ```
 
 /git_branch_hash_backups/
 /private/
