@@ -7,6 +7,13 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 = Quotes: =
 ====================================================================================================
 
+> Being in debt is hard. Being financially disciplined is hard. Choose your hard.  
+> Communication is hard. Not communicating is hard. Choose your hard.  
+> Obesity is hard. Being fit is hard. Choose your hard.  
+> Marriage is hard. Divorce is hard. Choose your hard.  
+> Life is rarely easy. It will be hard. But we can choose our hard.  
+    - Swish Goswami, ~24 Dec. 2020 [on LinkedIn](https://www.linkedin.com/posts/swishgoswami_being-in-debt-is-hard-being-financially-activity-6747804403127910400-Clwh)
+
 "If you love it, you'll teach yourself. If you don't love it, others teach you."
     - Yukitaka Yamaguchi, the "Tuna King", Youtube video: "The Tuna King Reigns at Tsukiji Fish Market — Omakase Japan", [11:33](https://youtu.be/trbl4RNgKO0?t=693)
 "I have a great love for programming, so I taught myself."
@@ -2652,28 +2659,26 @@ ls /proc/*/task = list the threads in all multi-threaded processes!
 
 == ==
 
-qpdf --decrypt in.pdf out.pdf = "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups!
-- Once I do this, I like to rename "out.pdf" to "some useful name [`qpdf --decrypt`ed]" so I can remember right in the name itself how I did this!
+qpdf --decrypt in.pdf out.pdf
+    "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups!
+    - Once I do this, I like to rename "out.pdf" to "some useful name [`qpdf --decrypt`ed]" so I can remember right in the name itself how I did this!
 
-gpg -c myfile.txt = encrypt myfile.txt with a passphrase (symmetric 'c'ipher); a GUI window will pop up, asking you for a password to encrypt the file; enter a password, then it will ask you again; once you enter the password again it will encrypt the file and create a new file called myfile.txt.gpg. You will need to manually delete the old file.
-gpg myfile.txt.gpg = decrypt myfile.txt.gpg back into myfile.txt; it will ask you for the password which was originally used to encrypt it!
-- See here for details and where I learned this! https://www.lifewire.com/encrypt-decrypt-password-protect-files-linux-4582604
+gpg -c myfile.txt
+    encrypt myfile.txt with a passphrase (symmetric 'c'ipher); a GUI window will pop up, asking you for a password to encrypt the file; enter a password, then it will ask you again; once you enter the password again it will encrypt the file and create a new file called myfile.txt.gpg. You will need to manually delete the old file.
+gpg myfile.txt.gpg
+    decrypt myfile.txt.gpg back into myfile.txt; it will ask you for the password which was originally used to encrypt it!
+    - See here for details and where I learned this! https://www.lifewire.com/encrypt-decrypt-password-protect-files-linux-4582604
 
 
 ====================================================================================================
 = Image and video compression and conversion: =
 ====================================================================================================
-[keywords: compressing videos, compressing images, compressing pictures, image/picture compression, compress images, compress photos, compressing photos, photo compression, compress videos, video compression, convert videos, converting videos, video conversion, image conversion, picture conversion, converting videos, converting images, converting pictures, convert pictures, convert images, convert videos, shrink pictures, shrink images]
+[keywords: compressing videos, compressing images, compressing pictures, image/picture compression, compress images, compress imgs, compress photos, compressing photos, photo compression, compress videos, video compression, convert videos, converting videos, video conversion, image conversion, picture conversion, converting videos, converting images, converting pictures, convert pictures, convert images, convert videos, shrink pictures, shrink images]
 
 == find large files: ==
 [this is adjacently related to video conversion, as GitHub doesn't allow files > 100 MB in size (see: https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com/59479166#59479166), so you may need to find all files > 100 MB, then convert them down to a smaller size using `ffmpeg` as shown below if they are videos!]
 
 find . -type f -size +100M = find all files in the current directory that are larger than 100 MB! See: https://superuser.com/questions/204564/how-can-i-find-files-that-are-bigger-smaller-than-x-bytes/204571#204571
-
-== PDF to images: ==
-
-pdftoppm
-See: [MY OWN ANS!] https://stackoverflow.com/questions/43085889/how-to-convert-a-pdf-into-jpg-with-commandline-in-linux/61700520#61700520
 
 == Image resizing: ==
 [resize image, resize picture, picture resizing]
@@ -2682,7 +2687,7 @@ convert in.png -resize 600x400 out.jpg = resize to make the dimensions max 600x4
 convert in.png -resize 800x800 out.jpg = same as above, but make the max dimension on either the x or y axis 800 pixels
 
 == Image compression: ==
-[picture compression]
+[picture compression, img compression]
 
 REFERENCES:
 1. https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF
@@ -2725,15 +2730,49 @@ time ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4 = [PRODUCE "LARGE" V
 ====================================================================================================
 = PDFs and PDF Manipulation: =
 ====================================================================================================
-[PDFs:, pdf combine, combine pdfs, merge pdfs, make PDFs have searchable text, PDF OCR, PDF Optical Character Recognition, OCR in PDFs, OCR pdfs, etc.]
+[PDFs:, pdf combine, combine pdfs, merge pdfs, make PDFs have searchable text, PDF OCR, PDF Optical Character Recognition, OCR in PDFs, OCR pdfs; split pdfs, extract pages from pdf, extract pgs from pdf; etc.]
+
+== PDF to images: ==
+
+pdftoppm
+    - See: [MY OWN ANS!] 
+      https://stackoverflow.com/questions/43085889/how-to-convert-a-pdf-into-jpg-with-commandline-in-linux/61700520#61700520
+    - Examples:
+pdftoppm -jpeg -r 300 input.pdf output 
+    The basic command format to convert a PDF to a bunch of images! The `-jpeg` sets the output image format to JPG, `-r 300` sets the output image resolution to 300 DPI, and the word `output` will be the prefix to all pages of images, which will be numbered and placed into your current directory you are working in.
+    Other examples:   
+mkdir -p images && pdftoppm -jpeg -r 300 mypdf.pdf images/pg
+    [Produces ~1MB-sized files per pg] Output in **.jpg** format at **300 DPI**.
+mkdir -p images && pdftoppm -jpeg -jpegopt quality=100 -r 300 mypdf.pdf images/pg
+    [Produces ~2MB-sized files per pg] Output in **.jpg** format **at highest quality (least compression)** and still at **300 DPI**.
+mkdir -p images && pdftoppm -jpeg -r 600 mypdf.pdf images/pg
+    If you need more resolution, you can try 600 DPI.
+mkdir -p images && pdftoppm -jpeg -r 1200 mypdf.pdf images/pg
+    ...or 1200 DPI.
+
+== Combine PDFs: ==
 
 pdfunite in1.pdf in2.pdf in3.pdf out.pdf
     Combine multiple PDFs into one! CAUTION: the last pdf argument MUST BE a new pdf name, such as out.pdf, or else you'll be accidentally overwriting an input, ruining it! Source for this cmd: see: https://stackoverflow.com/questions/2507766/merge-convert-multiple-pdf-files-into-one-pdf/11280219#11280219
+
+== Make PDFs Searchable/OCR PDFs: ==
 
 pdf2searchablepdf <input.pdf | dir_of_imgs> [lang]`
     [My own project] "If the 1st argument is to an input pdf, then convert input.pdf to input_searchable.pdf using language"lang" for OCR. Otherwise, if the 1st argument is a path to a directory containing a bunch of images, convert the whole directory of images into a single PDF, using language "lang" for OCR!" See: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF.
 pdf2searchablepdf -h
     Show the help menu for this program!
+
+== Split PDFs/extract pgs: ==
+
+pdftk input.pdf cat 10-12 output output.pdf
+    Extract pgs 10 to 12, inclusive, from input.pdf and save them into output.pdf. Works great!
+    - See: https://askubuntu.com/questions/221962/how-can-i-extract-a-page-range-a-part-of-a-pdf/672001#672001
+    [keywords: extract pgs from pdf, extract pages from pdf, split pdf]
+
+== Compress PDFs: ==
+[pdf compression]
+
+TODO. See: https://askubuntu.com/questions/113544/how-can-i-reduce-the-file-size-of-a-scanned-pdf-file/243753#243753
 
 
 ====================================================================================================
