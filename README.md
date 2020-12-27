@@ -1,5 +1,6 @@
 Gabriel Staples
 
+These are my Linux Ubuntu configuration files and commonly-used scripts--many of which I've written myself. 
 This project is well-maintained, highly-used by myself, and highly-functional. It's not experimental, it's what I use every day. Feel free to use or borrow from it yourself. 
 
 # Table of Contents
