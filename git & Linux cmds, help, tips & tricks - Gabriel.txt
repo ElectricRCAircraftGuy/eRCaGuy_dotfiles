@@ -2192,7 +2192,7 @@ objdump -h /bin/ls
 ====================================================================================================
 = Linux (General): =
 ====================================================================================================
-[general linux; linux general]
+[general linux; linux general, linux =]
 
 Linux Terminal shortcuts: https://www.howtogeek.com/howto/ubuntu/keyboard-shortcuts-for-bash-command-shell-for-ubuntu-debian-suse-redhat-linux-etc/
 Ex:
@@ -2212,6 +2212,7 @@ terminator = *****a terminal program to EASILY allow 4 terminals (2x2) or even 1
  - See here, **including my comments under the answer!**
    https://askubuntu.com/questions/612131/how-to-display-more-than-1-terminal-simultaneously/612139#612139
  - See also: [eRCaGuy_dotfiles/useful_apps/README.md](useful_apps/README.md)
+
 
 == ==
 
@@ -2274,6 +2275,26 @@ chmod 700 ~/.ssh
 chmod 777 some_file_or_dir
     Set the mode on some_file_or_dir to 777 (`u+rwx,g+rwx,o+rwx`), which means FULL PRIVILEGES for all! Note: watch out! This is _very rarely desired_, for security reasons, as it gives all privileges to all users to this file or dir. 
 
+[Linux bash shell debugging; bash debugging; bash debug prints]
+set -x
+    Turn on a type of "shell debugging" to "print commands and their arguments as they are executed." See `help set | less`. 
+    See also the `set -x` examples used by @eaglemc here in this issue on my repo here: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/issues/9. 
+set +x
+    Turn OFF the `set -x` "print everything executed in the shell" type debugging!
+
+[bash script path, bash full path, bash full dir path, bash full directory path, bash directory path, bash filename, bash basename, bash dirname]
+[FOR A FULL EXAMPLE OF THE BELOW 3 CMDS, SEE MY ANSWER HERE: <=========
+https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself/60157372#60157372]
+
+realpath some_file_or_symlink
+    Obtain the full, resolved path (absolute path) of some_file_or_symlink. If it is a symlink, this walks the path all the way down to the actual path. 
+    <========= VERY USEFUL! vvv^^^ ========
+dirname $(realpath some_file_or_symlink)
+    Obtain the full **directory** path of the path above.
+basename $(realpath some_file_or_symlink)
+    Obtain the base **filename** of the path above.
+
+
 == diff: ==
 
 diff file1.txt file2.txt = compare file1.txt and file2.txt for differences! (similar to `git diff`)
@@ -2293,6 +2314,7 @@ cat right_file.txt | diff -u --color=always left_file.txt - = pipe content in fr
 
 - This allows you to do interesting things, such as show how clang-format changes a file, like this:
 clang-format myfile.cpp | diff -u --color=always myfile.cpp - = run clang-format on myfile.cpp, sending its clang-formatted output to stdout; pipe this formatted output to `diff`, however, showing 3 lines of 'u'nified output, with color on, comparing the original myfile.cpp on the left to the stdinput piped in as the file on the right. Therefore, the left is the original file and the right is the formatted file. Now, you can see the output of what changes WOULD be made withOUT actually making those formatting changes! It's a sort of clang-format "preview" to see what **would** be done without actually doing it! See the == clang-format: == section above for further details.
+
 
 == ==
 
