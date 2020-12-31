@@ -80,4 +80,4 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
     1. Install: `sudo apt install libimage-exiftool-perl`
     1. Use: `exiftool <filename>`. Ex: `exiftool my_video.mp4`.
     1. This tool shows far more information than `mediainfo-gui` above!
-1. `git gui`: `sudo apt update && sudo apt install git-gui`
+1. `git gui`: `sudo apt update && sudo apt install git-gui` - useful for adding changes to be committed in git, graphically in a GUI, _line-by-line_ or code _chunk-by-chunk_, rather than just _file-by-file_. 
