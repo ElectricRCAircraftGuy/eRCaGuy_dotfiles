@@ -57,15 +57,20 @@ EXIT_ERROR=1
 HELP_STR="
 Usage: git changes <common_base> <backup_branch> [any other args to pass to git difftool]
 
-I recommend you also have a 'git difftool' configured. I use 'meld'. It is amazing. To install it,
-see my instrucitons here: 
-https://stackoverflow.com/questions/14821358/git-mergetool-with-meld-on-windows/48979939#48979939
+Brief description:
+See all changes (via `git difftool`) that were just added to `HEAD` (the currently-checked-out 
+feature branch) by a merge or rebase of `common_base` (ex: `master` branch) into `HEAD`, but 
+**only looking for merge/rebase changes in the files the feature branch had touched or changed** 
+(relative to the `common_base`--ex: `master`). 
 
 git-changes.sh
 - quickly compare a newly-rebased branch (your currently-checked-out branch) against its
   backup branch you should have manually created just before doing the rebase
 - this *requires* that you should have manually created a backup branch before doing the
   rebase!
+- I recommend you also have a 'git difftool' configured. I use 'meld'. It is amazing. To install it,
+  see my instrucitons here: 
+  https://stackoverflow.com/questions/14821358/git-mergetool-with-meld-on-windows/48979939#48979939
 - Here is the whole process:
         # 1. ensure you have the latest upstream changes from the branch you would like to rebase
         #    your feature branch **onto**. Let's assume that is 'master':
