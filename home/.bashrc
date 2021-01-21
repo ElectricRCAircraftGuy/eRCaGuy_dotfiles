@@ -1,6 +1,6 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# INSTRUCTIONS: 
+# INSTRUCTIONS:
 # Edit as desired, then copy to ~/.bashrc
 # Option 1) doesn't exist yet, so copy whole thing over: `cp -i .bashrc ~`
 # Option 2) append contents to existing .bashrc file: `cat .bashrc >> ~/.bashrc`
@@ -138,7 +138,7 @@ fi
 # Some nice nuggets to put in the bottom of your "~/.bashrc" file!
 # ----------------------------------------------------------------------------------------------------------------------
 
-# GS: show 1) the shell level and 2) the currently-checked-out git branch whenever you are inside any directory 
+# GS: show 1) the shell level and 2) the currently-checked-out git branch whenever you are inside any directory
 # containing a local git repository
 # See: https://stackoverflow.com/questions/4511407/how-do-i-know-if-im-running-a-nested-shell/57665918#57665918
 git_show_branch() {
@@ -159,17 +159,17 @@ git_show_branch() {
 PS1="\e[7m\$(git_show_branch)\e[m\n$PS1"
 PS1='\$SHLVL'":$SHLVL $PS1"
 
-############ TODO: fix this up! 
+############ TODO: fix this up!
 # 1. make it stand-alone
 # 2. make it work as `git branch_hash_bak [optional message]`
 #   - let the optional message just be the remainder of the arguments, so it doesn't require a quote
 #   - however, force it to not contain spaces, so replace spaces with underscores
 #   - add the optional message into the filename itself at the end
 ############
-# GS: git branch backups: useful to back up git branch hashes before deleting branches, so you can 
+# GS: git branch backups: useful to back up git branch hashes before deleting branches, so you can
 # always have their hashes to go back to to checkout rather than having to dig through your `git reflog` forever.
-# - Note that this currently requires that the GIT_BRANCH_HASH_BAK_DIR directory already exists. 
-# - TODO: fail more gracefully: make it check to see if this dir exists & prompt the user for permission to 
+# - Note that this currently requires that the GIT_BRANCH_HASH_BAK_DIR directory already exists.
+# - TODO: fail more gracefully: make it check to see if this dir exists & prompt the user for permission to
 #   auto-create it with `mkdir -p ${GIT_BRANCH_HASH_BAK_DIR}` if it does not.
 # Syntax: `gs_git_branch_hash_bak [dir]` = back up to a backup file in directory "dir" if a dir is passed in
 GIT_BRANCH_HASH_BAK_DEFAULT_DIR="./git_branch_hash_backups"
@@ -205,13 +205,19 @@ alias gs_git_branch_hash_bak_up1="gs_git_branch_hash_bak \"../git_branch_hash_ba
 alias gs_git_branch_hash_bak_up1_echo="echo gs_git_branch_hash_bak \"../git_branch_hash_backups\""
 
 # Edit this ssh command! Make the username, domain_name, & options what they should be for you.
-# Notes: 1) enable X11 window forwarding with `-X`; see here: 
+# Notes: 1) enable X11 window forwarding with `-X`; see here:
 # https://unix.stackexchange.com/questions/12755/how-to-forward-x-over-ssh-to-run-graphics-applications-remotely/12772#12772
 # 2) keep the connection alive with `-o "ServerAliveInterval 60"`; see here:
 # https://superuser.com/questions/699676/how-to-prevent-ssh-from-disconnecting-if-its-been-idle-for-a-while/699680#699680
-SSH_CMD="ssh -X -o \"ServerAliveInterval 60\" username@domain_name" 
+SSH_CMD="ssh -X -o \"ServerAliveInterval 60\" username@domain_name"
 alias gs_ssh="$SSH_CMD"
 alias gs_ssh_echo="echo '$SSH_CMD'"
+
+# See my own answer here!
+# https://askubuntu.com/questions/791002/how-to-prevent-sshfs-mount-freeze-after-changing-connection-after-suspend/942820#942820
+alias gs_sshfs="sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 \
+username@server_hostname:/path/on/server/to/mount ~/mnt/my_server"
+alias gs_sshfs_umount="sudo umount ~/mnt/my_server"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # TERMINAL TABS & TITLE (START)
@@ -219,28 +225,28 @@ alias gs_ssh_echo="echo '$SSH_CMD'"
 # Back up original PS1 Prompt 1 string when ~/.bashrc is first sourced upon bash opening; this must be placed
 # AFTER all other modifications have already occured to the `PS1` Prompt String 1 variable
 if [[ -z "$PS1_BAK" ]]; then # If length of this str is zero (see `man test`)
-    PS1_BAK=$PS1 
+    PS1_BAK=$PS1
 fi
 
 # Set the title string at the top of your current terminal window or terminal window tab.
 # See: https://unix.stackexchange.com/questions/177572/how-to-rename-terminal-tab-title-in-gnome-terminal/566383#566383
 # and: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
-# - Example usage: 
-#   - A) Static title strings (title remains fixed): 
+# - Example usage:
+#   - A) Static title strings (title remains fixed):
 #     - `set-title my tab 1` OR `set-title "my tab 1"`
 #     - `set-title $PWD` OR `set-title "$PWD"`
-#   - B) Dynamic title strings (title updates each time you enter any terminal command): you may use function calls or 
+#   - B) Dynamic title strings (title updates each time you enter any terminal command): you may use function calls or
 #     variables within your title string and have them *dynamically* updated each time you enter a new command.
-#     Simply enter a command or access a global variable inside your title string. **Be sure to use _single quotes_ 
-#     around the title string for this to work!**: 
+#     Simply enter a command or access a global variable inside your title string. **Be sure to use _single quotes_
+#     around the title string for this to work!**:
 #     - `set-title '$PWD'` - this updates the title to the Present Working Directory every time you `cd` to a new
 #        directory!
 #     - `set-title '$(date "+%m/%d/%Y - %k:%M:%S")'` - this updates the title to the new date and time every time
 #        it changes *and* you enter a new terminal command! The format looks like this: `02/06/2020 - 23:32:58`
 gs_set-title() {
-    # Set the PS1 title escape sequence; see "Customizing the terminal window title" here: 
+    # Set the PS1 title escape sequence; see "Customizing the terminal window title" here:
     # https://wiki.archlinux.org/index.php/Bash/Prompt_customization#Customizing_the_terminal_window_title
-    TITLE="\[\e]2;$@\a\]" 
+    TITLE="\[\e]2;$@\a\]"
     PS1=${PS1_BAK}${TITLE}
 }
 alias gs_set-title_echo='echo -e "This is a bash function in \"~/.bashrc\" which sets the title of your \
@@ -250,7 +256,7 @@ currently-opened terminal tab'
 # exported by the user. This can be accomplished as follows:
 #   export TITLE_DEFAULT="my title"
 #   . ~/.bashrc
-# Note that sourcing the ~/.bashrc file is done automatically by bash each time you open a new bash 
+# Note that sourcing the ~/.bashrc file is done automatically by bash each time you open a new bash
 # terminal, so long as it is an interactive (use `bash -i` if calling bash directly) type terminal
 if [[ -n "$TITLE_DEFAULT" ]]; then # If length of this is NONzero (see `man test`)
     gs_set-title "$TITLE_DEFAULT"
@@ -285,16 +291,27 @@ DEFAULT_TABS_CMD7="cd '$HOME/GS/dev'"
 # the title of each tab as desired. This is really helpful to get your programming environment set up
 # for software development work, for instance.
 gs_open_default_tabs() {
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
-    gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
+    # Ex of how to do this in the `terminator` terminal
+    # terminator --new-tab --command='ls; cd dev; ls; exec bash;'
+
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
+
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
 }
 
-# This chunk of code allows one to essentially call `open_default_tabs` from another script to open up all 
+# This chunk of code allows one to essentially call `open_default_tabs` from another script to open up all
 # default tabs in a brand new terminal window simply by entering these lines into your script:
 #   export OPEN_DEFAULT_TABS=true
 #   gnome-terminal          # this also sources ~/.bashrc (this script)
@@ -303,11 +320,11 @@ gs_open_default_tabs() {
 # See "eRCaGuy_dotfiles/useful_scripts/open_programming_tools.sh" for a full example & more detailed comments.
 if [[ -n "$OPEN_DEFAULT_TABS" ]]; then # If length of this is NONzero (see `man test`)
     # Reset to an empty string so this only happens ONCE since ~/.bashrc is about to be sourced recursively
-    OPEN_DEFAULT_TABS= 
+    OPEN_DEFAULT_TABS=
     gs_open_default_tabs
     # close the calling process so only the "default tabs" are left open while the initial `gnome-terminal` tab
     # that opened all the other tabs is now closed
-    exit 0 
+    exit 0
 fi
 
 # TERMINAL TABS & TITLE (END)
@@ -319,9 +336,9 @@ CMD="echo -e \"\a\""
 alias gs_sound_bell="$CMD"
 alias gs_sound_bell_echo="echo '$CMD'"
 
-# Even better, have a pop-up notification too! 
+# Even better, have a pop-up notification too!
 # Ex: `long_cmd; gs_alert` will play the sound above *and* pop up a notification when complete!
-# See more details, & screenshot of popup, here: 
+# See more details, & screenshot of popup, here:
 # https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/1213564#1213564
 CMD="gs_sound_bell; alert \"task complete\""
 alias gs_alert="$CMD"
@@ -347,7 +364,7 @@ sn3() {
 }
 
 # Text to speech as a sound: use cmd `spd-say "some text to read"`
-# Ex: `long_cmd; spd-say done` <=== AMAZING! 
+# Ex: `long_cmd; spd-say done` <=== AMAZING!
 # See also: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/587575#587575
 
 
@@ -361,7 +378,7 @@ gs_replace_str() {
 
     num_lines_matched=$(grep -c -E "$REGEX_SEARCH" "$FILENAME")
     # Also count number of matches, NOT just lines (`grep -c` counts lines), in case there are
-    # multiple matches per line; see: 
+    # multiple matches per line; see:
     # https://superuser.com/questions/339522/counting-total-number-of-matches-with-grep-instead-of-just-how-many-lines-match/339523#339523
     num_matches=$(grep -o -E "$REGEX_SEARCH" "$FILENAME" | wc -l)
 
@@ -370,7 +387,7 @@ gs_replace_str() {
     if [ "$num_matches" -gt 0 ]; then
         # Now *show these exact matches* with their corresponding line 'n'umbers in the file
         grep -n --color=always -E "$REGEX_SEARCH" "$FILENAME"
-        # Now actually *DO the string replacing* on the files 'i'n place using the `sed` 
+        # Now actually *DO the string replacing* on the files 'i'n place using the `sed`
         # 's'tream 'ed'itor!
         sed -i "s|${REGEX_SEARCH}|${REPLACEMENT_STR}|g" "$FILENAME"
     fi
