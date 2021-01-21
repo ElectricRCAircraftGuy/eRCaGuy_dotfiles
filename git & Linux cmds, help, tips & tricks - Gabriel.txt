@@ -22,6 +22,10 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 "It's better to be done well and on time, than perfect and late."
     - Gabriel Staples, ~2008, while studying at the US Air Force Academy and trying to figure out how to balance time
 
+Or, otherwise stated:
+"Done well and on time is better than perfect and never."
+    - Gabriel Staples--one of my main maxims. I learned this through my experiences at the US Air Force Academy where we were pressured into situations intentionally (primarily academic situations in our university studies, but also in other training environments and settings) where there literally wasn't time for the perfect answer--as happens frequently in war. So, if you're a struggling perfectionist, just get it done well enough and be done!
+
 "Done is good enough."
     - Gabriel Staples (inspired by a conversation with Anton Scherbakov), 8 Dec. 2020; a variation to ["Done is better than perfect."](https://lifehacker.com/done-is-better-than-perfect-5870379).
 
