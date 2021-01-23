@@ -1,6 +1,9 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# INSTRUCTIONS: 
+# INSTALLATION & USAGE INSTRUCTIONS:
+# See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions, here:
+# https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+
 # Edit as desired, then copy to ~/.profile
 # - Option 1) doesn't exist yet, so copy whole thing over: `cp -i .profile ~`
 # - Option 2) append contents to existing .profile file: `cat .profile >> ~/.profile`

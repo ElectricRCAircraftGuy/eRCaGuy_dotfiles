@@ -1463,7 +1463,11 @@ git add -A = add (stage changes for) all changes and files, including new files 
 git add . = add (stage changes for) only those files which are already tracked (have been previously commited)
 git add --patch <filename> = interactively add hunks/parts/chunks of filename, as desired! See here: https://stackoverflow.com/questions/1085162/commit-only-part-of-a-file-in-git/1085191#1085191
 git add -p <filename> = same as above
-git gui = open the GUI tool to do things like stage hunks, lines, or files; very useful for breaking up diffs/PRs! See: https://stackoverflow.com/questions/1085162/commit-only-part-of-a-file-in-git/1085202#1085202
+
+git gui
+    Open the GUI tool to do things like stage hunks, lines, or files; very useful for breaking up diffs/PRs! See: https://stackoverflow.com/questions/1085162/commit-only-part-of-a-file-in-git/1085202#1085202
+tig
+    A fancy ncurses-based GUI-*like* tool to navigate local or locally-pulled git repos
 
 git diff = look at all **unstaged** changes (those NOT yet added with `git add`)
 git difftool = same as above, except view the changes in your "git difftool" (ex: meld) instead of via the `git diff` command line

@@ -1,10 +1,12 @@
 {
-	"extensions":
-	[
-		".imwheelrc",
-		"desktop",
-		".sync_git_repo",
-		".bazelrc",
-		"nemo_action"
-	]
+    "extensions":
+    [
+        ".imwheelrc",
+        "desktop",
+        ".sync_git_repo",
+        ".bazelrc",
+        "nemo_action",
+        "conf",
+        ".bash_aliases_private"
+    ]
 }
