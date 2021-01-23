@@ -1,0 +1,24 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# INSTALLATION & USAGE INSTRUCTIONS:
+# See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions, here:
+# https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+
+# ==================================================================================================
+# PERSONAL (PRIVATE) Bash Aliases & Functions
+# - Add your personal, custom, or otherwise unshared bash aliases and functions here below.
+# - It is recommended to use this file for your personal or private aliases and functions rather
+#   than defining them in the "~/.bashrc" or "~/.bash_aliases" file.
+# - If you have something you think is very useful to others, add it to the "~/.bash_aliases" file
+#   and then open up a Pull Request on GitHub to ask me to merge it into the main eRCaGuy_dotfiles
+#   repo.
+# - All bash aliases or functions below will override any from the "~/.bash_aliases" file if
+#   they have the same name.
+# ==================================================================================================
+
+# In my naming of aliases and functions, I like to precede names with my initials followed by an
+# underscore, like this: `gs_some_cmd_name`. This way, simply by typing `gs_` at the terminal and
+# then pressing Tab twice, I can quickly see a list of ALL of my available custom functions. To
+# add your own initials, one technique is to simply add an alias to my aliases, like this. Let's
+# assume your initials are "am":
+# am_
