@@ -1,17 +1,20 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # INSTALLATION & USAGE INSTRUCTIONS:
-# See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions, here:
-# https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+# 1. If you are pulling in my bash configuration files for your usage, the primary file you
+#    should edit and customize is the ".bash_aliases_private" file.
+# 2. See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
+#    https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
 
 # Edit as desired, then copy to ~/.bashrc
 # Option 1) doesn't exist yet, so copy whole thing over: `cp -i .bashrc ~/.bashrc`
 # Option 2) append contents to existing .bashrc file: `cat .bashrc >> ~/.bashrc`
 
-# ======================================================================================================================
+# ==================================================================================================
 # START OF THE STANDARD UBUNTU-18-INSTALLED .bashrc FILE
-# - some minor additions or changes from the original may exist, indicated by comments which begin with "# GS"
-# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# - some minor additions or changes from the original may exist, indicated by comments which
+#   begin with "# GS"
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -132,12 +135,13 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # END OF THE STANDARD UBUNTU-18-INSTALLED .bashrc FILE
-# - some minor additions or changes from the original may exist, indicated by comments which begin with "# GS"
-# ======================================================================================================================
+# - some minor additions or changes from the original may exist, indicated by comments which
+#   begin with "# GS"
+# ==================================================================================================
 
 # Bash aliases and functions below will override any by the same name in both the ".bash_aliases"
-# and ".bash_aliases_private" files. I recommend you edit those two files instead.
+# and ".bash_aliases_private" files. I recommend you edit the ".bash_aliases_private" file instead.
 # See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions, here:
 # https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home

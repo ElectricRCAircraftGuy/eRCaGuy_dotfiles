@@ -1,8 +1,10 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # INSTALLATION & USAGE INSTRUCTIONS:
-# See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions, here:
-# https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+# 1. If you are pulling in my bash configuration files for your usage, I recommend you leave this
+#    file exactly as-is and copy and edit and customize the ".bash_aliases_private" file instead.
+# 2. See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
+#    https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
 
 # Make a symlink to this file in your home (~) dir:
 #       cd path/to/eRCaGuy_dotfiles/home
@@ -66,6 +68,7 @@ alias gs_suspend='systemctl suspend'
 # Syntax: `gs_git_branch_hash_bak [dir]` = back up to a backup file in directory "dir" if a dir is passed in
 GIT_BRANCH_HASH_BAK_DEFAULT_DIR="./git_branch_hash_backups"
 gs_git_branch_hash_bak () {
+    CMD="gs_git_branch_hash_bak"
     GIT_BRANCH_HASH_BAK_DIR="$GIT_BRANCH_HASH_BAK_DEFAULT_DIR"
     EXIT_SUCCESS=0
     EXIT_ERROR=1
@@ -76,7 +79,7 @@ gs_git_branch_hash_bak () {
         echo "names & short hashes to your local \"${GIT_BRANCH_HASH_BAK_DEFAULT_DIR}\" (or other"
         echo "specified) dir."
         echo ""
-        echo "Usage: $0 [dir]"
+        echo "Usage: $CMD [dir]"
         echo "    Back up branch names and hashes to a backup file in directory \"dir\"."
         return $EXIT_SUCCESS
     fi
@@ -124,117 +127,6 @@ alias gs_sshfs="sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 
 username@server_hostname:/path/on/server/to/mount ~/mnt/my_server"
 alias gs_sshfs_umount="sudo umount ~/mnt/my_server"
 
-# #-----------------------------------------------------------------------------------------------------------------------
-# # TERMINAL TABS & TITLE (START)
-
-# # Back up original PS1 Prompt 1 string when ~/.bashrc is first sourced upon bash opening; this must be placed
-# # AFTER all other modifications have already occured to the `PS1` Prompt String 1 variable
-# if [[ -z "$PS1_BAK" ]]; then # If length of this str is zero (see `man test`)
-#     PS1_BAK=$PS1
-# fi
-
-# # Set the title string at the top of your current terminal window or terminal window tab.
-# # See: https://unix.stackexchange.com/questions/177572/how-to-rename-terminal-tab-title-in-gnome-terminal/566383#566383
-# # and: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
-# # - Example usage:
-# #   - A) Static title strings (title remains fixed):
-# #     - `set-title my tab 1` OR `set-title "my tab 1"`
-# #     - `set-title $PWD` OR `set-title "$PWD"`
-# #   - B) Dynamic title strings (title updates each time you enter any terminal command): you may use function calls or
-# #     variables within your title string and have them *dynamically* updated each time you enter a new command.
-# #     Simply enter a command or access a global variable inside your title string. **Be sure to use _single quotes_
-# #     around the title string for this to work!**:
-# #     - `set-title '$PWD'` - this updates the title to the Present Working Directory every time you `cd` to a new
-# #        directory!
-# #     - `set-title '$(date "+%m/%d/%Y - %k:%M:%S")'` - this updates the title to the new date and time every time
-# #        it changes *and* you enter a new terminal command! The format looks like this: `02/06/2020 - 23:32:58`
-# gs_set-title() {
-#     # Set the PS1 title escape sequence; see "Customizing the terminal window title" here:
-#     # https://wiki.archlinux.org/index.php/Bash/Prompt_customization#Customizing_the_terminal_window_title
-#     TITLE="\[\e]2;$@\a\]"
-#     PS1=${PS1_BAK}${TITLE}
-# }
-# alias gs_set-title_echo='echo -e "This is a bash function in \"~/.bashrc\" which sets the title of your \
-# currently-opened terminal tab'
-
-# # Set the title to a user-specified value if and only if TITLE_DEFAULT has been previously set and
-# # exported by the user. This can be accomplished as follows:
-# #   export TITLE_DEFAULT="my title"
-# #   . ~/.bashrc
-# # Note that sourcing the ~/.bashrc file is done automatically by bash each time you open a new bash
-# # terminal, so long as it is an interactive (use `bash -i` if calling bash directly) type terminal
-# if [[ -n "$TITLE_DEFAULT" ]]; then # If length of this is NONzero (see `man test`)
-#     gs_set-title "$TITLE_DEFAULT"
-# fi
-
-# # ----------------------------------------------
-# # Configure default tabs to open if desired
-# # - UPDATE TITLES AND CMDS TO SUIT YOUR NEEDS!
-# # - See: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
-# # ----------------------------------------------
-
-# # Tab titles
-# DEFAULT_TABS_TITLE1="git"
-# DEFAULT_TABS_TITLE2="bazel"
-# DEFAULT_TABS_TITLE3="Python"
-# DEFAULT_TABS_TITLE4="ssh1"
-# DEFAULT_TABS_TITLE5="ssh2"
-# DEFAULT_TABS_TITLE6="ssh3"
-# DEFAULT_TABS_TITLE7="other"
-
-# # Tab commands
-# # Note: use quotes like this if there are spaces in the path: `DEFAULT_TABS_CMD3="cd '$HOME/temp/test folder'"`
-# DEFAULT_TABS_CMD1="cd '$HOME/GS/dev'"
-# DEFAULT_TABS_CMD2="cd '$HOME/GS/dev'"
-# DEFAULT_TABS_CMD3="cd '$HOME/GS/dev'"
-# DEFAULT_TABS_CMD4="cd '$HOME/GS/dev'"
-# DEFAULT_TABS_CMD5="cd '$HOME/GS/dev'"
-# DEFAULT_TABS_CMD6="cd '$HOME/GS/dev'"
-# DEFAULT_TABS_CMD7="cd '$HOME/GS/dev'"
-
-# # Call this function to open up the following tabs, calling the desired command in each tab and setting
-# # the title of each tab as desired. This is really helpful to get your programming environment set up
-# # for software development work, for instance.
-# gs_open_default_tabs() {
-#     # Ex of how to do this in the `terminator` terminal
-#     # terminator --new-tab --command='ls; cd dev; ls; exec bash;'
-
-#     terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
-#     terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
-#     terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
-#     terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
-#     terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
-#     terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
-#     terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
-
-#     # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
-#     # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
-#     # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
-#     # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
-#     # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
-#     # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
-#     # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
-# }
-
-# # # This chunk of code allows one to essentially call `open_default_tabs` from another script to open up all
-# # # default tabs in a brand new terminal window simply by entering these lines into your script:
-# # #   export OPEN_DEFAULT_TABS=true
-# # #   gnome-terminal          # this also sources ~/.bashrc (this script)
-# # #   OPEN_DEFAULT_TABS=      # set this variable back to an empty string so it's no longer in force
-# # #   unset OPEN_DEFAULT_TABS # unexport it
-# # # See "eRCaGuy_dotfiles/useful_scripts/open_programming_tools.sh" for a full example & more detailed comments.
-# # if [[ -n "$OPEN_DEFAULT_TABS" ]]; then # If length of this is NONzero (see `man test`)
-# #     # Reset to an empty string so this only happens ONCE since ~/.bashrc is about to be sourced recursively
-# #     OPEN_DEFAULT_TABS=
-# #     gs_open_default_tabs
-# #     # close the calling process so only the "default tabs" are left open while the initial `gnome-terminal` tab
-# #     # that opened all the other tabs is now closed
-# #     exit 0
-# # fi
-
-# # TERMINAL TABS & TITLE (END)
-# #-----------------------------------------------------------------------------------------------------------------------
-
 # Play sound; very useful to add to the end of a long cmd you want to be notified of when it completes!
 # Ex: `long_cmd; gs_sound_bell` will play a bell sound when `long_cmd` completes!
 alias gs_sound_bell="echo -e \"\a\""
@@ -250,10 +142,10 @@ alias gs_alert="gs_sound_bell; alert \"task complete\""
 # More sounds:
 # From: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/604116#604116
 sound() {
-  # plays sounds in sequence and waits for them to finish
-  for s in $@; do
-    paplay $s
-  done
+    # plays sounds in sequence and waits for them to finish
+    for s in $@; do
+        paplay $s
+    done
 }
 # Run these commands directly from the terminal to play these sounds; ex: `sn1`, `sn2`, `sn3`
 # Tick!
@@ -280,11 +172,12 @@ alias gs_say_complete="spd-say \"Operation Complete!\""
 # Usage: `gs_replace_str "regex_search_pattern" "replacement_string" "file_path"`
 # Ex:    `gs_replace_str "myFunc(" "myNewFunc(" "my_file.cpp"`
 gs_replace_str() {
+    CMD="gs_replace_str"
     # Help menu
     if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
         echo "Find and replace strings in a file."
-        echo "Usage:   $0 <\"regex_search_pattern\"> <\"replacement_string\"> <\"file_path\">"
-        echo "Example: $0 \"myFunc(\" \"myNewFunc(\" \"my_file.cpp\""
+        echo "Usage:   $CMD <\"regex_search_pattern\"> <\"replacement_string\"> <\"file_path\">"
+        echo "Example: $CMD \"myFunc(\" \"myNewFunc(\" \"my_file.cpp\""
         return $EXIT_SUCCESS
     fi
 
@@ -309,17 +202,158 @@ gs_replace_str() {
     fi
 }
 
+# Set the title string at the top of your current terminal window or terminal window tab.
+# See: https://unix.stackexchange.com/questions/177572/how-to-rename-terminal-tab-title-in-gnome-terminal/566383#566383
+# and: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
+# - Example usage:
+#   - A) Static title strings (title remains fixed):
+#     - `gs_set_title my tab 1` OR `gs_set_title "my tab 1"`
+#     - `gs_set_title $PWD` OR `gs_set_title "$PWD"`
+#   - B) Dynamic title strings (title updates each time you enter any terminal command): you may
+#     use function calls or variables within your title string and have them *dynamically*
+#     updated each time you enter a new command. Simply enter a command or access a global
+#     variable inside your title string. **Be sure to use _single quotes_ (`'`) around the title
+#     string for this to work!**:
+#     - `gs_set_title '$PWD'` - this updates the title to the Present Working Directory every
+#        time you `cd` to a new directory!
+#     - `gs_set_title '$(date "+%m/%d/%Y - %k:%M:%S")'` - this updates the title to the new
+#        date and time every time it changes *and* you enter a new terminal command! The
+#        date output of the above command looks like this: `02/06/2020 - 23:32:58`
+gs_set_title() {
+    CMD="gs_set_title"
+    # Help menu
+    if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
+        echo "Set the title of your currently-opened terminal tab."
+        echo "Usage:   $CMD any title you want"
+        echo "   OR:   $CMD \"any title you want\""
+        echo "   OR (to make a dynamic title which relies on variables or functions):"
+        echo "         $CMD '\$(some_cmd)'"
+        echo "     OR  $CMD '\${SOME_VARIABLE}'"
+        echo "Examples:"
+        echo "         1. static title"
+        echo "           $CMD my new title"
+        echo "         2. dynamic title"
+        echo "           $CMD 'Current Directory is \"\$PWD\"'"
+        echo "       OR  $CMD 'Date and time of last cmd is \"\$(date)\"'"
+        return $EXIT_SUCCESS
+    fi
 
-# ==================================================================================================
+    TITLE="$@"
+    # Set the PS1 title escape sequence; see "Customizing the terminal window title" here:
+    # https://wiki.archlinux.org/index.php/Bash/Prompt_customization#Customizing_the_terminal_window_title
+    ESCAPED_TITLE="\[\e]2;${TITLE}\a\]"
+
+    # Delete any existing title strings, if any, in the current PS1 variable. See my Q here:
+    # https://askubuntu.com/questions/1310665/how-to-replace-terminal-title-using-sed-in-ps1-prompt-string
+    PS1_NO_TITLE="$(echo "$PS1" | sed 's|\\\[\\e\]2;.*\\a\\\]||g')"
+    PS1="${PS1_NO_TITLE}${ESCAPED_TITLE}"
+}
+
+
+# ===================================== SECTION 2 START ============================================
 # 2. PERSONAL (PRIVATE) Bash Setup, Variables, Aliases, & Functions
 # - Add your personal, custom, or otherwise unshared bash aliases and functions to
-#   the "~/.bash_aliases_private" file (recommended), or here below.
-# - It is recommended to use the "~/.bash_aliases_private" file.
-# - All bash aliases or functions in that file, or below, will override any above if they
-#   have the same name.
-# ==================================================================================================
+#   the "~/.bash_aliases_private" file, which is sourced (imported) here.
+# - It is recommended that you edit the "~/.bash_aliases_private" file rather than modifying
+#   this file, so that you can keep this file as a symlink to the file in the repo, and easily
+#   and regularly pull the latest version of this file from the repo.
+# - All bash aliases or functions in "~/.bash_aliases_private", or below, will override any
+#   above if they have the same name.
 
 # # Import this "~/.bash_aliases_private" file, if it exists.
 # if [ -f ~/.bash_aliases_private ]; then
 #     . ~/.bash_aliases_private
 # fi
+
+# ====================================== SECTION 2 END =============================================
+
+
+# Back to more GENERAL (PUBLICLY SHARED) Bash Setup, Variables, Aliases, & Functions below:
+
+#--------------------------- CUSTOM TERMINAL TABS & TITLES (START) ---------------------------------
+
+# ############# DELETE ME!
+# # Back up the original `PS1` variable (Prompt String 1) when "~/.bashrc" is first sourced upon bash
+# # opening; this must be placed AFTER all other modifications have already occurred to the `PS1`
+# # Prompt String 1 variable. This should be the FINAL modification to `PS1`.
+# if [[ -z "$PS1_BAK" ]]; then # If length of this str is zero (see `man test`)
+#     PS1_BAK=$PS1
+# fi
+###############
+
+# Set the title to a user-specified value if and only if TITLE_DEFAULT has been previously set and
+# exported by the user. This can be accomplished as follows:
+#   export TITLE_DEFAULT="my title"
+#   . ~/.bashrc
+# Note that sourcing the ~/.bashrc file is done automatically by bash each time you open a new bash
+# terminal, so long as it is an interactive (use `bash -i` if calling bash directly) type terminal
+if [[ -n "$TITLE_DEFAULT" ]]; then # If length of this is NONzero (see `man test`)
+    gs_set_title "$TITLE_DEFAULT"
+fi
+
+# ----------------------------------------------
+# Configure default tabs to open if desired
+# - UPDATE TITLES AND CMDS TO SUIT YOUR NEEDS!
+# - See: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
+# ----------------------------------------------
+
+# Tab titles
+DEFAULT_TABS_TITLE1="git"
+DEFAULT_TABS_TITLE2="bazel"
+DEFAULT_TABS_TITLE3="Python"
+DEFAULT_TABS_TITLE4="ssh1"
+DEFAULT_TABS_TITLE5="ssh2"
+DEFAULT_TABS_TITLE6="ssh3"
+DEFAULT_TABS_TITLE7="other"
+
+# Tab commands
+# Note: use quotes like this if there are spaces in the path: `DEFAULT_TABS_CMD3="cd '$HOME/temp/test folder'"`
+DEFAULT_TABS_CMD1="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD2="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD3="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD4="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD5="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD6="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD7="cd '$HOME/GS/dev'"
+
+# Call this function to open up the following tabs, calling the desired command in each tab and setting
+# the title of each tab as desired. This is really helpful to get your programming environment set up
+# for software development work, for instance.
+gs_open_default_tabs() {
+    # Ex of how to do this in the `terminator` terminal
+    # terminator --new-tab --command='ls; cd dev; ls; exec bash;'
+
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
+    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
+
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
+    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
+}
+
+# # This chunk of code allows one to essentially call `open_default_tabs` from another script to open up all
+# # default tabs in a brand new terminal window simply by entering these lines into your script:
+# #   export OPEN_DEFAULT_TABS=true
+# #   gnome-terminal          # this also sources ~/.bashrc (this script)
+# #   OPEN_DEFAULT_TABS=      # set this variable back to an empty string so it's no longer in force
+# #   unset OPEN_DEFAULT_TABS # unexport it
+# # See "eRCaGuy_dotfiles/useful_scripts/open_programming_tools.sh" for a full example & more detailed comments.
+# if [[ -n "$OPEN_DEFAULT_TABS" ]]; then # If length of this is NONzero (see `man test`)
+#     # Reset to an empty string so this only happens ONCE since ~/.bashrc is about to be sourced recursively
+#     OPEN_DEFAULT_TABS=
+#     gs_open_default_tabs
+#     # close the calling process so only the "default tabs" are left open while the initial `gnome-terminal` tab
+#     # that opened all the other tabs is now closed
+#     exit 0
+# fi
+
+#--------------------------- CUSTOM TERMINAL TABS & TITLES (END) -----------------------------------

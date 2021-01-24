@@ -1,8 +1,13 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+# >> THIS IS THE PRIMARY BASH CONFIGURATION FILE FOR YOU TO EDIT AND CUSTOMIZE! <<
+
 # INSTALLATION & USAGE INSTRUCTIONS:
-# See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions, here:
-# https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+# 1. If you are pulling in my bash configuration files for your usage, I recommend you leave the
+#    ".bashrc" and ".bash_aliases" files alone, and copy and edit and customize this
+#    ".bash_aliases_private" file instead!
+# 2. See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
+#    https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
 
 # ==================================================================================================
 # PERSONAL (PRIVATE) Bash Setup, Variables, Aliases, & Functions
