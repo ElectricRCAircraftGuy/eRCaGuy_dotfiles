@@ -23,12 +23,15 @@
 #   https://stackoverflow.com/questions/8980464/how-do-i-access-an-environment-variable-in-a-desktop-files-exec-line
 
 [Desktop Entry]
-Name=Open Programming Tools
+Name=Touchpad Toggle On/Off
 Comment=
-# You should have previously copied `useful_scripts/open_programming_tools.sh` to
-# `~/bin/gs_open_programming_tools` for this to work.
-Exec=gs_open_programming_tools
-Icon=terminal
+# You should have previously copied `useful_scripts/touchpad_toggle.sh` to
+# `~/bin/gs_touchpad_toggle` for this to work.
+Exec=gs_touchpad_toggle
+# I discovered the `input-touchpad` icon at
+# `/usr/share/icons/gnome/16x16/devices/input-touchpad.png`. See my comment under this answer
+# here: https://askubuntu.com/questions/217331/where-are-the-desktop-icon-files-stored/217339#217339
+Icon=input-touchpad
 Terminal=false
 Type=Application
 StartupNotify=true
