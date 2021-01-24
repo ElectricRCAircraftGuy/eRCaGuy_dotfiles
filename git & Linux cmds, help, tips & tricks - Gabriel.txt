@@ -2633,7 +2633,8 @@ find | grep -E ".*(\.ino|\.cpp|\.c|\.h|\.hpp|\.hh)" = find any file with one of 
 find -L build/bin | grep -ni some_filename = quickly find a newly-built output file (such as an auto-generated source file created by some Bazel `genrule()`) inside of Bazel's output build dir, "build/bin". Note the `-L` to force `find` to follow symbolic links. This is required since Bazel makes all dirs in "build", such as "bin", simlinks. <======== VERY HELPFUL TO QUICKLY FIND A BAZEL BUILD OUTPUT FILE! ==========
 
 `sed`:
-sed -i "s|regex_pattern_to_match|replacement_string|g" my_file.txt = 'g'lobally replace (ie: replace all matching occurrences) of "regex_pattern_to_match" 'i'n place in my_file.txt, replacing the matching pattern with "replacement_string"
+sed -i "s|regex_pattern_to_match|replacement_string|g" my_file.txt
+    'g'lobally replace (ie: replace all matching occurrences) of "regex_pattern_to_match" 'i'n place in my_file.txt, replacing the matching pattern with "replacement_string"
 
 PUTTING IT ALL TOGETHER:
 References:
