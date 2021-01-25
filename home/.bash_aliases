@@ -260,10 +260,10 @@ gs_set_title() {
 # - All bash aliases or functions in "~/.bash_aliases_private", or below, will override any
 #   above if they have the same name.
 
-# # Import this "~/.bash_aliases_private" file, if it exists.
-# if [ -f ~/.bash_aliases_private ]; then
-#     . ~/.bash_aliases_private
-# fi
+# Import this "~/.bash_aliases_private" file, if it exists.
+if [ -f ~/.bash_aliases_private ]; then
+    . ~/.bash_aliases_private
+fi
 
 # ====================================== SECTION 2 END =============================================
 
@@ -272,49 +272,36 @@ gs_set_title() {
 
 #--------------------------- CUSTOM TERMINAL TABS & TITLES (START) ---------------------------------
 
-# ############# DELETE ME!
-# # Back up the original `PS1` variable (Prompt String 1) when "~/.bashrc" is first sourced upon bash
-# # opening; this must be placed AFTER all other modifications have already occurred to the `PS1`
-# # Prompt String 1 variable. This should be the FINAL modification to `PS1`.
-# if [[ -z "$PS1_BAK" ]]; then # If length of this str is zero (see `man test`)
-#     PS1_BAK=$PS1
-# fi
-###############
-
-# Set the title to a user-specified value if and only if TITLE_DEFAULT has been previously set and
-# exported by the user. This can be accomplished as follows:
-#   export TITLE_DEFAULT="my title"
-#   . ~/.bashrc
-# Note that sourcing the ~/.bashrc file is done automatically by bash each time you open a new bash
-# terminal, so long as it is an interactive (use `bash -i` if calling bash directly) type terminal
-if [[ -n "$TITLE_DEFAULT" ]]; then # If length of this is NONzero (see `man test`)
-    gs_set_title "$TITLE_DEFAULT"
+# Set the terminal title to a user-specified value each time your open a terminal or re-source
+# the "~/.bashrc" file if and only if `DEFAULT_TERMINAL_TITLE` has been previously set and/or
+# exported by the user. This can be accomplished in a number of ways:
+# 1. (Best option) Simply assign `DEFAULT_TERMINAL_TITLE` to some value inside
+# "~/.bash_aliases_private":
+#   a. to use a default title:
+#           DEFAULT_TERMINAL_TITLE="some default title"
+#   b. to NOT use a default title, either don't define this variable, or define it to be an empty
+#   string:
+#           DEFAULT_TERMINAL_TITLE=
+# 2. In an open terminal, export a value for this variable, then re-source your "~/.bashrc" file:
+#   a. turn it on:
+#           export DEFAULT_TERMINAL_TITLE="some title"
+#           . ~/.bashrc
+#   b. turn it off:
+#           DEFAULT_TERMINAL_TITLE=
+#           # OR
+#           unset DEFAULT_TERMINAL_TITLE
+#           # then
+#           . ~/.bashrc
+# 3. Assign and pass in a variable as you re-source the "~/.bashrc" file:
+#           DEFAULT_TERMINAL_TITLE="some title" . ~/.bashrc
+#
+# Note that sourcing the "~/.bashrc" file is done automatically by bash each time you open a new
+# bash terminal, as long as it is an interactive type terminal. You can use `bash -i` (if calling
+# bash directly) to force it to be an interactive terminal.
+if [[ -n "$DEFAULT_TERMINAL_TITLE" ]]; then # If length of this is NONzero (see `man test`)
+    gs_set_title "$DEFAULT_TERMINAL_TITLE"
 fi
 
-# ----------------------------------------------
-# Configure default tabs to open if desired
-# - UPDATE TITLES AND CMDS TO SUIT YOUR NEEDS!
-# - See: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
-# ----------------------------------------------
-
-# Tab titles
-DEFAULT_TABS_TITLE1="git"
-DEFAULT_TABS_TITLE2="bazel"
-DEFAULT_TABS_TITLE3="Python"
-DEFAULT_TABS_TITLE4="ssh1"
-DEFAULT_TABS_TITLE5="ssh2"
-DEFAULT_TABS_TITLE6="ssh3"
-DEFAULT_TABS_TITLE7="other"
-
-# Tab commands
-# Note: use quotes like this if there are spaces in the path: `DEFAULT_TABS_CMD3="cd '$HOME/temp/test folder'"`
-DEFAULT_TABS_CMD1="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD2="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD3="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD4="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD5="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD6="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD7="cd '$HOME/GS/dev'"
 
 # Call this function to open up the following tabs, calling the desired command in each tab and setting
 # the title of each tab as desired. This is really helpful to get your programming environment set up
@@ -323,13 +310,13 @@ gs_open_default_tabs() {
     # Ex of how to do this in the `terminator` terminal
     # terminator --new-tab --command='ls; cd dev; ls; exec bash;'
 
-    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
-    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
-    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
-    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
-    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
-    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
-    terminator --new-tab --command="export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
+    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
+    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
+    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
+    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
+    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
+    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
+    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
 
     # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
     # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"

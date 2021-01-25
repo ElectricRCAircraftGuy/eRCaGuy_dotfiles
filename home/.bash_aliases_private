@@ -27,3 +27,40 @@
 # add your own initials, one technique is to simply add an alias to my aliases, like this. Let's
 # assume your initials are "am":
 # am_
+
+
+# Uncomment one of the below options, or write your own, to set a default terminal title each time
+# you open up a terminal. You can also change the current terminal title manually at any time. See
+# `gs_set_title -h` for help.
+#
+# 1. Example static titles
+# DEFAULT_TERMINAL_TITLE="my new title"
+# 2. Example dynamic titles
+# DEFAULT_TERMINAL_TITLE='Current Directory is "$PWD"'
+# DEFAULT_TERMINAL_TITLE='Date and time of last cmd is "$(date)"'
+
+
+# ----------------------------------------------
+# Configure default tabs to open if desired
+# - UPDATE TITLES AND CMDS TO SUIT YOUR NEEDS!
+# - See: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
+# ----------------------------------------------
+
+# Tab titles
+DEFAULT_TABS_TITLE1="git"
+DEFAULT_TABS_TITLE2="bazel"
+DEFAULT_TABS_TITLE3="Python"
+DEFAULT_TABS_TITLE4="ssh1"
+DEFAULT_TABS_TITLE5="ssh2"
+DEFAULT_TABS_TITLE6="ssh3"
+DEFAULT_TABS_TITLE7="other"
+
+# Tab commands
+# Note: use quotes like this if there are spaces in the path: `DEFAULT_TABS_CMD3="cd '$HOME/temp/test folder'"`
+DEFAULT_TABS_CMD1="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD2="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD3="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD4="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD5="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD6="cd '$HOME/GS/dev'"
+DEFAULT_TABS_CMD7="cd '$HOME/GS/dev'"
