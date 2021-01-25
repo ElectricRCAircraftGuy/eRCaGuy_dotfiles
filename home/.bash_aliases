@@ -414,23 +414,32 @@ for software development work, for instance."
     fi
 } # gs_open_default_tabs
 
-
-
-
-# # This chunk of code allows one to essentially call `open_default_tabs` from another script to open up all
-# # default tabs in a brand new terminal window simply by entering these lines into your script:
-# #   export OPEN_DEFAULT_TABS=true
-# #   gnome-terminal          # this also sources ~/.bashrc (this script)
-# #   OPEN_DEFAULT_TABS=      # set this variable back to an empty string so it's no longer in force
-# #   unset OPEN_DEFAULT_TABS # unexport it
-# # See "eRCaGuy_dotfiles/useful_scripts/open_programming_tools.sh" for a full example & more detailed comments.
-# if [[ -n "$OPEN_DEFAULT_TABS" ]]; then # If length of this is NONzero (see `man test`)
-#     # Reset to an empty string so this only happens ONCE since ~/.bashrc is about to be sourced recursively
-#     OPEN_DEFAULT_TABS=
-#     gs_open_default_tabs
-#     # close the calling process so only the "default tabs" are left open while the initial `gnome-terminal` tab
-#     # that opened all the other tabs is now closed
-#     exit 0
-# fi
+# This chunk of code allows one to essentially call `gs_open_default_tabs` from another script to
+# open up all default tabs in a brand new terminal window. See
+# "eRCaGuy_dotfiles/useful_scripts/open_programming_tools.sh" for a full example and more-detailed
+# comments.
+# You must add these lines to your script:
+#       mkdir -p ~/temp
+#       if [ ! -f ~/temp/.open_default_tabs ]; then
+#           touch ~/temp/.open_default_tabs
+#       fi
+#       # then either:
+#       terminator&
+#       # OR
+#       gnome-terminal&
+# As the terminal opens now, it will see that the file "~/temp/.open_default_tabs" has been created,
+# and it will use this as an indicator it should open up all the default tabs automatically!
+mkdir -p ~/temp
+OPEN_DEFAULT_TABS="false"
+if [ -f ~/temp/.open_default_tabs ]; then  # see `man test` for meaning of `-f`
+    OPEN_DEFAULT_TABS="true"
+fi
+if [ "$OPEN_DEFAULT_TABS" == "true" ]; then
+    rm ~/temp/.open_default_tabs
+    gs_open_default_tabs
+    # close the calling process so only the "default tabs" are left open while the initial
+    # `gnome-terminal` or `terminator` tab that opened all the other tabs is now closed.
+    exit 0
+fi
 
 #--------------------------- CUSTOM TERMINAL TABS & TITLES (END) -----------------------------------
