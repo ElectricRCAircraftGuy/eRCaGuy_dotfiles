@@ -3,8 +3,8 @@
 # >> THIS IS THE PRIMARY BASH CONFIGURATION FILE FOR YOU TO EDIT AND CUSTOMIZE! <<
 
 # INSTALLATION & USAGE INSTRUCTIONS:
-# 1. If you are pulling in my bash configuration files for your usage, I recommend you leave the
-#    ".bashrc" and ".bash_aliases" files alone, and copy and edit and customize this
+# 1. If you are pulling in my bash configuration files for your usage, I recommend you leave my
+#    ".bashrc" and ".bash_aliases" files as-is, and edit and customize this
 #    ".bash_aliases_private" file instead!
 # 2. See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
 #    https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
@@ -17,8 +17,9 @@
 # - If you have something you think is very useful to others, add it to the "~/.bash_aliases" file
 #   and then open up a Pull Request on GitHub to ask me to merge it into the main eRCaGuy_dotfiles
 #   repo.
-# - All bash aliases or functions below will override any from the "~/.bash_aliases" file if
-#   they have the same name.
+# - All bash aliases or functions below will override any from the "~/.bash_aliases" file, prior
+#   to the point this "~/.bash_aliases_private" file is sourced (imported), if they have the
+#   same name.
 # ==================================================================================================
 
 # In my naming of aliases and functions, I like to precede names with my initials followed by an
@@ -26,52 +27,70 @@
 # then pressing Tab twice, I can quickly see a list of ALL of my available custom functions. To
 # add your own initials, one technique is to simply add an alias to my aliases, like this. Let's
 # assume your initials are "am":
-# am_
+#       alias am_open_default_tabs="gs_open_default_tabs"
+#       alias am_alert="gs_alert"
+#       # etc.
 
-
+# Default terminal title:
 # Uncomment one of the below options, or write your own, to set a default terminal title each time
 # you open up a terminal. You can also change the current terminal title manually at any time. See
 # `gs_set_title -h` for help.
 #
 # 1. Example static titles
 # DEFAULT_TERMINAL_TITLE="my new title"
-# 2. Example dynamic titles
+# 2. Example dynamic titles (must use single quotes around the whole title, as shown below)
 # DEFAULT_TERMINAL_TITLE='Current Directory is "$PWD"'
 # DEFAULT_TERMINAL_TITLE='Date and time of last cmd is "$(date)"'
 
+# ------------- CONFIGURATION FOR `gs_open_default_tabs` Bash function (START) ---------------------
+# You may configure up to 10 terminal tabs to be rapidly opened whenever you run
+# `gs_open_default_tabs`. Each tab can be given a static or dynamic title, as well as a command to
+# run when the tab is opened. If you need more than 10 you will need to edit the code for the
+# function inside `.bash_aliases`.
 
-
-
-# ----------------------------------------------
-# Configure default tabs to open if desired
-# - UPDATE TITLES AND CMDS TO SUIT YOUR NEEDS!
-# - See: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
-# ----------------------------------------------
+# See my answer here for additional reference:
+# https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
 
 # Uncomment the line for your desired terminal.
-TERMINAL="terminator"      # my preference
+TERMINAL="terminator"  # my preference since you can right-click and go to
+                       # "Split Horizontally" or "Split Vertically"
 # TERMINAL="gnome-terminal"  # the default that comes with Ubuntu 18.04, 20.04, etc.
 
-# Tab titles
-TERMINAL_TAB_TITLE1="git"
-# TERMINAL_TAB_TITLE2="bazel"
-# TERMINAL_TAB_TITLE3="Python"
-# TERMINAL_TAB_TITLE4="ssh1"
-# TERMINAL_TAB_TITLE5="ssh2"
-# TERMINAL_TAB_TITLE6="ssh3"
-# TERMINAL_TAB_TITLE7="other"
+# Uncomment a tab title OR tab command below to configure this tab to open. You may configure
+# just a title, just a command, or both.
 
-# Tab commands
+# 1. Tab TITLES
+TERMINAL_TAB_TITLE_01='git'
+TERMINAL_TAB_TITLE_02='bazel'
+TERMINAL_TAB_TITLE_03='Python'
+TERMINAL_TAB_TITLE_04='ssh1'
+TERMINAL_TAB_TITLE_05='ssh2'
+TERMINAL_TAB_TITLE_06='ssh3'
+TERMINAL_TAB_TITLE_07='other'
+TERMINAL_TAB_TITLE_08='other2'
+TERMINAL_TAB_TITLE_09='dynamic title: last cmd time: "$(date)"'
+TERMINAL_TAB_TITLE_10='dynamic title (change your dir) "$(pwd)"'
+
+# 2. Tab COMMANDS
 # Notes:
-# 1. Use single quotes (') as shown below if there are any spaces in the path:
-#    `TERMINAL_TAB_CMD4="cd '$HOME/some directory with spaces'"
-# 2. Escape apostrophes in `echo -e` with `\x27`. See my detailed answer here for more examples:
-#    https://stackoverflow.com/questions/1250079/how-to-escape-single-quotes-within-single-quoted-strings/65878993#65878993
+#   1. You must use quotes, as shown in the examples below, around any paths with spaces in
+#      the path.
+#   2. Escape apostrophes in `echo -e` with `\x27`, as shown in the examples below. See also my
+#      detailed answer here for more examples:
+#      https://stackoverflow.com/questions/1250079/how-to-escape-single-quotes-within-single-quoted-strings/65878993#65878993
 
-TERMINAL_TAB_CMD1="cd '$HOME'; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-# TERMINAL_TAB_CMD2="cd '$HOME'; ll"
-# TERMINAL_TAB_CMD3="cd '$HOME/GS/dev'"
-# TERMINAL_TAB_CMD4="cd '$HOME/some directory with spaces'; ls"
-# TERMINAL_TAB_CMD5="cd '$HOME'; ll"
-# TERMINAL_TAB_CMD6="cd '$HOME/GS/dev'"
-# TERMINAL_TAB_CMD7="cd '$HOME/GS/dev'"
+TERMINAL_TAB_CMD_01="cd \"$HOME\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+TERMINAL_TAB_CMD_02="cd \"$HOME\"; ll"
+TERMINAL_TAB_CMD_03="cd \"$HOME/GS/dev\""
+TERMINAL_TAB_CMD_04="cd \"$HOME/some directory with spaces\"; ls"
+TERMINAL_TAB_CMD_05="cd \"$HOME\"; ll"
+TERMINAL_TAB_CMD_06="cd \"$HOME/GS/dev\""
+TERMINAL_TAB_CMD_07="cd \"$HOME/GS/dev\""
+TERMINAL_TAB_CMD_08="cd \"$HOME/temp\""
+TERMINAL_TAB_CMD_09="cd \"$HOME/temp\""
+TERMINAL_TAB_CMD_10="cd \"$HOME/temp\""
+
+# ------------- CONFIGURATION FOR `gs_open_default_tabs` Bash function (END) -----------------------
+
+
+
