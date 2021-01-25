@@ -45,6 +45,23 @@ gs_git_show_branch() {
 PS1="\e[7m\$(gs_git_show_branch)\e[m\n$PS1" # comment out to NOT show git branch!
 PS1='\$SHLVL'":$SHLVL $PS1"                 # comment out to NOT show shell level!
 
+# See which files have changed since some prior commit named `MY_FIRST_COMMIT`.
+# Usage:
+#       gs_git_files_changed MY_FIRST_COMMIT~
+# OR (same thing):
+#       gs_git_files_changed BASE_COMMIT
+# Known limitations: works only on filenames which have no spaces or special bash chars. To make
+# it handle these chars, it will require using `git diff --name-only -z`, with some more
+# fancy bash trickery. See my ans:
+# https://stackoverflow.com/questions/28109520/how-to-cope-with-spaces-in-file-names-when-iterating-results-from-git-diff-nam/62853776#62853776
+gs_git_list_files_changed() {
+    files="$(git diff --name-only "$1")"
+    echo "These are the changed files:"
+    echo "$files"
+    # Now optionally create a new function from this and do something with these files here if you
+    # want!
+}
+
 # Find a file built by Bazel and therefor sitting in the "build/bin" dir.
 alias gs_find_bazel_build_file='find -L build/bin | grep'
 # note: the below could also be done with `gs_find_bazel_build_file -i somefilename`
@@ -62,12 +79,14 @@ alias gs_suspend='systemctl suspend'
 #   - add the optional message into the filename itself at the end
 ############
 # GS: git branch backups: useful to back up git branch hashes before deleting branches, so you can
-# always have their hashes to go back to to checkout rather than having to dig through your `git reflog` forever.
+# always have their hashes to go back to to checkout rather than having to dig through your `git
+# reflog` forever.
 # - Note that this currently requires that the GIT_BRANCH_HASH_BAK_DIR directory already exists.
-# - TODO: fail more gracefully: make it check to see if this dir exists & prompt the user for permission to
-#   auto-create it with `mkdir -p ${GIT_BRANCH_HASH_BAK_DIR}` if it does not.
+# - TODO: fail more gracefully: make it check to see if this dir exists & prompt the user for
+#   permission to auto-create it with `mkdir -p ${GIT_BRANCH_HASH_BAK_DIR}` if it does not.
 #
-# Syntax: `gs_git_branch_hash_bak [dir]` = back up to a backup file in directory "dir" if a dir is passed in
+# Syntax: `gs_git_branch_hash_bak [dir]` = back up to a backup file in directory "dir" if a dir is
+# passed in.
 GIT_BRANCH_HASH_BAK_DEFAULT_DIR="./git_branch_hash_backups"
 gs_git_branch_hash_bak () {
     CMD="gs_git_branch_hash_bak"
@@ -122,6 +141,12 @@ alias gs_git_branch_hash_bak_up1="gs_git_branch_hash_bak \"../git_branch_hash_ba
 #    https://superuser.com/questions/699676/how-to-prevent-ssh-from-disconnecting-if-its-been-idle-for-a-while/699680#699680
 alias gs_ssh="ssh -X -o \"ServerAliveInterval 60\" username@domain_name"
 
+# Remotely decrypt a LUKS-encrypted hard drive on a computer during boot, by sshing into a Dropbear
+# server on your machine. Here's a Google search to get started learning about this:
+# "dropbear ssh remotely decrypt hard drive":
+# https://www.google.com/search?q=dropbear+ssh+remotely+decrypt+hard+drive&oq=dropbear+ssh+remotely+decrypt+hard+drive&aqs=chrome..69i57.193j0j4&sourceid=chrome&ie=UTF-8
+# alias gs_ssh_dropbear=""
+
 # Mount a remote file system securely over ssh, using sshfs (SSH File System).
 # See my own answer here!:
 # https://askubuntu.com/questions/791002/how-to-prevent-sshfs-mount-freeze-after-changing-connection-after-suspend/942820#942820
@@ -170,7 +195,8 @@ alias gs_say_done="spd-say \"Done!\""
 alias gs_say_complete="spd-say \"Operation Complete!\""
 
 # Find and replace strings in a file.
-# Posted here: https://stackoverflow.com/questions/12144158/how-to-check-if-sed-has-changed-a-file
+# I posted this as an answer here:
+# https://stackoverflow.com/questions/12144158/how-to-check-if-sed-has-changed-a-file/61238414#61238414
 # Usage: `gs_replace_str "regex_search_pattern" "replacement_string" "file_path"`
 # Ex:    `gs_replace_str "myFunc(" "myNewFunc(" "my_file.cpp"`
 gs_replace_str() {

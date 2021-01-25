@@ -98,4 +98,28 @@ TERMINAL_TAB_CMD_07="cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get rea
 # ------------- CONFIGURATION FOR `gs_open_default_tabs` Bash function (END) -----------------------
 
 
+# UPDATE THESE FOR YOU! See .bash_aliases for detailed notes.
 
+# alias gs_ssh="ssh -X -o \"ServerAliveInterval 60\" username@domain_name"
+# alias gs_ssh_dropbear=""
+# alias gs_sshfs=""
+# alias gs_sshfs_umount=""
+
+# See git & Linux cmds doc:
+# alias bazel_build_lldb='time bazel build --copt=-glldb --copt=-O0 --strip=never \
+# //my/target1/... //my/target2/...; gs_alert'
+# alias bazel_test_lldb='time bazel test --copt=-glldb --copt=-O0 --strip=never \
+# //my/target1/... //my/target2/...; gs_alert'
+
+# Get the size of your built executable or shared object (*.so file) and print it out.
+# Related: see also my detailed Q & A here:
+# https://electronics.stackexchange.com/questions/363931/how-do-i-find-out-at-compile-time-how-much-of-an-stm32s-flash-memory-and-dynami
+# - Note that the `echo "$ ..."` parts of the command are just to remind you where these files are
+#   located is all--as though you had just manually typed the `size` command at the command-line
+#   instead of calling this alias. There is no magic there, and `$` means nothing special in this
+#   case other than to make it look like a command you typed at the terminal.
+# alias gs_program_size='\
+# echo "$ size build/bin/path/to/my/executable1" && \
+# size build/bin/path/to/my/executable1; \
+# echo "$ size build/bin/path/to/my/executable2" && \
+# size build/bin/path/to/my/executable2'
