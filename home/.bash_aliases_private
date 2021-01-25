@@ -40,27 +40,33 @@
 # DEFAULT_TERMINAL_TITLE='Date and time of last cmd is "$(date)"'
 
 
+
+
 # ----------------------------------------------
 # Configure default tabs to open if desired
 # - UPDATE TITLES AND CMDS TO SUIT YOUR NEEDS!
 # - See: https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
 # ----------------------------------------------
 
+# Uncomment the line for your desired terminal.
+TERMINAL="terminator"      # my preference
+# TERMINAL="gnome-terminal"  # the default that comes with Ubuntu 18.04, 20.04, etc.
+
 # Tab titles
-DEFAULT_TABS_TITLE1="git"
-DEFAULT_TABS_TITLE2="bazel"
-DEFAULT_TABS_TITLE3="Python"
-DEFAULT_TABS_TITLE4="ssh1"
-DEFAULT_TABS_TITLE5="ssh2"
-DEFAULT_TABS_TITLE6="ssh3"
-DEFAULT_TABS_TITLE7="other"
+TERMINAL_TAB_TITLE1="git"
+TERMINAL_TAB_TITLE2="bazel"
+TERMINAL_TAB_TITLE3="Python"
+TERMINAL_TAB_TITLE4="ssh1"
+TERMINAL_TAB_TITLE5="ssh2"
+TERMINAL_TAB_TITLE6="ssh3"
+TERMINAL_TAB_TITLE7="other"
 
 # Tab commands
 # Note: use quotes like this if there are spaces in the path: `DEFAULT_TABS_CMD3="cd '$HOME/temp/test folder'"`
-DEFAULT_TABS_CMD1="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD2="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD3="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD4="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD5="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD6="cd '$HOME/GS/dev'"
-DEFAULT_TABS_CMD7="cd '$HOME/GS/dev'"
+TERMINAL_TAB_CMD1="cd '$HOME'; ls; echo let\'s get ready to code!"
+TERMINAL_TAB_CMD2="cd '$HOME'; ll"
+TERMINAL_TAB_CMD3="cd '$HOME/GS/dev'"
+TERMINAL_TAB_CMD4="cd '$HOME'; ls"
+TERMINAL_TAB_CMD5="cd '$HOME'; ll"
+TERMINAL_TAB_CMD6="cd '$HOME/GS/dev'"
+TERMINAL_TAB_CMD7="cd '$HOME/GS/dev'"

@@ -270,6 +270,7 @@ fi
 
 # Back to more GENERAL (PUBLICLY SHARED) Bash Setup, Variables, Aliases, & Functions below:
 
+
 #--------------------------- CUSTOM TERMINAL TABS & TITLES (START) ---------------------------------
 
 # Set the terminal title to a user-specified value each time your open a terminal or re-source
@@ -302,30 +303,52 @@ if [[ -n "$DEFAULT_TERMINAL_TITLE" ]]; then # If length of this is NONzero (see 
     gs_set_title "$DEFAULT_TERMINAL_TITLE"
 fi
 
-
-# Call this function to open up the following tabs, calling the desired command in each tab and setting
-# the title of each tab as desired. This is really helpful to get your programming environment set up
-# for software development work, for instance.
+# See the description for this function in its help string just below.
 gs_open_default_tabs() {
-    # Ex of how to do this in the `terminator` terminal
-    # terminator --new-tab --command='ls; cd dev; ls; exec bash;'
+    CMD="gs_open_default_tabs"
+    HELP_STR="\
+Call this function to open up a bunch of terminal tabs, as configured in your
+\"~/.bash_aliases_private\" file, calling the desired command in each tab and setting the title of
+each tab as desired. This is really helpful to get your programming environment set up each day
+for software development work, for instance."
 
-    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
-    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
-    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
-    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
-    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
-    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
-    terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
+    # Help menu
+    if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
+        echo "$HELP_STR"
+        return $EXIT_SUCCESS
+    fi
 
-    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE1'; $DEFAULT_TABS_CMD1; exec bash;"
-    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE2'; $DEFAULT_TABS_CMD2; exec bash;"
-    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE3'; $DEFAULT_TABS_CMD3; exec bash;"
-    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE4'; $DEFAULT_TABS_CMD4; exec bash;"
-    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE5'; $DEFAULT_TABS_CMD5; exec bash;"
-    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE6'; $DEFAULT_TABS_CMD6; exec bash;"
-    # gnome-terminal --tab -- bash -ic "export TITLE_DEFAULT='$DEFAULT_TABS_TITLE7'; $DEFAULT_TABS_CMD7; exec bash;"
-}
+    if [ "$TERMINAL" == "terminator" ]; then
+        # Example of how to do this in the `terminator` terminal:
+        #       terminator --new-tab --command='ls; cd dev; ls; exec bash;'
+
+        # Note: the `bash -ic` trick below is required in order to make the shell command calls
+        # "interactive", thereby giving the terminal access to bash aliases and functions defined
+        # in "~/.bashrc", "~/.bash_aliases" above, or "~/.bash_aliases_private". Without that trick,
+        # commands such as `ll` would NOT work for the user, as a `TERMINAL_TAB_CMD`, as `ll` isn't
+        # defined yet! (It is defined inside "~/.bashrc" as the bash terminal is opening and
+        # sourcing this file).
+
+        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE1'; bash -ic \"$TERMINAL_TAB_CMD1\"; exec bash;"
+        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE2'; bash -ic \"$TERMINAL_TAB_CMD2\"; exec bash;"
+        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE3'; bash -ic \"$TERMINAL_TAB_CMD3\"; exec bash;"
+        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE4'; bash -ic \"$TERMINAL_TAB_CMD4\"; exec bash;"
+        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE5'; bash -ic \"$TERMINAL_TAB_CMD5\"; exec bash;"
+        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE6'; bash -ic \"$TERMINAL_TAB_CMD6\"; exec bash;"
+        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE7'; bash -ic \"$TERMINAL_TAB_CMD7\"; exec bash;"
+    elif [ "$TERMINAL" == "gnome-terminal" ]; then
+        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE1'; $TERMINAL_TAB_CMD1; exec bash;"
+        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE2'; $TERMINAL_TAB_CMD2; exec bash;"
+        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE3'; $TERMINAL_TAB_CMD3; exec bash;"
+        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE4'; $TERMINAL_TAB_CMD4; exec bash;"
+        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE5'; $TERMINAL_TAB_CMD5; exec bash;"
+        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE6'; $TERMINAL_TAB_CMD6; exec bash;"
+        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE7'; $TERMINAL_TAB_CMD7; exec bash;"
+    fi
+} # gs_open_default_tabs
+
+
+
 
 # # This chunk of code allows one to essentially call `open_default_tabs` from another script to open up all
 # # default tabs in a brand new terminal window simply by entering these lines into your script:
