@@ -325,25 +325,66 @@ for software development work, for instance."
         # Note: the `bash -ic` trick below is required in order to make the shell command calls
         # "interactive", thereby giving the terminal access to bash aliases and functions defined
         # in "~/.bashrc", "~/.bash_aliases" above, or "~/.bash_aliases_private". Without that trick,
-        # commands such as `ll` would NOT work for the user, as a `TERMINAL_TAB_CMD`, as `ll` isn't
+        # commands such as `ll` would NOT work for the user as a `TERMINAL_TAB_CMD`, as `ll` isn't
         # defined yet! (It is defined inside "~/.bashrc" as the bash terminal is opening and
         # sourcing this file).
 
-        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE1'; bash -ic \"$TERMINAL_TAB_CMD1\"; exec bash;"
-        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE2'; bash -ic \"$TERMINAL_TAB_CMD2\"; exec bash;"
-        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE3'; bash -ic \"$TERMINAL_TAB_CMD3\"; exec bash;"
-        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE4'; bash -ic \"$TERMINAL_TAB_CMD4\"; exec bash;"
-        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE5'; bash -ic \"$TERMINAL_TAB_CMD5\"; exec bash;"
-        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE6'; bash -ic \"$TERMINAL_TAB_CMD6\"; exec bash;"
-        terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE7'; bash -ic \"$TERMINAL_TAB_CMD7\"; exec bash;"
+        if [[ -n "$TERMINAL_TAB_TITLE1" ]] || [[ -n "$TERMINAL_TAB_CMD1" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE1'; bash -ic '$TERMINAL_TAB_CMD1'; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE2" ]] || [[ -n "$TERMINAL_TAB_CMD2" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE2'; bash -ic '$TERMINAL_TAB_CMD2'; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE3" ]] || [[ -n "$TERMINAL_TAB_CMD3" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE3'; bash -ic '$TERMINAL_TAB_CMD3'; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE4" ]] || [[ -n "$TERMINAL_TAB_CMD4" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE4'; bash -ic '$TERMINAL_TAB_CMD4'; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE5" ]] || [[ -n "$TERMINAL_TAB_CMD5" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE5'; bash -ic '$TERMINAL_TAB_CMD5'; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE6" ]] || [[ -n "$TERMINAL_TAB_CMD6" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE6'; bash -ic '$TERMINAL_TAB_CMD6'; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE7" ]] || [[ -n "$TERMINAL_TAB_CMD7" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE7'; bash -ic '$TERMINAL_TAB_CMD7'; exec bash;"
+        fi
+
     elif [ "$TERMINAL" == "gnome-terminal" ]; then
-        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE1'; $TERMINAL_TAB_CMD1; exec bash;"
-        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE2'; $TERMINAL_TAB_CMD2; exec bash;"
-        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE3'; $TERMINAL_TAB_CMD3; exec bash;"
-        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE4'; $TERMINAL_TAB_CMD4; exec bash;"
-        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE5'; $TERMINAL_TAB_CMD5; exec bash;"
-        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE6'; $TERMINAL_TAB_CMD6; exec bash;"
-        gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE7'; $TERMINAL_TAB_CMD7; exec bash;"
+        if [[ -n "$TERMINAL_TAB_TITLE1" ]] || [[ -n "$TERMINAL_TAB_CMD1" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE1'; $TERMINAL_TAB_CMD1; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE2" ]] || [[ -n "$TERMINAL_TAB_CMD2" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE2'; $TERMINAL_TAB_CMD2; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE3" ]] || [[ -n "$TERMINAL_TAB_CMD3" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE3'; $TERMINAL_TAB_CMD3; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE4" ]] || [[ -n "$TERMINAL_TAB_CMD4" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE4'; $TERMINAL_TAB_CMD4; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE5" ]] || [[ -n "$TERMINAL_TAB_CMD5" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE5'; $TERMINAL_TAB_CMD5; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE6" ]] || [[ -n "$TERMINAL_TAB_CMD6" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE6'; $TERMINAL_TAB_CMD6; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE7" ]] || [[ -n "$TERMINAL_TAB_CMD7" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE7'; $TERMINAL_TAB_CMD7; exec bash;"
+        fi
     fi
 } # gs_open_default_tabs
 

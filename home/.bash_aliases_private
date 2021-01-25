@@ -54,19 +54,24 @@ TERMINAL="terminator"      # my preference
 
 # Tab titles
 TERMINAL_TAB_TITLE1="git"
-TERMINAL_TAB_TITLE2="bazel"
-TERMINAL_TAB_TITLE3="Python"
-TERMINAL_TAB_TITLE4="ssh1"
-TERMINAL_TAB_TITLE5="ssh2"
-TERMINAL_TAB_TITLE6="ssh3"
-TERMINAL_TAB_TITLE7="other"
+# TERMINAL_TAB_TITLE2="bazel"
+# TERMINAL_TAB_TITLE3="Python"
+# TERMINAL_TAB_TITLE4="ssh1"
+# TERMINAL_TAB_TITLE5="ssh2"
+# TERMINAL_TAB_TITLE6="ssh3"
+# TERMINAL_TAB_TITLE7="other"
 
 # Tab commands
-# Note: use quotes like this if there are spaces in the path: `DEFAULT_TABS_CMD3="cd '$HOME/temp/test folder'"`
-TERMINAL_TAB_CMD1="cd '$HOME'; ls; echo let\'s get ready to code!"
-TERMINAL_TAB_CMD2="cd '$HOME'; ll"
-TERMINAL_TAB_CMD3="cd '$HOME/GS/dev'"
-TERMINAL_TAB_CMD4="cd '$HOME'; ls"
-TERMINAL_TAB_CMD5="cd '$HOME'; ll"
-TERMINAL_TAB_CMD6="cd '$HOME/GS/dev'"
-TERMINAL_TAB_CMD7="cd '$HOME/GS/dev'"
+# Notes:
+# 1. Use single quotes (') as shown below if there are any spaces in the path:
+#    `TERMINAL_TAB_CMD4="cd '$HOME/some directory with spaces'"
+# 2. Escape apostrophes in `echo -e` with `\x27`. See my detailed answer here for more examples:
+#    https://stackoverflow.com/questions/1250079/how-to-escape-single-quotes-within-single-quoted-strings/65878993#65878993
+
+TERMINAL_TAB_CMD1="cd '$HOME'; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+# TERMINAL_TAB_CMD2="cd '$HOME'; ll"
+# TERMINAL_TAB_CMD3="cd '$HOME/GS/dev'"
+# TERMINAL_TAB_CMD4="cd '$HOME/some directory with spaces'; ls"
+# TERMINAL_TAB_CMD5="cd '$HOME'; ll"
+# TERMINAL_TAB_CMD6="cd '$HOME/GS/dev'"
+# TERMINAL_TAB_CMD7="cd '$HOME/GS/dev'"
