@@ -11,7 +11,9 @@
 #       ln -si "${PWD}/.bash_aliases" ~/.bash_aliases
 
 # Note: to remind yourself what the definition is for any given alias, just run
-# `alias some_alias_name` at the terminal.
+# `alias some_alias_name` at the terminal. To see all aliases, run just `alias`. To see
+# ALL my custom aliases AND functions AND executable scripts, type `gs_` then press Tab Tab
+# (Tab two times).
 
 # ==================================================================================================
 # 1. GENERAL (PUBLICLY SHARED) Bash Setup, Variables, Aliases, & Functions

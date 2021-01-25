@@ -9,6 +9,11 @@
 # 2. See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
 #    https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
 
+# Note: to remind yourself what the definition is for any given alias, just run
+# `alias some_alias_name` at the terminal. To see all aliases, run just `alias`. To see
+# ALL my custom aliases AND functions AND executable scripts, type `gs_` then press Tab Tab
+# (Tab two times).
+
 # ==================================================================================================
 # PERSONAL (PRIVATE) Bash Setup, Variables, Aliases, & Functions
 # - Add your personal, custom, or otherwise unshared bash aliases and functions here below.
@@ -67,9 +72,9 @@ TERMINAL_TAB_TITLE_04='ssh1'
 TERMINAL_TAB_TITLE_05='ssh2'
 TERMINAL_TAB_TITLE_06='ssh3'
 TERMINAL_TAB_TITLE_07='other'
-TERMINAL_TAB_TITLE_08='other2'
-TERMINAL_TAB_TITLE_09='dynamic title: last cmd time: "$(date)"'
-TERMINAL_TAB_TITLE_10='dynamic title (change your dir) "$(pwd)"'
+# TERMINAL_TAB_TITLE_08='other2'
+# TERMINAL_TAB_TITLE_09='dynamic title: last cmd time: "$(date)"'
+# TERMINAL_TAB_TITLE_10='dynamic title (change your dir) "$(pwd)"'
 
 # 2. Tab COMMANDS
 # Notes:
@@ -79,16 +84,16 @@ TERMINAL_TAB_TITLE_10='dynamic title (change your dir) "$(pwd)"'
 #      detailed answer here for more examples:
 #      https://stackoverflow.com/questions/1250079/how-to-escape-single-quotes-within-single-quoted-strings/65878993#65878993
 
-TERMINAL_TAB_CMD_01="cd \"$HOME\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-TERMINAL_TAB_CMD_02="cd \"$HOME\"; ll"
+TERMINAL_TAB_CMD_01="cd \"$HOME/GS/dev\""
+TERMINAL_TAB_CMD_02="cd \"$HOME/GS/dev\""
 TERMINAL_TAB_CMD_03="cd \"$HOME/GS/dev\""
-TERMINAL_TAB_CMD_04="cd \"$HOME/some directory with spaces\"; ls"
-TERMINAL_TAB_CMD_05="cd \"$HOME\"; ll"
-TERMINAL_TAB_CMD_06="cd \"$HOME/GS/dev\""
-TERMINAL_TAB_CMD_07="cd \"$HOME/GS/dev\""
-TERMINAL_TAB_CMD_08="cd \"$HOME/temp\""
-TERMINAL_TAB_CMD_09="cd \"$HOME/temp\""
-TERMINAL_TAB_CMD_10="cd \"$HOME/temp\""
+TERMINAL_TAB_CMD_04="cd \"$HOME/GS/dev\""
+TERMINAL_TAB_CMD_05="cd \"$HOME/GS/dev\"; ls"
+TERMINAL_TAB_CMD_06="cd \"$HOME/GS/dev\"; ll"
+TERMINAL_TAB_CMD_07="cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+# TERMINAL_TAB_CMD_08="cd \"$HOME/temp\""
+# TERMINAL_TAB_CMD_09="cd \"$HOME/some directory with spaces\"; ls"
+# TERMINAL_TAB_CMD_10="cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
 
 # ------------- CONFIGURATION FOR `gs_open_default_tabs` Bash function (END) -----------------------
 
