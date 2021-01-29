@@ -7,6 +7,9 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 = Quotes: =
 ====================================================================================================
 
+"The best code is the 'done' code. (Meaning: it is functional [basic features] and works [runs/accomplishes the need])."
+    - Gabriel Staples, 24 Jan. 2021
+
 > Being in debt is hard. Being financially disciplined is hard. Choose your hard.  
 > Communication is hard. Not communicating is hard. Choose your hard.  
 > Obesity is hard. Being fit is hard. Choose your hard.  
@@ -1564,6 +1567,23 @@ git log --oneline --no-merges branch1 ^branch2 ^branch3
 git lg --no-merges branch1 ^branch2 ^branch3
     same as above, but using the `git lg` git alias instead, to show condensed (one-line) output with extra information! <======= BEST! (perhaps) ========
 
+git log -p
+    See the git log view except showing a "patch", or `git diff` type output for each commit as well, so you can see exactly what the changes were for each commit in the log!
+git log --patch
+    Same as above (the longer version of it is all). 
+
+SEE ALL GIT COMMITS WHICH TOUCHED A SPECIFIC FILE. See also my Q on Stack Overflow here!: https://stackoverflow.com/questions/65929317/whats-the-difference-between-git-log-some-file-and-git-log-follow-some
+[keywords: git commit one file, git commit 1 file, got log one file, git log 1 file, git patch 1 file, git log specific files]
+-----
+git log -- file.cpp
+    View just the commits which touched this file!
+git log --follow file.cpp
+    Similar to the cmd above, but more specific just to this file (seems to ignore merges)
+git log -p -- file.cpp
+    Same thing as `git log -- file.cpp`, except view the "patch view" of the git log, which shows a git diff output to show the changes introduced by this commit too! Note that `-p` is short for `--patch`.
+git log --patch -- file.cpp
+    Show patches for the commits in this log for this file only! (same as `git log -p -- file.cpp`)
+-----
 git log --follow <one_single_filename> = [VERY USEFUL!] Show the `git log` history which affected JUST THIS ONE SINGLE FILE YOU TOLD IT TO FOLLOW! This is VERY helpful to track and follow all of the commits which touched a certain file, in order to go back commit by commit until you find out **which commit** introduced the changes to that file that you care about!
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/ and `man git log` (then search for "--follow")
     [keywords: show file history]
