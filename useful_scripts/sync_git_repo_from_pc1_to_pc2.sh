@@ -5,17 +5,17 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # sync_git_repo_from_pc1_to_pc2.sh
-# - Sometimes you need to develop software on one machine (ex: a decent laptop, running an IDE like Eclipse) 
-#   while building on a remote server machine (ex: a powerful desktop, or a paid cloud-based server such as 
-#   AWS or Google Cloud--like this guy: https://matttrent.com/remote-development/). The problem, however, 
-#   is "how do I sync from the machine I work on to the machine I build on?". 
-#   This script answers that problem. It uses git to sync from one to the other. Git is 
-#   preferred over rsync or other sync tools since they try to sync *everything* and on large repos 
-#   they take FOREVER (dozens of minutes, to hours)! This script is lightning-fast (seconds) and 
+# - Sometimes you need to develop software on one machine (ex: a decent laptop, running an IDE like Eclipse)
+#   while building on a remote server machine (ex: a powerful desktop, or a paid cloud-based server such as
+#   AWS or Google Cloud--like this guy: https://matttrent.com/remote-development/). The problem, however,
+#   is "how do I sync from the machine I work on to the machine I build on?".
+#   This script answers that problem. It uses git to sync from one to the other. Git is
+#   preferred over rsync or other sync tools since they try to sync *everything* and on large repos
+#   they take FOREVER (dozens of minutes, to hours)! This script is lightning-fast (seconds) and
 #   ***safe***, because it always backs up any uncommitted changes you have on either PC1 or PC2
 #   before changing anything!
 # - A typical run might take <= ~30 seconds, and require ~25 MB of data (which you care about if running on
-#   a hotspot on your cell phone). 
+#   a hotspot on your cell phone).
 # - Run it from the *client* machine where you develop code (PC1), NOT the server where you will build
 #   the code (PC2)!
 # - It MUST be run from a directory inside the repo you are syncing FROM.
@@ -25,13 +25,13 @@
 #       cd /path/to/here
 #       mkdir -p ~/bin
 #       ln -s "${PWD}/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/sync_git_repo_from_pc1_to_pc2
-# 2. Now cd into a repo you want to sync from a PC1 (ex: some light development machine) to a 
+# 2. Now cd into a repo you want to sync from a PC1 (ex: some light development machine) to a
 #    PC2 (some powerful build machine), and run this script.
 #       sync_git_repo_from_pc1_to_pc2
 
 # References:
 # 1. For main notes & reference links see "sync_git_repo_from_pc1_to_pc2--notes.txt"
-# 1. Bash numerical comparisons: 
+# 1. Bash numerical comparisons:
 #    https://stackoverflow.com/questions/18668556/comparing-numbers-in-bash/18668580#18668580
 # 1. How to create a branch in a remote git repository:
 #    https://tecadmin.net/how-to-create-a-branch-in-remote-git-repository/
@@ -40,7 +40,7 @@
 # 1. Google search for "workflow to develop locally but build remotely" -
 #    https://www.google.com/search?q=workflow+to+develop+locally+but+build+remotely&oq=workflow+to+develop+locally+but+build+remotely&aqs=chrome..69i57.7154j0j7&sourceid=chrome&ie=UTF-8
 #   1. *****"Developing on a remote server _Without Jupyter and Vim_" - https://matttrent.com/remote-development/
-# 1. Google search for "eclipse work local build remote" - 
+# 1. Google search for "eclipse work local build remote" -
 #    https://www.google.com/search?q=eclipse+work+local+build+remote&oq=eclipse+work+local+build+remote&aqs=chrome..69i57.218j0j9&sourceid=chrome&ie=UTF-8
 #   1. https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh
 
@@ -57,7 +57,7 @@ if [ -f ~/.sync_git_repo ]; then
 fi
 
 # Option 2: fill out all these variables right here instead. For descriptions on what they mean, see
-# the example file in this project: "eRCaGuy_dotfiles/.sync_git_repo". 
+# the example file in this project: "eRCaGuy_dotfiles/.sync_git_repo".
 # (Comment these next lines out if using Option 1)
 # PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles"
 # PC2_SSH_USERNAME="my_username" # explicitly type this out; don't use variables
@@ -65,9 +65,9 @@ fi
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create the 
-# synchronization git branch name just below. 
-MY_NAME="gabriel.staples" 
+# Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create the
+# synchronization git branch name just below.
+MY_NAME="gabriel.staples"
 
 # This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
 # Feel free to modify this as you see fit.
@@ -98,7 +98,7 @@ get_path_to_this_script () {
 
 # A function to obtain the temporary directory we will use, given a directory to a git repo.
 # Call syntax: `get_temp_dir "$REPO_ROOT_DIR`
-# Example: if REPO_ROOT_DIR="~/dev/myrepo", then this function will return (echo out) "~/dev/myrepo_temp" as 
+# Example: if REPO_ROOT_DIR="~/dev/myrepo", then this function will return (echo out) "~/dev/myrepo_temp" as
 #   the temp directory
 get_temp_dir () {
     REPO_ROOT_DIR="$1" # Ex: /home/gabriel/dev/eRCaGuy_dotfiles
@@ -108,11 +108,11 @@ get_temp_dir () {
     echo "$TEMP_DIR"
 }
 
-# Create a temporary directory to store the results, & check the git repo for changes--very similar to 
+# Create a temporary directory to store the results, & check the git repo for changes--very similar to
 # what a human is doing when calling `git status`.
 # This function determines if any local, uncommitted changes or untracked files exist.
 create_temp_and_check_for_changes() {
-    # Get git root dir (so you can do `git commit -A` from this dir in case you are in a lower dir--ie: cd to 
+    # Get git root dir (so you can do `git commit -A` from this dir in case you are in a lower dir--ie: cd to
     # the root FIRST, then `git commit -A`, then cd back to where you were)
     # See: https://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-root-directory-in-one-command/957978#957978
     REPO_ROOT_DIR="$(git rev-parse --show-toplevel)" # Ex: /home/gabriel/dev/eRCaGuy_dotfiles
@@ -125,7 +125,7 @@ create_temp_and_check_for_changes() {
 
     echo "Storing temp files in \"$TEMP_DIR\"."
 
-    # See if any changes exist (as normally shown by `git status`). 
+    # See if any changes exist (as normally shown by `git status`).
     # If any changes do exist, back up the file paths which are:
     # 1) changed and staged
     # 2) changed and not staged
@@ -155,10 +155,10 @@ create_temp_and_check_for_changes() {
 
     total=$[$num_staged + $num_not_staged + $num_untracked]
     echo "  total = $total"
-} 
+}
 
 # On local machine:
-# Summary: Look for changes. Commit them to current local branch. Force Push them to remote SYNC branch. 
+# Summary: Look for changes. Commit them to current local branch. Force Push them to remote SYNC branch.
 # Uncommit them on local branch. Restore original state by re-staging any files that were previously staged.
 # Done.
 sync_pc1_to_remote_branch () {
@@ -178,11 +178,11 @@ sync_pc1_to_remote_branch () {
 
         echo "Making a temporary commit of all uncommitted changes."
         cd "$REPO_ROOT_DIR"
-        # Prepare a multi-line commit message in a variable first, then do the commit w/this msg. 
-        # See *my own answer here!*: 
+        # Prepare a multi-line commit message in a variable first, then do the commit w/this msg.
+        # See *my own answer here!*:
         # https://stackoverflow.com/questions/29933349/how-can-i-make-git-commit-messages-divide-into-multiple-lines/60826932#60826932
         commit_msg="AUTOMATIC COMMIT TO SYNC TO PC2 (BUILD MACHINE)"
-        
+
         # Staged files
         num="$num_staged"
         file_names_path="$FILES_STAGED"
@@ -247,7 +247,7 @@ sync_pc1_to_remote_branch () {
         # Now re-stage any files that were previously staged
         # See: 1) https://stackoverflow.com/questions/4227994/how-do-i-use-the-lines-of-a-file-as-arguments-of-a-command/4229346#4229346
         # and  2) *****https://www.cyberciti.biz/faq/unix-howto-read-line-by-line-from-file/
-        # and  3) *****+ [my own ans I just made now]: 
+        # and  3) *****+ [my own ans I just made now]:
         #         https://stackoverflow.com/questions/4227994/how-do-i-use-the-lines-of-a-file-as-arguments-of-a-command/60276836#60276836
         if [ "$num_staged" -gt "0" ]; then
             echo "Re-staging (via 'git add') any files that were previously staged."
@@ -256,7 +256,7 @@ sync_pc1_to_remote_branch () {
             while IFS= read -r line
             do
                 echo "  git add \"$line\""
-                git add "$line" 
+                git add "$line"
             done < "$FILES_STAGED"
         fi
     fi
@@ -282,7 +282,7 @@ update_pc2 () {
         echo "  they are important."
 
         # Produce a new branch name to back up these uncommitted changes.
-        
+
         # Get just the name of the currently-checked-out branch:
         # See: https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git/12142066#12142066
         # - Will simply output "HEAD" if in a 'detached HEAD' state (ie: not on any branch)
@@ -309,7 +309,7 @@ update_pc2 () {
     echo "Force pulling from remote \"$SYNC_BRANCH\" branch to overwrite local copy of this branch."
     echo "  1/3: git fetch origin \"$SYNC_BRANCH\""
     git fetch origin "$SYNC_BRANCH"         # MAY NEED TO COMMENT OUT DURING TESTING
-    echo "  2/3: git checkout \"$SYNC_BRANCH\"" 
+    echo "  2/3: git checkout \"$SYNC_BRANCH\""
     # Note: this `git checkout` call automatically checks out this branch from the remote "origin" if this branch
     # is not already present locally
     git checkout "$SYNC_BRANCH"             # MAY NEED TO COMMENT OUT DURING TESTING
@@ -320,8 +320,8 @@ update_pc2 () {
 }
 
 # On remote machine:
-# Summary: Look for changes. Commit them to a new branch forked off of current branch. Call it 
-# current_branch_SYNC_BAK_20200217-2310hrs. Check out $SYNC_BRANCH branch. Pull and hard reset. 
+# Summary: Look for changes. Commit them to a new branch forked off of current branch. Call it
+# current_branch_SYNC_BAK_20200217-2310hrs. Check out $SYNC_BRANCH branch. Pull and hard reset.
 # Done! We are ready to build now!
 sync_remote_branch_to_pc2 () {
     echo "===== Syncing remote branch to PC2 ====="
@@ -368,6 +368,9 @@ main () {
     echo "  Commit hash synced: ${synced_commit_hash}"
     echo "  From PC: ${USER}@${HOSTNAME}"
     echo "  To PC:   ${PC2_SSH_USERNAME}@${PC2_SSH_HOST}:${PC2_GIT_REPO_TARGET_DIR}"
+
+    timestamp="$(date "+%Y.%m.%d %H:%Mhrs:%Ssec")"
+    echo "  Completed at timestamp: $timestamp"
 
     echo "END!"
 }
