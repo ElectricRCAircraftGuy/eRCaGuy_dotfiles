@@ -24,10 +24,10 @@
 # 1. Create symlinks in ~/bin to this script so you can run it from anywhere:
 #       cd /path/to/here
 #       mkdir -p ~/bin
-#       ln -s "${PWD}/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/sync_git_repo_from_pc1_to_pc2
+#       ln -s "${PWD}/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/gs_sync_git_repo_from_pc1_to_pc2
 # 2. Now cd into a repo you want to sync from a PC1 (ex: some light development machine) to a
 #    PC2 (some powerful build machine), and run this script.
-#       sync_git_repo_from_pc1_to_pc2
+#       gs_sync_git_repo_from_pc1_to_pc2
 
 # References:
 # 1. For main notes & reference links see "sync_git_repo_from_pc1_to_pc2--notes.txt"
@@ -59,15 +59,15 @@ fi
 # Option 2: fill out all these variables right here instead. For descriptions on what they mean, see
 # the example file in this project: "eRCaGuy_dotfiles/.sync_git_repo".
 # (Comment these next lines out if using Option 1)
+# - - - - - -
+# # Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create the
+# # synchronization git branch name just below.
+# MY_NAME="gabriel.staples"
 # PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles"
 # PC2_SSH_USERNAME="my_username" # explicitly type this out; don't use variables
 # PC2_SSH_HOST="my_hostname"     # explicitly type this out; don't use variables
 
 # ----------------------------------------------------------------------------------------------------------------------
-
-# Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create the
-# synchronization git branch name just below.
-MY_NAME="gabriel.staples"
 
 # This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
 # Feel free to modify this as you see fit.
@@ -77,6 +77,8 @@ SYNC_BRANCH="${MY_NAME}_SYNC"
 # echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
 # echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
 # echo "PC2_SSH_HOST = $PC2_SSH_HOST"
+
+
 
 # ======================================================================================================================
 # FUNCTION DEFINITIONS
@@ -265,7 +267,7 @@ sync_pc1_to_remote_branch () {
 }
 
 # This is the main command to run on PC2 via ssh from PC1 in order to sync the remote branch to PC2!
-# Call syntax: `update_pc2 "$PC2_GIT_REPO_TARGET_DIR"`
+# Call syntax: `--update_pc2 "$PC2_GIT_REPO_TARGET_DIR"`
 update_pc2 () {
     echo "---\"update_pc2\" script start---"
 
@@ -345,7 +347,7 @@ sync_remote_branch_to_pc2 () {
     # more about the -t flag. Also see here:
     # https://malcontentcomics.com/systemsboy/2006/07/send-remote-commands-via-ssh.html
     # and here: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
-    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST  "$script_path_on_pc2 update_pc2 \"$PC2_GIT_REPO_TARGET_DIR\""
+    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST  "$script_path_on_pc2 --update_pc2 \"$PC2_GIT_REPO_TARGET_DIR\""
 
     echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
 }
@@ -390,8 +392,8 @@ echo "Running on PC user@hostname: $USER@$HOSTNAME"
 if [ "$#" -eq "0" ];  then
     time main # use `time` cmd in front to output the total time this process took when it ends!
 
-# Call only `update_pc2` function if desired (ie: when running this script from PC2 only!)
-# Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh update_pc2 <input_arg_to_update_pc2>`
-elif [ "$1" = "update_pc2" ];  then
+# Call only `--update_pc2` function if desired (ie: when running this script from PC2 only!)
+# Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <input_arg_to_update_pc2>`
+elif [ "$1" = "--update_pc2" ];  then
     update_pc2 "$2"
 fi
