@@ -1,6 +1,7 @@
 {
-	"extensions":
-	[
-		"dbc"
-	]
+    "extensions":
+    [
+        "dbc",
+        ".clang-format"
+    ]
 }
