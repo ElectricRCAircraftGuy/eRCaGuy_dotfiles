@@ -1,14 +1,25 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # INSTALLATION & USAGE INSTRUCTIONS:
-# 1. If you are pulling in my bash configuration files for your usage, the primary file you
-#    should edit and customize is the ".bash_aliases_private" file.
-# 2. See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
-#    https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+# - If you are using my bash configuration files for yourself, the primary file you
+#   should edit and customize is the ".bash_aliases_private" file, NOT the ".bashrc" file.
+# - See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
+#   https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+#
+# Option 1) (what you *may* want to use) if you think you will be editing your ~/.bashrc file
+# directly, rather than the ~/.bash_aliases_private file like I recommend, then COPY this file
+# to ~/.bashrc:
+#   Option A) it doesn't exist in your home dir yet, so copy the whole thing over:
+#           cp -i .bashrc ~
+#   Option B) append the contents of this file to the end of your existing ~/.bashrc file:
+#           cat .bashrc >> ~/.bashrc
+# Option 2) (recommended, and what I do for most of my computers) if you plan to NOT edit your
+# ~/.bashrc file directly, and instead edit only ~/.bash_aliases_private (like I do), then just
+# SYMLINK this file from my repo into yoru home dir. This way you can pull my repo to always get
+# the latest version of my ~/.bashrc file directly onto your computer too:
+#       cd path/to/here
+#       ln -si "${PWD}/.bashrc" ~
 
-# Edit as desired, then copy to ~/.bashrc
-# Option 1) doesn't exist yet, so copy whole thing over: `cp -i .bashrc ~/.bashrc`
-# Option 2) append contents to existing .bashrc file: `cat .bashrc >> ~/.bashrc`
 
 # ==================================================================================================
 # START OF THE STANDARD UBUNTU-18-INSTALLED .bashrc FILE
