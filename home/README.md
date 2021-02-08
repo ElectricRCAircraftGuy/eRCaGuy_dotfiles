@@ -17,6 +17,9 @@ Or, use `cat` to just _view_ its contents:
     cat .git_editor.sublime-project
 
 
+## Eclipse User Dictionary Setup
+See [.eclipse-user-dictionary--README.md](.eclipse-user-dictionary--README.md).
+
 ## Terminal Setup: Installation & Usage Instructions for `.profile`, `.bashrc`, `.bash_aliases`, and `.bash_aliases_private`
 
 ### 1. Installation
