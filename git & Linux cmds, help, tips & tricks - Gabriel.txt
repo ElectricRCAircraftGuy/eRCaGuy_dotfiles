@@ -310,7 +310,18 @@ And here's this shorter version again now with `\` again instead of `@`:
         // function implementation here
     }
 
-And the more compact version of the above (assumes shorter parameter names, and only [in] or [out] params but no [in,out] params):
+And the more compact versions of the above (assumes shorter parameter names, and only [in] or [out] params but no [in,out] params):
+
+    /// @brief      A brief one or two line description of the function.
+    /// @param[in]  variable_1  Input parameter
+    /// @param[in]  variable_2  Another input parameter
+    /// @param[out] variable_3  Output parameter
+    /// @param[out] variable_4  Another output parameter
+    /// @return     None
+    void myFunc(int var1, int var2, int* var3, int* var4)
+    {
+        // function implementation here
+    }
 
     /// \brief      A brief one or two line description of the function.
     /// \param[in]  variable_1  Input parameter
