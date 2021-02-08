@@ -26,10 +26,10 @@
 #       mkdir -p ~/bin
 #       cp -i open_programming_tools.sh ~/bin/gs_open_programming_tools
 #
-# 2. Edit the list of programs to open below. Ensure each program you want opened is called, and in
-# the order you want. TO VIEW DESKTOP LAUNCHERS TO SEE WHAT THE COMMANDS ARE FOR OPENING CERTAIN
-# PROGRAMS you already have installed, you can consult the various *.desktop files in your
-# "/usr/share/applications" directory:
+# 2. **In the copy in ~/bin**, edit the list of programs to open below. Ensure each program you want
+# opened is called, and in the order you want. TO VIEW DESKTOP LAUNCHERS TO SEE WHAT THE COMMANDS
+# ARE FOR OPENING CERTAIN PROGRAMS you already have installed, you can consult the various *.desktop
+# files in your "/usr/share/applications" directory:
 #       ls /usr/share/applications
 #       # then
 #       cat /usr/share/applications/launcher_of_interest.desktop
@@ -39,7 +39,13 @@
 #       cd /path/to/eRCaGuy_dotfiles/Desktop_launchers
 #       ln -si "${PWD}/open_programming_tools.desktop" ~/Desktop
 #
-# 4. Now double-click on the "Open Programming Tools" icon on your desktop to run this script!
+# 4. If you just created the "~/bin" dir for the first time ever in the first step above, close all
+# terminal windows and re-open them (or log out of Ubuntu and then log back in).
+#
+# 5. Now run the script. There are two ways:
+#   1. Double-click on the "Open Programming Tools" icon on your desktop! OR:
+#   2. Run `gs_open_programming_tools` from the terminal!
+#
 # DONE!
 
 # **Use ampersands (&) after each command below to allow them to all open up in parallel to speed up

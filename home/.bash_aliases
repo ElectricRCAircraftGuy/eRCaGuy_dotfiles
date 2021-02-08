@@ -1,14 +1,14 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # INSTALLATION & USAGE INSTRUCTIONS:
-# 1. If you are pulling in my bash configuration files for your usage, I recommend you leave this
-#    file exactly as-is and copy and edit and customize the ".bash_aliases_private" file instead.
-# 2. See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
-#    https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
-
-# Make a symlink to this file in your home (~) dir:
+# - If you are pulling in my bash configuration files for your usage, I recommend you leave this
+#   file exactly as-is and copy and edit and customize the ".bash_aliases_private" file instead.
+# - See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
+#   https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+#
+# 1. Make a symlink to this file in your home (~) dir:
 #       cd path/to/eRCaGuy_dotfiles/home
-#       ln -si "${PWD}/.bash_aliases" ~/.bash_aliases
+#       ln -si "${PWD}/.bash_aliases" ~
 
 # Note: to remind yourself what the definition is for any given alias, just run
 # `alias some_alias_name` at the terminal. To see all aliases, run just `alias`. To see

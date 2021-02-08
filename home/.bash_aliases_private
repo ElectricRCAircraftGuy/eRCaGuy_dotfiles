@@ -3,11 +3,14 @@
 # >> THIS IS THE PRIMARY BASH CONFIGURATION FILE FOR YOU TO EDIT AND CUSTOMIZE! <<
 
 # INSTALLATION & USAGE INSTRUCTIONS:
-# 1. If you are pulling in my bash configuration files for your usage, I recommend you leave my
-#    ".bashrc" and ".bash_aliases" files as-is, and edit and customize this
-#    ".bash_aliases_private" file instead!
-# 2. See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
-#    https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+# - If you are pulling in my bash configuration files for your usage, I recommend you leave my
+#   ".bashrc" and ".bash_aliases" files as-is, and edit and customize this
+#   ".bash_aliases_private" file instead!
+# - See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions and details, here:
+#   https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+#
+# 1. Install by copying this file to your home dir, and editing your own personal copy there:
+#       cp -i .bash_aliases_private ~
 
 # Note: to remind yourself what the definition is for any given alias, just run
 # `alias some_alias_name` at the terminal. To see all aliases, run just `alias`. To see
