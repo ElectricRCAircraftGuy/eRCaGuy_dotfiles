@@ -1590,6 +1590,15 @@ git log -- file.cpp
     View just the commits which touched this file!
 git log --follow file.cpp
     Similar to the cmd above, but more specific just to this file (seems to ignore merges)
+git log --follow master...HEAD file.cpp
+    Show all changes in file 'file.cpp', following it through file renames (if applicable), over the "revision range" from branch `master`...(to) `HEAD`, or current state.
+    SUPER USEFUL! <===============
+git log --follow --patch master...HEAD file.cpp
+    Same thing as above, except also show the `git diff`-style "patch" changes too.
+    SUPER USEFUL! <======== SUPER USEFUL! ========
+git log --follow --patch -U20 master...HEAD file.cpp
+    Same as above, but show more "git diff" type context (lines) above and below the changes--namely: 20 lines each above and below, instead of the default 3 lines or whatever.
+    SUPER USEFUL! <======== SUPER USEFUL! ========
 git log -p -- file.cpp
     Same thing as `git log -- file.cpp`, except view the "patch view" of the git log, which shows a git diff output to show the changes introduced by this commit too! Note that `-p` is short for `--patch`.
 git log --patch -- file.cpp
@@ -1968,6 +1977,21 @@ So, here's how to rewrite the history. See GitHub's instructions here: https://h
     [user]
         name = Your_Correct_Full_Name
         email = correct_email@gmail.com
+
+
+====================================================================================================
+= git submodules: =
+====================================================================================================
+
+REFERENCES:
+1. READ THIS TUTORIAL!: https://www.vogella.com/tutorials/GitSubmodules/article.html 
+
+git submodule update --init --recursive
+    Initialize (ie: do for the first time) and update all submodules in a git repo.
+    See: https://stackoverflow.com/questions/1030169/easy-way-to-pull-latest-of-all-git-submodules/1032653#1032653
+git submodule update --recursive
+    Call this every time thereafter? (ie: after the first time?)
+    See: https://stackoverflow.com/questions/1030169/easy-way-to-pull-latest-of-all-git-submodules/1032653#1032653
 
 
 ====================================================================================================
