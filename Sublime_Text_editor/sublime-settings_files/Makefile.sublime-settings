@@ -1,0 +1,4 @@
+// These settings override both User and Default settings for the Makefile syntax
+{
+    "translate_tabs_to_spaces": false,
+}
