@@ -2,41 +2,43 @@
 
 # Variables for "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh" script
 
-# The above script synchronizes a git repository from Personal Computer 1 (PC1) to Personal Computer 2 (PC2).
+# The above script synchronizes a git repository from Personal Computer 1 (PC1) to Personal Computer
+# 2 (PC2).
 
 # INSTALLATION:
-# 1. Update the variables below with your information.
-# 2. Copy this file to ~/.sync_git_repo_private:
+# 1. Copy this file to ~/.sync_git_repo_private:
 #           cp -i path/to/eRCaGuy_dotfiles/home/.sync_git_repo_private ~
+# 2. Editing the copy of the file in your home dir, update the variables below with your
+#    information.
 # 3. Ensure all your ssh keys are set up on both PC1 and PC2. This includes A) the keys to push/pull
 #    to/from your remote git repos, and B) the keys required to ssh from PC1 into PC2.
 # 4. Manually `git clone` your repo onto both PC1 and PC2.
-# 5. Now run the sync script whenever you have changes you want to push from PC1 to PC2 for building or
-#    testing!:
+# 5. Now run the sync script whenever you have changes you want to push from PC1 to PC2 for
+#    building or testing!:
 #           eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh
 
 
-# Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create the
-# synchronization git branch name.
+# Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create
+# the synchronization git branch name.
 MY_NAME="first.last"
 
-# The git repo root directory on PC2 where you are syncing your files TO; this dir must *already exist*
-# and you must have *already `git clone`d* a copy of your git repo into it!
-# - Do NOT use variables such as `$HOME`. Be explicit instead. This is because the variable expansion will
-#   happen on the local machine when what we need is the variable expansion from the remote machine. Being
-#   explicit instead just avoids this problem.
-PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles" # explicitly type this out; don't use variables
+# The git repo root directory on PC2 where you are syncing your files TO; this dir must *already
+# exist* and you must have *already `git clone`d* a copy of your git repo into it!
+# Do NOT use variables such as `$HOME`. Be explicit instead. This is because the variable expansion
+# will happen on the local machine when what we need is the variable expansion from the remote
+# machine. Being explicit instead just avoids this problem.
+PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles"
 
-# Target SSH username: explicitly type this out; don't use variables; you may run any one of the following
-# commands on your target machine to see your username:
+# Target SSH username: explicitly type this out; don't use variables; you may run any one of
+# the following commands on your target machine to see your username:
 #       who
 #       whoami
 #       echo $USER
 #       echo $USERNAME
 # Ex: "gabriel"
 PC2_SSH_USERNAME="my_username"
-# Target SSH hostname or IP address: explicitly type this out; don't use variables; run the `hostname`
-# command on your target machine to see your hostname, or run `ifconfig` to see your IP address.
-# Ex: "gabriel-mypc1234", "10.0.0.100", or "192.168.200.100"
+# Target SSH hostname or IP address: explicitly type this out; don't use variables; run the
+# `hostname` command on your target machine to see your hostname, or run `ifconfig` to see your IP
+# address. Ex: "gabriel-mypc1234", "10.0.0.100", or "192.168.200.100"
 PC2_SSH_HOST="my_hostname"
 
