@@ -6,14 +6,14 @@
 
 # INSTALLATION:
 # 1. Update the variables below with your information.
-# 2. Copy this file to ~/.sync_git_repo:
-#       cp -i path/to/eRCaGuy_dotfiles/.sync_git_repo ~/.sync_git_repo
+# 2. Copy this file to ~/.sync_git_repo_private:
+#           cp -i path/to/eRCaGuy_dotfiles/home/.sync_git_repo_private ~
 # 3. Ensure all your ssh keys are set up on both PC1 and PC2. This includes A) the keys to push/pull
 #    to/from your remote git repos, and B) the keys required to ssh from PC1 into PC2.
 # 4. Manually `git clone` your repo onto both PC1 and PC2.
 # 5. Now run the sync script whenever you have changes you want to push from PC1 to PC2 for building or
 #    testing!:
-#       eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh
+#           eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh
 
 
 # Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create the
