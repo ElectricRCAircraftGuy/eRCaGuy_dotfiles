@@ -23,14 +23,14 @@ Notes to self on how to accomplish this "sync_git_repo_to_server.sh" script.
 1. `git status`, commit a "SYNC TO BUILD_MACHINE" commit if there are changes, 
 2. do `git push --force origin <local_branch_name>:gabriel.staples_SYNC_TO_BUILD_MACHINE` branch [--force causes the remote branch to LOSE DATA, which is ok here]
     - this works too! `git push --force origin HEAD:gabriel.staples_SYNC_TO_BUILD_MACHINE` <=====
-3. use ssh commands to pull it on the remote server:
-See also: https://stackoverflow.com/questions/1125968/how-do-i-force-git-pull-to-overwrite-local-files/8888015#8888015
-
+3. use ssh commands to pull it on the remote server:  
+    See also: https://stackoverflow.com/questions/1125968/how-do-i-force-git-pull-to-overwrite-local-files/8888015#8888015
+    ```bash
     git checkout gabriel.staples_SYNC_TO_BUILD_MACHINE
     git fetch origin gabriel.staples_SYNC_TO_BUILD_MACHINE
     git reset --hard origin gabriel.staples_SYNC_TO_BUILD_MACHINE
-
-then kick off the build manually on the remote server
+    ```
+    then kick off the build manually on the remote server
 4. Last step is to `git reset` back to before doing the "SYNC TO BUILD_MACHINE" commit on the local pc. 
 
 See how this goes. If it works well, document it on Stack Overflow here:
@@ -61,9 +61,9 @@ See: https://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-ro
 
     git rev-parse --show-toplevel
 
-Get just the name of the currently-checked-out branch:
-See: https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git/12142066#12142066
-- will simply output "HEAD" if in a 'detached HEAD' state (ie: not on any branch)
+Get just the name of the currently-checked-out branch:  
+See: https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git/12142066#12142066  
+-will simply output "HEAD" if in a 'detached HEAD' state (ie: not on any branch)
 
     git rev-parse --abbrev-ref HEAD
 
