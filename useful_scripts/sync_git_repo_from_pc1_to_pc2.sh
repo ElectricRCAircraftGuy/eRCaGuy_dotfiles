@@ -134,6 +134,18 @@ parse_args() {
     echo "SYNC_BRANCH = \"$SYNC_BRANCH\""
     echo "Running on PC user@hostname: $USER@$HOSTNAME"
 
+    # Only run main if no input args are given
+    # Sample calling syntax to this script: `./sync_git_repo_from_pc1_to_pc2.sh`
+    if [ "$#" -eq "0" ];  then
+        time main
+    fi
+
+    # Call only `--update_pc2` function if desired (ie: when running this script from PC2 only!)
+    # Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <input_arg_to_update_pc2>`
+    elif [ "$1" = "--update_pc2" ];  then
+        update_pc2 "$2"
+    fi
+
 
     if [ $# -eq 0 ]; then
         echo "No arguments supplied"
@@ -203,13 +215,14 @@ get_temp_dir () {
     echo "$TEMP_DIR"
 }
 
-# Create a temporary directory to store the results, & check the git repo for changes--very similar to
-# what a human is doing when calling `git status`.
-# This function determines if any local, uncommitted changes or untracked files exist.
+# (Runs on both PC1 and PC2):
+# Create a temporary directory to store the results, & check the git repo for changes--very similar
+# to what a human is doing when calling `git status`. This function determines if any local,
+# uncommitted changes or untracked files exist.
 create_temp_and_check_for_changes() {
-    # Get git root dir (so you can do `git commit -A` from this dir in case you are in a lower dir--ie: cd to
-    # the root FIRST, then `git commit -A`, then cd back to where you were)
-    # See: https://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-root-directory-in-one-command/957978#957978
+    # Get git root dir (so you can do `git commit -A` from this dir in case you are in a lower
+    # dir--ie: cd to the root FIRST, then `git commit -A`, then cd back to where you were). See:
+    # https://stackoverflow.com/questions/957928/is-there-a-way-to-get-the-git-root-directory-in-one-command/957978#957978
     REPO_ROOT_DIR="$(git rev-parse --show-toplevel)" # Ex: /home/gabriel/dev/eRCaGuy_dotfiles
     # echo "REPO_ROOT_DIR = $REPO_ROOT_DIR" # debugging
 
@@ -253,9 +266,9 @@ create_temp_and_check_for_changes() {
 }
 
 # On local machine:
-# Summary: Look for changes. Commit them to current local branch. Force Push them to remote SYNC branch.
-# Uncommit them on local branch. Restore original state by re-staging any files that were previously staged.
-# Done.
+# Summary: Look for changes. Commit them to current local branch. Force Push them to remote SYNC
+# branch. Uncommit them on local branch. Restore original state by re-staging any files that were
+# previously staged. Done.
 sync_pc1_to_remote_branch () {
     echo "===== Syncing PC1 to remote branch ====="
     echo "Preparing to push current branch with all changes (including staged, unstaged, & untracked files)"
@@ -445,8 +458,8 @@ sync_remote_branch_to_pc2 () {
     echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
 }
 
-# Main code
-main () {
+# Main code to run on PC1
+main_pc1 () {
     DIR_START="$(pwd)"
     # echo "DIR_START = $DIR_START" # debugging
 
@@ -476,17 +489,9 @@ main () {
 
 parse_args "$@"
 initialize
-
-# Only run main if no input args are given
-# Sample calling syntax to this script: `./sync_git_repo_from_pc1_to_pc2.sh`
-if [ "$#" -eq "0" ];  then
-    time main # use `time` cmd in front to output the total time this process took when it ends!
-
-# Call only `--update_pc2` function if desired (ie: when running this script from PC2 only!)
-# Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <input_arg_to_update_pc2>`
-elif [ "$1" = "--update_pc2" ];  then
-    update_pc2 "$2"
+if [ "$RUN_ON" == "pc1" ]; then
+    # Note: use `time` cmd in front to output the total time this process took when it ends!
+    time main_pc1
+elif [ "$RUN_ON" == "pc2" ]; then
+    update_pc2 "$PC2_GIT_REPO_TARGET_DIR"
 fi
-
-
-
