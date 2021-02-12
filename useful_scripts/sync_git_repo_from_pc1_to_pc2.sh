@@ -21,13 +21,21 @@
 # - It MUST be run from a directory inside the repo you are syncing FROM.
 
 # INSTALLATION:
+#
+# See also: README_git-sync_repo_from_pc1_to_pc2.md
+#
 # 1. Create symlinks in ~/bin to this script so you can run it from anywhere:
-#       cd /path/to/here
-#       mkdir -p ~/bin
-#       ln -s "${PWD}/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/sync_git_repo_from_pc1_to_pc2
-# 2. Now cd into a repo you want to sync from a PC1 (ex: some light development machine) to a
+#           cd /path/to/here
+#           mkdir -p ~/bin
+#           ln -s "${PWD}/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/gs_sync_git_repo_from_pc1_to_pc2
+# 2. Copy "eRCaGuy_dotfiles/home/.bash_aliases_private" to "~/.bash_aliases_private":
+#           cp -i ../home/.sync_git_repo_private ~
+# 3. Now edit ~/.sync_git_repo_private as desired.
+# 4. Now cd into a repo you want to sync from a PC1 (ex: some light development machine) to a
 #    PC2 (some powerful build machine), and run this script.
-#       sync_git_repo_from_pc1_to_pc2
+#           gs_sync_git_repo_from_pc1_to_pc2
+# 5. See the help menu for more details on the command:
+#           gs_sync_git_repo_from_pc1_to_pc2 -h
 
 # References:
 # 1. For main notes & reference links see "sync_git_repo_from_pc1_to_pc2--notes.txt"
@@ -44,30 +52,41 @@
 #    https://www.google.com/search?q=eclipse+work+local+build+remote&oq=eclipse+work+local+build+remote&aqs=chrome..69i57.218j0j9&sourceid=chrome&ie=UTF-8
 #   1. https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh
 
-# ======================================================================================================================
-# USER PARAMETERS, INCL. SSH PARAMETERS TO SYNC OVER SSH FROM PC1 TO PC2
-# - COMMENT OUT THE OPTION (1 or 2) BELOW THAT YOU'RE NOT USING!
-# ======================================================================================================================
-# Option 1: Create a "~/.sync_git_repo" file on PC1 and define these variables inside there. See and
-# use the example file in this project: "eRCaGuy_dotfiles/.sync_git_repo".
-# (Comment these next lines out if using Option 2)
-if [ -f ~/.sync_git_repo ]; then
+# ==================================================================================================
+# OTHER PROGRAM PARAMETERS, INCL. SSH PARAMETERS TO SYNC OVER SSH FROM PC1 TO PC2.
+# NOTE: ALL USER PARAMETERS TO EDIT MUST BE STORED IN "~/.sync_git_repo_private". See
+# "eRCaGuy_dotfiles/home/.sync_git_repo_private" for details.
+# ==================================================================================================
+
+#########
+# Copy "eRCaGuy_dotfiles/home/.sync_git_repo_private" to "~/.sync_git_repo_private" on PC1 and edit the contents
+# of that file there.
+
+# See bash associative array tutorial here!:
+# https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
+# See also `help declare`.
+# - Note: use `unset` to delete a variable. Ex: `unset PC2_USERNAME`.
+declare -A PC2_USERNAME
+declare -A PC2_HOSTNAME
+declare -A PC2_TARGETDIR
+
+export PC2_USERNAME
+export PC2_HOSTNAME
+export PC2_TARGETDIR
+
+if [ -f ~/.sync_git_repo_private ]; then
     # Source this file only if it exists
-    . ~/.sync_git_repo
+    . ~/.sync_git_repo_private
+else
+    echo "WARNING! This script will not work unless you //put file in ~.sync_git_repo_private///////////"
 fi
 
-# Option 2: fill out all these variables right here instead. For descriptions on what they mean, see
-# the example file in this project: "eRCaGuy_dotfiles/.sync_git_repo".
-# (Comment these next lines out if using Option 1)
-# PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles"
-# PC2_SSH_USERNAME="my_username" # explicitly type this out; don't use variables
-# PC2_SSH_HOST="my_hostname"     # explicitly type this out; don't use variables
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-# Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create the
-# synchronization git branch name just below.
-MY_NAME="gabriel.staples"
+# Set defaults:
+if [ -n "$DEFAULT_TARGET"]; then
+    PC2_USERNAME["default"]="${PC2_USERNAME["${DEFAULT_TARGET}"]}"
+    PC2_HOSTNAME["default"]="${PC2_HOSTNAME["${DEFAULT_TARGET}"]}"
+    PC2_TARGETDIR["default"]="${PC2_TARGETDIR["${DEFAULT_TARGET}"]}"
+fi
 
 # This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
 # Feel free to modify this as you see fit.
@@ -78,10 +97,41 @@ SYNC_BRANCH="${MY_NAME}_SYNC"
 # echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
 # echo "PC2_SSH_HOST = $PC2_SSH_HOST"
 
-# ======================================================================================================================
-# FUNCTION DEFINITIONS
-# ======================================================================================================================
 
+EXIT_SUCCESS=0
+EXIT_ERROR=1
+
+VERSION="0.2.0"
+AUTHOR="Gabriel Staples"
+
+SCRIPT_NAME="$(basename "$0")"
+VERSION_SHORT_STR="sync_git_repo_from_pc1_to_pc2 (run as '$SCRIPT_NAME') version $VERSION"
+VERSION_LONG_STR="\
+$VERSION_SHORT_STR
+Author = $AUTHOR
+See '$SCRIPT_NAME -h' for more info.
+"
+
+HELP_STR="\
+$VERSION_SHORT_STR
+
+Purpose: synchronize a git repo from one computer (\"PC1\") to another (\"PC2\"). This is useful,
+for example, to edit and write code on a local laptop (\"PC1\") while building on a more-powerful,
+remote desktop (\"PC2\").
+
+Usage:  '$SCRIPT_NAME [target]'
+
+Synchronize the git repo (whose directory you are currently in when running the command) on the
+local computer (\"PC1\") to the remote 'pc2_target_name' computer (\"PC2\"). 'pc2_target_name' is
+optional. If not specified, it defaults to///////////////
+
+"
+
+# ==================================================================================================
+# FUNCTION DEFINITIONS
+# ==================================================================================================
+
+###########3 UDPATE TO THE SIMPLER FORM!
 get_path_to_this_script () {
     # Find the directory where this script lies
     # - See: https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself/246128#246128
@@ -345,7 +395,7 @@ sync_remote_branch_to_pc2 () {
     # more about the -t flag. Also see here:
     # https://malcontentcomics.com/systemsboy/2006/07/send-remote-commands-via-ssh.html
     # and here: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
-    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST  "$script_path_on_pc2 update_pc2 \"$PC2_GIT_REPO_TARGET_DIR\""
+    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST  "$script_path_on_pc2 --update_pc2 \"$PC2_GIT_REPO_TARGET_DIR\""
 
     echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
 }
@@ -375,9 +425,9 @@ main () {
     echo "END!"
 }
 
-# ======================================================================================================================
+# ==================================================================================================
 # PROGRAM ENTRY POINT
-# ======================================================================================================================
+# ==================================================================================================
 
 # Run this always:
 PATH_TO_THIS_SCRIPT="$(get_path_to_this_script)"
@@ -390,8 +440,8 @@ echo "Running on PC user@hostname: $USER@$HOSTNAME"
 if [ "$#" -eq "0" ];  then
     time main # use `time` cmd in front to output the total time this process took when it ends!
 
-# Call only `update_pc2` function if desired (ie: when running this script from PC2 only!)
-# Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh update_pc2 <input_arg_to_update_pc2>`
-elif [ "$1" = "update_pc2" ];  then
+# Call only `--update_pc2` function if desired (ie: when running this script from PC2 only!)
+# Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <input_arg_to_update_pc2>`
+elif [ "$1" = "--update_pc2" ];  then
     update_pc2 "$2"
 fi

@@ -6,6 +6,8 @@
 # 2 (PC2).
 
 # INSTALLATION:
+# ///////////////////see other file!
+
 # 1. Copy this file to ~/.sync_git_repo_private:
 #           cp -i path/to/eRCaGuy_dotfiles/home/.sync_git_repo_private ~
 # 2. Editing the copy of the file in your home dir, update the variables below with your
