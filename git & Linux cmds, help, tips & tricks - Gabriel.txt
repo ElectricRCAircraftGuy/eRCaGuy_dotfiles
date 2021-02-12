@@ -1660,6 +1660,22 @@ git reset --soft <commit_hash>
 git reset --hard <commit_hash>
     WARNING WARNING WARNING! ALL CHANGES YOU ARE UNCOMMITTING WILL BE **LOST**! Same as above, except DELETE the changes instead of just uncommitting and unstaging them. DANGER DANGER DANGER! This cannot be easily undone (you'd need to go back to a backup branch or use `git reflog` to find the HEAD you were on before calling this command), so be careful when doing this.
 
+TWO WAYS TO SQUASH ["git squash"; squash in git; git squash]:
+1) the `git rebase -i <commit_hash>` way 
+<========== BEST WAY TO SQUASH IN GIT if squashing a **linear** git history and you want to preserve commit messages! ===========
+git checkout feature_branch
+git rebase -i master
+    ...then manually change all "pick" commit entries in the editor to "squash", or just "s" for short.
+    Done!
+2) the `git reset --soft <commit_hash>` way 
+<========== BEST WAY TO SQUASH IN GIT if squashing across merges or branches! ===========
+git checkout feature_branch
+git reset --soft master
+    uncommit all changes which are in the `feature_branch` but NOT in the `master` branch; `--soft` leaves all these changes "staged", however.
+git commit -m "Commit all \"squashed\" feature_branch branch changes not in master"
+    Commit these "squashed" changes now.
+    Done!
+
 REBASE AND SQUASH NOTES:
 [TWO DISTINCT "SQUASH" AND "REBASE" STYLES!]:
 There is no "squash" command in git. There *is* a "rebase" command in git, but "merging" or "cherry-picking" can also be used as a form of "rebasing". The concept of "squashing" and "rebasing" can mean multiple things. Here are two common work-flow styles and what "squashing" and "rebasing" means in each:
@@ -1744,11 +1760,38 @@ git rev-list HEAD --max-count=10 = list only the last 10 commits in reverse-chro
 git merge-base branch1 branch2
     find the common ancestor between branch1 and branch2; see: https://stackoverflow.com/questions/1549146/git-find-the-most-recent-common-ancestor-of-two-branches/1549155#1549155
 git checkout branch1 && git merge -X theirs branch2
+    <====== PRO TIP =======
     merge branch2 into branch1, ACCEPTING ALL OF branch2's CHANGES IN THE EVENT OF ANY MERGE CONFLICTS! The `-X theirs` flag says to always accept the changes from the branch we are *not* on, in the event of conflicts! This can be very useful to run if you first run `git merge branch2` alone and see you have like 10 to 20+ files with conflicts, for ALL (100%) OF WHICH YOU NEED TO KEEP THE CHANGES FROM branch2 and NOT from branch1! You can then cancel the merge with `git merge --abort` and go back and run `git merge -X theirs branch2` to just accept all of their changes.
-    See: 1) https://stackoverflow.com/questions/50991701/merging-two-branches-how-do-i-accept-one-branch-for-all-conflicts/50994582#50994582.
-    *****2) My work-around described in my question here!: https://stackoverflow.com/questions/63623581/how-do-i-accept-git-merge-conflicts-from-their-branch-for-only-a-certain-direc
+    See:   1) https://stackoverflow.com/questions/50991701/merging-two-branches-how-do-i-accept-one-branch-for-all-conflicts/50994582#50994582.
+    *****  2) My work-around described in my question here!: https://stackoverflow.com/questions/63623581/how-do-i-accept-git-merge-conflicts-from-their-branch-for-only-a-certain-direc
+    *****+ 3) My answer here: https://stackoverflow.com/questions/21025314/who-is-us-and-who-is-them-according-to-git/63911630#63911630
 git merge -X theirs <branch_or_commit>
     merge <branch_or_commit> into the currently-checked-out branch. In the event of conflict, accept ALL changes from the <branch_or_commit>, NOT from your currently-checked-out branch (HEAD). See just above for details and links.
+git checkout --ours -- path/to/somefile1.c path/to/somefile2.c path/to/somefile3.c
+    <====== PRO TIP =======
+    When in the middle of a `merge` or other type of conflict, check out these files from the `ours` side. 
+    - See my answer here for what that means in each conflict-resolution context: `git merge`, `git cherry-pick`, `git rebase`, `git revert`, etc.: 
+    https://stackoverflow.com/questions/21025314/who-is-us-and-who-is-them-according-to-git/63911630#63911630
+    - See also this answer to check out `branch_name` instead of just `--ours` or `--theirs`: 
+      https://stackoverflow.com/a/63624168/4561887
+git checkout --theirs -- path/to/somefile1.c path/to/somefile2.c path/to/somefile3.c
+    <====== PRO TIP =======
+    When in the middle of a `merge` or other type of conflict, check out these files from the `theirs` side. 
+    - See my answer here for what that means in each conflict-resolution context: `git merge`, `git cherry-pick`, `git rebase`, `git revert`, etc.: 
+    https://stackoverflow.com/questions/21025314/who-is-us-and-who-is-them-according-to-git/63911630#63911630
+    - See also this answer to check out `branch_name` instead of just `--ours` or `--theirs`: 
+      https://stackoverflow.com/a/63624168/4561887
+git checkout [--ours|--theirs] -- path/to/some/dir
+    <====== PRO TIP =======
+    [WORKS!] You can check out all files from an ENTIRE DIRECTORY too instead of just specifying files individually!
+    See this answer to my Q here: 
+    https://stackoverflow.com/questions/63623581/how-do-i-accept-git-merge-conflicts-from-their-branch-for-only-a-certain-direc/63624168#63624168
+
+HOW TO CHECK OUT A FILE FROM A COMMIT_HASH INTO A NEW FILE LOCATION:
+git show HEAD~:somefile.cpp > temp/somefile_old.cpp
+    Similar, apparently, to `git cat-file`: check out file "somefile.cpp" from commit/branch `HEAD~` into new path location "temp/somefile_old.cpp". 
+    See this answer here: https://stackoverflow.com/a/888623/4561887
+    <====== PRO TIP ======= VERY USEFUL! =======
 
 Assuming you just did this to rebase your feature branch onto latest master:
     git checkout master
@@ -1774,7 +1817,21 @@ git commit --date "Wed Jan 01 23:00:00 2020 -0700"
 
 git push origin my_local_branchname:my_remote_branchname = push my_local_branchname to origin/my_remote_branchname; normally `git push`ing only allows pushing to a remote branch of the *same* branch name, so this is the work-around! See: https://stackoverflow.com/questions/13897717/push-commits-to-another-branch/13897766#13897766.
 
-== To *locally* view, review, and compare changes from a GitHub PR, in the (fantastic) "meld" file comparison tool: ==
+== GitHub: ==
+
+----- Quick (PR review with meld) demo START -----
+- I'd like to review a PR with meld **locally** withOUT checking out any other branches, so I can stay on the "dirty" branch I'm working on. Here are the 3 commands I just ran:
+
+time git fetch origin master:master
+    Fetch the latest content from the remote "origin" `master` branch into the locally-stored remote-tracking `origin/master` branch, and also into local `master` branch. 
+time git fetch origin feature_branch_from_github
+    Fetch the remote `feature_branch_from_github` into the locally-stored remote-tracking `origin/feature_branch_from_github` branch.
+git difftool master...origin/feature_branch_from_github
+    Difftool (compare with meld) the changes on `origin/feature_branch_from_github` since it diverged from my (now-updated) local `master` branch. 
+    Yes, those 3 dots (`...`) in this command are important. 2 dots (`..`) means something else entirely. 3 dots looks at the changes since the common merge-base (which is how GitHub shows changes as well, in the PR); 2 dots looks at the direct changes side-by-side (which will show TONS of files, potentially, this PR doesn't touch, simply because changes exist on one side [branch] compared to the other, even though this PR didn't introduce them). 
+----- Quick (PR review with meld) demo END -----
+
+To *locally* view, review, and compare changes from a GitHub PR, in the (fantastic) "meld" file comparison tool:
 [keywords: github review PR, github local review in meld, local github review in meld, github review locally, locally review github PR, local github PR review in meld, github PR review, PR review in github, github meld pr, github pr review in meld, meld github pr review]
 Note: despite being able to locally view the changes, you'll still have to use the GitHub interface for all comments and things in the review process.
 
@@ -1818,6 +1875,7 @@ B) You may also do the comparison withOUT checking out the branch from the PR as
 Note: this has the benefit of allowing you to do the comparison withOUT checking out the branch first! This means you can keep open whatever work you currently had open. The downside, of course, is that you can't `git grep`, `grep`, or otherwise search the code base in the modified state, nor use your IDE or editor to explore the changes. Therefore, I highly recommend just doing option A above instead!
     git fetch origin/branch_from_github_PR  # update your locally-stored remote-tracking branch to origin/branch_from_github_PR
     git difftool $(git merge-base origin/master origin/branch_from_github_PR)
+
 
 == To move a chunk of commits to a new branch after a merge as though they were squashed & then cherry-picked instead: ==
 See the section titled "How to use a patch file as a much easier replacement for squashing", here: https://stackoverflow.com/questions/7566416/how-to-see-which-commits-in-one-branch-arent-in-the-other/60731900#60731900
@@ -1998,7 +2056,8 @@ git submodule update --recursive
 = github: =
 ====================================================================================================
 
-- This is mostly to describe things like doing searches on GitHub. For `git` commands related to GitHub, see the "= git: =" section above instead.
+- This is mostly to describe things like doing searches on GitHub. 
+- For `git` commands related to GitHub, see the "== GitHub: ==" subsection of the "= git: =" main section above instead.
 
 == GitHub search: ==
 1. See my longer answer and "GitHub search quick-reference cheat sheet" here: https://stackoverflow.com/questions/29136057/can-i-search-github-labels-with-logical-operator-or/61618255#61618255
