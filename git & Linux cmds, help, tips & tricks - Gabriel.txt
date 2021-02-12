@@ -1789,9 +1789,9 @@ git checkout [--ours|--theirs] -- path/to/some/dir
 
 HOW TO CHECK OUT A FILE FROM A COMMIT_HASH INTO A NEW FILE LOCATION:
 git show HEAD~:somefile.cpp > temp/somefile_old.cpp
+    <====== PRO TIP ======= VERY USEFUL! =======
     Similar, apparently, to `git cat-file`: check out file "somefile.cpp" from commit/branch `HEAD~` into new path location "temp/somefile_old.cpp". 
     See this answer here: https://stackoverflow.com/a/888623/4561887
-    <====== PRO TIP ======= VERY USEFUL! =======
 
 Assuming you just did this to rebase your feature branch onto latest master:
     git checkout master
