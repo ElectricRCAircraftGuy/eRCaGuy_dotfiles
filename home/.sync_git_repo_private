@@ -1,23 +1,17 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# Variables for "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh" script
+# This file contains custom, private variables and ssh information for you to run the
+# "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh" script.
 
 # The above script synchronizes a git repository from Personal Computer 1 (PC1) to Personal Computer
 # 2 (PC2).
 
 # INSTALLATION:
-# ///////////////////see other file!
+# See the instructions in "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh", as
+# well as in the associated README that is mentioned there.
 
-# 1. Copy this file to ~/.sync_git_repo_private:
-#           cp -i path/to/eRCaGuy_dotfiles/home/.sync_git_repo_private ~
-# 2. Editing the copy of the file in your home dir, update the variables below with your
-#    information.
-# 3. Ensure all your ssh keys are set up on both PC1 and PC2. This includes A) the keys to push/pull
-#    to/from your remote git repos, and B) the keys required to ssh from PC1 into PC2.
-# 4. Manually `git clone` your repo onto both PC1 and PC2.
-# 5. Now run the sync script whenever you have changes you want to push from PC1 to PC2 for
-#    building or testing!:
-#           eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh
+
+# YOUR PRIVATE INFORMATION:
 
 
 # Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create

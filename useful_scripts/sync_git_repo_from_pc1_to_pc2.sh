@@ -5,44 +5,59 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # sync_git_repo_from_pc1_to_pc2.sh
-# - Sometimes you need to develop software on one machine (ex: a decent laptop, running an IDE like Eclipse)
-#   while building on a remote server machine (ex: a powerful desktop, or a paid cloud-based server such as
-#   AWS or Google Cloud--like this guy: https://matttrent.com/remote-development/). The problem, however,
-#   is "how do I sync from the machine I work on to the machine I build on?".
-#   This script answers that problem. It uses git to sync from one to the other. Git is
-#   preferred over rsync or other sync tools since they try to sync *everything* and on large repos
-#   they take FOREVER (dozens of minutes, to hours)! This script is lightning-fast (seconds) and
-#   ***safe***, because it always backs up any uncommitted changes you have on either PC1 or PC2
-#   before changing anything!
-# - A typical run might take <= ~30 seconds, and require ~25 MB of data (which you care about if running on
-#   a hotspot on your cell phone).
-# - Run it from the *client* machine where you develop code (PC1), NOT the server where you will build
-#   the code (PC2)!
-# - It MUST be run from a directory inside the repo you are syncing FROM.
+#
+# Sometimes you need to develop software on one machine (ex: a decent laptop, running an IDE like
+# Eclipse) while building on a remote server machine (ex: a powerful desktop, or a paid cloud-based
+# server such as AWS or Google Cloud--like this guy: https://matttrent.com/remote-development/). The
+# problem, however, is "how do I sync from the machine I work on to the machine I build on?". This
+# script answers that problem. It uses git to sync from one to the other. Git is preferred over
+# rsync or other sync tools since they try to sync *everything* and on large repos they take FOREVER
+# (dozens of minutes, to hours)! This script is lightning-fast (seconds) and ***safe***, because it
+# always backs up any uncommitted changes you have on either PC1 or PC2 before changing anything!
+#
+# A typical run might take <= ~30 seconds to 1 minute, and require ~25 MB of data (which you care
+# about if running on a hotspot on your cell phone).
+#
+# Run it from the *client* machine where you develop code (PC1), NOT the server where you will build
+# the code (PC2)!
+#
+# It MUST be run from a directory inside the repo you are syncing FROM.
 
+# -------------
 # INSTALLATION:
+# -------------
 #
-# See also: README_git-sync_repo_from_pc1_to_pc2.md
+# See also: README_git-sync_repo_from_pc1_to_pc2.md for more information.
 #
-# 1. Create symlinks in ~/bin to this script so you can run it from anywhere:
+# 1. Copy the ".bash_aliases_private" file to your home directory:
+#           cp -i path/to/eRCaGuy_dotfiles/home/.sync_git_repo_private ~
+# 2. Edit the copy of that file in your home dir ("~/.sync_git_repo_private") as desired,
+#    updating the variables in it with your custom information.
+# 3. Ensure all your ssh keys are set up on both PC1 and PC2. This includes A) the keys to push/pull
+#    to/from your remote git repos, and B) the keys required to ssh from PC1 into PC2.
+# 4. Manually `git clone` your repo onto both PC1 and PC2.
+# 5. On PC1, create symlinks in ~/bin to this sync script so you can run it from anywhere:
 #           cd /path/to/here
 #           mkdir -p ~/bin
 #           ln -s "${PWD}/sync_git_repo_from_pc1_to_pc2.sh" ~/bin/gs_sync_git_repo_from_pc1_to_pc2
-# 2. Copy "eRCaGuy_dotfiles/home/.bash_aliases_private" to "~/.bash_aliases_private":
-#           cp -i ../home/.sync_git_repo_private ~
-# 3. Now edit ~/.sync_git_repo_private as desired.
-# 4. Now cd into a repo you want to sync from a PC1 (ex: some light development machine) to a
-#    PC2 (some powerful build machine), and run this script.
-#           gs_sync_git_repo_from_pc1_to_pc2
-# 5. See the help menu for more details on the command:
+# 6. See the help menu for more details on the command:
 #           gs_sync_git_repo_from_pc1_to_pc2 -h
+# 7. Now cd into a repo on PC1 that you want to sync from PC1 (ex: some light development machine)
+#    to PC2 (ex: some powerful build machine), and run this script:
+#           gs_sync_git_repo_from_pc1_to_pc2
+#    You can run the sync script whenever you have changes you want to push from PC1 to PC2 for
+#    building or testing!
+# 8. Done! About a minute later the sync will be complete. Pay attention to the output messages
+#    to see what `git` is doing behind the scenes, and to ensure it worked and no errors occurred.
 
 # References:
-# 1. For main notes & reference links see "sync_git_repo_from_pc1_to_pc2--notes.txt"
+# 1. For main notes & reference links see "sync_git_repo_from_pc1_to_pc2--notes.md"
 # 1. Bash numerical comparisons:
 #    https://stackoverflow.com/questions/18668556/comparing-numbers-in-bash/18668580#18668580
 # 1. How to create a branch in a remote git repository:
 #    https://tecadmin.net/how-to-create-a-branch-in-remote-git-repository/
+# 1. [example of a previous bash program I wrote, to aid myself as I write in bash]:
+#    https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/blob/master/pdf2searchablepdf.sh
 
 # Background Research:
 # 1. Google search for "workflow to develop locally but build remotely" -
@@ -53,56 +68,14 @@
 #   1. https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh
 
 # ==================================================================================================
-# OTHER PROGRAM PARAMETERS, INCL. SSH PARAMETERS TO SYNC OVER SSH FROM PC1 TO PC2.
-# NOTE: ALL USER PARAMETERS TO EDIT MUST BE STORED IN "~/.sync_git_repo_private". See
-# "eRCaGuy_dotfiles/home/.sync_git_repo_private" for details.
+# PROGRAM PARAMETERS
 # ==================================================================================================
-
-#########
-# Copy "eRCaGuy_dotfiles/home/.sync_git_repo_private" to "~/.sync_git_repo_private" on PC1 and edit the contents
-# of that file there.
-
-# See bash associative array tutorial here!:
-# https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
-# See also `help declare`.
-# - Note: use `unset` to delete a variable. Ex: `unset PC2_USERNAME`.
-declare -A PC2_USERNAME
-declare -A PC2_HOSTNAME
-declare -A PC2_TARGETDIR
-
-export PC2_USERNAME
-export PC2_HOSTNAME
-export PC2_TARGETDIR
-
-if [ -f ~/.sync_git_repo_private ]; then
-    # Source this file only if it exists
-    . ~/.sync_git_repo_private
-else
-    echo "WARNING! This script will not work unless you //put file in ~.sync_git_repo_private///////////"
-fi
-
-# Set defaults:
-if [ -n "$DEFAULT_TARGET"]; then
-    PC2_USERNAME["default"]="${PC2_USERNAME["${DEFAULT_TARGET}"]}"
-    PC2_HOSTNAME["default"]="${PC2_HOSTNAME["${DEFAULT_TARGET}"]}"
-    PC2_TARGETDIR["default"]="${PC2_TARGETDIR["${DEFAULT_TARGET}"]}"
-fi
-
-# This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
-# Feel free to modify this as you see fit.
-SYNC_BRANCH="${MY_NAME}_SYNC"
-
-# Debugging prints
-# echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
-# echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
-# echo "PC2_SSH_HOST = $PC2_SSH_HOST"
-
-
-EXIT_SUCCESS=0
-EXIT_ERROR=1
 
 VERSION="0.2.0"
 AUTHOR="Gabriel Staples"
+
+EXIT_SUCCESS=0
+EXIT_ERROR=1
 
 SCRIPT_NAME="$(basename "$0")"
 VERSION_SHORT_STR="sync_git_repo_from_pc1_to_pc2 (run as '$SCRIPT_NAME') version $VERSION"
@@ -119,31 +92,103 @@ Purpose: synchronize a git repo from one computer (\"PC1\") to another (\"PC2\")
 for example, to edit and write code on a local laptop (\"PC1\") while building on a more-powerful,
 remote desktop (\"PC2\").
 
-Usage:  '$SCRIPT_NAME [target]'
+Usage:
 
-Synchronize the git repo (whose directory you are currently in when running the command) on the
-local computer (\"PC1\") to the remote 'pc2_target_name' computer (\"PC2\"). 'pc2_target_name' is
-optional. If not specified, it defaults to///////////////
+    '$SCRIPT_NAME [target]'
+            Synchronize the git repo (whose directory you are currently in when running the command)
+            on the local computer (\"PC1\") to the remote 'pc2_target_name' computer (\"PC2\").
+            'pc2_target_name' is optional. If not specified, it defaults to///////////////
 
+Private Usage (the script itself calls this automatically on PC2, when needed):
+
+    '$SCRIPT_NAME --update_pc2'
+            Finish synchronizing the changes from GitHub to PC2.
+
+Examples:
+
+    TODO
+
+Source Code:
+https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh
 "
 
 # ==================================================================================================
 # FUNCTION DEFINITIONS
 # ==================================================================================================
 
-###########3 UDPATE TO THE SIMPLER FORM!
-get_path_to_this_script () {
-    # Find the directory where this script lies
-    # - See: https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself/246128#246128
-    SOURCE="${BASH_SOURCE[0]}"
-    while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-      DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-      SOURCE="$(readlink "$SOURCE")"
-      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-    done
-    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+print_help() {
+    echo "$HELP_STR" | less -RFX
+}
 
-    echo "$SOURCE"
+print_version() {
+    echo "$VERSION_LONG_STR"
+}
+
+parse_args() {
+    # Run this always:
+
+    # See my answer here:
+    # https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel/60157372#60157372
+    PATH_TO_THIS_SCRIPT="$(realpath "$0")"
+    echo "PATH_TO_THIS_SCRIPT = \"$PATH_TO_THIS_SCRIPT\""
+    echo "SYNC_BRANCH = \"$SYNC_BRANCH\""
+    echo "Running on PC user@hostname: $USER@$HOSTNAME"
+
+
+    if [ $# -eq 0 ]; then
+        echo "No arguments supplied"
+        print_help
+        exit $EXIT_ERROR
+    fi
+
+    # Help menu
+    if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
+        print_help
+        exit $EXIT_SUCCESS
+    fi
+
+    # Version
+    if [ "$1" == "-v" ]; then
+        print_version
+        exit $EXIT_SUCCESS
+    fi
+}
+
+initialize() {
+    # See bash associative array tutorial here!:
+    # https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
+    # See also `help declare`.
+    # - Note: use `unset` to delete a variable. Ex: `unset PC2_USERNAME`.
+    declare -A PC2_USERNAME
+    declare -A PC2_HOSTNAME
+    declare -A PC2_TARGETDIR
+
+    export PC2_USERNAME
+    export PC2_HOSTNAME
+    export PC2_TARGETDIR
+
+    if [ -f ~/.sync_git_repo_private ]; then
+        # Source this file only if it exists
+        . ~/.sync_git_repo_private
+    else
+        echo "WARNING! This script will not work unless you //put file in ~.sync_git_repo_private///////////"
+    fi
+
+    # Set defaults:
+    if [ -n "$DEFAULT_TARGET"]; then
+        PC2_USERNAME["default"]="${PC2_USERNAME["${DEFAULT_TARGET}"]}"
+        PC2_HOSTNAME["default"]="${PC2_HOSTNAME["${DEFAULT_TARGET}"]}"
+        PC2_TARGETDIR["default"]="${PC2_TARGETDIR["${DEFAULT_TARGET}"]}"
+    fi
+
+    # This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
+    # Feel free to modify this as you see fit.
+    SYNC_BRANCH="${MY_NAME}_SYNC"
+
+    # Debugging prints
+    # echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
+    # echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
+    # echo "PC2_SSH_HOST = $PC2_SSH_HOST"
 }
 
 # A function to obtain the temporary directory we will use, given a directory to a git repo.
@@ -151,10 +196,10 @@ get_path_to_this_script () {
 # Example: if REPO_ROOT_DIR="~/dev/myrepo", then this function will return (echo out) "~/dev/myrepo_temp" as
 #   the temp directory
 get_temp_dir () {
-    REPO_ROOT_DIR="$1" # Ex: /home/gabriel/dev/eRCaGuy_dotfiles
+    REPO_ROOT_DIR="$1"                      # Ex: /home/gabriel/dev/eRCaGuy_dotfiles
     BASENAME="$(basename "$REPO_ROOT_DIR")" # Ex: eRCaGuy_dotfiles
-    DIRNAME="$(dirname "$REPO_ROOT_DIR")" # Ex: /home/gabriel/dev
-    TEMP_DIR="${DIRNAME}/${BASENAME}_temp" # this is where temp files will be stored
+    DIRNAME="$(dirname "$REPO_ROOT_DIR")"   # Ex: /home/gabriel/dev
+    TEMP_DIR="${DIRNAME}/${BASENAME}_temp"  # this is where temp files will be stored
     echo "$TEMP_DIR"
 }
 
@@ -429,11 +474,8 @@ main () {
 # PROGRAM ENTRY POINT
 # ==================================================================================================
 
-# Run this always:
-PATH_TO_THIS_SCRIPT="$(get_path_to_this_script)"
-echo "PATH_TO_THIS_SCRIPT = \"$PATH_TO_THIS_SCRIPT\""
-echo "SYNC_BRANCH = \"$SYNC_BRANCH\""
-echo "Running on PC user@hostname: $USER@$HOSTNAME"
+parse_args "$@"
+initialize
 
 # Only run main if no input args are given
 # Sample calling syntax to this script: `./sync_git_repo_from_pc1_to_pc2.sh`
@@ -445,3 +487,6 @@ if [ "$#" -eq "0" ];  then
 elif [ "$1" = "--update_pc2" ];  then
     update_pc2 "$2"
 fi
+
+
+
