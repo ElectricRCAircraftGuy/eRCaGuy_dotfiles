@@ -59,82 +59,92 @@ From most generic --> most specific (AKA: "outer" --> "inner" scope).
 1. **You can have _at least_ one `EXPECT_CALL` per mock method:** One mock class can have many mocked methods, so each method may have one or more `EXPECT_CALL`s configuring the expected interaction with that method. Therefore, a mock class can have _at least_ one `EXPECT_CALL` per method.
 1. **You _shouldn't have more than one_ `EXPECT_CALL` per matcher signature on a single mock method:** (Read more on this in Rule 3 below). Each mock method has many different parameter *values* that can be passed in, so you can have _up to_ one `EXPECT_CALL` per matcher signature (possible parameter value or combination of values, in the event of multiple input parameters). This means each mock method can have potentially many _thousands_ or even _millions or billions_ of _valid and unique_ `EXPECT_CALL`s attached to it, each matching a different set of "matchers", or input parameters to the mocked method. For example, this is perfectly valid:
 
-        // Each `EXPECT_CALL()` in this example has a different and 
-        // unique "matcher" signature, so every `EXPECT_CALL()` will
-        // take effect for its matching parameter signature when
-        // `myMockMethod()` is called.
-        //                                    v--matchers
-        EXPECT_CALL(myMockClass, myMockMethod(1));
-        EXPECT_CALL(myMockClass, myMockMethod(2));
-        EXPECT_CALL(myMockClass, myMockMethod(3));
-        EXPECT_CALL(myMockClass, myMockMethod(4));
-        EXPECT_CALL(myMockClass, myMockMethod(5));
-        ...
-        EXPECT_CALL(myMockClass, myMockMethod(1000));
+    ```cpp
+    // Each `EXPECT_CALL()` in this example has a different and 
+    // unique "matcher" signature, so every `EXPECT_CALL()` will
+    // take effect for its matching parameter signature when
+    // `myMockMethod()` is called.
+    //                                    v--matchers
+    EXPECT_CALL(myMockClass, myMockMethod(1));
+    EXPECT_CALL(myMockClass, myMockMethod(2));
+    EXPECT_CALL(myMockClass, myMockMethod(3));
+    EXPECT_CALL(myMockClass, myMockMethod(4));
+    EXPECT_CALL(myMockClass, myMockMethod(5));
+    ...
+    EXPECT_CALL(myMockClass, myMockMethod(1000));
+    ```
 
     In particular, the above `EXPECT_CALL`s each specify that a call to `myMockMethod()` with that matching signature must occur _exactly 1 time_. That's because the [cardinality rules][6] in this case dictate than an implicit `.Times(1)` is present on each of those `EXPECT_CALL`s, even though you don't see it written.  
 
     To specify that you want a given `EXPECT_CALL` to mach *any* input value for a given parameter, use the `::testing::_` matcher, like this:
 
-        using ::testing::_;
+    ```cpp
+    using ::testing::_;
 
-        EXPECT_CALL(myMockClass, myMockMethod(_));
+    EXPECT_CALL(myMockClass, myMockMethod(_));
+    ```
 
 1. **Don't have _duplicate `EXPECT_CALL`s with the same matcher signature_ on the same mock method, but _multiple_ `EXPECT_CALL`s with _overlapping/overriding_ (but NOT duplicate) matcher signatures on the same mock method are OK:** If you attach more than one `EXPECT_CALL` to the same *matching values*, only *the last one set* will have any effect. See [here][7], [here][8], and [here][9], for instance. This means if you have two or more `EXPECT_CALL`s with duplicate matcher signatures (the same parameters passed to the mock method), then ONLY THE LAST ONE WILL EVER GET ANY CALLS.
 
     Therefore, your test will ALWAYS FAIL except in the unusual case that all `EXPECT_CALL`s except the last one have a `.Times(0)` value, specifying that they will _never_ be called, as indeed this is the case: the last `EXPECT_CALL` will match all of the calls for these matchers and all duplicate `EXPECT_CALL`s above it will have _no_ matching calls! Here is an example of a test which will **always fail** as a result of this behavior. This is the main behavior that @luantkow focuses on [in his answer here](https://stackoverflow.com/a/44035118/4561887).
 
-        using ::testing::_;
+    ```cpp
+    using ::testing::_;
 
-        // Notice they all have the same mock method parameter "matchers"
-        // here, making only the last `EXPECT_CALL()` with this matcher
-        // signature actually match and get called. Therefore, THIS TEST
-        // WILL ***ALWAYS FAIL***, since EXPECT_CALL #1 expects to get 
-        // called 1 time but is NEVER called, #2 through #1006, inclusive,
-        // all expect to get called 2 times each but all of them are NEVER
-        // called, etc.! Only #1007 is ever called, since it is last and
-        // therefore always matches first.          
-        //                                    v--matchers
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(1); // EXPECT_CALL #1
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #2
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #3
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #4
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #5
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #6
-        // ... duplicate the line just above 1000 more times here
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(3); // EXPECT_CALL #1007
+    // Notice they all have the same mock method parameter "matchers"
+    // here, making only the last `EXPECT_CALL()` with this matcher
+    // signature actually match and get called. Therefore, THIS TEST
+    // WILL ***ALWAYS FAIL***, since EXPECT_CALL #1 expects to get 
+    // called 1 time but is NEVER called, #2 through #1006, inclusive,
+    // all expect to get called 2 times each but all of them are NEVER
+    // called, etc.! Only #1007 is ever called, since it is last and
+    // therefore always matches first.          
+    //                                    v--matchers
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(1); // EXPECT_CALL #1
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #2
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #3
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #4
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #5
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(2); // EXPECT_CALL #6
+    // ... duplicate the line just above 1000 more times here
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(3); // EXPECT_CALL #1007
+    ```
 
     This weird exception, however, makes the test valid simply by setting all duplicate `EXPECT_CALL`s, _except for the last one_, to have a `.Times(0)` cardinal setting:
 
-        using ::testing::_;
+    ```cpp
+    using ::testing::_;
 
-        // Notice they all have the same mock method parameter "matchers"
-        // here, making only the last `EXPECT_CALL()` with this matcher
-        // signature actually match and get called. However, since all previous
-        // `EXCEPT_CALL` duplicates are set to `.Times(0)`, this test is valid
-        // and can pass.          
-        //                                    v--matchers
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #1
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #2
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #3
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #4
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #5
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #6
-        // ... duplicate the line just above 1000 more times here
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(3); // EXPECT_CALL #1007
+    // Notice they all have the same mock method parameter "matchers"
+    // here, making only the last `EXPECT_CALL()` with this matcher
+    // signature actually match and get called. However, since all previous
+    // `EXCEPT_CALL` duplicates are set to `.Times(0)`, this test is valid
+    // and can pass.          
+    //                                    v--matchers
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #1
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #2
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #3
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #4
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #5
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(0); // EXPECT_CALL #6
+    // ... duplicate the line just above 1000 more times here
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(3); // EXPECT_CALL #1007
+    ```
 
     Here, only `EXPECT_CALL` #1007 (the very last `EXPECT_CALL`) will ever match a call to `myMockMethod()`, and `Times(3)` will be in effect. Since all duplicate `EXPECT_CALL`s above this one will NEVER MATCH AND GET CALLED, since they are never reached, tests with duplicate `EXPECT_CALL`s for a given matcher would ALWAYS FAIL for any `.Times()` value other than `.Times(0)` for all non-last-place duplicate `EXPECT_CALL`s. 
 
     This effect of making later matchers have the ability to override earlier matchers is *intentional* and part of the Googlemock design, as it allows you to create a very useful kind of hierarchy of expected calls, based on value passed to the mock method, like this:
 
-        using ::testing::_;
+    ```cpp
+    using ::testing::_;
 
-        // Most general matchers first (_ matches any input value)
-        EXPECT_CALL(myMockClass, myMockMethod(_)).Times(1);
-        // More specific matchers next, to override the more general matcher 
-        // above if they match
-        EXPECT_CALL(myMockClass, myMockMethod(7)).Times(2);
-        EXPECT_CALL(myMockClass, myMockMethod(5)).Times(4);
+    // Most general matchers first (_ matches any input value)
+    EXPECT_CALL(myMockClass, myMockMethod(_)).Times(1);
+    // More specific matchers next, to override the more general matcher 
+    // above if they match
+    EXPECT_CALL(myMockClass, myMockMethod(7)).Times(2);
+    EXPECT_CALL(myMockClass, myMockMethod(5)).Times(4);
+    ```
 
     The various google documents say that matching `EXPECT_CALL`s are searched for in *reverse order*, from *bottom to top*. So, if `myMockMethod(8)` is called, it will be checked against the last `EXPECT_CALL` for this method, which is looking for `myMockMethod(5)`. That doesn't match, so it goes up one and checks against `myMockMethod(7)`. That doesn't match, so it goes up one and checks against `myMockMethod(_)`. This matches! So, it counts as the one call authorized by the `Times(1)` cardinal value. 
 
@@ -164,61 +174,65 @@ A: NO, you can NOT do this! Although it may *seem to work in testing*, according
 
 Therefore, this is NOT ALLOWED!
 
-    // EXAMPLE OF A BAD TEST THAT MAY SEEM TO WORK BUT IS RELYING ON *UNDEFINED* BEHAVIOR!
-    // The goal is to ensure that `myMockMethod()` is only called 2x the first time by 
-    // `myOtherFunc()`, 3x the second time, and 0x the last time.
+```cpp
+// EXAMPLE OF A BAD TEST THAT MAY SEEM TO WORK BUT IS RELYING ON *UNDEFINED* BEHAVIOR!
+// The goal is to ensure that `myMockMethod()` is only called 2x the first time by 
+// `myOtherFunc()`, 3x the second time, and 0x the last time.
 
-    // Google states: "**Important note:** gMock requires expectations to be set 
-    // **before** the mock functions are called, otherwise the behavior is **undefined**. 
-    // In particular, you mustn't interleave `EXPECT_CALL()`s and calls to the mock functions"
-    // (https://github.com/google/googletest/blob/master/googlemock/docs/for_dummies.md#using-mocks-in-tests)
+// Google states: "**Important note:** gMock requires expectations to be set 
+// **before** the mock functions are called, otherwise the behavior is **undefined**. 
+// In particular, you mustn't interleave `EXPECT_CALL()`s and calls to the mock functions"
+// (https://github.com/google/googletest/blob/master/googlemock/docs/for_dummies.md#using-mocks-in-tests)
 
-    using ::testing::_;
+using ::testing::_;
 
-    TEST_F(MyTestFixture, MyCustomTest) 
+TEST_F(MyTestFixture, MyCustomTest) 
+{
+    // `myMockMethod()` should be called only 2x here by `myOtherFunc()`,
+    // despite calling `myOtherFunc()` repeatedly
+    EXPECT_CALL(MyMockClass, myMockMethod(_, _))
+        .Times(2);
+    for (int i = 0; i < 10; i++)
     {
-        // `myMockMethod()` should be called only 2x here by `myOtherFunc()`,
-        // despite calling `myOtherFunc()` repeatedly
-        EXPECT_CALL(MyMockClass, myMockMethod(_, _))
-            .Times(2);
-        for (int i = 0; i < 10; i++)
-        {
-            myOtherFunc();
-        }
-
-        // UNDEFINED BEHAVIOR BEGINS HERE: you can't interleave calls to `EXPECT_CALL` with 
-        // calls to the mocked functions (in this case: `myMockMethod()`,
-        // which is called by `myOtherFunc()`).
-
-        // THEN `myMockMethod()` should be called 3x here by `myOtherFunc()`
-        EXPECT_CALL(MyMockClass, myMockMethod(_, _))
-            .Times(3);
-        for (int i = 0; i < 10; i++)
-        {
-            myOtherFunc();
-        }
-
-        // LAST, `myMockMethod()` should be called 0x here by `myOtherFunc()`
-        EXPECT_CALL(MyMockClass, myMockMethod(_, _))
-            .Times(0);
-        for (int i = 0; i < 10; i++)
-        {
-            myOtherFunc();
-        }
+        myOtherFunc();
     }
+
+    // UNDEFINED BEHAVIOR BEGINS HERE: you can't interleave calls to `EXPECT_CALL` with 
+    // calls to the mocked functions (in this case: `myMockMethod()`,
+    // which is called by `myOtherFunc()`).
+
+    // THEN `myMockMethod()` should be called 3x here by `myOtherFunc()`
+    EXPECT_CALL(MyMockClass, myMockMethod(_, _))
+        .Times(3);
+    for (int i = 0; i < 10; i++)
+    {
+        myOtherFunc();
+    }
+
+    // LAST, `myMockMethod()` should be called 0x here by `myOtherFunc()`
+    EXPECT_CALL(MyMockClass, myMockMethod(_, _))
+        .Times(0);
+    for (int i = 0; i < 10; i++)
+    {
+        myOtherFunc();
+    }
+}
+```
 
 So, what's a valid solution here? Well, if you can break this test up into 3 different, independent tests, just do that! But, what if these 3 tests are interconnected in such a way you cannot separate them? Example: you are trying to test a throttling function which throttles print output to only once per second, for instance, even if you try to print more often that that per second. Well, in this case there are some work-arounds. 
 
 First, let's review: per the [Google Mock Cheat Sheet][11], here are the ways to configure an `EXPECT_CALL()`:
 
-    EXPECT_CALL(mock-object, method (matchers)?)
-         .With(multi-argument-matcher)  ?
-         .Times(cardinality)            ?
-         .InSequence(sequences)         *
-         .After(expectations)           *
-         .WillOnce(action)              *
-         .WillRepeatedly(action)        ?
-         .RetiresOnSaturation();        ?
+```cpp
+EXPECT_CALL(mock-object, method (matchers)?)
+     .With(multi-argument-matcher)  ?
+     .Times(cardinality)            ?
+     .InSequence(sequences)         *
+     .After(expectations)           *
+     .WillOnce(action)              *
+     .WillRepeatedly(action)        ?
+     .RetiresOnSaturation();        ?
+```
 
 > For each item above, `?` means it can be used at most once, while `*` means it can be used any number of times.
 
@@ -242,172 +256,178 @@ Here are some work-arounds to safely and correctly perform the above test which 
 
     _This technique has actually been tested and proven to work on real code:_
 
-        using ::testing::_;
-        using ::testing::Assign;
+    ```cpp
+    using ::testing::_;
+    using ::testing::Assign;
 
-        TEST_F(MyTestFixture, MyCustomTest) 
+    TEST_F(MyTestFixture, MyCustomTest) 
+    {
+        bool myMockMethodWasCalled = false;
+
+        EXPECT_CALL(MyMockClass, myMockMethod(_, _))
+            // Set `myMockMethodWasCalled` to true every time `myMockMethod()` is called with
+            // *any* input parameters!
+            .WillRepeatedly(Assign(&myMockMethodWasCalled, true));
+
+        // Do any necessary setup here for the 1st sub-test 
+
+        // Test that `myMockMethod()` is called only 2x here by `myOtherFunc()`,
+        // despite calling `myOtherFunc()` repeatedly
+        for (int i = 0; i < 10; i++)
         {
-            bool myMockMethodWasCalled = false;
+            myOtherFunc();
 
-            EXPECT_CALL(MyMockClass, myMockMethod(_, _))
-                // Set `myMockMethodWasCalled` to true every time `myMockMethod()` is called with
-                // *any* input parameters!
-                .WillRepeatedly(Assign(&myMockMethodWasCalled, true));
-
-            // Do any necessary setup here for the 1st sub-test 
-
-            // Test that `myMockMethod()` is called only 2x here by `myOtherFunc()`,
-            // despite calling `myOtherFunc()` repeatedly
-            for (int i = 0; i < 10; i++)
+            if (i < 2)
             {
-                myOtherFunc();
-
-                if (i < 2)
-                {
-                    EXPECT_TRUE(myMockMethodWasCalled);
-                    myMockMethodWasCalled = false;        // reset
-                    EXPECT_FALSE(myMockMethodWasCalled);  // ensure reset works (sanity check)
-                }
-                else
-                {
-                    EXPECT_FALSE(myMockMethodWasCalled);
-                }
+                EXPECT_TRUE(myMockMethodWasCalled);
+                myMockMethodWasCalled = false;        // reset
+                EXPECT_FALSE(myMockMethodWasCalled);  // ensure reset works (sanity check)
             }
-
-            // Do any necessary setup here for the 2nd sub-test
-
-            // Test that `myMockMethod()` is called only 3x here by `myOtherFunc()`,
-            // despite calling `myOtherFunc()` repeatedly
-            for (int i = 0; i < 10; i++)
+            else
             {
-                myOtherFunc();
-
-                if (i < 3)
-                {
-                    EXPECT_TRUE(myMockMethodWasCalled);
-                    myMockMethodWasCalled = false;        // reset
-                    EXPECT_FALSE(myMockMethodWasCalled);  // ensure reset works (sanity check)
-                }
-                else
-                {
-                    EXPECT_FALSE(myMockMethodWasCalled);
-                }
-            }
-
-            // Do any necessary setup here for the 3rd sub-test
-
-            // Test that `myMockMethod()` is called 0x here by `myOtherFunc()`,
-            // despite calling `myOtherFunc()` repeatedly
-            for (int i = 0; i < 10; i++)
-            {
-                myOtherFunc();
                 EXPECT_FALSE(myMockMethodWasCalled);
             }
         }
+
+        // Do any necessary setup here for the 2nd sub-test
+
+        // Test that `myMockMethod()` is called only 3x here by `myOtherFunc()`,
+        // despite calling `myOtherFunc()` repeatedly
+        for (int i = 0; i < 10; i++)
+        {
+            myOtherFunc();
+
+            if (i < 3)
+            {
+                EXPECT_TRUE(myMockMethodWasCalled);
+                myMockMethodWasCalled = false;        // reset
+                EXPECT_FALSE(myMockMethodWasCalled);  // ensure reset works (sanity check)
+            }
+            else
+            {
+                EXPECT_FALSE(myMockMethodWasCalled);
+            }
+        }
+
+        // Do any necessary setup here for the 3rd sub-test
+
+        // Test that `myMockMethod()` is called 0x here by `myOtherFunc()`,
+        // despite calling `myOtherFunc()` repeatedly
+        for (int i = 0; i < 10; i++)
+        {
+            myOtherFunc();
+            EXPECT_FALSE(myMockMethodWasCalled);
+        }
+    }
+    ```
 
 2. **Use `InvokeWithoutArgs(f)` with a global counter variable and a global counter function.** This works great, and is much easier to use and more versatile than the previous approach! Note that you could also migrate this global function and variable to be inside your test fixture class as well if you wanted, which would clean it up a bit.
 
     _This technique has actually been tested and proven to work on real code:_
 
-        using ::testing::_;
-        using ::testing::InvokeWithoutArgs;
+    ```cpp
+    using ::testing::_;
+    using ::testing::InvokeWithoutArgs;
 
-        static uint32_t callCounter = 0;
-        static void incrementCallCounter()
+    static uint32_t callCounter = 0;
+    static void incrementCallCounter()
+    {
+        callCounter++;
+    }
+
+    TEST_F(MyTestFixture, MyCustomTest)
+    {
+        EXPECT_CALL(MyMockClass, myMockMethod(_, _))
+            // Set gmock to increment the global `callCounter` variable every time 
+            // `myMockMethod()` is called with *any* input parameters!
+            .WillRepeatedly(InvokeWithoutArgs(incrementCallCounter));
+
+        // Do any necessary setup here for the 1st sub-test 
+
+        // Test that `myMockMethod()` is called only 2x here by `myOtherFunc()`,
+        // despite calling `myOtherFunc()` repeatedly
+        callCounter = 0; // ensure this is zero BEFORE you start the test!
+        for (int i = 0; i < 10; i++)
         {
-            callCounter++;
+            myOtherFunc();
         }
+        EXPECT_EQ(callCounter, 2);
 
-        TEST_F(MyTestFixture, MyCustomTest)
+        // Do any necessary setup here for the 2nd sub-test 
+
+        // Test that `myMockMethod()` is called only 3x here by `myOtherFunc()`,
+        // despite calling `myOtherFunc()` repeatedly
+        callCounter = 0; // ensure this is zero BEFORE you start the test!
+        for (int i = 0; i < 10; i++)
         {
-            EXPECT_CALL(MyMockClass, myMockMethod(_, _))
-                // Set gmock to increment the global `callCounter` variable every time 
-                // `myMockMethod()` is called with *any* input parameters!
-                .WillRepeatedly(InvokeWithoutArgs(incrementCallCounter));
-
-            // Do any necessary setup here for the 1st sub-test 
-
-            // Test that `myMockMethod()` is called only 2x here by `myOtherFunc()`,
-            // despite calling `myOtherFunc()` repeatedly
-            callCounter = 0; // ensure this is zero BEFORE you start the test!
-            for (int i = 0; i < 10; i++)
-            {
-                myOtherFunc();
-            }
-            EXPECT_EQ(callCounter, 2);
-
-            // Do any necessary setup here for the 2nd sub-test 
-
-            // Test that `myMockMethod()` is called only 3x here by `myOtherFunc()`,
-            // despite calling `myOtherFunc()` repeatedly
-            callCounter = 0; // ensure this is zero BEFORE you start the test!
-            for (int i = 0; i < 10; i++)
-            {
-                myOtherFunc();
-            }
-            EXPECT_EQ(callCounter, 3);
-
-            // Do any necessary setup here for the 1st sub-test 
-
-            // Test that `myMockMethod()` is called 0x here by `myOtherFunc()`,
-            // despite calling `myOtherFunc()` repeatedly
-            callCounter = 0; // ensure this is zero BEFORE you start the test!
-            for (int i = 0; i < 10; i++)
-            {
-                myOtherFunc();
-            }
-            EXPECT_EQ(callCounter, 0);
+            myOtherFunc();
         }
+        EXPECT_EQ(callCounter, 3);
+
+        // Do any necessary setup here for the 1st sub-test 
+
+        // Test that `myMockMethod()` is called 0x here by `myOtherFunc()`,
+        // despite calling `myOtherFunc()` repeatedly
+        callCounter = 0; // ensure this is zero BEFORE you start the test!
+        for (int i = 0; i < 10; i++)
+        {
+            myOtherFunc();
+        }
+        EXPECT_EQ(callCounter, 0);
+    }
+    ```
 
 3. **[BEST TECHNIQUE] Use `InvokeWithoutArgs(f)` with a _local_ counter variable and a simple lambda function!** This works great, and is much easier to use and more versatile than the 1st approach, while avoiding the global variable and additional global function of the 2nd approach. It is for sure my favorite way to handle this, and works extremely well.
 
     _This technique has actually been tested and proven to work on real code:_
 
-        using ::testing::_;
-        using ::testing::InvokeWithoutArgs;
+    ```cpp
+    using ::testing::_;
+    using ::testing::InvokeWithoutArgs;
 
-        TEST_F(MyTestFixture, MyCustomTest)
+    TEST_F(MyTestFixture, MyCustomTest)
+    {
+        uint32_t callCounter;
+
+        EXPECT_CALL(MyMockClass, myMockMethod(_, _))
+            // Use a lambda function to set gmock to increment `callCounter` every 
+            // time `myMockMethod()` is called with *any* input parameters!
+            .WillRepeatedly(InvokeWithoutArgs([&callCounter](){ callCounter++; }));
+
+        // Do any necessary setup here for the 1st sub-test 
+
+        // Test that `myMockMethod()` is called only 2x here by `myOtherFunc()`,
+        // despite calling `myOtherFunc()` repeatedly
+        callCounter = 0; // ensure this is zero BEFORE you start the test!
+        for (int i = 0; i < 10; i++)
         {
-            uint32_t callCounter;
-
-            EXPECT_CALL(MyMockClass, myMockMethod(_, _))
-                // Use a lambda function to set gmock to increment `callCounter` every 
-                // time `myMockMethod()` is called with *any* input parameters!
-                .WillRepeatedly(InvokeWithoutArgs([&callCounter](){ callCounter++; }));
-
-            // Do any necessary setup here for the 1st sub-test 
-
-            // Test that `myMockMethod()` is called only 2x here by `myOtherFunc()`,
-            // despite calling `myOtherFunc()` repeatedly
-            callCounter = 0; // ensure this is zero BEFORE you start the test!
-            for (int i = 0; i < 10; i++)
-            {
-                myOtherFunc();
-            }
-            EXPECT_EQ(callCounter, 2);
-
-            // Do any necessary setup here for the 2nd sub-test 
-
-            // Test that `myMockMethod()` is called only 3x here by `myOtherFunc()`,
-            // despite calling `myOtherFunc()` repeatedly
-            callCounter = 0; // ensure this is zero BEFORE you start the test!
-            for (int i = 0; i < 10; i++)
-            {
-                myOtherFunc();
-            }
-            EXPECT_EQ(callCounter, 3);
-
-            // Do any necessary setup here for the 1st sub-test 
-
-            // Test that `myMockMethod()` is called 0x here by `myOtherFunc()`,
-            // despite calling `myOtherFunc()` repeatedly
-            callCounter = 0; // ensure this is zero BEFORE you start the test!
-            for (int i = 0; i < 10; i++)
-            {
-                myOtherFunc();
-            }
-            EXPECT_EQ(callCounter, 0);
+            myOtherFunc();
         }
+        EXPECT_EQ(callCounter, 2);
+
+        // Do any necessary setup here for the 2nd sub-test 
+
+        // Test that `myMockMethod()` is called only 3x here by `myOtherFunc()`,
+        // despite calling `myOtherFunc()` repeatedly
+        callCounter = 0; // ensure this is zero BEFORE you start the test!
+        for (int i = 0; i < 10; i++)
+        {
+            myOtherFunc();
+        }
+        EXPECT_EQ(callCounter, 3);
+
+        // Do any necessary setup here for the 1st sub-test 
+
+        // Test that `myMockMethod()` is called 0x here by `myOtherFunc()`,
+        // despite calling `myOtherFunc()` repeatedly
+        callCounter = 0; // ensure this is zero BEFORE you start the test!
+        for (int i = 0; i < 10; i++)
+        {
+            myOtherFunc();
+        }
+        EXPECT_EQ(callCounter, 0);
+    }
+    ```
 
 If you think this whole answer should be added as a stand-alone file among the Gmock docs (I propose we do this), click the github issue link just below and upvote it.
 
