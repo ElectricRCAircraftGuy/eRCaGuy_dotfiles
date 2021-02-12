@@ -74,8 +74,8 @@
 VERSION="0.2.0"
 AUTHOR="Gabriel Staples"
 
-EXIT_SUCCESS=0
-EXIT_ERROR=1
+RETURN_CODE_SUCCESS=0
+RETURN_CODE_ERROR=1
 
 SCRIPT_NAME="$(basename "$0")"
 VERSION_SHORT_STR="sync_git_repo_from_pc1_to_pc2 (run as '$SCRIPT_NAME') version $VERSION"
@@ -98,11 +98,20 @@ Usage:
             Synchronize the git repo (whose directory you are currently in when running the command)
             on the local computer (\"PC1\") to the remote 'pc2_target_name' computer (\"PC2\").
             'pc2_target_name' is optional. If not specified, it defaults to///////////////
+    '$SCRIPT_NAME'
+            Run the script with the target set to the value of DEFAULT_TARGET, as defined by the
+            user in the user's \"~/.sync_git_repo_private\" file.
+    '$SCRIPT_NAME -h'
+            print the help menu
+    '$SCRIPT_NAME -?'
+            print the help menu
+    '$SCRIPT_NAME -v'
+            print the author and version
 
 Private Usage (the script itself calls this automatically on PC2, when needed):
 
-    '$SCRIPT_NAME --update_pc2'
-            Finish synchronizing the changes from GitHub to PC2.
+    '$SCRIPT_NAME --update_pc2 <pc2_git_repo_target_dir>'
+            Finish synchronizing the changes from GitHub to PC2 in PC2's 'pc2_git_repo_target_dir'.
 
 Examples:
 
@@ -124,15 +133,31 @@ print_version() {
     echo "$VERSION_LONG_STR"
 }
 
-parse_args() {
-    # Run this always:
 
+# Run this always--this function shall get called every run
+run_always() {
     # See my answer here:
     # https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel/60157372#60157372
     PATH_TO_THIS_SCRIPT="$(realpath "$0")"
     echo "PATH_TO_THIS_SCRIPT = \"$PATH_TO_THIS_SCRIPT\""
-    echo "SYNC_BRANCH = \"$SYNC_BRANCH\""
     echo "Running on PC user@hostname: $USER@$HOSTNAME"
+}
+
+parse_args() {
+    # Call only `--update_pc2` function if desired (ie: when running this script from PC2 only!)
+    # Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <pc2_git_repo_target_dir>`
+    if [ "$1" = "--update_pc2" ]; then
+        if [ $# -eq 2 ]; then
+            PC_TO_RUN_ON="pc2"
+            PC2_GIT_REPO_TARGET_DIR="$2"
+            return RETURN_CODE_SUCCESS
+        else
+            echo "ERROR: '--update_pc2' command missing 2nd arg!"
+            exit RETURN_CODE_ERROR
+        fi
+    fi
+
+    ############### PICK BACK UP HERE!
 
     # Only run main if no input args are given
     # Sample calling syntax to this script: `./sync_git_repo_from_pc1_to_pc2.sh`
@@ -140,33 +165,31 @@ parse_args() {
         time main
     fi
 
-    # Call only `--update_pc2` function if desired (ie: when running this script from PC2 only!)
-    # Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <input_arg_to_update_pc2>`
-    elif [ "$1" = "--update_pc2" ];  then
-        update_pc2 "$2"
-    fi
 
 
     if [ $# -eq 0 ]; then
         echo "No arguments supplied"
         print_help
-        exit $EXIT_ERROR
+        exit $RETURN_CODE_ERROR
     fi
 
     # Help menu
     if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
         print_help
-        exit $EXIT_SUCCESS
+        exit $RETURN_CODE_SUCCESS
     fi
 
     # Version
     if [ "$1" == "-v" ]; then
         print_version
-        exit $EXIT_SUCCESS
+        exit $RETURN_CODE_SUCCESS
     fi
+
+    PC_TO_RUN_ON="pc1"
 }
 
-initialize() {
+# Read the parameters from the user's "~/.sync_git_repo_private" file.
+read_user_parameters() {
     # See bash associative array tutorial here!:
     # https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
     # See also `help declare`.
@@ -196,6 +219,7 @@ initialize() {
     # This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
     # Feel free to modify this as you see fit.
     SYNC_BRANCH="${MY_NAME}_SYNC"
+    echo "SYNC_BRANCH = \"$SYNC_BRANCH\""
 
     # Debugging prints
     # echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
@@ -484,14 +508,16 @@ main_pc1 () {
 }
 
 # ==================================================================================================
-# PROGRAM ENTRY POINT
+# MAIN PROGRAM ENTRY POINT
 # ==================================================================================================
 
+run_always "$@"
 parse_args "$@"
-initialize
-if [ "$RUN_ON" == "pc1" ]; then
+
+if [ "$PC_TO_RUN_ON" == "pc1" ]; then
+    read_user_parameters
     # Note: use `time` cmd in front to output the total time this process took when it ends!
     time main_pc1
-elif [ "$RUN_ON" == "pc2" ]; then
+elif [ "$PC_TO_RUN_ON" == "pc2" ]; then
     update_pc2 "$PC2_GIT_REPO_TARGET_DIR"
 fi
