@@ -206,7 +206,8 @@ read_user_parameters() {
         # Source this file only if it exists
         . ~/.sync_git_repo_private
     else
-        echo "WARNING! This script will not work unless you //put file in ~.sync_git_repo_private///////////"
+        echo "ERROR! This script will not work unless you //put file in ~.sync_git_repo_private///////////"
+        exit RETURN_CODE_ERROR
     fi
 
     # Set defaults:
