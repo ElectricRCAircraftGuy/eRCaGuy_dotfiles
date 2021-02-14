@@ -171,7 +171,10 @@ main() {
         auto_delete_tempfile_when_done="true"
     fi
 
-    FILE_OUT="${FILE_IN}.git-blame"
+    # See my own answer about `basename`: https://stackoverflow.com/a/60157372/4561887
+    # - Ex: if `FILE_IN` is "some/path/file.txt", then `FILE_OUT`
+    #   will now be simply "file.txt.git-blame".
+    FILE_OUT="$(basename "$FILE_IN").git-blame"
     FILE_OUT_FULL_PATH="${TEMP_DIR}/${FILE_OUT}"
     echo "Temporary file path: \"$FILE_OUT_FULL_PATH\"."
 
