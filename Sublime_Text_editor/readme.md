@@ -60,3 +60,4 @@ These are the Sublime Text 3 packages I currently have installed and like to hav
 1. **Git blame**
     1. https://packagecontrol.io/packages/Git%20blame
     1. https://github.com/frou/st3-gitblame
+    1. Issue/feature request I've opened up here: https://github.com/frou/st3-gitblame/issues/59
