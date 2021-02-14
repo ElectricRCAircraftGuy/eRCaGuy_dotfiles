@@ -78,15 +78,19 @@ RETURN_CODE_SUCCESS=0
 RETURN_CODE_ERROR=1
 
 SCRIPT_NAME="$(basename "$0")"
-VERSION_SHORT_STR="sync_git_repo_from_pc1_to_pc2 (run as '$SCRIPT_NAME') version $VERSION"
-VERSION_LONG_STR="\
-$VERSION_SHORT_STR
+README_URL="https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/README_git-sync_repo_from_pc1_to_pc2.md"
+SOURCE_CODE_URL="https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh"
+VERSION_STR_SHORT="sync_git_repo_from_pc1_to_pc2 (run as '$SCRIPT_NAME') version $VERSION"
+VERSION_STR_LONG="
+$VERSION_STR_SHORT
 Author = $AUTHOR
+Readme = $README_URL
+Source Code = $SOURCE_CODE_URL
 See '$SCRIPT_NAME -h' for more info.
 "
 
-HELP_STR="\
-$VERSION_SHORT_STR
+HELP_STR="
+$VERSION_STR_SHORT
 
 Purpose: synchronize a git repo from one computer (\"PC1\") to another (\"PC2\"). This is useful,
 for example, to edit and write code on a local laptop (\"PC1\") while building on a more-powerful,
@@ -94,31 +98,45 @@ remote desktop (\"PC2\").
 
 Usage:
 
-    '$SCRIPT_NAME [target]'
+    '$SCRIPT_NAME [pc2_target_name]'
             Synchronize the git repo (whose directory you are currently in when running the command)
             on the local computer (\"PC1\") to the remote 'pc2_target_name' computer (\"PC2\").
-            'pc2_target_name' is optional. If not specified, it defaults to///////////////
+            'pc2_target_name' is optional. You must set and configure your 'pc2_target_name' options
+            as 'TARGET' variables inside your custom  \"~/.sync_git_repo_private\" file. If
+            'pc2_target_name' is not passed as an argument to this program call, it defaults to
+            'DEFAULT_TARGET' which you must also set inside your custom
+            \"~/.sync_git_repo_private\" file.
+
     '$SCRIPT_NAME'
-            Run the script with the target set to the value of DEFAULT_TARGET, as defined by the
-            user in the user's \"~/.sync_git_repo_private\" file.
+            Run the script with the target set to the value of 'DEFAULT_TARGET', as defined by the
+            user in their custom \"~/.sync_git_repo_private\" file.
+
     '$SCRIPT_NAME -h'
             print the help menu
+
     '$SCRIPT_NAME -?'
             print the help menu
+
     '$SCRIPT_NAME -v'
             print the author and version
 
-Private Usage (the script itself calls this automatically on PC2, when needed):
+Private Usage
+(these are calls the script itself automatically makes):
 
     '$SCRIPT_NAME --update_pc2 <pc2_git_repo_target_dir>'
             Finish synchronizing the changes from GitHub to PC2 in PC2's 'pc2_git_repo_target_dir'.
+            The script itself calls this automatically on PC2 via an ssh command to PC2, when
+            needed.
 
 Examples:
 
-    TODO
+    TODO ################
+
+Readme:
+    $README_URL
 
 Source Code:
-https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh
+    $SOURCE_CODE_URL
 "
 
 # ==================================================================================================
@@ -130,7 +148,7 @@ print_help() {
 }
 
 print_version() {
-    echo "$VERSION_LONG_STR"
+    echo "$VERSION_STR_LONG"
 }
 
 
@@ -144,6 +162,10 @@ run_always() {
 }
 
 parse_args() {
+    PC_TO_RUN_ON="pc1"
+
+    # 1. Intended for private usage
+
     # Call only `--update_pc2` function if desired (ie: when running this script from PC2 only!)
     # Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <pc2_git_repo_target_dir>`
     if [ "$1" = "--update_pc2" ]; then
@@ -152,26 +174,12 @@ parse_args() {
             PC2_GIT_REPO_TARGET_DIR="$2"
             return RETURN_CODE_SUCCESS
         else
-            echo "ERROR: '--update_pc2' command missing 2nd arg!"
+            echo "ERROR: '--update_pc2' command missing 2nd argument!"
             exit RETURN_CODE_ERROR
         fi
     fi
 
-    ############### PICK BACK UP HERE!
-
-    # Only run main if no input args are given
-    # Sample calling syntax to this script: `./sync_git_repo_from_pc1_to_pc2.sh`
-    if [ "$#" -eq "0" ];  then
-        time main
-    fi
-
-
-
-    if [ $# -eq 0 ]; then
-        echo "No arguments supplied"
-        print_help
-        exit $RETURN_CODE_ERROR
-    fi
+    # 2. Public usage
 
     # Help menu
     if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
@@ -185,7 +193,14 @@ parse_args() {
         exit $RETURN_CODE_SUCCESS
     fi
 
-    PC_TO_RUN_ON="pc1"
+    # Reminder to self: see bash associative array tutorial here!:
+    # https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
+
+    if [ "$#" -eq "0" ];  then
+        pc2_target_name="default"
+    else
+        pc2_target_name="$1"
+    fi
 }
 
 # Read the parameters from the user's "~/.sync_git_repo_private" file.
@@ -198,6 +213,8 @@ read_user_parameters() {
     declare -A PC2_HOSTNAME
     declare -A PC2_TARGETDIR
 
+    # Export these variables so that these will be the variables the user is setting in
+    # their custom "~/.sync_git_repo_private" file.
     export PC2_USERNAME
     export PC2_HOSTNAME
     export PC2_TARGETDIR
@@ -206,26 +223,37 @@ read_user_parameters() {
         # Source this file only if it exists
         . ~/.sync_git_repo_private
     else
-        echo "ERROR! This script will not work unless you //put file in ~.sync_git_repo_private///////////"
+        echo "\
+ERROR! You must have a copy of the \"eRCaGuy_dotfiles/home/.sync_git_repo_private\" file in
+\"~/.sync_git_repo_private\", with your custom configuration settings in it. Please see the
+installation instructions in the top of this script for installation details. Script location:
+\"$PATH_TO_THIS_SCRIPT\"."
         exit RETURN_CODE_ERROR
     fi
 
-    # Set defaults:
-    if [ -n "$DEFAULT_TARGET"]; then
-        PC2_USERNAME["default"]="${PC2_USERNAME["${DEFAULT_TARGET}"]}"
-        PC2_HOSTNAME["default"]="${PC2_HOSTNAME["${DEFAULT_TARGET}"]}"
-        PC2_TARGETDIR["default"]="${PC2_TARGETDIR["${DEFAULT_TARGET}"]}"
-    fi
-
-    # This is the name of the local and remote branch we will use for git repository synchronization from PC1 to PC2.
-    # Feel free to modify this as you see fit.
-    SYNC_BRANCH="${MY_NAME}_SYNC"
     echo "SYNC_BRANCH = \"$SYNC_BRANCH\""
 
+    # Copy defaults into the associative array:
+    if [ -n "$DEFAULT_TARGET"]; then
+        PC2_USERNAME["default"]="${PC2_USERNAME["$DEFAULT_TARGET"]}"
+        PC2_HOSTNAME["default"]="${PC2_HOSTNAME["$DEFAULT_TARGET"]}"
+        PC2_TARGETDIR["default"]="${PC2_TARGETDIR["$DEFAULT_TARGET"]}"
+    else
+        echo "\
+ERROR: you must set the 'DEFAULT_TARGET' variable in \"~/.sync_git_repo_private\" to something."
+        exit RETURN_CODE_ERROR
+    fi
+
+    PC2_SSH_USERNAME="${PC2_USERNAME["$pc2_target_name"]}"
+    PC2_SSH_HOST="${PC2_HOSTNAME["$pc2_target_name"]}"
+    PC2_GIT_REPO_TARGET_DIR="${PC2_TARGETDIR["$pc2_target_name"]}"
+
     # Debugging prints
-    # echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
-    # echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
-    # echo "PC2_SSH_HOST = $PC2_SSH_HOST"
+    echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
+    echo "PC2_SSH_HOST = $PC2_SSH_HOST"
+    echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
+
+    exit ##########
 }
 
 # A function to obtain the temporary directory we will use, given a directory to a git repo.
