@@ -13,7 +13,7 @@
 
 # INSTALLATION INSTRUCTIONS:
 
-
+# instlal plugin
 
 
 
@@ -96,11 +96,23 @@ mkdir -p "$TEMP_DIR"
 FILE_IN="${@: -1}"
 # echo "$FILENAME" # for debugging
 
+# Get the editor command from the user's settings.
+editor="$(git config blametool.editor)"
+if [ -z "$editor" ]; then
+    # If no editor is set by the user, use Sublime Text 3 (subl) as the default
+    echo "NOTICE: you have set no text editor as your git blametool, so Sublime Text 3 ('subl') "
+    echo "  will be used by default. To override this setting and set your own git blametool editor,"
+    echo "  call 'git config --global blametool.editor [editor-executable]'. Example: "
+    echo "  'git config --global blametool.editor gedit'."
+    editor="subl"
+fi
+echo "git blametool editor = '$editor'."
+
 FILE_OUT="${FILE_IN}.git-blame"
 FILE_OUT_FULL_PATH="${TEMP_DIR}/${FILE_OUT}"
 echo "Temporary file path: \"$FILE_OUT_FULL_PATH\"."
 
-echo "Creating temporary file using output from 'git blame'."
+echo "Creating temporary file with output from 'git blame'."
 git blame "$@" > "$FILE_OUT_FULL_PATH"
 # For return code, see: https://stackoverflow.com/a/38533260/4561887
 ret_code="$?"
@@ -109,7 +121,7 @@ ret_code="$?"
 # open it in your favorite text editor only if `git blame` is successful
 if [ "$ret_code" -eq "$RETURN_CODE_SUCCESS" ]; then
     echo "Opening temporary file."
-    subl "$FILE_OUT_FULL_PATH"
+    $editor "$FILE_OUT_FULL_PATH"
     sleep 0.5  # give the file time to open
 fi
 
