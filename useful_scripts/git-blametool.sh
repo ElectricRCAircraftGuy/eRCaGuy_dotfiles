@@ -22,8 +22,8 @@
 #    after each run. Set these as you desire:
 #           git config --global blametool.editor subl
 #           git config --global blametool.auto-delete-tempfile-when-done true  # set to true or false (case-sensitive)
-# 3. Open up "~/.gitconfig", after running the commands above, and verify you see the following
-#    in the end of the file:
+# 3. Open up "~/.gitconfig", after running the commands above, and verify you see the following,
+#    or similar, in the end of the file:
 #    ```
 #    [blametool]
 #        editor = subl
@@ -98,6 +98,17 @@ Examples:
 
     '$SCRIPT_NAME master path/to/myfile.c'
     '$SCRIPT_NAME path/to/myfile.c'
+
+Configuration:
+
+    1. Set your blametool editor:
+       'git config --global blametool.editor [editor]'
+       Example: set 'subl', for Sublime Text 3:
+       'git config --global blametool.editor subl'
+    2. Set whether or not to auto-delete the temporary file when done:
+       'git config --global blametool.auto-delete-tempfile-when-done [true|false]'
+       Be sure to set to 'true' or 'false' (case-sensitive). Example:
+       'git config --global blametool.auto-delete-tempfile-when-done true
 
 Source Code:
 https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/git-blametool.sh

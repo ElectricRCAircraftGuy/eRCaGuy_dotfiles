@@ -15,9 +15,17 @@
 [alias]
     # Source for this `git lg` "better git log" alias: https://coderwall.com/p/euwpig/a-better-git-log
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-    
 
-# TODO: CLEAN UP ALL OF THESE SCRATCH NOTES BELOW; DO THEM, DELETE THEM, MOVE THEM TO BETTER PLACESS TO KEEP THEM AS 
+# For 'git blametool'. See: "eRCaGuy_dotfiles/useful_scripts/git-blametool.sh".
+# Example:
+# - Create an entry below with: `git config --global blametool.editor subl`
+# - Read it with:               `git config blametool.editor`
+[blametool]
+    editor = subl
+    auto-delete-tempfile-when-done = true
+
+
+# TODO: CLEAN UP ALL OF THESE SCRATCH NOTES BELOW; DO THEM, DELETE THEM, MOVE THEM TO BETTER PLACESS TO KEEP THEM AS
 # PERMANENT NOTES, ETC.
 
     # http://barkas.com/2018/git-alias-bash-functions-with-arguments/
@@ -38,9 +46,11 @@
     # and add git-wtf to my dotfiles project, but rename it to git-branch_status, and make a symlink to it called git-wtf; be sure to cite where you're getting it from!
     # Consider adding everything in this location, as many of these tools look pretty useful: https://github.com/DanielVartanov/willgit/tree/master/bin
 
-# HOW TO Customize your `git diff` colors. 
+# HOW TO Customize your `git diff` colors.
 # See: https://stackoverflow.com/questions/26941144/how-do-you-customize-the-color-of-the-diff-header-in-git-diff/61993060#61993060
 # [color "diff"]
 #   meta = blue                 # header: blue text
 #   old = black red strike      # deleted lines: black text with red background, strikethrough line through the text
 #   new = black green italic    # added lines: black text with green background, italic text
+
+
