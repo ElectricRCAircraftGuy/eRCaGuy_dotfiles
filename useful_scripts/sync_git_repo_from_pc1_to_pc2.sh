@@ -123,10 +123,10 @@ Usage:
 Private Usage
 (these are calls the script itself automatically makes):
 
-    '$SCRIPT_NAME --update_pc2 <pc2_git_repo_target_dir>'
-            Finish synchronizing the changes from GitHub to PC2 in PC2's 'pc2_git_repo_target_dir'.
-            The script itself calls this automatically on PC2 via an ssh command to PC2, when
-            needed.
+    '$SCRIPT_NAME --update_pc2 <pc2_git_repo_target_dir> <sync_branch>'
+            Finish synchronizing the changes from GitHub to PC2 in PC2's 'pc2_git_repo_target_dir',
+            from the remote 'sync_branch'. The script itself calls this automatically on PC2 via an
+            ssh command to PC2, when needed.
 
 Examples:
 
@@ -167,15 +167,16 @@ parse_args() {
     # 1. Intended for private usage
 
     # Call only `--update_pc2` function if desired (ie: when running this script from PC2 only!)
-    # Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <pc2_git_repo_target_dir>`
+    # Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <pc2_git_repo_target_dir> <sync_branch>'
     if [ "$1" = "--update_pc2" ]; then
-        if [ $# -eq 2 ]; then
+        if [ $# -eq 3 ]; then
             PC_TO_RUN_ON="pc2"
             PC2_GIT_REPO_TARGET_DIR="$2"
-            return RETURN_CODE_SUCCESS
+            SYNC_BRANCH="$3"
+            return $RETURN_CODE_SUCCESS
         else
-            echo "ERROR: '--update_pc2' command missing 2nd argument!"
-            exit RETURN_CODE_ERROR
+            echo "ERROR: '--update_pc2' command missing 2nd and/or 3rd arguments!"
+            exit $RETURN_CODE_ERROR
         fi
     fi
 
@@ -201,6 +202,7 @@ parse_args() {
     else
         pc2_target_name="$1"
     fi
+    echo "pc2_target_name = $pc2_target_name"
 }
 
 # Read the parameters from the user's "~/.sync_git_repo_private" file.
@@ -212,12 +214,14 @@ read_user_parameters() {
     declare -A PC2_USERNAME
     declare -A PC2_HOSTNAME
     declare -A PC2_TARGETDIR
+    declare -A PC2_SYNCBRANCH
 
     # Export these variables so that these will be the variables the user is setting in
     # their custom "~/.sync_git_repo_private" file.
     export PC2_USERNAME
     export PC2_HOSTNAME
     export PC2_TARGETDIR
+    export PC2_SYNCBRANCH
 
     if [ -f ~/.sync_git_repo_private ]; then
         # Source this file only if it exists
@@ -228,32 +232,30 @@ ERROR! You must have a copy of the \"eRCaGuy_dotfiles/home/.sync_git_repo_privat
 \"~/.sync_git_repo_private\", with your custom configuration settings in it. Please see the
 installation instructions in the top of this script for installation details. Script location:
 \"$PATH_TO_THIS_SCRIPT\"."
-        exit RETURN_CODE_ERROR
+        exit $RETURN_CODE_ERROR
     fi
 
-    echo "SYNC_BRANCH = \"$SYNC_BRANCH\""
-
     # Copy defaults into the associative array:
-    if [ -n "$DEFAULT_TARGET"]; then
+    if [ -n "$DEFAULT_TARGET" ]; then
         PC2_USERNAME["default"]="${PC2_USERNAME["$DEFAULT_TARGET"]}"
         PC2_HOSTNAME["default"]="${PC2_HOSTNAME["$DEFAULT_TARGET"]}"
         PC2_TARGETDIR["default"]="${PC2_TARGETDIR["$DEFAULT_TARGET"]}"
+        PC2_SYNCBRANCH["default"]="${PC2_SYNCBRANCH["$DEFAULT_TARGET"]}"
     else
         echo "\
 ERROR: you must set the 'DEFAULT_TARGET' variable in \"~/.sync_git_repo_private\" to something."
-        exit RETURN_CODE_ERROR
+        exit $RETURN_CODE_ERROR
     fi
 
     PC2_SSH_USERNAME="${PC2_USERNAME["$pc2_target_name"]}"
     PC2_SSH_HOST="${PC2_HOSTNAME["$pc2_target_name"]}"
     PC2_GIT_REPO_TARGET_DIR="${PC2_TARGETDIR["$pc2_target_name"]}"
+    SYNC_BRANCH="${PC2_SYNCBRANCH["$pc2_target_name"]}"
 
-    # Debugging prints
     echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
     echo "PC2_SSH_HOST = $PC2_SSH_HOST"
     echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
-
-    exit ##########
+    echo "SYNC_BRANCH = $SYNC_BRANCH"
 }
 
 # A function to obtain the temporary directory we will use, given a directory to a git repo.
@@ -323,7 +325,10 @@ create_temp_and_check_for_changes() {
 # branch. Uncommit them on local branch. Restore original state by re-staging any files that were
 # previously staged. Done.
 sync_pc1_to_remote_branch () {
-    echo "===== Syncing PC1 to remote branch ====="
+    echo ""
+    echo "============================"
+    echo "Syncing PC1 to remote branch"
+    echo "============================"
     echo "Preparing to push current branch with all changes (including staged, unstaged, & untracked files)"
     echo "  to remote sync branch."
 
@@ -468,13 +473,13 @@ update_pc2 () {
     echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
     echo "  (w/'ssh-add <my_github_key>') OR ELSE THESE FOLLOWING STEPS WILL FAIL!"
     echo "Force pulling from remote \"$SYNC_BRANCH\" branch to overwrite local copy of this branch."
-    echo "  1/3: git fetch origin \"$SYNC_BRANCH\""
+    echo "  1/3: 'git fetch origin \"$SYNC_BRANCH\"'"
     git fetch origin "$SYNC_BRANCH"         # MAY NEED TO COMMENT OUT DURING TESTING
-    echo "  2/3: git checkout \"$SYNC_BRANCH\""
+    echo "  2/3: 'git checkout \"$SYNC_BRANCH\"'"
     # Note: this `git checkout` call automatically checks out this branch from the remote "origin" if this branch
     # is not already present locally
     git checkout "$SYNC_BRANCH"             # MAY NEED TO COMMENT OUT DURING TESTING
-    echo "  3/3: git reset --hard \"origin/$SYNC_BRANCH\" (to force-update the local branch to match the origin branch)"
+    echo "  3/3: 'git reset --hard \"origin/$SYNC_BRANCH\"' (to force-update the local branch to match the origin branch)"
     git reset --hard "origin/$SYNC_BRANCH"  # MAY NEED TO COMMENT OUT DURING TESTING
 
     echo "---\"update_pc2\" script end---"
@@ -485,7 +490,10 @@ update_pc2 () {
 # current_branch_SYNC_BAK_20200217-2310hrs. Check out $SYNC_BRANCH branch. Pull and hard reset.
 # Done! We are ready to build now!
 sync_remote_branch_to_pc2 () {
-    echo "===== Syncing remote branch to PC2 ====="
+    echo ""
+    echo "============================"
+    echo "Syncing remote branch to PC2"
+    echo "============================"
 
     # rsync a copy of this script over to a temp dir on PC2
     TEMP_DIR="$(get_temp_dir "$PC2_GIT_REPO_TARGET_DIR")"
@@ -506,9 +514,18 @@ sync_remote_branch_to_pc2 () {
     # more about the -t flag. Also see here:
     # https://malcontentcomics.com/systemsboy/2006/07/send-remote-commands-via-ssh.html
     # and here: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
-    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST  "$script_path_on_pc2 --update_pc2 \"$PC2_GIT_REPO_TARGET_DIR\""
+    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST  "$script_path_on_pc2 --update_pc2 \
+    \"$PC2_GIT_REPO_TARGET_DIR\" \"$SYNC_BRANCH\""
 
-    echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
+    # Obtain return code from `ssh`; see: https://stackoverflow.com/a/38533260/4561887
+    ret_code="$?"
+    # echo "Return code from 'git blame' = $ret_code" # debugging
+    if [ "$ret_code" -eq "$RETURN_CODE_SUCCESS" ]; then
+        echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
+    else
+        echo "ERROR: FAILED TO SYNC! Please try again."
+        exit $ret_code
+    fi
 }
 
 # Main code to run on PC1
@@ -523,6 +540,7 @@ main_pc1 () {
     # and expect to be in the dir where we started
     cd "$DIR_START"
 
+    echo ""
     echo "=========================================================================================="
     echo "SUMMARY:"
     echo "=========================================================================================="
