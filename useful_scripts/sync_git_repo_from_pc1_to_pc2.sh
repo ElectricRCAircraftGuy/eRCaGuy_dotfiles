@@ -320,6 +320,24 @@ create_temp_and_check_for_changes() {
     echo "  total = $total"
 }
 
+# Load the 'pc2_actual_commit_hash' variable with the actual commit hash currently checked-out
+# on pc2!
+get_pc2_actual_commit_hash() {
+    pc2_actual_commit_hash="unknown"
+    # NB: do NOT use `-t` here with `ssh`, or else the `pc2_actual_commit_hash` will have some sort
+    # of hidden char(s) in it or something and fail to match the actual commit hash from pc1, even
+    # when they really *do* match!
+    pc2_actual_commit_hash="$(ssh $PC2_SSH_USERNAME@$PC2_SSH_HOST \
+    "cd \"$PC2_GIT_REPO_TARGET_DIR\"; git rev-parse HEAD")"
+
+    # Obtain return code from `ssh`; see: https://stackoverflow.com/a/38533260/4561887
+    ret_code="$?"
+    if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
+        echo "ERROR: Failed to get pc2 actual commit hash! Please try again."
+        exit $ret_code
+    fi
+}
+
 # On local machine:
 # Summary: Look for changes. Commit them to current local branch. Force Push them to remote SYNC
 # branch. Uncommit them on local branch. Restore original state by re-staging any files that were
@@ -508,10 +526,10 @@ sync_remote_branch_to_pc2 () {
     # echo "script_path_on_pc2 = $script_path_on_pc2" # Debugging
 
     echo "Calling script on PC2 to sync from remote branch to PC2."
-    # NB: the `-t` flag to `ssh` tells it that it is an interactive shell. Some commands which use `screen`
-    # internally require the `-t` flag when being called over ssh. Using `-t` also has the effect of causing
-    # it to print out "Connection to $HOSTNAME closed" whenever the cmd is over. See `man ssh` to read
-    # more about the -t flag. Also see here:
+    # NB: the `-t` flag to `ssh` tells it that it is an interactive shell. Some commands which use
+    # `screen` internally require the `-t` flag when being called over ssh. Using `-t` also has the
+    # effect of causing it to print out "Connection to $HOSTNAME closed" whenever the cmd is over.
+    # See `man ssh` to read more about the -t flag. Also see here:
     # https://malcontentcomics.com/systemsboy/2006/07/send-remote-commands-via-ssh.html
     # and here: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
     ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST  "$script_path_on_pc2 --update_pc2 \
@@ -519,13 +537,22 @@ sync_remote_branch_to_pc2 () {
 
     # Obtain return code from `ssh`; see: https://stackoverflow.com/a/38533260/4561887
     ret_code="$?"
-    # echo "Return code from 'git blame' = $ret_code" # debugging
-    if [ "$ret_code" -eq "$RETURN_CODE_SUCCESS" ]; then
-        echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
-    else
+    if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
         echo "ERROR: FAILED TO SYNC! Please try again."
         exit $ret_code
     fi
+
+    # Ensure the commit hash on PC2 is now what we expect
+    get_pc2_actual_commit_hash
+    echo "synced_commit_hash from pc1 = $synced_commit_hash"
+    echo "pc2_actual_commit_hash      = $pc2_actual_commit_hash"
+    if [ "$synced_commit_hash" != "$pc2_actual_commit_hash" ]; then
+        echo "ERROR: FAILED TO SYNC! Mismatch in pc1 synced commit hash vs pc2 actual commit hash."
+        echo "Please try again."
+        exit $RETURN_CODE_ERROR
+    fi
+
+    echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
 }
 
 # Main code to run on PC1
@@ -544,8 +571,10 @@ main_pc1 () {
     echo "=========================================================================================="
     echo "SUMMARY:"
     echo "=========================================================================================="
-    echo "  Commit hash synced: ${synced_commit_hash}"
-    echo "  From PC: ${USER}@${HOSTNAME}"
+    echo "  Commit hash synced:"
+    echo "      From PC1:   ${synced_commit_hash}"
+    echo "      Now on PC2: ${pc2_actual_commit_hash}"
+    echo "  From PC: ${USER}@${HOSTNAME}:$(git rev-parse --show-toplevel)"
     echo "  To PC:   ${PC2_SSH_USERNAME}@${PC2_SSH_HOST}:${PC2_GIT_REPO_TARGET_DIR}"
 
     timestamp="$(date "+%Y.%m.%d %H:%Mhrs:%Ssec")"
