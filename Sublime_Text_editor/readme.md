@@ -9,6 +9,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 1. [Helpful Links:](#helpful-links)
 1. [Sublime Text Settings:](#sublime-text-settings)
 1. [Packages to install](#packages-to-install)
+1. [Packages I'm still evaluating and maybe you should install](#packages-im-still-evaluating-and-maybe-you-should-install)
 
 <!-- /MarkdownTOC -->
 </details>
@@ -53,3 +54,9 @@ These are the Sublime Text 3 packages I currently have installed and like to hav
 1. **SCSS** - syntax highlighting for [SASS](https://sass-lang.com/) ([Syntactically Awesome Style Sheets](https://en.wikipedia.org/wiki/Sass_(stylesheet_language))) (`*.scss` files) in Sublime Text. See: https://stackoverflow.com/questions/42159810/how-to-set-scss-syntax-in-sublime-3/45261710#45261710.
 
 
+<a id="packages-im-still-evaluating-and-maybe-you-should-install"></a>
+# Packages I'm still evaluating and maybe you should install
+
+1. **Git blame**
+    1. https://packagecontrol.io/packages/Git%20blame
+    1. https://github.com/frou/st3-gitblame
