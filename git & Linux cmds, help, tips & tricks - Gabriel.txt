@@ -1447,12 +1447,36 @@ See here for where I first learned this: http://barkas.com/2018/git-alias-bash-f
 git config <variable_name> [value]
     Read and write git variables. Read and print the value of the git variable `variable_name`, optionally setting it to `value`. 
     From `man git config`: "Get and set repository or global options."
-    Ex:
+git config [file-option] <variable_name> [value]
+    See above, except read/write explicitly to the 'file-option' configuration file. Options include, in order from widest to narrowest scope: '--system', '--global', '--local', and '--file'. See `man git config` for details. 
+git config --global <variable_name> [value]
+    See above, except read/write explicitly to the '--global' configuration file, which is stored in "~/.gitconfig". See details above.
+---------
+EXAMPLES:
+---------
 git config merge.renameLimit
     Read the value of the `merge.renameLimit` variable, if it is set. 
 git config merge.renameLimit 10000
     Set the value of the `merge.renameLimit` git variable to `10000`. 
     See my comment under this answer, where I do this: https://stackoverflow.com/questions/7830728/warning-on-diff-renamelimit-variable-when-doing-git-push/28064699#28064699.
+---------
+YOU CAN INVENT VARIABLES AS YOU SEE FIT. (I am inventing the `blametool.editor` variable below):
+---------
+Example: this command: `git config --global blametool.editor subl` adds these lines to the bottom of your global "~/.gitconfig" file:
+```
+[blametool]
+    editor = subl
+```
+And you can read out that variable value, 'subl', with: `git config blametool.editor`.
+---------
+SUMMARY:
+---------
+git config --global blametool.editor subl
+    Writes this to your global "~/.gitconfig" file:
+            [blametool]
+                editor = subl
+git config blametool.editor
+    Reads 'subl' from the settings you just set above. Since we didn't specify '--global' when reading here, this will read all of the git config files, retaining the variable value found in the narrowest scope (ie: any value found in the '--local' config files takes precedent over '--global', which takes precedent over '--system', etc.).
 
 git branch -a = show ALL branches, even remote-only branches
 git branch -r = show ONLY 'r'emote branches
@@ -2418,6 +2442,7 @@ basename $(realpath some_file_or_symlink)
 
 
 == diff: ==
+[plain diff; NOT git diff; regular diff; diff only; only diff; diff alone; alone diff]
 
 diff file1.txt file2.txt = compare file1.txt and file2.txt for differences! (similar to `git diff`)
 diff -u file1.txt file2.txt = same as above, except showing 'u'nified context output, meaning: show 3 lines (by default) of "unified", or intermingled line-by-line, output to show the context around the differences between the left and right files!
