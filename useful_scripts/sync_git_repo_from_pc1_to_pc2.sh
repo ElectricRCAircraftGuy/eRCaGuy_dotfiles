@@ -69,7 +69,7 @@
 
 # NOTES TO SELF:
 # Tests to run:
-# 1)
+# 1) Test `echo "Detected there is no commit to reset."` below!
 #       touch file
 #       git add file
 #       rm file
@@ -425,7 +425,9 @@ sync_pc1_to_remote_branch () {
         git add -A
         error_msg="$(git commit -m "$commit_msg")"
         echo "$error_msg"
-        if [ "$error_msg" == "nothing to commit, working tree clean" ]; then
+        error_msg_last_line="$(echo "$error_msg" | tail -n1)"
+        if [ "$error_msg_last_line" == "nothing to commit, working tree clean" ]; then
+            echo "Detected there is no commit to reset."
             made_temp_commit=false
         fi
     fi
