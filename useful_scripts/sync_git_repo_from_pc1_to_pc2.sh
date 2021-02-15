@@ -67,6 +67,19 @@
 #    https://www.google.com/search?q=eclipse+work+local+build+remote&oq=eclipse+work+local+build+remote&aqs=chrome..69i57.218j0j9&sourceid=chrome&ie=UTF-8
 #   1. https://stackoverflow.com/questions/4216822/work-on-a-remote-project-with-eclipse-via-ssh
 
+# NOTES TO SELF:
+# Tests to run:
+# 1)
+#       touch file
+#       git add file
+#       rm file
+#       git status
+#       # now, 'file' is both staged for commit AND deleted, so `git add -A` followed by `git commit`
+#       # would have `git commit` error out and say: "nothing to commit, working tree clean".
+#       # So, let's get into this situation and ensure my script still works ok and handles this
+#       # edge case!
+#       gs_sync_git_repo_from_pc1_to_pc2
+
 # ==================================================================================================
 # PROGRAM PARAMETERS
 # ==================================================================================================
@@ -168,7 +181,7 @@ parse_args() {
 
     # Call only `--update_pc2` function if desired (ie: when running this script from PC2 only!)
     # Calling syntax: `./sync_git_repo_from_pc1_to_pc2.sh --update_pc2 <pc2_git_repo_target_dir> <sync_branch>'
-    if [ "$1" = "--update_pc2" ]; then
+    if [ "$1" == "--update_pc2" ]; then  # see `man test` or `man [` for meaning of `[ ]`.
         if [ $# -eq 3 ]; then
             PC_TO_RUN_ON="pc2"
             PC2_GIT_REPO_TARGET_DIR="$2"
@@ -410,18 +423,43 @@ sync_pc1_to_remote_branch () {
         fi
 
         git add -A
-        git commit -m "$commit_msg"
+        error_msg="$(git commit -m "$commit_msg")"
+        echo "$error_msg"
+        if [ "$error_msg" == "nothing to commit, working tree clean" ]; then
+            made_temp_commit=false
+        fi
     fi
 
     # Print out and store current commit hash; how to get hash of current commit:
     # see: https://stackoverflow.com/questions/949314/how-to-retrieve-the-hash-for-the-current-commit-in-git/949391#949391
     synced_commit_hash="$(git rev-parse HEAD)"
 
-    echo "Force pushing commit ${synced_commit_hash} to remote \"$SYNC_BRANCH\" branch."
-    echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
-    echo "  (w/'ssh-add <my_github_key>') OR ELSE THIS WILL FAIL!"
-    # TODO: figure out if origin is even available (ex: via a ping or something), and if not, error out right here!
-    git push --force origin "HEAD:$SYNC_BRANCH" # MAY NEED TO COMMENT OUT DURING TESTING
+    # Only push the changes if pc2 doesn't already have these changes!
+    get_pc2_actual_commit_hash
+    if [ "$synced_commit_hash" == "$pc2_actual_commit_hash" ]; then
+        need_to_sync_to_pc2="false"
+        echo "NOTHING TO DO. PC2 already has the changes from PC1!:"
+        echo "  synced_commit_hash from pc1 = $synced_commit_hash"
+        echo "  pc2_actual_commit_hash      = $pc2_actual_commit_hash"
+    else
+        # The current commit hash on pc2 does NOT equal what's on pc1, so DO sync pc1's changes
+        # to the remote branch.
+        echo "Force pushing commit ${synced_commit_hash} to remote \"$SYNC_BRANCH\" branch."
+        echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
+        echo "  (w/'ssh-add <my_github_key>') OR ELSE THIS WILL FAIL!"
+        # TODO: figure out if origin is even available (ex: via a ping or something), and if not, error out right here!
+        git push --force origin "HEAD:$SYNC_BRANCH" # MAY NEED TO COMMENT OUT DURING TESTING
+
+        # Obtain return code from the last cmd (`git push`); see:
+        # https://stackoverflow.com/a/38533260/4561887
+        ret_code="$?"
+        if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
+            echo "ERROR: FAILED to 'git push'! Please try again."
+            exit $ret_code
+        fi
+
+        echo "Done syncing PC1 to remote branch."
+    fi
 
     # Uncommit the temporary commit we committed above
     if [ "$made_temp_commit" = "true" ]; then
@@ -444,8 +482,6 @@ sync_pc1_to_remote_branch () {
             done < "$FILES_STAGED"
         fi
     fi
-
-    echo "Done syncing PC1 to remote branch."
 }
 
 # This is the main command to run on PC2 via ssh from PC1 in order to sync the remote branch to PC2!
@@ -560,22 +596,27 @@ main_pc1 () {
     DIR_START="$(pwd)"
     # echo "DIR_START = $DIR_START" # debugging
 
+    need_to_sync_to_pc2="true"
     sync_pc1_to_remote_branch
-    sync_remote_branch_to_pc2
+    if [ "$need_to_sync_to_pc2" == "true" ]; then
+        sync_remote_branch_to_pc2
+    fi
 
-    # (optional, but not a bad habit) cd back to where we started in case we ever add additional code after this
-    # and expect to be in the dir where we started
+    # Optional, but not a bad habit: cd back to where we started in case we ever add additional code
+    # after this and expect to be in the dir where we started
     cd "$DIR_START"
 
-    echo ""
-    echo "=========================================================================================="
-    echo "SUMMARY:"
-    echo "=========================================================================================="
-    echo "  Commit hash synced:"
-    echo "      From PC1:   ${synced_commit_hash}"
-    echo "      Now on PC2: ${pc2_actual_commit_hash}"
-    echo "  From PC: ${USER}@${HOSTNAME}:$(git rev-parse --show-toplevel)"
-    echo "  To PC:   ${PC2_SSH_USERNAME}@${PC2_SSH_HOST}:${PC2_GIT_REPO_TARGET_DIR}"
+    echo   ""
+    echo   "=========================================================================================="
+    echo   "SUMMARY:"
+    echo   "=========================================================================================="
+    echo   "  Commit hash synced:"
+    echo   "      From PC1:   ${synced_commit_hash}"
+    echo   "      Now on PC2: ${pc2_actual_commit_hash}"
+    # For printf help, see: https://stackoverflow.com/questions/994461/right-align-pad-numbers-in-bash/994471#994471
+    # and: http://www.cplusplus.com/reference/cstdio/printf/
+    printf "  From PC1: %-35s Repo root: %s\n" "${USER}@${HOSTNAME}:" "${REPO_ROOT_DIR}"
+    printf "  To PC2:   %-35s Repo root: %s\n" "${PC2_SSH_USERNAME}@${PC2_SSH_HOST}:" "${PC2_GIT_REPO_TARGET_DIR}"
 
     timestamp="$(date "+%Y.%m.%d %H:%Mhrs:%Ssec")"
     echo "  Completed at timestamp: $timestamp"
