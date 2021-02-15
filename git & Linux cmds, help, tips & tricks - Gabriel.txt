@@ -1590,7 +1590,9 @@ git lg = show the git log history in a condensed form, with graphics lines to sh
     See: "eRCaGuy_dotfiles/home/.gitconfig" for how to create this `lg` alias for git, and
     https://coderwall.com/p/euwpig/a-better-git-log for where I originally got it from!
 
+-----
 FIND ALL GIT COMMITS WHICH ARE ON ONE BRANCH BUT NOT ON ANOTHER!
+-----
 [keywords: git commits on one branch but not another, git commits not on branch, git commits in one branch but not another]
 git log --no-merges branch1 ^branch2 ^branch3
     show all commits which are ONLY on branch1, but NOT on branch2 or branch3, omitting all merge commits since they aren't new changes! See: https://stackoverflow.com/questions/1710894/using-git-show-all-commits-that-are-in-one-branch-but-not-the-others/4207176#4207176 <========== SUPER USEFUL TO SEE WHAT CHANGES A BRANCH CONTAINS ON IT! ============
@@ -1601,6 +1603,12 @@ git log --oneline --no-merges branch1 ^branch2 ^branch3
     same as above, but show only one line per commit! <======= EXCELLENT! (& SIMPLEST) ========
 git lg --no-merges branch1 ^branch2 ^branch3
     same as above, but using the `git lg` git alias instead, to show condensed (one-line) output with extra information! <======= BEST! (perhaps) ========
+-----
+HOW TO **COUNT** HOW MANY COMMITS ARE IN ONE BRANCH BUT NOT ANOTHER:
+-----
+git log --oneline ^master HEAD | wc -l
+    Count how many commits are on the current branch (`HEAD`), but NOT on `master`. 
+    See my answer here: https://stackoverflow.com/questions/1710894/using-git-show-all-commits-that-are-in-one-branch-but-not-the-others/66201217#66201217
 
 git log -p
     See the git log view except showing a "patch", or `git diff` type output for each commit as well, so you can see exactly what the changes were for each commit in the log!
