@@ -61,6 +61,11 @@
 #       the script name only, like this: `gs_sync_git_repo_from_pc1_to_pc2`. Be sure to use one of
 #       the target names of the targets already defined above it.
 
+# Note:
+#       The bash variables below are associative arrays (hash tables, I believe). If you're curious
+#       about the details and syntax of how they work in bash, see this **excellent** tutorial here:
+#       https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/.
+
 # DEFINITIONS:
 # YOUR PRIVATE INFORMATION GOES HERE:
 
