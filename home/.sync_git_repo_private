@@ -10,31 +10,72 @@
 # See the instructions in "eRCaGuy_dotfiles/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh", as
 # well as in the associated README that is mentioned there.
 
+# DESCRIPTIONS:
+#
+# MY_NAME
+#       Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help
+#       create the synchronization git branch name.
+#
+# TARGET
+#       A target name to specify which "PC2" you'd like to synchronize your "PC1" to. You will be
+#       able to call this target name directly when you call the script, so make it something you
+#       can easily remember. Here is an example call to the script with the target name "desktop"
+#       passed as an argument: `gs_sync_git_repo_from_pc1_to_pc2 desktop`.
+#
+# PC2_USERNAME
+#       The target PC (PC2) SSH username. Explicitly type this out. Do not use variables, as they
+#       won't expand as expected since they will expand on your local computer and not on your
+#       target computer. You may run any one of the following commands on your target machine to see
+#       your username:
+#               who
+#               whoami
+#               echo $USER
+#               echo $USERNAME
+#       Example username: "gabriel"
+#
+# PC2_HOSTNAME
+#       The target PC (PC2) SSH hostname or IP address. Explicitly type this out. Do not use
+#       variables, as they won't expand as expected since they will expand on your local computer
+#       and not on your target computer. Run the `hostname` command on your target machine to see
+#       your hostname, or run `ifconfig` to see your IP address.
+#       Example hostnames: "gabriel-mypc1234", "10.0.0.100", or "192.168.200.100"
+#
+# PC2_TARGETDIR
+#       Target directory: the git repo root directory on PC2 where you are syncing your files TO.
+#       This directory must **already exist** and you must have **already `git clone`d** a copy of
+#       your git repo into it! Do NOT use variables such as `$HOME`. Be explicit instead. This is
+#       because the variable expansion will happen on the local machine when what we need is the
+#       variable expansion from the remote machine. Example git repo target directory:
+#       "/home/gabriel/dev/eRCaGuy_dotfiles"
+#
+# PC2_SYNCBRANCH
+#       Synchronization branch name: this is the name of the remote git branch we will push to on
+#       PC1, and pull from on PC2, for the file synchronization to take place from PC1 to PC2. You
+#       can set it to anything you want. If you leave it as-is below it will auto-generate a
+#       synchronization branch name using the variables above it.
+#       Example remote synchronization branch name: "john.smith_SYNC_desktop".
+#
+# DEFAULT_TARGET
+#       Set a default target to be automatically used whenever you call the script withOUT
+#       specifying the target explicitly. In other words, this is the target used whenever you call
+#       the script name only, like this: `gs_sync_git_repo_from_pc1_to_pc2`. Be sure to use one of
+#       the target names of the targets already defined above it.
 
-# YOUR PRIVATE INFORMATION:
+# DEFINITIONS:
+# YOUR PRIVATE INFORMATION GOES HERE:
 
-
-# Your name. No spaces allowed! Recommended to use all lower-case. This is only used to help create
-# the synchronization git branch name.
 MY_NAME="first.last"
 
-# The git repo root directory on PC2 where you are syncing your files TO; this dir must *already
-# exist* and you must have *already `git clone`d* a copy of your git repo into it!
-# Do NOT use variables such as `$HOME`. Be explicit instead. This is because the variable expansion
-# will happen on the local machine when what we need is the variable expansion from the remote
-# machine. Being explicit instead just avoids this problem.
-PC2_GIT_REPO_TARGET_DIR="/home/gabriel/dev/eRCaGuy_dotfiles"
+TARGET="desktop"
+PC2_USERNAME["$TARGET"]="my_username"
+PC2_HOSTNAME["$TARGET"]="my_hostname"
+PC2_TARGETDIR["$TARGET"]="/home/gabriel/dev/eRCaGuy_dotfiles"
+PC2_SYNCBRANCH["$TARGET"]="${MY_NAME}_SYNC_${TARGET}"
 
-# Target SSH username: explicitly type this out; don't use variables; you may run any one of
-# the following commands on your target machine to see your username:
-#       who
-#       whoami
-#       echo $USER
-#       echo $USERNAME
-# Ex: "gabriel"
-PC2_SSH_USERNAME="my_username"
-# Target SSH hostname or IP address: explicitly type this out; don't use variables; run the
-# `hostname` command on your target machine to see your hostname, or run `ifconfig` to see your IP
-# address. Ex: "gabriel-mypc1234", "10.0.0.100", or "192.168.200.100"
-PC2_SSH_HOST="my_hostname"
+TARGET="desktop2"
+PC2_USERNAME["$TARGET"]="my_username2"
+PC2_HOSTNAME["$TARGET"]="my_hostname2"
+PC2_TARGETDIR["$TARGET"]="/home/gabriel/dev/eRCaGuy_dotfiles"
+PC2_SYNCBRANCH["$TARGET"]="${MY_NAME}_SYNC_${TARGET}"
 
+DEFAULT_TARGET="desktop"

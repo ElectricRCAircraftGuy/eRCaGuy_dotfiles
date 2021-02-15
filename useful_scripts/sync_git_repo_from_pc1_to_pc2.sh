@@ -27,7 +27,7 @@
 # INSTALLATION:
 # -------------
 #
-# See also: README_git-sync_repo_from_pc1_to_pc2.md for more information.
+# See also: "README_git-sync_repo_from_pc1_to_pc2.md" for more information.
 #
 # 1. Copy the ".bash_aliases_private" file to your home directory:
 #           cp -i path/to/eRCaGuy_dotfiles/home/.sync_git_repo_private ~
@@ -125,7 +125,7 @@ Usage:
             user in their custom \"~/.sync_git_repo_private\" file.
 
     '$SCRIPT_NAME -t'
-            Print all 't'argets the user has already defined inside
+            Print all user-defined 't'argets the user has defined inside
             \"~/.sync_git_repo_private\".
 
     '$SCRIPT_NAME -h'
@@ -148,10 +148,13 @@ Private Usage
 Examples:
 
     '$SCRIPT_NAME'
+            Syncrhonize PC1 to PC2 where PC2 is the \"default\" target.
     '$SCRIPT_NAME default'
-    '$SCRIPT_NAME desktop1'
+            Same as above, except explicitly specify \"default\" target.
+    '$SCRIPT_NAME desktop'
+            Synchronize to user-defined \"desktop\" target.
     '$SCRIPT_NAME desktop2'
-    ################
+            Synchronize to user-defined \"desktop2\" target.
 
 Readme:
     $README_URL
