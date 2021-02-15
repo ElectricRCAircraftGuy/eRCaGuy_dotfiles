@@ -301,9 +301,9 @@ ERROR: you must set the 'DEFAULT_TARGET' variable in \"~/.sync_git_repo_private\
     # Ensure target name is valid and that none of these variables are empty strings.
     if [ -z "$PC2_SSH_USERNAME" ] || [ -z "$PC2_SSH_HOST" ] || [ -z "$PC2_GIT_REPO_TARGET_DIR" ] ||
     [ -z "$SYNC_BRANCH" ]; then
-        echo "ERROR: invalid 'pc2_target_name' passed to this program. Please add this target"
-        echo "  to your custom \"~/.sync_git_repo_private\" file, or choose a valid target"
-        echo "  already defined in that file, and try again."
+        echo "ERROR: invalid 'pc2_target_name' (\"$pc2_target_name\") passed to this program."
+        echo "  Please add this target to your custom \"~/.sync_git_repo_private\" file, or"
+        echo "  choose a valid target already defined in that file, and try again."
         print_targets
         exit $RETURN_CODE_ERROR
     fi
