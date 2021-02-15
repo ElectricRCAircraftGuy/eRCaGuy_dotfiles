@@ -102,7 +102,7 @@ Source Code = $SOURCE_CODE_URL
 See '$SCRIPT_NAME -h' for more info.
 "
 
-HELP_STR="
+HELP_STR="\
 $VERSION_STR_SHORT
 
 Purpose: synchronize a git repo from one computer (\"PC1\") to another (\"PC2\"). This is useful,
@@ -124,11 +124,15 @@ Usage:
             Run the script with the target set to the value of 'DEFAULT_TARGET', as defined by the
             user in their custom \"~/.sync_git_repo_private\" file.
 
+    '$SCRIPT_NAME -t'
+            Print all 't'argets the user has already defined inside
+            \"~/.sync_git_repo_private\".
+
     '$SCRIPT_NAME -h'
-            print the help menu
+            print this help menu
 
     '$SCRIPT_NAME -?'
-            print the help menu
+            print this help menu
 
     '$SCRIPT_NAME -v'
             print the author and version
@@ -143,7 +147,11 @@ Private Usage
 
 Examples:
 
-    TODO ################
+    '$SCRIPT_NAME'
+    '$SCRIPT_NAME default'
+    '$SCRIPT_NAME desktop1'
+    '$SCRIPT_NAME desktop2'
+    ################
 
 Readme:
     $README_URL
@@ -176,6 +184,7 @@ run_always() {
 
 parse_args() {
     PC_TO_RUN_ON="pc1"
+    pc2_target_name="default"
 
     # 1. Intended for private usage
 
@@ -199,35 +208,47 @@ parse_args() {
     if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
         print_help
         exit $RETURN_CODE_SUCCESS
-    fi
-
     # Version
-    if [ "$1" == "-v" ]; then
+    elif [ "$1" == "-v" ]; then
         print_version
+        exit $RETURN_CODE_SUCCESS
+    # Print targets
+    elif [ "$1" == "-t" ]; then
+        read_user_parameters
+        echo ""
+        print_targets
         exit $RETURN_CODE_SUCCESS
     fi
 
     # Reminder to self: see bash associative array tutorial here!:
     # https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
 
-    if [ "$#" -eq "0" ];  then
-        pc2_target_name="default"
-    else
+    if [ "$#" -eq "1" ];  then
         pc2_target_name="$1"
+    elif [ "$#" -gt "1" ];  then
+        echo "ERROR: too many arguments!"
+        exit $RETURN_CODE_ERROR
     fi
-    echo "pc2_target_name = $pc2_target_name"
+}
+
+print_targets() {
+    echo "Valid targets you have already defined inside \"~/.sync_git_repo_private\" include:"
+    for target in "${!PC2_USERNAME[@]}"; do
+        echo "  $target"
+    done
 }
 
 # Read the parameters from the user's "~/.sync_git_repo_private" file.
 read_user_parameters() {
     # See bash associative array tutorial here!:
     # https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
-    # See also `help declare`.
+    # See also `help declare`. NB: `-g` makes these variables global; otherwise they would be
+    # local to this function only!
     # - Note: use `unset` to delete a variable. Ex: `unset PC2_USERNAME`.
-    declare -A PC2_USERNAME
-    declare -A PC2_HOSTNAME
-    declare -A PC2_TARGETDIR
-    declare -A PC2_SYNCBRANCH
+    declare -gA PC2_USERNAME
+    declare -gA PC2_HOSTNAME
+    declare -gA PC2_TARGETDIR
+    declare -gA PC2_SYNCBRANCH
 
     # Export these variables so that these will be the variables the user is setting in
     # their custom "~/.sync_git_repo_private" file.
@@ -250,6 +271,7 @@ installation instructions in the top of this script for installation details. Sc
 
     # Copy defaults into the associative array:
     if [ -n "$DEFAULT_TARGET" ]; then
+
         PC2_USERNAME["default"]="${PC2_USERNAME["$DEFAULT_TARGET"]}"
         PC2_HOSTNAME["default"]="${PC2_HOSTNAME["$DEFAULT_TARGET"]}"
         PC2_TARGETDIR["default"]="${PC2_TARGETDIR["$DEFAULT_TARGET"]}"
@@ -265,10 +287,23 @@ ERROR: you must set the 'DEFAULT_TARGET' variable in \"~/.sync_git_repo_private\
     PC2_GIT_REPO_TARGET_DIR="${PC2_TARGETDIR["$pc2_target_name"]}"
     SYNC_BRANCH="${PC2_SYNCBRANCH["$pc2_target_name"]}"
 
+    echo "pc2_target_name = $pc2_target_name"
+    echo "DEFAULT_TARGET (called with \"default\") = $DEFAULT_TARGET"
+
     echo "PC2_SSH_USERNAME = $PC2_SSH_USERNAME"
     echo "PC2_SSH_HOST = $PC2_SSH_HOST"
     echo "PC2_GIT_REPO_TARGET_DIR = $PC2_GIT_REPO_TARGET_DIR"
     echo "SYNC_BRANCH = $SYNC_BRANCH"
+
+    # Ensure target name is valid and that none of these variables are empty strings.
+    if [ -z "$PC2_SSH_USERNAME" ] || [ -z "$PC2_SSH_HOST" ] || [ -z "$PC2_GIT_REPO_TARGET_DIR" ] ||
+    [ -z "$SYNC_BRANCH" ]; then
+        echo "ERROR: invalid 'pc2_target_name' passed to this program. Please add this target"
+        echo "  to your custom \"~/.sync_git_repo_private\" file, or choose a valid target"
+        echo "  already defined in that file, and try again."
+        print_targets
+        exit $RETURN_CODE_ERROR
+    fi
 }
 
 # A function to obtain the temporary directory we will use, given a directory to a git repo.
