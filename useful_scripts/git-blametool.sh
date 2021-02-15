@@ -155,7 +155,7 @@ main() {
     editor="$(git config blametool.editor)"
     auto_delete_tempfile_when_done="$(git config blametool.auto-delete-tempfile-when-done)"
 
-    if [ -z "$editor" ]; then  # see `man test` for meaning of `-z`
+    if [ -z "$editor" ]; then  # see `man test` or `man [` for meaning of `-z`
         # If no editor is set by the user, use Sublime Text 3 (subl) as the default
         echo "NOTICE: you have set no text editor as your git blametool, so '$DEFAULT_EDITOR'"
         echo "  ($DEFAULT_EDITOR_DESCRIPTION) will be used by default. To override this setting"
