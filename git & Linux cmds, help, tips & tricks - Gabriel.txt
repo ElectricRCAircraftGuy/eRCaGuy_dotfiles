@@ -2075,13 +2075,119 @@ So, here's how to rewrite the history. See GitHub's instructions here: https://h
 
 REFERENCES:
 1. READ THIS TUTORIAL!: https://www.vogella.com/tutorials/GitSubmodules/article.html 
+1. *****+ Official documentation!: https://git-scm.com/book/en/v2/Git-Tools-Submodules <==== READ THIS! ====
+1. `man git submodule`
 
-git submodule update --init --recursive
-    Initialize (ie: do for the first time) and update all submodules in a git repo.
-    See: https://stackoverflow.com/questions/1030169/easy-way-to-pull-latest-of-all-git-submodules/1032653#1032653
+1. HOW TO ADD A REPO AS A SUBMODULE TO ANOTHER GIT REPO:
+SEE: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> "Starting with Submodules"
+--------------------
+git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
+    Clone this project (repo).
+cd eRCaGuy_X9C_digital_pot
+    cd (change directories) into it.
+git submodule add https://github.com/ElectricRCAircraftGuy/eRCaGuy_CodeFormatter.git
+    **Clone** AND add AND stage for commit this eRCaGuy_CodeFormatter repo as a repo (submodule) within the current repo. 
+    IT IS PROBABLY BEST TO USE THE "https" URL, NOT the "ssh" URL, so that others who may not have ssh keys set up in github can still read from it and clone this repo too, even though they don't have their ssh keys set up--which I think throws an error during cloning if they attempt to use the "ssh" url otherwise. 
+    See here: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> see also the "Note" at the bottom of the "Starting with Submodules" section which talks about configuring your own 'PRIVATE_URL' which you have push access to. See also the `git config` command I use just below to set a private push/pull url for just myself!
+git status
+    See the submodule in your current repo, which IS now already staged from the `git submodule add` cmd above, but is NOT yet committed. 
+    You will see two new files:
+            new file:   .gitmodules
+            new file:   eRCaGuy_CodeFormatter
+git diff --cached eRCaGuy_CodeFormatter
+    See the cached changes. You'll see eRCaGuy_CodeFormatter as a particular **commit hash** from that repository! Even though it's a folder and a submodule, git tracks it as a particular git commit hash from that repository. 
+    See here: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> search for "Instead, Git sees it as a particular commit from that repository."
+git diff --cached --submodule
+    See a nicer `git diff` view with special submodule information for this submodule. 
+    NB: If you don't want to type `git diff --submodule` all the time, add the "log" setting to your config like this: `git config --global diff.submodule log`. See: https://git-scm.com/book/en/v2/Git-Tools-Submodules.
+git commit
+    Commit the added submodule to your current repo. When you do, you'll see something like this:
+            2 files changed, 4 insertions(+)
+            create mode 100644 .gitmodules
+            create mode 160000 eRCaGuy_CodeFormatter
+    Notice the `160000` mode for the eRCaGuy_CodeFormatter entry. This means that entry is a git submodule directory, rather than a regular, tracked file or directory. 
+git config submodule.eRCaGuy_CodeFormatter.url git@github.com:ElectricRCAircraftGuy/eRCaGuy_CodeFormatter.git
+    Add my private GitHub "ssh" url which I can also **push** to! This way, public users of my repo can easily pull using my https url (or the ssh one if they have ssh keys set up in GitHub), but I can also **push** using my ssh url. 
+    See here: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> see also the "Note" at the bottom of the "Starting with Submodules" section which talks about configuring your own 'PRIVATE_URL' which you have push access to.
+git push origin master
+    Push these changes to the remote repo on GitHub. 
+
+2. HOW TO CLONE A REPO WITH SUBMODULES:
+SEE: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> "Cloning a Project with Submodules"
+--------------------
+-----
+OPTION 1 
+(explicit--multiple commands):
+-----
+git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
+    Clone this project (repo). NB: "When you clone such a project, by default you get the directories that contain submodules, but none of the files within them yet" (https://git-scm.com/book/en/v2/Git-Tools-Submodules). 
+git submodule init
+    Initialize your local git configuration file (inside ".git/config" maybe?)
+git submodule update
+    Clone all 1-level-deep submodules within this repo. OR:
 git submodule update --recursive
-    Call this every time thereafter? (ie: after the first time?)
+    [BETTER than the cmd just above] Clone all n-level-deep submodules within this repo, recursively, to all levels of nesting. 
+    See: `man git submodule`, then search for "--recursive", until you find this under the `update` section:
+    > If `--recursive` is specified, this command will recurse into the registered submodules, and update any nested submodules within.
+-----
+OPTION 2 [GREAT]: <==============
+-----
+git clone --recurse-submodules https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
+    Clone the main repo, as well as all submodules, recursively down to all levels of submodules. 
+-----
+OPTION 3 [the shorter version of Option 1]:
+-----
+git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
+    Clone the repo, but not the submodules. 
+git submodule update --init
+    This is the equivalent of `git submodule init` followed by `git submodule update`.
+-----
+OPTION 4 [BEST I THINK!]: <======= BEST ========
+-----
+git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
+    Clone the repo, but not the submodules. 
+git submodule update --init --recursive
+    BEST! Combines `git submodule init` followed by `git submodule update --recursive`, thereby fetching and checking out any and all nested submodules as well!
+
+3. PULLING UPSTREAM CHANGES INTO THE SUBMODULES
+SEE: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> "Pulling Upstream Changes from the Project Remote"
+--------------------
+git pull
+    Pull all upstream changes in the repo as well as submodules. This apparently does NOT, I think, check out the submodule changes just pulled, however--maybe they are just fetched?
+git submodule update --init --recursive
+    Update (clone) all submodule changes too.
+
+OTHER, GENERAL NOTES ABOUT GIT SUBMODULE CMDS:
+
+git diff --submodule
+    Show a nicer `git diff` view for submodules. 
+
+git submodule update --init
+    Initialize and update (clone) all submodules in this repo to 1-level deep.
+    See: https://git-scm.com/book/en/v2/Git-Tools-Submodules
+git submodule update --init --recursive
+    <========== USE THIS ONE, esp. after each `git pull`! ==========
+    Initialize (ie: do for the first time) and update (clone) all submodules in a git repo, recursively, to all levels deep.
     See: https://stackoverflow.com/questions/1030169/easy-way-to-pull-latest-of-all-git-submodules/1032653#1032653
+    and https://git-scm.com/book/en/v2/Git-Tools-Submodules --> see:
+        > Note that to be on the safe side, you should run `git submodule update` with the `--init`
+        > flag in case the MainProject commits you just pulled added new submodules, and with the
+        > `--recursive` flag if any submodules have nested submodules.
+git submodule update --recursive
+    Call this every time thereafter? (ie: after the first time when you also initialized?)--NO! Use the command above instead!: `git submodule update --init --recursive`. See the quote from the official `git submodule` documentation in the description of the cmd just above. 
+    Just update all submodules, recursively, assuming you've already initialized at least once.
+    See: https://stackoverflow.com/questions/1030169/easy-way-to-pull-latest-of-all-git-submodules/1032653#1032653
+    and https://git-scm.com/book/en/v2/Git-Tools-Submodules
+
+git submodule update --remote
+    In place of manually `cd`ing into each submodule and pulling/fetching the latest, then committing it in the parent repo, you can call this command to automatically go into each submodule and do that for you, thereby updating each submodule (ALL submodules) in the project to point to the latest version (commit hash) of those submodule repos!
+    See: https://git-scm.com/book/en/v2/Git-Tools-Submodules
+git submodule update eRCaGuy_CodeFormatter
+    Just update the `eRCaGuy_CodeFormatter` submodule within the current git repo. 
+    See: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> search for "If you have a lot of them, you may want to pass the name of just the submodule you want to try to update."
+git config -f .gitmodules submodule.eRCaGuy_CodeFormatter.branch my_branch
+    Write to your local .gitmodules file that you want the branch pulled into the eRCaGuy_CodeFormatter submodule to be `my_branch`, rather than the default `master`!
+    See: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> search for "git config -f .gitmodules".
 
 
 ====================================================================================================
