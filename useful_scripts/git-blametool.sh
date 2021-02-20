@@ -77,38 +77,52 @@ Usage:
     around 'git blame', it takes ALL of the same parameters that 'git blame' takes too! A typical
     usage of 'git blametool' is like this:
 
-    '$SCRIPT_NAME [commit_hash] <file_path>'
+    $SCRIPT_NAME [commit_hash] <file_path>
             Open up the 'git blame' output for file \"file_path\" from commit or branch
             \"commit_hash\" in your editor specified by 'git config blametool.editor'.
             If no editor is set, the default, '$DEFAULT_EDITOR' ($DEFAULT_EDITOR_DESCRIPTION) is
-            used. You can set your editor of choice with
-            'git config --global blametool.editor [editor-executable]'.
+            used. You can set your editor of choice with:
+                    git config --global blametool.editor [editor-executable]
             Example:
-            'git config --global blametool.editor gedit'.
-    '$SCRIPT_NAME'
+                    git config --global blametool.editor gedit
+    $SCRIPT_NAME
             print this help menu
-    '$SCRIPT_NAME -h'
+    $SCRIPT_NAME -h
             print this help menu
-    '$SCRIPT_NAME -?'
+    $SCRIPT_NAME -?
             print this help menu
-    '$SCRIPT_NAME -v'
+    $SCRIPT_NAME -v
             print author & version
 
 Examples:
 
-    '$SCRIPT_NAME master path/to/myfile.c'
-    '$SCRIPT_NAME path/to/myfile.c'
+    $SCRIPT_NAME master path/to/myfile.c
+    $SCRIPT_NAME path/to/myfile.c
 
 Configuration:
 
-    1. Set your blametool editor:
-       'git config --global blametool.editor [editor]'
-       Example: set 'subl', for Sublime Text 3:
-       'git config --global blametool.editor subl'
-    2. Set whether or not to auto-delete the temporary file when done:
-       'git config --global blametool.auto-delete-tempfile-when-done [true|false]'
-       Be sure to set to 'true' or 'false' (case-sensitive). Example:
-       'git config --global blametool.auto-delete-tempfile-when-done true
+    1. Set your blametool editor. If not set, the default is '$DEFAULT_EDITOR'
+       ($DEFAULT_EDITOR_DESCRIPTION). General form:
+            git config --global blametool.editor [editor-executable]
+       Example: set your editor as Sublime Text 3 (its command-line executable is 'subl'):
+            git config --global blametool.editor subl
+       Other popular choices:
+            git config --global blametool.editor vim
+            git config --global blametool.editor emacs
+            git config --global blametool.editor nano
+            git config --global blametool.editor gedit
+            git config --global blametool.editor leafpad
+       Remember, you can use ANY editor you want. You can set the 'editor' to a full path too if
+       you like:
+            git config --global blametool.editor \"/path/to/editor\"
+
+    2. Set whether or not to auto-delete the temporary file when done (if not set, the default is
+       'true'). Be sure to set to 'true' or 'false' (case-sensitive), NOT 'True' or 'False' or
+       'TRUE' or 'FALSE'! General form:
+            git config --global blametool.auto-delete-tempfile-when-done [true|false]
+        Examples:
+            git config --global blametool.auto-delete-tempfile-when-done true
+            git config --global blametool.auto-delete-tempfile-when-done false
 
 Source Code:
 https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/git-blametool.sh
