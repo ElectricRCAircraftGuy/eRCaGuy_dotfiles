@@ -249,11 +249,6 @@ get_commit_hash() {
 main() {
     mkdir -p "$TEMP_DIR"
 
-    # get the last argument, which is the file name; see:
-    # https://stackoverflow.com/questions/1853946/getting-the-last-argument-passed-to-a-shell-script/1854031#1854031
-    FILE_IN="${@: -1}"
-    echo "$FILE_IN" # for debugging
-
     # Read the user's settings.
     editor="$(git config blametool.editor)"
     auto_delete_tempfile_when_done="$(git config blametool.auto-delete-tempfile-when-done)"
@@ -274,12 +269,21 @@ main() {
         auto_delete_tempfile_when_done="true"
     fi
 
+    timestamp="$(date "+%Y%m%d-%H%M%S.%3N")"
+    filename_suffix="$timestamp"
+    if [ -n "$commit_hash" ]; then
+        filename_suffix="${filename_suffix}__${commit_hash}"
+    fi
+
     # See my own answer about `basename`: https://stackoverflow.com/a/60157372/4561887
     # - Ex: if `FILE_IN` is "some/path/file.txt", then `FILE_OUT`
     #   will now be simply "file.txt.git-blame".
-    FILE_OUT="$(basename "$FILE_IN").git-blame"
+    FILE_OUT="$(basename "$FILE_IN")__${filename_suffix}.git-blame"
     FILE_OUT_FULL_PATH="${TEMP_DIR}/${FILE_OUT}"
     echo "Temporary file path: \"$FILE_OUT_FULL_PATH\"."
+    echo "  - Note: filename format is \"filename__YYYYMMDD-HHMMSS.milliseconds__commitHash.git-blame\", where"
+    echo "    YYYYMMDD-HHMMSS.milliseconds is the timestamp of when you ran this script, NOT"
+    echo "    the timestamp of when the commit was created."
 
     echo "Creating temporary file with output from 'git blame'."
     git blame "$@" > "$FILE_OUT_FULL_PATH"
