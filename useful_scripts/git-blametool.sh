@@ -157,26 +157,91 @@ parse_args() {
     fi
 }
 
-# Obtain all positional arguments from the full list of positional arguments and optional arguments
-# (options) passed into `git blame`/`git blametool`. Note: `man git blame` shows these are the
-# possible args:
+# Find the revision (git commit) argument, either `<rev>` or `<rev>..<rev>` below, as well as the
+# `<file>` argument.
+# Note: `man git blame` shows these are the possible args:
 #       git blame [-c] [-b] [-l] [--root] [-t] [-f] [-n] [-s] [-e] [-p] [-w] [--incremental]
 #                   [-L <range>] [-S <revs-file>] [-M] [-C] [-C] [-C] [--since=<date>]
 #                   [--progress] [--abbrev=<n>] [<rev> | --contents <file> | --reverse <rev>..<rev>]
 #                   [--] <file>
-get_positional_args() {
-    positional_args_array=()
-    for arg in "$@"; do
-        # echo "$arg" # debugging
-        first_letter="${arg:0:1}"  # See: https://stackoverflow.com/a/10218528/4561887
-        # echo "$first_letter" # debugging
+get_revision_and_filename() {
+    # For advanced argument parsing help and demo, see:
+    # https://stackoverflow.com/a/14203146/4561887.
 
-        # Positional args do NOT start with a "-" (but optional args do), so exclude all
-        # those which do.
-        if [ "$first_letter" != "-" ]; then
-            positional_args_array+=("$arg") # see: https://stackoverflow.com/a/1951523/4561887
-        fi
+    # skip over all optional args beginning with `-`. But, if you see a `-L` or `-S` or
+    # `--contents`, skip over the accompanying mandatory positional arg right after those too.
+    # This will leave just 1 or 2 positional arguments remaining, with the last arg being
+    # `<file>`, and the 2nd-to-last arg (if it exists at all, since it doesn't have to be
+    # provided) being either `<rev>` or `<rev>..<rev>`.
+    POSITIONAL_ARGS_ARRAY=()
+    while [[ $# -gt 0 ]]; do
+    arg="$1"
+    # first letter of `arg`; see: https://stackoverflow.com/a/10218528/4561887
+    first_letter="${arg:0:1}"
+
+    case $first_letter in
+        "-")
+            shift # past argument
+            if [ "$arg" == "-L" ] || [ "$arg" == "-S" ] || [ "$arg" == "--contents" ]; then
+                shift # past value
+            fi
+            ;;
+        *) # unknown option (ie: unmatched in the switch cases above)
+            POSITIONAL_ARGS_ARRAY+=("$1") # save it in an array for later
+            shift # past argument
+            ;;
+    esac
     done
+
+    # last filtered arg
+    FILE_IN="${POSITIONAL_ARGS_ARRAY[-1]}"
+    # 2nd-to-last filtered arg
+    REVISION="${POSITIONAL_ARGS_ARRAY[-2]}"
+
+    array_len=${#POSITIONAL_ARGS_ARRAY[@]}
+    if [ $array_len -gt 2 ]; then
+        echo "Warning. 'git blametool' parsing may be faulty. Positional arguments array is longer"
+        echo   "than expected. Please open an issue here:"
+        echo "  https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/issues"
+        echo "  Include this output. array_len = $array_len. Your cmd:"
+        echo "          $FULL_CMD"
+    fi
+
+    # debugging
+    # TEST 1 INPUT:
+    #       git blametool hey how --are -- -you doing -L l_arg -S s_arg --contents contents_arg -a -b -c
+    # TEST 1 EXPECTED RESULTS:
+    #       last filtered arg        = doing
+    #       2nd-to-last filtered arg = how
+    echo "last filtered arg        = $FILE_IN"
+    echo "2nd-to-last filtered arg = $REVISION"
+
+    # # testing
+    # OUTSIDE_ARRAY="${POSITIONAL_ARGS_ARRAY[-200]}"
+    # if [ -z  "$OUTSIDE_ARRAY" ]; then
+    #     echo "== is zero-length-string =="
+    # fi
+
+
+    # for i in "${!all_args_array[@]}"; do
+    #     arg="${all_args_array[$i]}"
+    #     echo "$arg" # debugging
+    #     echo "end"
+    #     # first_letter="${arg:0:1}"  # See: https://stackoverflow.com/a/10218528/4561887
+    #     # # echo "$first_letter" # debugging
+
+    #     # # skip over all optional args beginning with `-`. But, if you see a `-L` or `-S` or
+    #     # # `--contents`, skip over the accompanying mandatory positional arg right after those too.
+    #     # # This will leave just 1 or 2 positional arguments remaining, with the last arg being
+    #     # # `<file>`, and the 2nd-to-last arg (if it exists at all, since it doesn't have to be
+    #     # # provided) being either `<rev>` or `<rev>..<rev>`.
+    #     # if [ "$arg" == "-L" ] || [ "$arg" == "-S" ] || [ "$arg" == "--contents" ]; then
+
+
+    #     # if [ "$first_letter" != "-" ]; then
+    #     #     positional_args_array+=("$arg") # see: https://stackoverflow.com/a/1951523/4561887
+    #     # fi
+    # done
 
     # # For debugging
 
@@ -196,7 +261,7 @@ get_positional_args() {
     # # print the 2nd to last arg in it
     # echo "2nd to last arg = ${positional_args_array[-2]}"
 
-    # exit
+    exit
 }
 
 # Get the short commit hash specified by the user's inputs to `git blame`/`git blametool`.
@@ -204,6 +269,10 @@ get_positional_args() {
 # commit the temp file is showing `git blame` output.
 get_commit_hash() {
     # The
+    echo ""
+    # See: https://stackoverflow.com/a/1441062/4561887 and see my comments under that answer too.
+    # git log -1 --pretty=format:"%h" HEAD~..HEAD
+
 
     ####### parse and get `HEAD~..HEAD` part.
     # git rev-parse --short $(git rev-parse HEAD~..HEAD | head -n 1)
@@ -267,6 +336,9 @@ main() {
 # main program entry point
 # --------------------------------------------------------------------------------------------------
 
-get_positional_args "$@"
-parse_args "$@"
-main "$@"
+ALL_ARGS_ARRAY="$@"
+FULL_CMD="$0 $ALL_ARGS_ARRAY"
+
+get_revision_and_filename $ALL_ARGS_ARRAY
+parse_args $ALL_ARGS_ARRAY
+main $ALL_ARGS_ARRAY
