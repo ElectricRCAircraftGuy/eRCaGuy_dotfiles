@@ -46,7 +46,7 @@
 # References:
 # 1. Issue to make this feature: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/issues/13
 
-VERSION="0.1.0"
+VERSION="0.2.0"
 AUTHOR="Gabriel Staples"
 
 RETURN_CODE_SUCCESS=0
@@ -157,6 +157,58 @@ parse_args() {
     fi
 }
 
+# Obtain all positional arguments from the full list of positional arguments and optional arguments
+# (options) passed into `git blame`/`git blametool`. Note: `man git blame` shows these are the
+# possible args:
+#       git blame [-c] [-b] [-l] [--root] [-t] [-f] [-n] [-s] [-e] [-p] [-w] [--incremental]
+#                   [-L <range>] [-S <revs-file>] [-M] [-C] [-C] [-C] [--since=<date>]
+#                   [--progress] [--abbrev=<n>] [<rev> | --contents <file> | --reverse <rev>..<rev>]
+#                   [--] <file>
+get_positional_args() {
+    positional_args_array=()
+    for arg in "$@"; do
+        # echo "$arg" # debugging
+        first_letter="${arg:0:1}"  # See: https://stackoverflow.com/a/10218528/4561887
+        # echo "$first_letter" # debugging
+
+        # Positional args do NOT start with a "-" (but optional args do), so exclude all
+        # those which do.
+        if [ "$first_letter" != "-" ]; then
+            positional_args_array+=("$arg") # see: https://stackoverflow.com/a/1951523/4561887
+        fi
+    done
+
+    # # For debugging
+
+    # # Sample test call: `git blametool hey how --are -- -you doing`
+    # # Expected output:
+    # #       hey
+    # #       how
+    # #       doing
+    # for arg in "${positional_args_array[@]}"; do
+    #     echo "$arg"
+    # done
+
+    # # For debugging
+    # # print the last arg in it
+    # # See: https://unix.stackexchange.com/a/198789/114401
+    # echo "last arg = ${positional_args_array[-1]}"
+    # # print the 2nd to last arg in it
+    # echo "2nd to last arg = ${positional_args_array[-2]}"
+
+    # exit
+}
+
+# Get the short commit hash specified by the user's inputs to `git blame`/`git blametool`.
+# This will be used as part of the temporary file name, for instance, to make it obvious for which
+# commit the temp file is showing `git blame` output.
+get_commit_hash() {
+    # The
+
+    ####### parse and get `HEAD~..HEAD` part.
+    # git rev-parse --short $(git rev-parse HEAD~..HEAD | head -n 1)
+}
+
 main() {
     mkdir -p "$TEMP_DIR"
 
@@ -215,5 +267,6 @@ main() {
 # main program entry point
 # --------------------------------------------------------------------------------------------------
 
+get_positional_args "$@"
 parse_args "$@"
 main "$@"
