@@ -1682,8 +1682,13 @@ git log --author="name or email regex search pattern" = show an abridged git log
     git log --author="Gabriel Staples"
     git log --author="some_email@gmail.com"
 
-git show <commit_hash> = show the commit message that was stored, as well as a `git diff` of the changes this commit introduced, and to which files!
+[keywords: git log and git show equivalents; git log equivalent; git show equivalent; equivalent to git log; equivalent to git show]
+git show <commit_hash>
+    Show the commit message that was stored (for just this *one* commit), as well as a `git diff` of the changes this commit introduced, and to which files!
     See: https://github.github.com/training-kit/downloads/github-git-cheat-sheet/
+    NB: THIS IS **EXACTLY** EQUIVALENT TO: `git log -p -1 <commit_hash>`. 
+git log -p -1 <commit_hash>
+    The **exact** same thing as above! (`git show <commit_hash>`): show the "diff" style log output of just this one commit at `commit_hash`.
 
 git reset <commit_hash>
     Uncommit your changes on this branch going back to commit `commit_hash`, but NOT including that commit. In other words, all changes AFTER commit `commit_hash` will be UNCOMMITED, but retained as unstaged changes in your repo.
