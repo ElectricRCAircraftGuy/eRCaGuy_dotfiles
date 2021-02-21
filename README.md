@@ -1,3 +1,5 @@
+[![HitCount](http://hits.dwyl.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles.svg)](http://hits.dwyl.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles)
+
 Gabriel Staples
 
 - These are my Linux Ubuntu configuration files and commonly-used scripts--many of which I've written myself. 
