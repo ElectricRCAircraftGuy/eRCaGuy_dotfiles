@@ -2712,9 +2712,15 @@ sudo ifconfig wlan0 down
     turn network interface wlan0 OFF
 
 sudo ip link set wlan0 up
-    Turn ON the `wlan0` networking device--the same as (or very similar to) `sudo ifconfig wlan0 up` above. Apparently this `ip link set` command is intended to replace the older and apparently now-deprecated `ifconfig` cmd above! See: https://www.redhat.com/sysadmin/ifconfig-vs-ip --> sections "What's trending?" and "Enable and disable an interface". 
+    <===== REALLY USEFUL (NEWER CMD!) =======
+    Turn ON the `wlan0` networking device--the same as (or very similar to) `sudo ifconfig wlan0 up` above. Apparently this `ip link set` command is intended to replace the older and apparently now-deprecated `ifconfig` cmd above! 
+    See: https://www.redhat.com/sysadmin/ifconfig-vs-ip --> sections "What's trending?" and "Enable and disable an interface". 
+    See also my answer here: https://askubuntu.com/a/1320155/327339.
 sudo ip link set wlan0 down
-    Turn OFF the `wlan0` networking device--the same as (or very similar to) `sudo ifconfig wlan0 down` above. Apparently this `ip link set` command is intended to replace the older and apparently now-deprecated `ifconfig` cmd above! See: https://www.redhat.com/sysadmin/ifconfig-vs-ip --> sections "What's trending?" and "Enable and disable an interface". 
+    <===== REALLY USEFUL (NEWER CMD!) =======
+    Turn OFF the `wlan0` networking device--the same as (or very similar to) `sudo ifconfig wlan0 down` above. Apparently this `ip link set` command is intended to replace the older and apparently now-deprecated `ifconfig` cmd above! 
+    See: https://www.redhat.com/sysadmin/ifconfig-vs-ip --> sections "What's trending?" and "Enable and disable an interface". 
+    See also my answer here: https://askubuntu.com/a/1320155/327339.
 
 iwconfig
     'w'ireless network 'i'nterface configuration tool of some sort (stands for 'i'nterface 'w'ireless perhaps?); see `man iwconfig` and also here for a little more info: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895
