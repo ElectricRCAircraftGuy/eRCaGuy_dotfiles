@@ -2690,15 +2690,26 @@ watch -n 30 'sudo du -h ~/.cache/bazel | tail -n 1' = same as above, except with
 
 == IP & Networking: ==
 
-ifconfig = show the internet & network configuration/connection information for your system and all of its network cards (both wireless (ex: WIFI) and wired (ex: Ethernet ports))
+ifconfig
+    show the internet & network configuration/connection information for your system and all of its network cards (both wireless (ex: WIFI) and wired (ex: Ethernet ports))
+-----
 TURN NETWORK INTERFACES ON AND OFF (up or down, respectively)
 See: https://askubuntu.com/questions/168032/how-to-disable-built-in-wifi-and-use-only-usb-wifi-card/204536#204536
-ifconfig = list ALL network interfaces; note: see more on "virtual interfaces" and how to create them farther below
-iwconfig = list all wireless network interfaces (see more on this cmd below)
-sudo ifconfig INTERFACE_NAME up = turn network interface INTERFACE_NAME on; ex:
-sudo ifconfig wlan0 up = turn network interface wlan0 ON
-sudo ifconfig INTERFACE_NAME down = turn network interface INTERFACE_NAME off; ex:
-sudo ifconfig wlan0 down = turn network interface wlan0 OFF
+-----
+ifconfig
+    list ALL network interfaces; note: see more on "virtual interfaces" and how to create them farther below
+iwconfig
+    list all wireless network interfaces (see more on this cmd below)
+sudo ifconfig INTERFACE_NAME up
+    turn network interface INTERFACE_NAME on; ex:
+sudo ifconfig wlan0 up
+    <===== REALLY USEFUL =======
+    turn network interface wlan0 ON
+sudo ifconfig INTERFACE_NAME down
+    turn network interface INTERFACE_NAME off; ex:
+sudo ifconfig wlan0 down
+    <===== REALLY USEFUL =======
+    turn network interface wlan0 OFF
 
 iwconfig
     'w'ireless network 'i'nterface configuration tool of some sort (stands for 'i'nterface 'w'ireless perhaps?); see `man iwconfig` and also here for a little more info: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895
