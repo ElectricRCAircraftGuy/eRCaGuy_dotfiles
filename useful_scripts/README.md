@@ -6,7 +6,7 @@ Each script herein has detailed installation and usage information commented in 
     1. **[README_git-diffn.md](README_git-diffn.md)**
     1. `git diff` with line numbers
 1. **git-blametool.sh**
-    1. See my answer and demo about `git blametool` here: [StackOverflow: Is there git blame gui similar to bzr qannotate?](https://stackoverflow.com/a/47585300/4561887).
+    1. See my answer and demo about `git blametool` here: [StackOverflow: Is there git blame gui similar to bzr qannotate?](https://stackoverflow.com/a/66433627/4561887).
 1. **PC-to-PC Git-based Folder/Project Sync Script**
     1. **[README_git-sync_repo_from_pc1_to_pc2.md](README_git-sync_repo_from_pc1_to_pc2.md)**
     1. git-based sync script to re-sync gigabytes of data over a cell phone hot spot in 1 minute and with 50 MB data usage
