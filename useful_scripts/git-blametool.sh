@@ -12,6 +12,9 @@
 # git-blametool.sh:
 # This is a wrapper around `git blame` to open up the output in your favorite text editor.
 
+# DEMO AND SCREENSHOTS:
+# See my answer here: https://stackoverflow.com/a/66433627/4561887
+
 # INSTALLATION INSTRUCTIONS:
 # 1. Install your editor of choice.
 #   1. For me, that's Sublime Text 3. So, install it from here: https://www.sublimetext.com/3.
