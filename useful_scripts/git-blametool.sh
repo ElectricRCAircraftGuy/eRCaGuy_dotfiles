@@ -246,6 +246,8 @@ get_commit_hash() {
     if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
         echo "Warning: 'git blametool' failed to get git commit hash."
         commit_hash=""
+    else
+        echo "Commit hash = $commit_hash"
     fi
 }
 
