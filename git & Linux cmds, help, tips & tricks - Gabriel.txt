@@ -2712,6 +2712,7 @@ See: https://askubuntu.com/questions/168032/how-to-disable-built-in-wifi-and-use
 ifconfig
     list ALL network interfaces; note: see more on "virtual interfaces" and how to create them farther below
 iwconfig
+    <===== REALLY USEFUL =======
     list all wireless network interfaces (see more on this cmd below)
 sudo ifconfig INTERFACE_NAME up
     turn network interface INTERFACE_NAME on; ex:
