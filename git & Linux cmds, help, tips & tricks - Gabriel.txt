@@ -1572,6 +1572,7 @@ git diff --word-diff-regex=<regex>
 git diff --word-diff-regex=.
     do a diff on a CHARACTER-BY-CHARACTER BASIS!--showing deleted chars in [-some chars-] and added ones in {+some chars+}
     See: https://stackoverflow.com/questions/3231759/how-can-i-visualize-per-character-differences-in-a-unified-diff-file/7870727#7870727
+    [keywords: word diff, char diff, diff by characters, char by char diff, git diff chars, git diff words, git diff by chars, git diff char-by-char, git diff letters, git diff letter-by-letter, git diff letter by letter, letter diff, char diff]
 git diff --color-words=.
     do a diff on a CHARACTER-BY-CHARACTER BASIS, except just showing COLORS only, instead of the [- -] and {+ +} symbols too! THIS IS THE BEST FOR CHAR-BY-CHAR COMPARISONS! DO THIS! <=========== BEST CHAR-BY-CHAR DIFFS! [this must be what meld uses under the hood] =============
     See the comment under this answer: https://stackoverflow.com/questions/3231759/how-can-i-visualize-per-character-differences-in-a-unified-diff-file/7870727#7870727
@@ -2563,15 +2564,27 @@ basename $(realpath some_file_or_symlink)
 == diff: ==
 [plain diff; NOT git diff; regular diff; diff only; only diff; diff alone; alone diff]
 
-diff file1.txt file2.txt = compare file1.txt and file2.txt for differences! (similar to `git diff`)
-diff -u file1.txt file2.txt = same as above, except showing 'u'nified context output, meaning: show 3 lines (by default) of "unified", or intermingled line-by-line, output to show the context around the differences between the left and right files!
-diff --unified file1.txt file2.txt = same as above
-diff -c file1.txt file2.txt = similar to the above, except show 3 lines for each file of **'c'opied** 'c'ontext instead of line-by-line unified context
-diff --context file1.txt file2.txt = same as above
-diff -u=10 file1.txt file2.txt = show 10 lines of 'u'nified context instead of the default 3 lines
-diff --color=always file1.txt file2.txt = show color output!
-diff -u --color=always file1.txt file2.txt = JUST LIKE `git diff`! SHOW COLOR, WITH UNIFIED LINE-BY-LINE CONTEXT, JUST LIKE git diff! <============== BEST ANSWER! [identical output to `git diff`] ===============
-diff -u --color=always left_file.txt right_file.txt = same as above, except accentuating the position of the "left" and "right" files <=============
+diff file1.txt file2.txt
+    compare file1.txt and file2.txt for differences! (similar to `git diff`)
+diff -u file1.txt file2.txt
+    same as above, except showing 'u'nified context output, meaning: show 3 lines (by default) of "unified", or intermingled line-by-line, output to show the context around the differences between the left and right files!
+diff --unified file1.txt file2.txt
+    same as above
+diff -c file1.txt file2.txt
+    similar to the above, except show 3 lines for each file of **'c'opied** 'c'ontext instead of line-by-line unified context
+diff --context file1.txt file2.txt
+    same as above
+diff -u=10 file1.txt file2.txt
+    show 10 lines of 'u'nified context instead of the default 3 lines
+diff --color=always file1.txt file2.txt
+    show color output!
+diff -u --color=always file1.txt file2.txt
+    JUST LIKE `git diff`! SHOW COLOR, WITH UNIFIED LINE-BY-LINE CONTEXT, JUST LIKE git diff! <============== BEST ANSWER! [identical output to `git diff`] ===============
+diff -u --color=always left_file.txt right_file.txt
+    same as above, except with me accentuating the position of the "left" and "right" files in the command <=============
+git diff --no-index -- file.a file.b
+    same as `diff -u --color=always file1.txt file2.txt`! ie: this (`--no-index`) allows you to use `git diff` on files NOT tracked in/tracked by any git repo!
+    See: https://stackoverflow.com/a/15110387/4561887
 
 - Note that `man diff` shows that you can use `-` as one of the two files to read from stdinput for that file instead! It says, "FILES  are  'FILE1  FILE2' or 'DIR1 DIR2' or 'DIR FILE' or 'FILE DIR'.  If --from-file or --to-file is given, there are no restrictions on FILE(s).  If a FILE is '-', read standard input.  Exit status is 0 if inputs are the same, 1 if different, 2 if trouble." So, you can do this!:
 ---

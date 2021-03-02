@@ -1,0 +1,32 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# INSTRUCTIONS:
+# See here for detailed desktop file installation instructions:
+#   1. In this project: read "eRCaGuy_dotfiles/Desktop_launchers/readme_and_install_info.md".
+#     - It shows various installation scripts available to "Install" and "Uninstall" custom .desktop files.
+#       Here's how to use those scripts:
+#       1. Ensure the following local directory exists:
+#           mkdir -p ~/Desktop_launchers
+#       2. Make a copy of the desktop file you want. (Once copied, manually edit it as desired.):
+#           cp -i eRCaGuy_dotfiles/Desktop_launchers/launcher_I_want.desktop ~/Desktop_launchers
+#       3. "Install" this desktop file so it's accessible via the Application menu as well as on the Desktop:
+#           eRCaGuy_dotfiles/Desktop_launchers/desktop_file_install.sh my_launcher.desktop
+#       4. If you ever want to "Uninstall" this desktop file, simply run this:
+#           eRCaGuy_dotfiles/Desktop_launchers/desktop_file_uninstall.sh my_launcher.desktop
+#   2. Online: https://askubuntu.com/questions/64222/how-can-i-create-launchers-on-my-desktop/1014261#1014261
+#
+# Note: variables, such as $HOME, are NOT evaluated in standard .desktop file 'Exec' (Execution) & 'Icon'
+# paths, so use explicit, absolute paths, as shown below.
+# - For more info, see here:
+#   https://askubuntu.com/questions/476233/how-to-include-environment-variable-in-launcher-for-icon
+#   and here:
+#   https://stackoverflow.com/questions/8980464/how-do-i-access-an-environment-variable-in-a-desktop-files-exec-line
+
+[Desktop Entry]
+Name=Shotcut
+Comment=
+Exec=/home/gabriel/Downloads/Install_Files/Shotcut/shotcut-linux-x86_64-210129.AppImage
+Icon=/home/gabriel/Downloads/Install_Files/Shotcut/shotcut-logo-512x512.png
+Terminal=false
+Type=Application
+StartupNotify=true
