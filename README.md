@@ -39,6 +39,8 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
     1. I can't remember what I learned, but I *can* remember where I wrote it down, so I frequently reference this document to remind myself what I learned.
 1. `git diffn` drop-in-replacement program to show `git diff` with line 'n'umbers. As a thin `awk`-language-based wrapper around `git diff` it supports ALL options and features that `git diff` does! Learn [how to install and use it here](useful_scripts/README_git-diffn.md). Screenshot:
     1. ![`git diffn` screenshot](useful_scripts/git-diffn_screenshot_cropped.png)
+1. `git blametool`. See: [useful_scripts/README.md](useful_scripts/README.md).
+    1. [![](https://i.stack.imgur.com/5D4oE.jpg)](https://i.stack.imgur.com/5D4oE.jpg)
 1. .bashrc file which contains:
     1. `ls` aliases such as `ll`, `la`, & `l`
     1. Prompt String 1 (`PS1`) modifications to add terminal titles, current git branch name checked out [VERY USEFUL FEATURE!], bash shell level, etc
