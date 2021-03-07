@@ -2996,26 +2996,55 @@ gpg myfile.txt.gpg
 
 
 ====================================================================================================
-= Image and video compression and conversion: =
+= Images and videos, incl. image and video compression and conversion: =
 ====================================================================================================
+Was: = Image and video compression and conversion: =
 [keywords: compressing videos, compressing images, compressing pictures, image/picture compression, compress images, compress imgs, compress photos, compressing photos, photo compression, compress videos, video compression, convert videos, converting videos, video conversion, image conversion, picture conversion, converting videos, converting images, converting pictures, convert pictures, convert images, convert videos, shrink pictures, shrink images]
+
+== media info: ==
+exiftool image.jpg
+    <========== VERY USEFUL ==========
+    Print out all metadata of an image, video, etc., including geo-tagging/geo-location info. for the image or media file
+    See: https://askubuntu.com/a/249966/327339
+exiftool image.jpg | grep 'GPS'
+    Find GPS-based geo-tagging/geo-location info. for the image or media file!
+    See: https://superuser.com/a/1370421/425838
+mediainfo <image.jpg|song.mp3|video.mp4>
+    <========== VERY USEFUL ==========
+    Show various media info. (image/picture/sound/song/video, etc.) / metadata. 
+    See: https://askubuntu.com/a/252775/327339.
 
 == find large files: ==
 [this is adjacently related to video conversion, as GitHub doesn't allow files > 100 MB in size (see: https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com/59479166#59479166), so you may need to find all files > 100 MB, then convert them down to a smaller size using `ffmpeg` as shown below if they are videos!]
 
-find . -type f -size +100M = find all files in the current directory that are larger than 100 MB! See: https://superuser.com/questions/204564/how-can-i-find-files-that-are-bigger-smaller-than-x-bytes/204571#204571
+find . -type f -size +100M
+    find all files in the current directory that are larger than 100 MB! See: https://superuser.com/questions/204564/how-can-i-find-files-that-are-bigger-smaller-than-x-bytes/204571#204571
 
 == Image resizing: ==
 [resize image, resize picture, picture resizing]
 
-convert in.png -resize 600x400 out.jpg = resize to make the dimensions max 600x400, while still retaining proportional dimensions to the original image, while also converting from the (uncompressed I think?) PNG format to the compressed JPEG format. See: https://askubuntu.com/questions/271776/how-to-resize-an-image-through-the-terminal/271797#271797
-convert in.png -resize 800x800 out.jpg = same as above, but make the max dimension on either the x or y axis 800 pixels
+convert in.png -resize 600x400 out.jpg
+    resize to make the dimensions max 600x400, while still retaining proportional dimensions to the original image, while also converting from the (uncompressed I think?) PNG format to the compressed JPEG format. See: https://askubuntu.com/questions/271776/how-to-resize-an-image-through-the-terminal/271797#271797
+convert in.png -resize 800x800 out.jpg
+    same as above, but make the max dimension on either the x or y axis 800 pixels
+convert in.png -resize 1920x1920 out.jpg
+    same as above, but make the max dimension on either the x or y axis 1920 pixels
+convert in.png -resize 1920x1080 out.jpg
+    same as above, but make the max dimension on the x axis 1920 pixels and on the y axis 1080 pixels, like a standard, modern-day HD monitor or laptop!
 
 == Image compression: ==
 [picture compression, img compression]
 
 REFERENCES:
 1. https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF
+
+jpegoptim --size=500k dir_of_imgs/*.jpg
+    compress a whole dir of images!
+convert in.png -resize 1920x1080 out.jpg \
+ && cp out.jpg out2.jpg \
+ && jpegoptim --size=250k out2.jpg
+    <========== VERY USEFUL ==========
+    Resize in.png to a max of 1920x1080 pixels (while keeping correct dimensions and convering it to out.jpg), then copy out.jpg to out2.jpg, then optimize out2.jpg to be ~250KB!
 
 Compress all the images, then convert all of them to a single, searchable PDF:
 See: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF
@@ -3027,8 +3056,10 @@ For my particular case, with 7 jpeg images originally in the 2.5 to 3MB size ran
 
 == Video compression: ==
 
-sudo apt install ffmpeg = install ffmpeg (required below)
-sudo apt install vlc = install the VLC media player GUI application to play the converted videos below
+sudo apt install ffmpeg
+    install ffmpeg (required below)
+sudo apt install vlc
+    install the VLC media player GUI application to play the converted videos below
 
 SUMMARY:
 - libx265 (H.265) format crf values may be as high as 24 to 30 (higher values are lower quality).
