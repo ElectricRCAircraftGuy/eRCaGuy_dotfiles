@@ -2750,6 +2750,11 @@ iwlist wlan0 scanning | grep -C5 -i '\"my_network_name\"'
     - Note that **2.4GHz channels** include `01`, `02`, `03`, etc. through `11`, and **5GHz channels** are just `36`, `40`, `44`, and `48` (this is based on looking at my Orbi mesh router settings).
     - Also, I first learned this `iwlist` command from here: https://askubuntu.com/questions/183525/how-to-set-wifi-driver-settings-to-prefer-5-ghz-channel-above-2-4-ghz/631329#631329.
 
+nm-connection-editor
+    <=================
+    Open the "Advanced Network Configuration" GUI! Taught to me by BrosTrend Trend-tech in an email to me on 7 Mar. 2021. One thing you can do is set a "Device", by MAC address, in order to limit one WiFi connection to a specific WiFi adapter. Or, you can leave this "Device" field blank to let that connection work with ANY connected network/WiFi adapter! Be sure to **look at the command-line output in the terminal** when running this program, to take note of any feedback or errors the GUI program may be seeing. This is helpful to indicate to you why you may not be able to save new settings, for instance. 
+    See my notes on this cmd here: https://github.com/ElectricRCAircraftGuy/BrosTrendWifiAdapterSoftware
+
 ip help = show the options and `OBJECT`s available for the `ip [OPTIONS] <OBJECT>` commands!
 - See also MY ANS HERE! https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
 ip address = show all configured network interfaces and their IP addresses & network interface info; NB: I don't really understand this command yet, but it looks useful, and seems to show a bunch of the same information as `ifconfig`.
