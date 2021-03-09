@@ -560,9 +560,17 @@ Bazel Online Documentation:
 1. See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html
    See also the `bazel info` commands just below!
 
-bazel info --show_make_env [optional: build options] = see just above! It shows all predefined Bazel "Make" variables [bazel make variables] in ALL CAPS at the very top, and then Bazel environment variables, such as genfiles, bin, etc. output and build paths right after that! See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html <==== VERY USEFUL TO BE ABLE TO SEE WHERE ALL BUILD OUTPUT WILL BE PLACED FOR A GIVEN SET OF BUILD SETTINGS! ====
-bazel info = similar to the above, but show JUST the Bazel environment variables (output/build dirs and things), and NOT the Bazel "Make" variables as well! <==== VERY USEFUL! ====
-bazel info bazel-bin = show the full path to the bazel output "bin" directory
+bazel info --show_make_env [optional: build options]
+bazel info --show_make_env
+    see just above! It shows all predefined Bazel "Make" variables [bazel make variables] in ALL CAPS at the very top, and then Bazel environment variables, such as genfiles, bin, etc. output and build paths right after that! See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html <==== VERY USEFUL TO BE ABLE TO SEE WHERE ALL BUILD OUTPUT WILL BE PLACED FOR A GIVEN SET OF BUILD SETTINGS! ====
+bazel info
+    <==== VERY USEFUL! ====
+    Show ALL the `bazel info` variables at once! 
+    Similar to the above, but show JUST the Bazel environment variables (output/build dirs and things), and NOT the Bazel "Make" variables as well! 
+    For `bazel info` options, see here: https://docs.bazel.build/versions/master/command-line-reference.html#info.
+bazel info bazel-bin
+    show the full path to the bazel output "bin" directory
+
 bazel help
     See generic bazel help information, including the `bazel help info-keys` cmd.
 bazel help info
@@ -657,13 +665,16 @@ ls -d "$(bazel info output_base)"/*/
             /home/gabriel/.cache/bazel/_bazel_gabriel/04bc77638a312ceaca7e62e095dc00bc/install/
             /home/gabriel/.cache/bazel/_bazel_gabriel/04bc77638a312ceaca7e62e095dc00bc/server/
 ls "$(bazel info output_base)/external"
-    <================
+    <======= VERY USEFUL! ========
     IMPORTANT FOLDER! This "external" folder should be considered like an extension of your source code, whenever using bazel! It will house all bazel-downloaded external libraries which are dependencies to your bazel-based projects. So, if you consider your main source code dir PLUS (+) this "$(bazel info output_base)/external" dir to be all part of the source code you are using, then that is correct. 
     Adding this "external" dir to your IDE indexer, and/or `grep`ping within this "external" dir may be useful whenever you are searching for functions or things within certain external dependencies your source code is using! This allows you to see whatever source code or implementation details or code-based documentation you may need to see when browsing your source code and looking in the external libraries used by your source code.
 
-time bazel build //... = build the whole project
-time bazel build //:all = (apparently) build only the build targets at the **top level** of the project (defined directly in the top-most BUILD or BUILD.bazel file), NOT recursing down and building all lower-level build targets too, like `bazel build //...` would do; see here for more info:
-    https://docs.bazel.build/versions/master/guide.html#specifying-targets-to-build
+time bazel build //...
+    build the whole project
+time bazel build //:all
+    (apparently) build only the build targets at the **top level** of the project (defined directly in the top-most BUILD or BUILD.bazel file), NOT recursing down and building all lower-level build targets too, like `bazel build //...` would do; 
+    See here for more info: https://docs.bazel.build/versions/master/guide.html#specifying-targets-to-build
+
 time bazel query //...
 time bazel test //...
 bazel --version
@@ -677,20 +688,27 @@ References:
         bazel query 'deps(//path/to/package:target)'
 1. *****https://docs.bazel.build/versions/master/query.html
 
-bazel query = invalid command (missing arguments); it will tell you to type `bazel help query` for help
-bazel help query = see the help for `bazel query`
-bazel help query | less -RFX = same as above, but see the output in the less viewer since it's so long
-bazel help --long query = show the long help menu
-bazel help --long query | less -RFX = same as above, but see the output in the less viewer since it's so long <====== GOOD HELP INFO =====
+bazel query
+    invalid command (missing arguments); it will tell you to type `bazel help query` for help
+bazel help query
+    see the help for `bazel query`
+bazel help query | less -RFX
+    same as above, but see the output in the less viewer since it's so long
+bazel help --long query
+    show the long help menu
+bazel help --long query | less -RFX
+    same as above, but see the output in the less viewer since it's so long <====== GOOD HELP INFO =====
 
 FIND DEPENDENCIES OF A BUILD TARGET:
 bazel query "deps(//foo)"
 bazel query "deps(//some/path:my_target)"
 bazel query "deps(//some/path/...)"
-bazel query 'deps(//path/to/package:target)' = "find all dependencies of //path/to/package:target"
+bazel query 'deps(//path/to/package:target)'
+    "find all dependencies of //path/to/package:target"
 
 FIND A DEPENDENCY PATH BETWEEN TWO BUILD TARGETS:
-bazel query 'somepath(//path/to/package:target, //dependency)' = "find a dependency path between //path/to/package:target and //dependency"
+bazel query 'somepath(//path/to/package:target, //dependency)'
+    "find a dependency path between //path/to/package:target and //dependency"
 
 == SUMMARY OF GOOD STARTUP OPTIONS (see above or below or online for details): ==
 bazel [startup_options] build //...
@@ -1340,6 +1358,7 @@ clang-tidy          C/C++
 clang sanitizers    C/C++
 shellcheck          Linux/Posix shell: bash/sh, etc. <=== really useful!
 flake8              Python
+mypy                Python static type checker (http://mypy-lang.org/, https://mypy.readthedocs.io/en/stable/)
 black               Python (https://pypi.org/project/black/)
 pylint              Python (https://pypi.org/project/pylint/)
 roslint             Python (for ROS packages?) (http://wiki.ros.org/roslint)
@@ -1400,6 +1419,7 @@ A source code static analysis (programming errors, style, best practices, bug ch
 
 References:
 1. https://clang.llvm.org/extra/clang-tidy/
+1. [What's the difference between clang-format and clang-tidy? Do they have different configuration options? I'm only using clang-format so far.](https://news.ycombinator.com/item?id=19349009)
 
 == clang sanitizers: ==
 [C/C++]
@@ -1448,6 +1468,11 @@ shellcheck -x -e CODE1,CODE2,CODE3 file1.sh file2.sh file3.sh = see explanation 
 REFERENCES:
 1. https://realpython.com/python-code-quality/
 1. https://dbader.org/blog/python-code-linting
+
+== mypy: ==
+
+I need to look into this more!
+Python static type checker (http://mypy-lang.org/, https://mypy.readthedocs.io/en/stable/).
 
 == flake8: ==
 [Python]
@@ -2905,11 +2930,20 @@ TODO: need to add this information in here so I don't forget it.
 
 == USB, serial, devices, etc.: ==
 
-dmesg = print all messages from the Linux kernel ring buffer, which includes all entries for USB enumeration and stuff, including entries for each time you plug in or unplug any USB device, USB HID keyboard or mouse or gamepad or similar, USB to serial UARTs/converters (on nearly all Arduino boards), etc.
-dmesg | tail = just show the last 10 entries from the Linux kernel dmesg ring buffer
-dmesg | tail -n 10 = same as above! (10 is the default `-n` setting for `tail`)
-dmesg | tail -n 30 = show just the last 30 entries from the Linux kernel dmesg ring buffer [very useful to see what USB device you just plugged in or unplugged! It will show the device's USB ID, vendor ID, vendor name, manufacturer, serial number, etc. etc.] <===== EXCELLENT! =====
-sudo dmesg --clear = clear the entire Linux kernel dmesg ring buffer (not recommended necessarily, but it allows you to easily isolate and see just the lines generated by unplugging or plugging in a certain USB device); better, I think, would be to simply look at the timestamps in the `dmesg` output to see what device or event is likely to have generated which lines. See `man dmesg` for details on this command.
+dmesg
+    print all messages from the Linux kernel ring buffer, which includes all entries for USB enumeration and stuff, including entries for each time you plug in or unplug any USB device, USB HID keyboard or mouse or gamepad or similar, USB to serial UARTs/converters (on nearly all Arduino boards), etc.
+dmesg | tail
+    just show the last 10 entries from the Linux kernel dmesg ring buffer
+dmesg | tail -n 10
+    same as above! (10 is the default `-n` setting for `tail`)
+dmesg | tail -n 30
+    show just the last 30 entries from the Linux kernel dmesg ring buffer [very useful to see what USB device you just plugged in or unplugged! It will show the device's USB ID, vendor ID, vendor name, manufacturer, serial number, etc. etc.] <===== EXCELLENT! =====
+sudo dmesg --clear
+    clear the entire Linux kernel dmesg ring buffer (not recommended necessarily, but it allows you to easily isolate and see just the lines generated by unplugging or plugging in a certain USB device); better, I think, would be to simply look at the timestamps in the `dmesg` output to see what device or event is likely to have generated which lines. See `man dmesg` for details on this command.
+dmesg -wH
+    <======== VERY USEFUL!--shows LIVE output! ==========
+    See the `dmesg` output **live** **as it changes!** `-H` means 'H'uman-readable output, and `-w` means `--follow`, or "'w'ait for new messages" (as they come in!). 
+    See: https://unix.stackexchange.com/a/95852/114401
 
 lsusb = list ('l'i's't) all USB devices which are plugged in
 
