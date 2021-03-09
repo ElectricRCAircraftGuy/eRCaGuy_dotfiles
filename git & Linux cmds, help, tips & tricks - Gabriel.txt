@@ -563,6 +563,103 @@ Bazel Online Documentation:
 bazel info --show_make_env [optional: build options] = see just above! It shows all predefined Bazel "Make" variables [bazel make variables] in ALL CAPS at the very top, and then Bazel environment variables, such as genfiles, bin, etc. output and build paths right after that! See here for details on the Bazel "output directory layout"!: https://docs.bazel.build/versions/master/output_directories.html <==== VERY USEFUL TO BE ABLE TO SEE WHERE ALL BUILD OUTPUT WILL BE PLACED FOR A GIVEN SET OF BUILD SETTINGS! ====
 bazel info = similar to the above, but show JUST the Bazel environment variables (output/build dirs and things), and NOT the Bazel "Make" variables as well! <==== VERY USEFUL! ====
 bazel info bazel-bin = show the full path to the bazel output "bin" directory
+bazel help
+    See generic bazel help information, including the `bazel help info-keys` cmd.
+bazel help info
+    See bazel help for the `bazel info` cmd used just above! This is a lot of information, so, even better: pipe it to `less`!:
+bazel help info | less -RFX
+    Same as above, except piped to `less` for easy viewing. Note that right aft the top of the help it shows:
+        Usage: bazel info <options> [key]
+    And: 
+        The full list of keys and the meaning of their values is documented in
+        the bazel User Manual, and can be programmatically obtained with
+        'bazel help info-keys'.
+bazel info <options> [key]
+    The generic `bazel info` cmd format, as shown in the help menu just above.
+bazel help info-keys
+    <================
+    Print all of the keys which can be queried with the `bazel info` cmd above, and a description of what they mean! Example: `bazel info output_base`.
+    Sample output:
+            $ bazel help info-keys
+            bazel-bin               Configuration dependent directory for binaries.
+            bazel-genfiles          Configuration dependent directory for generated files.
+            bazel-testlogs          Configuration dependent directory for logs from a test run.
+            build-language          A protobuffer with the build language structure
+            character-encoding      Information about the character encoding used by the running JVM.
+            client-env              The specifications that need to be added to the project-specific rc file to freeze the current client environment
+            command_log             Location of the log containing the output from the build commands.
+            committed-heap-size     The amount of memory in bytes that is committed for the Java virtual machine to use
+            default-package-path    The default package path
+            defaults-package        Obsolete. Retained for backwards compatibility.
+            execution_root          A directory that makes all input and output files visible to the build.
+            gc-count                Number of garbage collection runs.
+            gc-time                 The approximate accumulated time spend on garbage collection.
+            install_base            The installation base directory.
+            java-home               Location of the current Java runtime.
+            java-runtime            Name and version of the current Java runtime environment.
+            java-vm                 Name and version of the current Java virtual machine.
+            max-heap-size           The maximum amount of memory in bytes that can be used for memory management.
+            output_base             A directory for shared bazel state as well as tool and strategy specific subdirectories.
+            output_path             Output directory
+            package_path            The search path for resolving package labels.
+            peak-heap-size          The peak amount of used memory in bytes after any call to System.gc().
+            release                 bazel release identifier
+            repository_cache        The location of the repository download cache used
+            server_log              bazel server log path
+            server_pid              bazel process id
+            starlark-semantics      The effective set of Starlark semantics option values.
+            used-heap-size          The amount of used memory in bytes. Note that this is not a good indicator of the actual memory use, as it includes any remaining inaccessible memory.
+            used-heap-size-after-gc The amount of used memory in bytes after a call to System.gc().
+            workspace               The working directory of the server.
+bazel info | grep -o '.*: ' | rev | cut -c3- | rev
+    Read just available keys from the output of `bazel info`! 
+    See also this help on how to use `rev | cut -c3- | rev`: https://stackoverflow.com/a/39013253/4561887.
+    Sample output:
+            $ bazel info | grep -o '.*: ' | rev | cut -c3- | rev
+            bazel-bin
+            bazel-genfiles
+            bazel-testlogs
+            character-encoding
+            command_log
+            committed-heap-size
+            execution_root
+            gc-count
+            gc-time
+            install_base
+            java-home
+            java-runtime
+            java-vm
+            max-heap-size
+            output_base
+            output_path
+            package_path
+            release
+            repository_cache
+            server_log
+            server_pid
+            used-heap-size
+            workspace
+bazel info | grep -o '.*: ' | grep -o '[^: ]*'
+    Alternative way to get the exact same list of keys from the `bazel info` output as shown just above!
+bazel info output_base
+    Show the output directory of the bazel build + sources, including external sources. Sample output:
+            $ bazel info output_base
+            /home/gabriel/.cache/bazel/_bazel_gabriel/04bc77638a312ceaca7e62e095dc00bc
+ls "$(bazel info output_base)"
+    List all contents of the output_base directory (shown above).
+ls -d "$(bazel info output_base)"/*/
+    List only the **directories** within the output_base dir!
+    See also here for the `/*/` part help at the end: https://stackoverflow.com/a/14352330/4561887
+    Example output. Notice the 4 directories in this "output_base" dir!: "execroot", "external", "install", and "server":
+            $ ls -d "$(bazel info output_base)"/*/
+            /home/gabriel/.cache/bazel/_bazel_gabriel/04bc77638a312ceaca7e62e095dc00bc/execroot/
+            /home/gabriel/.cache/bazel/_bazel_gabriel/04bc77638a312ceaca7e62e095dc00bc/external/
+            /home/gabriel/.cache/bazel/_bazel_gabriel/04bc77638a312ceaca7e62e095dc00bc/install/
+            /home/gabriel/.cache/bazel/_bazel_gabriel/04bc77638a312ceaca7e62e095dc00bc/server/
+ls "$(bazel info output_base)/external"
+    <================
+    IMPORTANT FOLDER! This "external" folder should be considered like an extension of your source code, whenever using bazel! It will house all bazel-downloaded external libraries which are dependencies to your bazel-based projects. So, if you consider your main source code dir PLUS (+) this "$(bazel info output_base)/external" dir to be all part of the source code you are using, then that is correct. 
+    Adding this "external" dir to your IDE indexer, and/or `grep`ping within this "external" dir may be useful whenever you are searching for functions or things within certain external dependencies your source code is using! This allows you to see whatever source code or implementation details or code-based documentation you may need to see when browsing your source code and looking in the external libraries used by your source code.
 
 time bazel build //... = build the whole project
 time bazel build //:all = (apparently) build only the build targets at the **top level** of the project (defined directly in the top-most BUILD or BUILD.bazel file), NOT recursing down and building all lower-level build targets too, like `bazel build //...` would do; see here for more info:
