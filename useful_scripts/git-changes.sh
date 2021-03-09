@@ -5,7 +5,7 @@
 # Status: IT WORKS! USE IT.
 
 # Author: Gabriel Staples
-# www.ElectricRCAircraftGuy.com 
+# www.ElectricRCAircraftGuy.com
 
 # DESCRIPTION:
 # git-changes.sh
@@ -58,10 +58,10 @@ HELP_STR="
 Usage: git changes <common_base> <backup_branch> [any other args to pass to git difftool]
 
 Brief description:
-See all changes (via `git difftool`) that were just added to `HEAD` (the currently-checked-out 
-feature branch) by a merge or rebase of `common_base` (ex: `master` branch) into `HEAD`, but 
-**only looking for merge/rebase changes in the files the feature branch had touched or changed** 
-(relative to the `common_base`--ex: `master`). 
+See all changes (via 'git difftool') that were just added to 'HEAD' (the currently-checked-out
+feature branch) by a merge or rebase of 'common_base' (ex: 'master' branch) into 'HEAD', but
+**only looking for merge/rebase changes in the files the feature branch had touched or changed**
+(relative to the 'common_base'--ex: 'master').
 
 git-changes.sh
 - quickly compare a newly-rebased branch (your currently-checked-out branch) against its
@@ -69,7 +69,7 @@ git-changes.sh
 - this *requires* that you should have manually created a backup branch before doing the
   rebase!
 - I recommend you also have a 'git difftool' configured. I use 'meld'. It is amazing. To install it,
-  see my instrucitons here: 
+  see my instrucitons here:
   https://stackoverflow.com/questions/14821358/git-mergetool-with-meld-on-windows/48979939#48979939
 - Here is the whole process:
         # 1. ensure you have the latest upstream changes from the branch you would like to rebase
@@ -81,7 +81,7 @@ git-changes.sh
         # 3. create a backup branch; NB: \"20200605-2230hrs\" in the backup branch name
         #    below means 10:30pm (2230hrs) on 5 June 2020.
         git branch my_branch_BAK_20200605-2230hrs_about_to_rebase
-        # 4. rebase my_branch onto latest master; manually resolve any conflicts as 
+        # 4. rebase my_branch onto latest master; manually resolve any conflicts as
         #    necessary
         git rebase master
         # 5. now use 'git changes' to compare your newly-rebased 'my_branch' against your
@@ -130,9 +130,9 @@ done < <(git diff --name-only -z "$merge_base" $BACKUP_BRANCH)
 # # DEBUG PRINTS. COMMENT OUT WHEN DONE DEBUGGING.
 # echo "$files_changed_escaped"
 # echo "----------"
-# # print withOUT quotes to see if that changes things; ans: indeed, it does: this removes extra 
-# # spaces and I think will replace each true newline char (\n) with a single space as well 
-# echo $files_changed_escaped 
+# # print withOUT quotes to see if that changes things; ans: indeed, it does: this removes extra
+# # spaces and I think will replace each true newline char (\n) with a single space as well
+# echo $files_changed_escaped
 # echo "=========="
 
 # NB: the `--` is REQUIRED before listing all of the files to search in, or else escaped files
