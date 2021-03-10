@@ -1821,22 +1821,62 @@ git reset --hard <commit_hash>
     WARNING WARNING WARNING! ALL CHANGES YOU ARE UNCOMMITTING WILL BE **LOST**! Same as above, except DELETE the changes instead of just uncommitting and unstaging them. DANGER DANGER DANGER! This cannot be easily undone (you'd need to go back to a backup branch or use `git reflog` to find the HEAD you were on before calling this command), so be careful when doing this.
 
 TWO WAYS TO SQUASH ["git squash"; squash in git; git squash]:
-1) the `git rebase -i <commit_hash>` way 
+1) the `git rebase -i <commit_hash>` way (this keeps and combines all commit messages)
 <========== BEST WAY TO SQUASH IN GIT if squashing a **linear** git history and you want to preserve commit messages! ===========
+```
 git checkout feature_branch
 git rebase -i master
     ...then manually change all "pick" commit entries in the editor to "squash", or just "s" for short.
     Done!
-2) the `git reset --soft <commit_hash>` way 
+```
+OR:
+```
+git checkout feature_branch
+git rebase -i my_first_commit~
+# manually "pick" first entry and set all others afterwards to "squash", or just "s" for short.
+```
+2) the `git reset --soft <commit_hash>` way (you lose the commit messages this way though)
 <========== BEST WAY TO SQUASH IN GIT if squashing across merges or branches! ===========
+```
 git checkout feature_branch
 git reset --soft master
     uncommit all changes which are in the `feature_branch` but NOT in the `master` branch; `--soft` leaves all these changes "staged", however.
 git commit -m "Commit all \"squashed\" feature_branch branch changes not in master"
     Commit these "squashed" changes now.
     Done!
-
-REBASE AND SQUASH NOTES:
+```
+OR:
+```
+git branch my_branch_BAK  # create backup branch just in case
+git reset --soft my_first_commit~
+git commit
+```
+-------------------------------------
+CONCISE SQUASH SUMMARY (2 MAIN WAYS):
+-------------------------------------
+[keywords: git squashing, squashing in git]
+1) `git rebase -i` way (keeps and combines all commit messages)
+        ```
+        git checkout feature_branch
+        git branch my_branch_BAK  # create backup branch just in case
+        git rebase -i my_first_commit~
+        # OR:
+        # git rebase -i master
+        # 1. Now, in editor, manually "pick" first entry and set all others afterwards to "squash", or just "s" for short.
+        # 2. When you close the editor, the squashing rebase will begin. When it's done, the editor will open again,
+        #    with all commit messages from all squashed commits in it, and you can manually edit the messages into a 
+        #    single, unified commit message.
+        ```
+2) `git reset --soft` way (you lose the commit messages this way though, but it squashes over merge commits really easily)
+        ```
+        git checkout feature_branch
+        git branch my_branch_BAK  # create backup branch just in case
+        git reset --soft my_first_commit~
+        # OR:
+        # git reset --soft master
+        git commit  # Manually add a new and complete commit message in the editor that opens.
+        ```
+MORE-DETAILED REBASE AND SQUASH NOTES:
 [TWO DISTINCT "SQUASH" AND "REBASE" STYLES!]:
 There is no "squash" command in git. There *is* a "rebase" command in git, but "merging" or "cherry-picking" can also be used as a form of "rebasing". The concept of "squashing" and "rebasing" can mean multiple things. Here are two common work-flow styles and what "squashing" and "rebasing" means in each:
 1. In a merge-based-workflow-style where you are continually **merging the latest "master" branch** into your feature branch to keep your feature up-to-date with upstream changes in "master", you can "squash and rebase" like this (assuming "master" is already fully up-to-date with the latest upstream changes). First, we use `git reset --soft` to "squash" all feature branch commits into one, then we cherry-pick this onto the latest master!:
