@@ -115,8 +115,8 @@ Bash functions can also be overridden in this way. The last definition is what r
 
 Each time you add or edit an alias in one of the files above, you must get your terminal to re-source it (re-import it) before it is available for usage in its new form. There are 3 ways to do this:
 
-1. Close and re-open your terminal.
-1. Manually re-source it like this:
+1. (Method 1) Close and re-open your terminal.
+1. (Methods 2 and 3) Manually re-source it like this:
     ```bash
     # recommended, since this is the POSIX-compliant way to do it
     . ~/.bashrc
