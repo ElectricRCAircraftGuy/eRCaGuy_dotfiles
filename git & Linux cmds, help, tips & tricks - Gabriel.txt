@@ -668,6 +668,33 @@ ls "$(bazel info output_base)/external"
     <======= VERY USEFUL! ========
     IMPORTANT FOLDER! This "external" folder should be considered like an extension of your source code, whenever using bazel! It will house all bazel-downloaded external libraries which are dependencies to your bazel-based projects. So, if you consider your main source code dir PLUS (+) this "$(bazel info output_base)/external" dir to be all part of the source code you are using, then that is correct. 
     Adding this "external" dir to your IDE indexer, and/or `grep`ping within this "external" dir may be useful whenever you are searching for functions or things within certain external dependencies your source code is using! This allows you to see whatever source code or implementation details or code-based documentation you may need to see when browsing your source code and looking in the external libraries used by your source code.
+./update_symlink_to_external.sh
+    Update the symlink to the Bazel "external" dir found just above, assuming this "update_symlink_to_external.sh" script is executable and contains the following code:
+        ```
+        #!/bin/bash
+
+        FULL_PATH_TO_SCRIPT="$(realpath "$0")"
+        SCRIPT_DIRECTORY="$(dirname "$FULL_PATH_TO_SCRIPT")"
+
+        target_dir="$(bazel info output_base)/external"
+
+        echo "Creating symlink to dir \"$target_dir\" inside \"$SCRIPT_DIRECTORY\"."
+        ln -sf "$target_dir" "$SCRIPT_DIRECTORY"
+        ```
+    You should then add this symlink dir to your Eclipse (or other IDE) project, as a virtual folder or otherwise, and as required, to bring them in to be indexed so you can search, navigate, and browse any external source code libraries as needed.
+    INSTALLATION:
+    Something like this would work:
+        ```
+        cd path/to/repo
+        mkdir -p GS/external
+        gedit GS/external/update_symlink_to_external.sh
+        # copy and paste the above code into this script now; then:
+        chmod +x GS/external/update_symlink_to_external.sh
+        # Now you **may** want to either exclude this dir in your `.gitignore` file:
+        echo '/GS/' >> .gitignore
+        # OR just locally for yourself in your private `.git/info/exclude` file:
+        echo '/GS/' >> .git/info/exclude
+        ```
 
 time bazel build //...
     build the whole project
@@ -799,13 +826,25 @@ Other useful options:
 
 == BAZEL TEST OPTIONS: ==
 
-[print test output always]
-bazel test --test_output=errors //... = log all errors (failed test results) to stdout--in other words, you'll only see a long output from running the bazel test if it fails!--this is a good setting to use; for help, see: https://groups.google.com/forum/#!topic/bazel-discuss/2mJPklIaCeo; see also: `bazel help test` for other options!
-bazel test --test_output=summary //... = the default (doesn't show errors; just shows a summary)
-bazel test --test_output=all //... = prints ALL output to stdout, even for tests that pass!
+[keywords: print test output always]
+bazel test --test_output=errors //...
+    log all errors (failed test results) to stdout--in other words, you'll only see a long output from running the bazel test if it fails!--this is a good setting to use; for help, see: https://groups.google.com/forum/#!topic/bazel-discuss/2mJPklIaCeo; see also: `bazel help test` for other options!
+bazel test --test_output=summary //...
+    the default (doesn't show errors; just shows a summary)
+bazel test --test_output=all //...
+    prints ALL output to stdout, even for tests that pass!
+    <========
+bazel test --test_arg=--some_arg_to_test_program //some/dir:my_test
+    Pass argument `--some_arg_to_test_program` to the test program when running the test! 
+    See: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command
+    And (official documentation): 
+        CLI reference: https://docs.bazel.build/versions/master/command-line-reference.html#flag--test_arg
+        User Manual: https://docs.bazel.build/versions/master/user-manual.html#flag--test_arg
+    <========
 
 *****BEST BAZEL TEST CMD (optionally add `--host_jvm_args=-Xmx16g` if needed too)*****
-time bazel test --test_output=errors --test_arg=--gtest_color=yes //... = get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
+time bazel test --test_output=errors --test_arg=--gtest_color=yes //...
+    get color output in the tests! See the readme in my project here for more explanation and a list of references: https://github.com/ElectricRCAircraftGuy/eRCaGuy_gtest_practice. See also: https://stackoverflow.com/questions/50877601/how-to-pass-custom-flags-to-bazel-test-command/50890446#50890446.
 
 == Debugging Bazel Builds: ==
 [keywords: bazel debug build flags; bazel build debug flags; *debugging bazel builds*; debug bazel builds; bazel builds debugging; bazel debugging]
@@ -1641,14 +1680,21 @@ git diff --name-only   commit_hash
             file2.h
             file3.h
 git diff --name-status commit_hash
+    <======= VERY USEFUL! ========
     [MUCH MORE USEFUL THAN THE CMD ABOVE!] see a list of filenames and status! Ex: indicators for modified, deleted, added, etc.
-    Sample output:
+    From `man git diff`: "Show only names and status of changed files. See the description of the `--diff-filter` option on what the status letters mean."
+    Sample output ('M' means "'m'odified"--see `man git diff` and search for "--diff-filter="):
             $ git diff --name-status
             M       file1.h
             M       file2.h
             M       file3.h
 git diff --name-only --diff-filter=d commit_hash
+    <======= VERY USEFUL to see all changes EXCEPT file deletions! ========
     Do NOT include (ie: filter out) all 'd'eleted files! See `man git diff` and search for "--diff-filter=".
+    Replace `--name-only` with `--name-status` for details about how each file was changed. 
+    See my answer here!: https://stackoverflow.com/questions/30905086/git-list-of-all-changed-but-not-deleted-files-in-a-commit/66649684#66649684
+    See also this particular answer: https://stackoverflow.com/questions/5096268/how-to-get-a-list-of-all-files-that-changed-between-two-git-commits/50521039#50521039
+    [keywords: git diff filter; filter git diff].
 git diff --stat        commit_hash
     a graphical +++--- representation of changes, with color! Very nice! See the last line of this output for totals.
     Sample output:
@@ -1681,6 +1727,9 @@ git diff --dirstat     commit_hash
               12.6% dir2/
 git diff --word-diff
     Highlight changes on a word-by-word basis, rather than a line-by-line basis
+git diff --cached --ignore-all-space --word-diff=color | sed -E "s/\033\[3[12]/\0;7/g"
+    <==== NEED TO STUDY THIS AND TRY IT OUT STILL! ====
+    See here: https://github.com/ymattw/ydiff/issues/99#issuecomment-803365676
 git diff --word-diff=plain
     Same as above (`plain` is the default word-diff _mode_).
 git diff --word-diff[=<mode>]
@@ -1712,6 +1761,26 @@ git log --oneline = show each commit as a single line only
 git lg = show the git log history in a condensed form, with graphics lines to show forks, branches, and merges; this is VERY USEFUL! <========
     See: "eRCaGuy_dotfiles/home/.gitconfig" for how to create this `lg` alias for git, and
     https://coderwall.com/p/euwpig/a-better-git-log for where I originally got it from!
+
+-----
+RESOLVING MERGE CONFLICTS
+- Imagine you are on `feature_branch`, merging in the latest `master` into it, to bring the latest upstream changes from `master` into your `feature_branch`. Here's how: 
+[keywords: fix merge conflicts, fixing git merge conflicts, fixing git merge conflicts, git merge help, git merge find changes, find git merge changes, find changes in git merge, find changes during git merge, see git merge changes, seeing git changes during merge, seeing git merge changes, advanced merge conflict resolution, advanced git merge conflict resolution]
+-----
+        # fetch latest master changes from GitHub; use `upstream` instead of `origin` if necessary
+        git fetch origin master:master
+        git checkout feature_branch
+        git merge master
+        # merge conflicts result here
+        # 1. see and make a mental note of what changes happened **on `master`** in your files with conflicts
+        git difftool $(git merge-base master feature_branch)..master file1.cpp file2.cpp file3.cpp
+        # 2. see and make a mental note of what changes happened **on `feature_branch`** in your files with conflicts
+        git difftool $(git merge-base master feature_branch)..feature_branch file1.cpp file2.cpp file3.cpp
+        # manually resolve conflicts
+        # then add (stage) your fixed files into the git index
+        git add file1.cpp file2.cpp file3.cpp
+        # finish the merge
+        git merge --continue
 
 -----
 FIND ALL GIT COMMITS WHICH ARE ON ONE BRANCH BUT NOT ON ANOTHER!
