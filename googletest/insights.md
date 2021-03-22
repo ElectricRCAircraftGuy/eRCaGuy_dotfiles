@@ -1,5 +1,5 @@
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FElectricRCAircraftGuy%2FeRCaGuy_dotfiles%2Fblob%2Fmaster%2Fgoogletest%2Finsights.md&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=views+in+this+file+%28today+%2F+total%29&edge_flat=false)](https://hits.seeyoufarm.com)  
-_[See also: main **eRCaGuy_dotfiles** readme](..)_
+_[See also: main **eRCaGuy_dotfiles** readme](../../..)_
 
 insights.md  
 -a detailed look at some aspects of the proper usage of googlemocks/googletest
