@@ -71,6 +71,8 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
     1. OpenSSH should also work fine (the default `ssh`-related series of terminal commands which [come pre-installed on Ubuntu](https://stackoverflow.com/questions/47079224/how-do-i-check-if-openssh-is-installed-on-ubuntu/58617302#58617302)), but sometimes the GUI setup in PuTTY is nice, even on Linux
 1. Shotcut - excellent video editor. Download the latest Linux portable tar or Linux AppImage straight from their website here: https://shotcut.org/.
 1. OBS Studio (Open Broadcaster Software) - a really good, cross-platform, and free and open source _screen recorder_ and screencasting/streaming tool for making video tutorials! https://obsproject.com/. 
+    1. See my detailed installation, setup, and usage instructions here: https://stackoverflow.com/questions/37040798/how-do-you-use-youtube-dl-to-download-live-streams-that-are-live/66838396#66838396. 
+    1. See also this really great quick setup tutorial here, by Kezz Bracey on 25 Jul 2020, where I learned how to use it and set it up, and learned how to write my instructions above: https://photography.tutsplus.com/tutorials/obs-for-screen-recording-quick-start--cms-28549
 1. `mediainfo-gui` - very useful tool to quickly see video or audio file metadata, such as bitrates and sample rates of audio, and video resolution, as well as encoding information.
     1. Install the GUI version with `sudo apt install mediainfo-gui`, or the CLI version with `sudo apt install mediainfo`. 
     1. Then, right-click on any video or audio file in your file manager (ex: nemo) --> Open With --> MediaInfo. 
