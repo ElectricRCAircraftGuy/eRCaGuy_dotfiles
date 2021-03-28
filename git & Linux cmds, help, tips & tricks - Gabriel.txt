@@ -349,7 +349,7 @@ General format:
 
     def my_func(self, param1, param2, param3, param4):
         """
-        Function to do whaterver.
+        Function to do whatever.
 
         Parameters:
             param1 (string): string to do ___
@@ -383,6 +383,68 @@ Example from my own code (see my git-tree.py link above):
             NA
         """
         # Do constructor stuff here
+
+Alternative General format [MY PREFERRED PYTHON DOCSTRING FORMAT NOW I THINK]:
+- Note: see Python Built-in Exceptions here: https://docs.python.org/3/library/exceptions.html
+
+    def my_func(self, param1, param2, param3, param4):
+        """
+        Function to do whatever.
+
+        For python exception-handling help and examples, see: 
+        https://www.w3schools.com/python/python_try_except.asp
+
+        -----------
+        Parameters:
+        -----------
+        param1: str
+            String to do ___.
+        param2: int
+            Integer between the range of __ and __ to be used for __.
+        param3: list of MyClass objects
+            List of myClass objects for __.
+        param4: dict of {string:string} key:value
+            Map from something1 to something2, to be used for __ and __ in order to __.
+        param5: list of ints
+            List of integers representing __.
+
+        --------
+        Returns:
+        --------
+        dict of {string:MyClass} key:value pairs 
+            Map of a name string to a MyClass object.
+        
+        -------
+        Raises:
+        -------
+        TypeError:
+            If `param2` is not an integer.
+        ValueError:
+            If input parameter `param2` has the right type but an invalid (out-of-range) value. 
+            See: https://docs.python.org/3/library/exceptions.html#ValueError
+        SystemError:
+            If whatever (detailed description goes here).
+        """
+
+        if not type(param2) is int:
+            raise TypeError("param2 must be an int.")
+
+        if not (0 <= param2 <= 100):
+            raise ValueError("param2 must be between 0 and 100, inclusive.")
+
+        try:
+            # do some stuff here
+        except SystemError:
+            print("Some descriptive message; output_data = \n{}.".format(output_data))
+            raise  # re-raise the exception to crash the program
+
+        my_class = MyClass(param1, param2)
+        some_str = "hello"
+        my_class2 = MyClass(param1 + some_str, param2 + 724)
+        
+        my_dict = {param1: my_class, some_str: my_class2}
+
+        return my_dict
 
 
 ====================================================================================================
@@ -1695,6 +1757,22 @@ git diff --name-only --diff-filter=d commit_hash
     See my answer here!: https://stackoverflow.com/questions/30905086/git-list-of-all-changed-but-not-deleted-files-in-a-commit/66649684#66649684
     See also this particular answer: https://stackoverflow.com/questions/5096268/how-to-get-a-list-of-all-files-that-changed-between-two-git-commits/50521039#50521039
     [keywords: git diff filter; filter git diff].
+====vvvv `git whatchanged` and `git log --name-status` vvvv====
+git whatchanged
+    <======= VERY USEFUL! ========
+    See all changed files over time. Like `git log`, but showing all files changed too and whether they were `A`dded, `M`odified, etc.
+    See my answer here!: https://superuser.com/a/1636160/425838
+git whatchanged --diff-filter=A
+    Same as above, but show only Added files.
+    See my answer here!: https://superuser.com/a/1636160/425838
+git log --name-status
+    <======= VERY USEFUL! MY FAVORITE I THINK! ========
+    Very similar to `git whatchanged`, but even simpler output, with slightly less information at the left-hand-side of each file shown.
+    See my answer here!: https://superuser.com/a/1636160/425838
+git log --name-status --diff-filter=AM
+    Same as above, but show only Added and Modified files.
+    See my answer here!: https://superuser.com/a/1636160/425838
+====^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^====
 git diff --stat        commit_hash
     a graphical +++--- representation of changes, with color! Very nice! See the last line of this output for totals.
     Sample output:
@@ -2687,6 +2765,200 @@ objdump -h /bin/ls
 
 
 ====================================================================================================
+= IP & Networking: =
+====================================================================================================
+
+ifconfig
+    show the internet & network configuration/connection information for your system and all of its network cards (both wireless (ex: WIFI) and wired (ex: Ethernet ports))
+-----
+TURN NETWORK INTERFACES ON AND OFF (up or down, respectively)
+See: https://askubuntu.com/questions/168032/how-to-disable-built-in-wifi-and-use-only-usb-wifi-card/204536#204536
+-----
+ifconfig
+    list ALL network interfaces; note: see more on "virtual interfaces" and how to create them farther below
+iwconfig
+    <===== REALLY USEFUL =======
+    list all wireless network interfaces (see more on this cmd below)
+sudo ifconfig INTERFACE_NAME up
+    turn network interface INTERFACE_NAME on; ex:
+sudo ifconfig wlan0 up
+    <===== REALLY USEFUL =======
+    turn network interface wlan0 ON
+sudo ifconfig INTERFACE_NAME down
+    turn network interface INTERFACE_NAME off; ex:
+sudo ifconfig wlan0 down
+    <===== REALLY USEFUL =======
+    turn network interface wlan0 OFF
+
+sudo ip link set wlan0 up
+    <===== REALLY USEFUL (NEWER CMD!) =======
+    Turn ON the `wlan0` networking device--the same as (or very similar to) `sudo ifconfig wlan0 up` above. Apparently this `ip link set` command is intended to replace the older and apparently now-deprecated `ifconfig` cmd above! 
+    See: https://www.redhat.com/sysadmin/ifconfig-vs-ip --> sections "What's trending?" and "Enable and disable an interface". 
+    See also my answer here: https://askubuntu.com/a/1320155/327339.
+    [GS: See more `ip` cmds below!]
+sudo ip link set wlan0 down
+    <===== REALLY USEFUL (NEWER CMD!) =======
+    Turn OFF the `wlan0` networking device--the same as (or very similar to) `sudo ifconfig wlan0 down` above. Apparently this `ip link set` command is intended to replace the older and apparently now-deprecated `ifconfig` cmd above! 
+    See: https://www.redhat.com/sysadmin/ifconfig-vs-ip --> sections "What's trending?" and "Enable and disable an interface". 
+    See also my answer here: https://askubuntu.com/a/1320155/327339.
+    [GS: See more `ip` cmds below!]
+
+iwconfig
+    'w'ireless network 'i'nterface configuration tool of some sort (stands for 'i'nterface 'w'ireless perhaps?); see `man iwconfig` and also here for a little more info: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895
+iwconfig
+    list wireless network interfaces
+iwlist INTERFACE_NAME freq
+    list the available wireless frequencies of interface INTERFACE_NAME; see: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895; ex:
+iwlist wlan0 freq
+    list the available wireless frequencies of wireless network interface `wlan0`
+iwlist wlan0 scanning | grep -C5 -i '\"my_network_name\"'
+    See all channels and frequencies "my_network_name" is broadcasting on, on both 2.4GHz *and* 5GHz frequencies!
+    - See my comment under this answer here: https://askubuntu.com/questions/202288/how-do-i-require-use-of-the-5-ghz-band-when-connecting-to-a-wireless-n-access-po/261410#261410.
+    - Note that **2.4GHz channels** include `01`, `02`, `03`, etc. through `11`, and **5GHz channels** are just `36`, `40`, `44`, and `48` (this is based on looking at my Orbi mesh router settings).
+    - Also, I first learned this `iwlist` command from here: https://askubuntu.com/questions/183525/how-to-set-wifi-driver-settings-to-prefer-5-ghz-channel-above-2-4-ghz/631329#631329.
+
+nm-connection-editor
+    <=================
+    Open the "Advanced Network Configuration" GUI! Taught to me by BrosTrend Trend-tech in an email to me on 7 Mar. 2021. One thing you can do is set a "Device", by MAC address, in order to limit one WiFi connection to a specific WiFi adapter. Or, you can leave this "Device" field blank to let that connection work with ANY connected network/WiFi adapter! Be sure to **look at the command-line output in the terminal** when running this program, to take note of any feedback or errors the GUI program may be seeing. This is helpful to indicate to you why you may not be able to save new settings, for instance. 
+    See my notes on this cmd here: https://github.com/ElectricRCAircraftGuy/BrosTrendWifiAdapterSoftware
+
+ip help
+    show the options and `OBJECT`s available for the `ip [OPTIONS] <OBJECT>` commands!
+    - See also MY ANS HERE! https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
+        - https://unix.stackexchange.com/a/593142/114401
+man ip
+    See the "man" (manual) pages for the higher-level `ip` cmd.
+ip link help
+    Help menu for the `ip link` cmd.
+man ip link
+    See the "man" (manual) pages for the `ip link` cmd.
+sudo ip link set wlan0 [up|down]
+    [GS: See these "ip link set" cmds farther above where I documented them before.]
+ip address help
+    Show help menu for the `ip address` cmd.
+man ip address
+    See the "man" (manual) pages for the `ip address` cmd.
+ip address
+    show all configured network interfaces and their IP addresses & network interface info; NB: I don't really understand this command yet, but it looks useful, and seems to show a bunch of the same information as `ifconfig`.
+ip addres = same as above
+ip addre = same as above
+ip addr = same as above
+ip add = same as above
+ip ad = same as above
+ip a = same as above
+^^ Note the trend! So long as the command can be figured out and determined to be distinct from all other command possibilities, it is accepted! Therefore, you only need as many characters in the OBJECT as are required to make it distinct from all other OBJECT possibilities for this command!
+---------
+[virtual interfaces, virtual network interfaces, virtual network devices, virtual devices]
+Learn how to make **virtual network interfaces** here!
+- Sometimes, you must create a virtual interface to simulate a connected hardware network card with a certain IP address so that software you have which is trying to open up a network socket to that specific device at that specific IP is able to do so, _even if the hardware isn't actually physically present on the PC you are running the software!_ Very useful, for instance, on hardware test platforms or HIL test systems.
+  - [MY OWN ANS!] https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
+    - https://unix.stackexchange.com/a/593142/114401
+  - https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/152334#152334
+- - - - - 
+`modprobe`, `lsmod`, `ip link add`, `ip address change`, `ip address`, `ip link delete`, etc.
+See my answer here!: https://unix.stackexchange.com/a/593142/114401
+*****ALSO: see this other answer here!: https://unix.stackexchange.com/a/152334/114401
+- - - - - 
+lsmod
+    List and show the status of modules in the Linux Kernel. Creating a dummy interface requires the "dummy" kernel module. 
+    See my answer here!: https://unix.stackexchange.com/a/593142/114401
+lsmod | grep dummy
+    Search for the "dummy" kernel module to see if you have it!
+    See my answer here!: https://unix.stackexchange.com/a/593142/114401
+sudo modprobe dummy
+    1. Install the "dummy" Linux kernel module.
+    See my answer here!: https://unix.stackexchange.com/a/593142/114401
+    *****ALSO: see this other answer here!: https://unix.stackexchange.com/a/152334/114401
+sudo lsmod | grep dummy
+    2. Ensure the "dummy" Linux kernel module is installed.
+    See my answer here!: https://unix.stackexchange.com/a/593142/114401
+    *****ALSO: see this other answer here!: https://unix.stackexchange.com/a/152334/114401
+sudo ip link add eth10 type dummy
+    3. Create a virtual (dummy) interface named `eth10`.
+    See my answer here!: https://unix.stackexchange.com/a/593142/114401
+sudo ip address change dev eth10 10.0.0.1
+    4. Change this new interface's IP address to whatever you like (10.0.0.1 in this case).
+    See my answer here!: https://unix.stackexchange.com/a/593142/114401
+ip address
+    5. See the newly-created device and the IP address you just assigned to it.
+    See what IP addresses and interfaces you have.
+    See my answer here!: https://unix.stackexchange.com/a/593142/114401
+ip a
+    Same as above. See the list of these commands a bit above where I show they are all same!: `ip a`, `ip addr`, `ip address`, etc.
+sudo ip link delete eth10 type dummy
+    6. Delete this 'eth10' dummy device, if you ever need to.
+    See my answer here!: https://unix.stackexchange.com/a/593142/114401
+ip address
+    7. Ensure 'eth10' is deleted and doesn't show up here now.
+ifconfig
+    See what IP addresses and interfaces you have (this may not be as complete as the `ip address` cmd above, and it may not show your virtual dummy 'eth10' device you just created above!).
+    See my answer here!: https://unix.stackexchange.com/a/593142/114401
+
+ssh -X -o "ServerAliveInterval 60" my_username@my_hostname_or_IP
+    ssh into hostname or IP address my_hostname_or_IP with username my_username, enabling X-window forwarding, and with the additional 'o'ption set to send a heartbeat signal (server "keep alive" message) every 60 seconds, so your session never disconnects automatically!
+
+hostname
+    show my hostname; ex: mypcname23-aa
+nslookup some_ip_address
+    use 'n'ame 's'erver lookup to try to find the hostname of a given IP address
+nslookup some_hostname
+    the exact reverse of the above: try to find the IP address from a given hostname
+
+wget https://path.to.some.file.to.download
+    download a file at this URL; shows a nice progress bar and download stats (speed, total size to download, total size downloaded so far, etc.) the entire time!
+curl
+    cURL stands for "client URL". It "is a command line tool that developers use to transfer data to and from a [web] server."
+    See [NEED TO STUDY & READ!]: https://developer.ibm.com/devpractices/api/articles/what-is-curl-command/
+    Some web utility for interaction with websites and HTML "REST" APIs; need to learn how to use a lot more still.
+curl -X POST --data '{"some key 1":"some value 1","some key 2":"some value 2", "some key 3":"some value 3"}' http://some.web.address
+    [NEED TO STUDY & LEARN MORE] Send this JSON object as a `POST` HTML REST command to a web server at this address.
+curl -X GET http://some.web.address/some_id
+    Assuming the server responded to the previous POST cmd with some ID `some_id`, request some response JSON data object for this `some_id` from the serer. It will come back as a JSON object.
+curl -X GET http://some.web.address/some_id | jq .
+    Same as above, except pipe all the output to the `jq` (JQuery?) "Command-line JSON processor" so it can pretty-format it all for us. Now, we can look at the (probably JSON) JSON object returned to us from the server in a nice-to-look-at format!
+curl -X GET http://some.web.address/some_id | jq .key1
+    Same as above, except filter on only the outer-most dict key named `key1`, so that that's all we see in the output of the JSON object!
+
+telnet
+    (Note: install with `sudo apt install telnet`).
+
+nc
+    (From `man nc` or `man netcat`): "The nc (or netcat) utility is used for just about anything under the sun involving TCP, UDP, or UNIX-domain sockets."
+netcat
+    Same as above! `nc` is an alias to `netcat` apparently. `man nc` and `man netcat` are identical. 
+nc -h
+    netcat help menu
+netcat -h
+    netcat help menu
+nc -u -l 127.0.0.1 -p 30000
+    Set up a UDP (`-u`) listener (`-l`) to the loopback interface (IP `127.0.0.1`, AKA: LOCALHOST) on port (`-p`) 30000. 
+    Note: I arbitrarily chose port 30000. 
+    For a list of common TCP and UDP ports, see Wikipedia here: https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers.
+nc -u 127.0.0.1 30000
+    Set up a UDP (`-u`) sender (the default, apparently) to the loopback interface (IP `127.0.0.1`, AKA: LOCALHOST) on port (`-p`) 30000. 
+    Now, to send char data, just start typing, then press Enter! So long as you have a listener already open in another terminal (see just above), you'll see the output you send magically show up in the lister's terminal!
+exit
+    Type this to exit any open netcat session you are in!
+EXERCISE:
+---------
+1. In one terminal, open up a UDP listener:
+        nc -u -l 127.0.0.1 -p 30000
+1. In another terminal, open up a UDP sender:
+        nc -u 127.0.0.1 30000
+1. In the sender's terminal, type "hello" and press Enter. You'll see it show up in the listener's terminal! 
+1. In the receiver's terminal, type "world" and press Enter. You'll see it show up in the sender's terminal! Notice the communication is 2-way! Either side can send now!
+1. Type more data to send from either side, as desired. 
+1. When done, type `exit` into each netcat terminal to exit `netcat`, OR press Ctrl + C to interrupt and kill each open `netcat`. 
+The above works!
+- - - - - 
+GOING FURTHER:
+(goal is to get multiple senders to be able to send to multiple listeners...is this even possible?)
+    WORK-IN-PROGRESS/Need to research this more!:
+    1. In a 3rd terminal, open up another **listener**, as shown above, and in a 4th terminal, open up another **sender**, as shown above.
+    ...
+
+
+====================================================================================================
 = Linux (General): =
 ====================================================================================================
 [general linux; linux general, linux =]
@@ -2932,86 +3204,6 @@ watch -n 30 'du -h ~/.cache | tail -n 1' = display the disk usage in your ~/.cac
 watch -n 30 'du -h ~/.cache/bazel | tail -n 1' = watch your bazel build cache (in ~/.cache/bazel) grow every 30 seconds--ex: during a large build; it can be useful to watch the directory grow as evidence that the build is progressing properly; note: you may need to use sudo in the command `watch` is running for it to check the size of *all* objects:
 watch -n 30 'sudo du -h ~/.cache/bazel | tail -n 1' = same as above, except with the subcommand, `du`, as root, so it can read *all* items, even those in your cache which may be owned by root
 
-== IP & Networking: ==
-
-ifconfig
-    show the internet & network configuration/connection information for your system and all of its network cards (both wireless (ex: WIFI) and wired (ex: Ethernet ports))
------
-TURN NETWORK INTERFACES ON AND OFF (up or down, respectively)
-See: https://askubuntu.com/questions/168032/how-to-disable-built-in-wifi-and-use-only-usb-wifi-card/204536#204536
------
-ifconfig
-    list ALL network interfaces; note: see more on "virtual interfaces" and how to create them farther below
-iwconfig
-    <===== REALLY USEFUL =======
-    list all wireless network interfaces (see more on this cmd below)
-sudo ifconfig INTERFACE_NAME up
-    turn network interface INTERFACE_NAME on; ex:
-sudo ifconfig wlan0 up
-    <===== REALLY USEFUL =======
-    turn network interface wlan0 ON
-sudo ifconfig INTERFACE_NAME down
-    turn network interface INTERFACE_NAME off; ex:
-sudo ifconfig wlan0 down
-    <===== REALLY USEFUL =======
-    turn network interface wlan0 OFF
-
-sudo ip link set wlan0 up
-    <===== REALLY USEFUL (NEWER CMD!) =======
-    Turn ON the `wlan0` networking device--the same as (or very similar to) `sudo ifconfig wlan0 up` above. Apparently this `ip link set` command is intended to replace the older and apparently now-deprecated `ifconfig` cmd above! 
-    See: https://www.redhat.com/sysadmin/ifconfig-vs-ip --> sections "What's trending?" and "Enable and disable an interface". 
-    See also my answer here: https://askubuntu.com/a/1320155/327339.
-sudo ip link set wlan0 down
-    <===== REALLY USEFUL (NEWER CMD!) =======
-    Turn OFF the `wlan0` networking device--the same as (or very similar to) `sudo ifconfig wlan0 down` above. Apparently this `ip link set` command is intended to replace the older and apparently now-deprecated `ifconfig` cmd above! 
-    See: https://www.redhat.com/sysadmin/ifconfig-vs-ip --> sections "What's trending?" and "Enable and disable an interface". 
-    See also my answer here: https://askubuntu.com/a/1320155/327339.
-
-iwconfig
-    'w'ireless network 'i'nterface configuration tool of some sort (stands for 'i'nterface 'w'ireless perhaps?); see `man iwconfig` and also here for a little more info: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895
-iwconfig
-    list wireless network interfaces
-iwlist INTERFACE_NAME freq
-    list the available wireless frequencies of interface INTERFACE_NAME; see: https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5ghz/137895#137895; ex:
-iwlist wlan0 freq
-    list the available wireless frequencies of wireless network interface `wlan0`
-iwlist wlan0 scanning | grep -C5 -i '\"my_network_name\"'
-    See all channels and frequencies "my_network_name" is broadcasting on, on both 2.4GHz *and* 5GHz frequencies!
-    - See my comment under this answer here: https://askubuntu.com/questions/202288/how-do-i-require-use-of-the-5-ghz-band-when-connecting-to-a-wireless-n-access-po/261410#261410.
-    - Note that **2.4GHz channels** include `01`, `02`, `03`, etc. through `11`, and **5GHz channels** are just `36`, `40`, `44`, and `48` (this is based on looking at my Orbi mesh router settings).
-    - Also, I first learned this `iwlist` command from here: https://askubuntu.com/questions/183525/how-to-set-wifi-driver-settings-to-prefer-5-ghz-channel-above-2-4-ghz/631329#631329.
-
-nm-connection-editor
-    <=================
-    Open the "Advanced Network Configuration" GUI! Taught to me by BrosTrend Trend-tech in an email to me on 7 Mar. 2021. One thing you can do is set a "Device", by MAC address, in order to limit one WiFi connection to a specific WiFi adapter. Or, you can leave this "Device" field blank to let that connection work with ANY connected network/WiFi adapter! Be sure to **look at the command-line output in the terminal** when running this program, to take note of any feedback or errors the GUI program may be seeing. This is helpful to indicate to you why you may not be able to save new settings, for instance. 
-    See my notes on this cmd here: https://github.com/ElectricRCAircraftGuy/BrosTrendWifiAdapterSoftware
-
-ip help = show the options and `OBJECT`s available for the `ip [OPTIONS] <OBJECT>` commands!
-- See also MY ANS HERE! https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
-ip address = show all configured network interfaces and their IP addresses & network interface info; NB: I don't really understand this command yet, but it looks useful, and seems to show a bunch of the same information as `ifconfig`.
-ip addres = same as above
-ip addre = same as above
-ip addr = same as above
-ip add = same as above
-ip ad = same as above
-ip a = same as above
-^^ Note the trend! So long as the command can be figured out and determined to be distinct from all other command possibilities, it is accepted! Therefore, you only need as many characters in the OBJECT as are required to make it distinct from all other OBJECT possibilities for this command!
-
-[virtual interfaces, virtual network interfaces, virtual network devices, virtual devices]
-Learn how to make **virtual network interfaces** here!
-- Sometimes, you must create a virtual interface to simulate a connected hardware network card with a certain IP address so that software you have which is trying to open up a network socket to that specific device at that specific IP is able to do so, _even if the hardware isn't actually physically present on the PC you are running the software!_ Very useful, for instance, on hardware test platforms or HIL test systems.
-  - [MY OWN ANS!] https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142
-  - https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/152334#152334
-
-ssh -X -o "ServerAliveInterval 60" my_username@my_hostname_or_IP = ssh into hostname or IP address my_hostname_or_IP with username my_username, enabling X-window forwarding, and with the additional 'o'ption set to send a heartbeat signal (server "keep alive" message) every 60 seconds, so your session never disconnects automatically!
-
-hostname = show my hostname; ex: mypcname23-aa
-nslookup some_ip_address = use 'n'ame 's'erver lookup to try to find the hostname of a given IP address
-nslookup some_hostname = the exact reverse of the above: try to find the IP address from a given hostname
-
-curl = some web utility for interaction with websites; need to learn how to use
-wget https://path.to.some.file.to.download = download a file at this URL; shows a nice progress bar and download stats (speed, total size to download, total size downloaded so far, etc.) the entire time!
-
 
 == rsync: ==
 [keywords: copy, copies, copying, copying with progress bar]
@@ -3233,6 +3425,7 @@ qpdf --decrypt in.pdf out.pdf
     "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups!
     - Once I do this, I like to rename "out.pdf" to "some useful name [`qpdf --decrypt`ed]" so I can remember right in the name itself how I did this!
 
+[keywords: file password encryption, document password encryption]
 gpg -c myfile.txt
     encrypt myfile.txt with a passphrase (symmetric 'c'ipher); a GUI window will pop up, asking you for a password to encrypt the file; enter a password, then it will ask you again; once you enter the password again it will encrypt the file and create a new file called myfile.txt.gpg. You will need to manually delete the old file.
 gpg myfile.txt.gpg
