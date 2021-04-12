@@ -23,18 +23,32 @@
         "Vintage"
     ],
 
-    // Columns in which to display vertical rulers
-    // - NB: the *first* value listed below is the one that text will be hard-wrapped to when you press Alt + Q or
-    //   go to Edit --> Wrap --> Wrap Paragraph at Ruler.
+    // VERTICAL RULER COLUMNS
+    // (Columns at which to display vertical rulers)
+    //
+    // NB: the *first* value listed below is the one to which text will be hard-wrapped when you
+    // press Alt + Q or go to "Edit" --> "Wrap" --> "Wrap Paragraph at Ruler".
+    //
+    // RECOMMENDED RULERS:
+    //
+    // 50 is recommended for `git commit` subject lines, and 72 for `git commit` message content.
+    //
+    // 80 is recommended for writing code snippets on Stack Overflow, to prevent code from
+    // requiring a horizontal scroll bar.
+    //
+    // 80, 100, and 120 are common character widths for general code writing on modern displays. I
+    // like to use 100 instead of 120, as it works on slightly older and lower-resolution displays
+    // better, and also provides more room when looking at multiple columns of code at once on
+    // modern displays. However, 120 is common too.
     "rulers":
     [
-        // 72 is recommended by git for commit message content, and 50 for commit titles
         // 72,
         // 50,
-        // 80, 100, and 120 are common character widths for general code writing
-        // - on modern displays, I like to use 120, although 100 is common too
-        // 80,
         100,
+        // When writing Stack Overflow answers, temporarily shift this "80" line up to be first so
+        // Alt + Q will wrap at 80 chars to prevent the horizontal scroll bar from showing up on
+        // your answer.
+        80,
         120,
     ],
 
