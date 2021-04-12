@@ -1759,7 +1759,7 @@ git diff --name-only --diff-filter=d commit_hash
     [keywords: git diff filter; filter git diff].
 ====vvvv `git whatchanged` and `git log --name-status` vvvv====
 git whatchanged
-    <======= VERY USEFUL! ========
+    <======= [recommended to use `git log --name-status` instead] ========
     See all changed files over time. Like `git log`, but showing all files changed too and whether they were `A`dded, `M`odified, etc.
     See my answer here!: https://superuser.com/a/1636160/425838
 git whatchanged --diff-filter=A
@@ -1767,6 +1767,7 @@ git whatchanged --diff-filter=A
     See my answer here!: https://superuser.com/a/1636160/425838
 git log --name-status
     <======= VERY USEFUL! MY FAVORITE I THINK! ========
+    See all changed files over time. Like `git log`, but showing all files changed too and whether they were `A`dded, `M`odified, etc.
     Very similar to `git whatchanged`, but even simpler output, with slightly less information at the left-hand-side of each file shown.
     See my answer here!: https://superuser.com/a/1636160/425838
 git log --name-status --diff-filter=AM
