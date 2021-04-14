@@ -21,7 +21,7 @@
 # https://askubuntu.com/questions/254367/permanently-fix-chrome-scroll-speed/991680#991680
 
 
-# For `google-chrome`
+# For `google-chrome` Web Browser
 "-chrome"
 None,      Up,   Button4, 3
 None,      Down, Button5, 3
@@ -29,6 +29,10 @@ Control_L, Up,   Control_L|Button4
 Control_L, Down, Control_L|Button5
 Shift_L,   Up,   Shift_L|Button4
 Shift_L,   Down, Shift_L|Button5
+
+# For Firefox Web Browser
+# Follow the instructions described here, editing a value inside the browser
+# itself: https://support.mozilla.org/en-US/questions/1019147
 
 # For `slack`
 "slack"
