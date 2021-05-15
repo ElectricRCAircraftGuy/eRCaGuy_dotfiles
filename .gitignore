@@ -42,6 +42,16 @@
 #                                           # which _will_ allow subsequent UNignores!
 #   ```
 
+# Another example of UNignoring files and folders within an ignored dir (see comments above 
+# for more info.):
+#
+# # Exclude the _contents of_ the build dir
+# /build/*
+# # But DO include the "include" dir, and the readme
+# !/build/include/
+# !/build/README.md
+
+
 /git_branch_hash_backups/
 /private/
 
