@@ -1,0 +1,24 @@
+
+GS
+\~ June 2020
+
+Mousetrap car mechanical advantage and optimizing for max speed calcs.
+
+
+https://www.youtube.com/watch?v=b7zWwo9dbiU&lc=UgxmSlR9oR5qxh9LII54AaABAg
+
+Hey Mark, ***awesome*** video! As an aeronautical/mechanical/software engineer myself, who has built a winning mousetrap car in high school but had NO IDEA how to do any of this math, and knew nothing about the math behind mechanical advantage at the time (heck, you just taught me a TON even today), this was particularly interesting. 
+However, you said to optimize for the speed car one should make the energy get transfered from the mouse trap to kinetic energy in the car as quickly as possible without wheel slippage. It seems to me this is *not* correct. It will *not* produce the optimal (max) speed at the finish line. Rather, the optimum (max) speed will be produced by *minimizing the coast distance* before crossing the finish line. This means do the calculations to produce the mechanical advantage to get the mouse trap to stop imparting energy into the system at *exactly the moment* you cross the finish line. The calculations are this:
+v = velocity (m/s), a = acceleration (m/s^2), d = distance (m), F = force (N), m = mass (kg)
+v = sqrt(2*a*d)
+F = m*a --> a = F/m
+so, v = sqrt(2*d*F/m)
+I think you said the speed car speed would be measured at a distance of 15 ft, so:
+d = 15 ft = 4.572m
+m = the mass of the car (measure it)
+F = the pulling force--something you can optimize using mechanical advantage, and then measure with a scale while the car isn't moving but is ready to start.
+Now calculate v. The optimum F is simply whatever Force happens when you calculate the mechanical advantage necessary for the mouse trap to *finish its arc* at *exactly 15 ft*. 
+So, you can measure or calculate the arc length the mouse trap arm travels, and you can use the mechanical advantage calculations to then optimize your arm length and axle diameter to wheel diameter ratio. 
+You need to simply choose a ratio which gets the wheels to move 15 ft before the mouse trap is done. The mouse trap arc diameter is about 3.875 in, so the arc length over a 180 deg arm swing is pi*d/2 = 3.14159*3.875/2 = 6.087 in. 15 ft x 12in/ft = 180 in. 180/6.087 = 29.57, so you need a mechanical advantage of ***about 30*** to optimize the mouse trap speed car. Do NOT try to make it impart the energy as quickly as possible without spinning out, but rather make it impart the energy over **exactly 15 ft,** which means use a mechanical advantage of about 30. 
+**The concept is simple:** the mouse trap car will never go faster than what it is going when the Force applied to the system is removed, so get the Force to be removed at the exact moment the car crosses the finish line. Now, all energy will have been imparted without losing any to friction *while coasting*, because coasting (and hence deceleration) will begin exactly where the finish line is.
+Last note: I now know how to calculate the Joules of energy in the mouse trap, which is super cool. Just numerically integrate the force over the arc distance. Force could be measured at various points along the arc. You could also calculate the **total efficiency** of the system. Simply compare the integrated Joules of energy in the mouse trap to the Joules of energy at the wheels where they touch the ground. The Joules of energy at the wheels could be numerically integrated as well: simply measure the pull Force with a scale at various points along the distance of car travel, and numerically integrate each segment of energy (E = F*dist) over the distance traveled. Now, you have output energy integrated at the wheels, and input energy integrated at the end of the mouse trap arm. The *efficiency = output_joules/input_joules.* Losses are due to friction in the system between those two measurements, which accounts for losses due to friction in the axles, pulleys, string, and wheels to ground, but *not* the friction losses within the mousetrap spring itself. I'd be very interested to see what the efficiency of the system is for various mouse trap cars.
