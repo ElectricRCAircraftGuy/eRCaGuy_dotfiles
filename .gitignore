@@ -25,8 +25,9 @@
 #   ```
 #   Note, however, that if you've ignored a directory DIRECTLY, rather than merely its **contents**,
 #   you canNOT UNignore anything in it! Therefore, you must change the ignore rule from ignoring the
-#   directory to ignoring the **contents** of the directory! See here: 
-#   https://stackoverflow.com/a/5285539/4561887
+#   directory to ignoring the **contents** of the directory! 
+#   See here: https://stackoverflow.com/a/5285539/4561887 
+#   and also my answer here: https://stackoverflow.com/a/67551691/4561887
 #   Example:
 #   ```
 #   # OK: we CAN use the `!` rule after this ignore to UNignore something inside the "ignored_dir":
