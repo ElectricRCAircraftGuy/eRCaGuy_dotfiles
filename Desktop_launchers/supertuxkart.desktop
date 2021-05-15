@@ -1,0 +1,20 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# Copied from "/usr/share/applications/supertuxkart.desktop"
+
+[Desktop Entry]
+Name=SuperTuxKart
+Icon=supertuxkart
+GenericName=A kart racing game
+GenericName[da]=Et kart racerspil
+GenericName[de]=Ein Kart-Rennspiel
+GenericName[fr]=Un jeu de karting
+GenericName[gl]=Xogo de carreiras con karts
+GenericName[pl]=Wyścigi gokartów
+GenericName[ro]=Un joc de curse cu carturi
+Exec=supertuxkart
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;
+Keywords=tux;game;race;
