@@ -1730,6 +1730,10 @@ git gui
 tig
     A fancy ncurses-based GUI-*like* tool to navigate local or locally-pulled git repos
 
+git remote update origin --prune
+    Update the **local list** of remote branches, (I think) pruning all locally-stored branch names which exist locally but NOT remotely.
+    See: [When does Git refresh the list of remote branches?](https://stackoverflow.com/a/36358502/4561887)
+
 git diff = look at all **unstaged** changes (those NOT yet added with `git add`)
 git difftool = same as above, except view the changes in your "git difftool" (ex: meld) instead of via the `git diff` command line
 git diff --cached = look at just the **staged** changes (those added with `git add`)
