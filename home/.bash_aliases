@@ -252,17 +252,23 @@ gs_set_title() {
     # Help menu
     if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
         echo "Set the title of your currently-opened terminal tab."
-        echo "Usage:   $CMD any title you want"
-        echo "   OR:   $CMD \"any title you want\""
-        echo "   OR (to make a dynamic title which relies on variables or functions):"
-        echo "         $CMD '\$(some_cmd)'"
-        echo "     OR  $CMD '\${SOME_VARIABLE}'"
+        echo "Usage:"
+        echo "  1. set a **static** title"
+        echo "          $CMD any title you want"
+        echo "          # OR"
+        echo "          $CMD \"any title you want\""
+        echo "  2. set a **dynamic** title, which relies on variables or functions"
+        echo "          $CMD '\$(some_cmd)'       # with a dynamically-run command"
+        echo "          $CMD '\${SOME_VARIABLE}'  # with a dynamically-expanded variable"
+        echo ""
         echo "Examples:"
-        echo "         1. static title"
-        echo "           $CMD my new title"
-        echo "         2. dynamic title"
-        echo "           $CMD 'Current Directory is \"\$PWD\"'"
-        echo "       OR  $CMD 'Date and time of last cmd is \"\$(date)\"'"
+        echo "  1. static title"
+        echo "          $CMD my new title"
+        echo "  2. dynamic title"
+        echo "          $CMD 'Current Directory is \"\$PWD\"'"
+        echo "          $CMD 'Date and time of last cmd is \"\$(date)\"'"
+        echo "          # [MY FAVORITE!] To actively show just the directory name"
+        echo "          $CMD '\$(basename \"\$(pwd)\")'"
         return $EXIT_SUCCESS
     fi
 
