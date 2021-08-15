@@ -2467,6 +2467,7 @@ OPTION 4 [BEST I THINK!]: <======= BEST ========
 git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
     Clone the repo, but not the submodules. 
 git submodule update --init --recursive
+    <========== USE THIS! ==========
     BEST! Combines `git submodule init` followed by `git submodule update --recursive`, thereby fetching and checking out any and all nested submodules as well!
 
 3. PULLING UPSTREAM CHANGES INTO THE SUBMODULES
@@ -2475,6 +2476,7 @@ SEE: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> "Pulling Upstream C
 git pull
     Pull all upstream changes in the repo as well as submodules. This apparently does NOT, I think, check out the submodule changes just pulled, however--maybe they are just fetched?
 git submodule update --init --recursive
+    <========== USE THIS! ==========
     Update (clone) all submodule changes too.
 
 OTHER, GENERAL NOTES ABOUT GIT SUBMODULE CMDS:
@@ -3072,8 +3074,12 @@ basename $(realpath some_file_or_symlink)
 == diff: ==
 [plain diff; NOT git diff; regular diff; diff only; only diff; diff alone; alone diff]
 
+See also the Linux `cmp` command:
+cmp file1 file2
+    Compare two files **byte-by-byte**.
+
 diff file1.txt file2.txt
-    compare file1.txt and file2.txt for differences! (similar to `git diff`)
+    Compare file1.txt and file2.txt **line-by-line** for differences! (similar to `git diff`).
 diff -u file1.txt file2.txt
     same as above, except showing 'u'nified context output, meaning: show 3 lines (by default) of "unified", or intermingled line-by-line, output to show the context around the differences between the left and right files!
 diff --unified file1.txt file2.txt
@@ -3325,7 +3331,7 @@ So, to limit to 80% on an 8-core machine, use 0.8*800 = 640, like this:
 Limit to 62.5% on an 8-core machine:
     cpulimit -p 3185 -l 500
 
-This is very useful to limit your CPU usage being used by Bazel, for instance, when it is building for dozens of minutes, or even hours. Note that the Bazel build server JVM is usually just called "java", and can easily be viewed with `ps`, `top`, `htop`, or the `gnome-system-monitor` GUI (my preferred choice).
+This is very useful to limit your CPU usage being used by Bazel, for instance, when it is building for dozens of minutes, or even hours. Note that the Bazel build server JVM is usually just called "java", and can easily be viewed with `ps`, `top`, `htop`, or the `gnome-system-monitor` GUI (my preferred choice).
 
     sudo apt update
     sudo apt install cpulimit
@@ -3335,6 +3341,16 @@ This is very useful to limit your CPU usage being used by Bazel, for instance, w
     cpulimit -p <pid> -l 500 # limit your bazel build to 62.5% max CPU usage on an 8-core machine <=====
 
 Leave the `cpulimit` process running as long as you want this limiting effect in place. You don't need to restart it each time you begin a new bazel build, as the bazel build server continues running in the background even after a build completes.
+
+== Set process priority: ==
+An ALTERNATIVE TO (OR PARTNER TECHNIQUE to use in conjunction with) the `cpulimit` command above:
+
+nice
+    "run a program with modified scheduling priority"; ie: modify process priority in Linux to give one process priority over another
+    For help, tutorial, and examples, see: https://www.tecmint.com/set-linux-process-priority-using-nice-and-renice-commands/
+
+renice
+    See: https://www.tecmint.com/set-linux-process-priority-using-nice-and-renice-commands/
 
 == Mosh: ==
 An ssh-replacement program for better connections over wifi, cellular, and long-distance links. It is free software (GNU GPLv3)!
