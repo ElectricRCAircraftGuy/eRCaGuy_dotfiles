@@ -2398,7 +2398,7 @@ REFERENCES:
 1. *****+ Official documentation!: https://git-scm.com/book/en/v2/Git-Tools-Submodules <==== READ THIS! ====
 1. `man git submodule`
 
-1. HOW TO ADD A REPO AS A SUBMODULE TO ANOTHER GIT REPO:
+# 1. HOW TO ADD A REPO AS A SUBMODULE TO ANOTHER GIT REPO:
 SEE: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> "Starting with Submodules"
 --------------------
 git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
@@ -2432,7 +2432,7 @@ git config submodule.eRCaGuy_CodeFormatter.url git@github.com:ElectricRCAircraft
 git push origin master
     Push these changes to the remote repo on GitHub. 
 
-2. HOW TO CLONE A REPO WITH SUBMODULES:
+# 2. HOW TO CLONE A REPO WITH SUBMODULES:
 SEE: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> "Cloning a Project with Submodules"
 --------------------
 -----
@@ -2469,15 +2469,21 @@ git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
 git submodule update --init --recursive
     <========== USE THIS! ==========
     BEST! Combines `git submodule init` followed by `git submodule update --recursive`, thereby fetching and checking out any and all nested submodules as well!
+-----
+OPTION 5 [ALSO A GREAT TECHNIQUE IT SEEMS! [NEED TO TEST IT STILL TO BE SURE]]
+-----
+git clone --recursive https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
+    Clone the repo, AND the submodules, all in one go!
 
-3. PULLING UPSTREAM CHANGES INTO THE SUBMODULES
+# 3. PULLING UPSTREAM CHANGES INTO THE SUBMODULES [>> run BOTH commands below, in this order! <<]
 SEE: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> "Pulling Upstream Changes from the Project Remote"
 --------------------
 git pull
     Pull all upstream changes in the repo as well as submodules. This apparently does NOT, I think, check out the submodule changes just pulled, however--maybe they are just fetched?
 git submodule update --init --recursive
     <========== USE THIS! ==========
-    Update (clone) all submodule changes too.
+    Update (clone) all submodule changes too. 
+    GS: as determined through experimental testing, this also **checks out the appropriate commit hash** for each submodule, in a "detached head" (`HEAD detached at commit_id`) state! You can `cd` into each submodule directory and run `git status` and `git log` to see what I mean!
 
 OTHER, GENERAL NOTES ABOUT GIT SUBMODULE CMDS:
 
