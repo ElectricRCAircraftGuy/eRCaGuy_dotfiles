@@ -566,22 +566,22 @@ update_pc2 () {
     # TODO: figure out if origin is even available (ex: via a ping or something), and if not, error out right here!
     echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
     echo "  (w/'ssh-add <my_github_key>') OR ELSE THESE FOLLOWING STEPS WILL FAIL!"
-    echo "Force pulling from remote \"$SYNC_BRANCH\" branch to overwrite local copy of this branch."
-    echo "  1/3: 'git fetch origin \"$SYNC_BRANCH\"'"
-    git fetch origin "$SYNC_BRANCH"         # MAY NEED TO COMMENT OUT DURING TESTING
-    echo "  2/3: 'git checkout \"$SYNC_BRANCH\"'"
-    # Note: this `git checkout` call automatically checks out this branch from the remote "origin" if this branch
-    # is not already present locally
-    git checkout "$SYNC_BRANCH"             # MAY NEED TO COMMENT OUT DURING TESTING
-    echo "  3/3: 'git reset --hard \"origin/$SYNC_BRANCH\"' (to force-update the local branch to match the origin branch)"
-    git reset --hard "origin/$SYNC_BRANCH"  # MAY NEED TO COMMENT OUT DURING TESTING
+    echo "Force pulling from remote \"${SYNC_BRANCH}\" branch to overwrite local copy of this branch."
+    echo "  1/4: 'git fetch origin \"${SYNC_BRANCH}\"'"
+    git fetch origin "${SYNC_BRANCH}"           # MAY NEED TO COMMENT OUT DURING TESTING
+    echo "  2/4: 'git checkout \"origin/${SYNC_BRANCH}\"'"
+    git checkout "origin/${SYNC_BRANCH}"        # MAY NEED TO COMMENT OUT DURING TESTING
+    echo "  3/4: 'git branch -D \"${SYNC_BRANCH}\"'"
+    git branch -D "${SYNC_BRANCH}"              # MAY NEED TO COMMENT OUT DURING TESTING
+    echo "  4/4: 'git checkout -b \"${SYNC_BRANCH}\"'"
+    git checkout -b "${SYNC_BRANCH}"            # MAY NEED TO COMMENT OUT DURING TESTING
 
     echo "---\"update_pc2\" script end---"
 }
 
 # On remote machine:
 # Summary: Look for changes. Commit them to a new branch forked off of current branch. Call it
-# current_branch_SYNC_BAK_20200217-2310hrs. Check out $SYNC_BRANCH branch. Pull and hard reset.
+# current_branch_SYNC_BAK_20200217-2310hrs. Check out ${SYNC_BRANCH} branch. Pull and hard reset.
 # Done! We are ready to build now!
 sync_remote_branch_to_pc2 () {
     echo ""
