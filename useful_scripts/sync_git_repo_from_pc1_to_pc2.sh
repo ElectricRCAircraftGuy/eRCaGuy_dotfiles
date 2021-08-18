@@ -94,6 +94,7 @@ SCRIPT_NAME="$(basename "$0")"
 README_URL="https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/README_git-sync_repo_from_pc1_to_pc2.md"
 SOURCE_CODE_URL="https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/sync_git_repo_from_pc1_to_pc2.sh"
 VERSION_STR_SHORT="sync_git_repo_from_pc1_to_pc2 (run as '$SCRIPT_NAME') version $VERSION"
+
 VERSION_STR_LONG="
 $VERSION_STR_SHORT
 Author = $AUTHOR
@@ -163,9 +164,26 @@ Source Code:
     $SOURCE_CODE_URL
 "
 
+# ANSI Color Codes
+# See this file, approximately here:
+# https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/git-diffn.sh#L126
+COLOR_OFF="\033[m"
+COLOR_RED="\033[31m"
+COLOR_GRN="\033[32m"
+
 # ==================================================================================================
 # FUNCTION DEFINITIONS
 # ==================================================================================================
+
+# echo (print) the passed-in text in red
+echo_red() {
+    echo -e "${COLOR_RED}$@${COLOR_OFF}"
+}
+
+# echo (print) the passed-in text in green
+echo_grn() {
+    echo -e "${COLOR_GRN}$@${COLOR_OFF}"
+}
 
 print_help() {
     echo "$HELP_STR" | less -RFX
@@ -200,7 +218,7 @@ parse_args() {
             SYNC_BRANCH="$3"
             return $RETURN_CODE_SUCCESS
         else
-            echo "ERROR: '--update_pc2' command missing 2nd and/or 3rd arguments!"
+            echo_red "ERROR: '--update_pc2' command missing 2nd and/or 3rd arguments!"
             exit $RETURN_CODE_ERROR
         fi
     fi
@@ -229,7 +247,7 @@ parse_args() {
     if [ "$#" -eq "1" ];  then
         pc2_target_name="$1"
     elif [ "$#" -gt "1" ];  then
-        echo "ERROR: too many arguments!"
+        echo_red "ERROR: too many arguments!"
         exit $RETURN_CODE_ERROR
     fi
 }
@@ -264,7 +282,7 @@ read_user_parameters() {
         # Source this file only if it exists
         . ~/.sync_git_repo_private
     else
-        echo "\
+        echo_red "\
 ERROR! You must have a copy of the \"eRCaGuy_dotfiles/home/.sync_git_repo_private\" file in
 \"~/.sync_git_repo_private\", with your custom configuration settings in it. Please see the
 installation instructions in the top of this script for installation details. Script location:
@@ -280,7 +298,7 @@ installation instructions in the top of this script for installation details. Sc
         PC2_TARGETDIR["default"]="${PC2_TARGETDIR["$DEFAULT_TARGET"]}"
         PC2_SYNCBRANCH["default"]="${PC2_SYNCBRANCH["$DEFAULT_TARGET"]}"
     else
-        echo "\
+        echo_red "\
 ERROR: you must set the 'DEFAULT_TARGET' variable in \"~/.sync_git_repo_private\" to something."
         exit $RETURN_CODE_ERROR
     fi
@@ -301,9 +319,9 @@ ERROR: you must set the 'DEFAULT_TARGET' variable in \"~/.sync_git_repo_private\
     # Ensure target name is valid and that none of these variables are empty strings.
     if [ -z "$PC2_SSH_USERNAME" ] || [ -z "$PC2_SSH_HOST" ] || [ -z "$PC2_GIT_REPO_TARGET_DIR" ] ||
     [ -z "$SYNC_BRANCH" ]; then
-        echo "ERROR: invalid 'pc2_target_name' (\"$pc2_target_name\") passed to this program."
-        echo "  Please add this target to your custom \"~/.sync_git_repo_private\" file, or"
-        echo "  choose a valid target already defined in that file, and try again."
+        echo_red "ERROR: invalid 'pc2_target_name' (\"$pc2_target_name\") passed to this program."
+        echo_red "  Please add this target to your custom \"~/.sync_git_repo_private\" file, or"
+        echo_red "  choose a valid target already defined in that file, and try again."
         print_targets
         exit $RETURN_CODE_ERROR
     fi
@@ -384,7 +402,7 @@ get_pc2_actual_commit_hash() {
     # Obtain return code from `ssh`; see: https://stackoverflow.com/a/38533260/4561887
     ret_code="$?"
     if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
-        echo "ERROR: Failed to get pc2 actual commit hash! Please try again."
+        echo_red "ERROR: Failed to get pc2 actual commit hash! Please try again."
         exit $ret_code
     fi
 }
@@ -475,6 +493,11 @@ sync_pc1_to_remote_branch () {
     synced_commit_hash="$(git rev-parse HEAD)"
 
     # Only push the changes if pc2 doesn't already have these changes!
+    # - TODO: **ALSO** consider checking to see if the commit we are about to push is already on the
+    #   remote server, and if it is, there is NOT a need to push to the remote server even though
+    #   there IS a need to pull the new changes onto PC2. Note: think about this though: this may
+    #   not actually be a scenario we will ever see in practice, so maybe this isn't necessary
+    #   after-all.
     get_pc2_actual_commit_hash
     if [ "$synced_commit_hash" == "$pc2_actual_commit_hash" ]; then
         need_to_sync_to_pc2="false"
@@ -494,7 +517,7 @@ sync_pc1_to_remote_branch () {
         # https://stackoverflow.com/a/38533260/4561887
         ret_code="$?"
         if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
-            echo "ERROR: FAILED to 'git push'! Please try again."
+            echo_red "ERROR: FAILED to 'git push'! Please try again."
             exit $ret_code
         fi
 
@@ -614,21 +637,27 @@ sync_remote_branch_to_pc2 () {
     # Obtain return code from `ssh`; see: https://stackoverflow.com/a/38533260/4561887
     ret_code="$?"
     if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
-        echo "ERROR: FAILED TO SYNC! Please try again."
+        echo_red "ERROR: FAILED TO SYNC! Please try again."
         exit $ret_code
     fi
 
     # Ensure the commit hash on PC2 is now what we expect
     get_pc2_actual_commit_hash
-    echo "synced_commit_hash from pc1 = $synced_commit_hash"
-    echo "pc2_actual_commit_hash      = $pc2_actual_commit_hash"
     if [ "$synced_commit_hash" != "$pc2_actual_commit_hash" ]; then
-        echo "ERROR: FAILED TO SYNC! Mismatch in pc1 synced commit hash vs pc2 actual commit hash."
-        echo "Please try again."
+        # failure: print 1 as green and 1 as red
+        echo -e "synced_commit_hash from pc1 = ${COLOR_GRN}${synced_commit_hash}${COLOR_OFF}"
+        echo -e "pc2_actual_commit_hash      = ${COLOR_RED}${pc2_actual_commit_hash}${COLOR_OFF}"
+
+        echo_red "ERROR: FAILED TO SYNC! Mismatch in pc1 synced commit hash vs pc2 actual commit hash."
+        echo_red "Please try again."
         exit $RETURN_CODE_ERROR
     fi
 
-    echo "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
+    # success: print both as green
+    echo -e "synced_commit_hash from pc1 = ${COLOR_GRN}${synced_commit_hash}${COLOR_OFF}"
+    echo -e "pc2_actual_commit_hash      = ${COLOR_GRN}${pc2_actual_commit_hash}${COLOR_OFF}"
+
+    echo_grn "Done syncing remote branch to PC2. It should be ready to be built on PC2 now!"
 }
 
 # Main code to run on PC1
@@ -646,22 +675,22 @@ main_pc1 () {
     # after this and expect to be in the dir where we started
     cd "$DIR_START"
 
-    echo   ""
-    echo   "=========================================================================================="
-    echo   "SUMMARY:"
-    echo   "=========================================================================================="
-    echo   "  Commit hash synced:"
-    echo   "      From PC1:   ${synced_commit_hash}"
-    echo   "      Now on PC2: ${pc2_actual_commit_hash}"
+    echo       ""
+    echo       "=========================================================================================="
+    echo       "SUMMARY:"
+    echo       "=========================================================================================="
+    echo       "  Commit hash synced:"
+    echo_grn   "      From PC1:   ${synced_commit_hash}"
+    echo_grn   "      Now on PC2: ${pc2_actual_commit_hash}"
     # For printf help, see: https://stackoverflow.com/questions/994461/right-align-pad-numbers-in-bash/994471#994471
     # and: http://www.cplusplus.com/reference/cstdio/printf/
     printf "  From PC1: %-35s Repo root: %s\n" "${USER}@${HOSTNAME}:" "${REPO_ROOT_DIR}"
     printf "  To PC2:   %-35s Repo root: %s\n" "${PC2_SSH_USERNAME}@${PC2_SSH_HOST}:" "${PC2_GIT_REPO_TARGET_DIR}"
 
     timestamp="$(date "+%Y.%m.%d %H:%Mhrs:%Ssec")"
-    echo "  Completed at timestamp: $timestamp"
+    echo -e "  ${COLOR_GRN}Completed successfully${COLOR_OFF} at timestamp: $timestamp"
 
-    echo "END!"
+    echo_grn "END!"
 }
 
 # ==================================================================================================
