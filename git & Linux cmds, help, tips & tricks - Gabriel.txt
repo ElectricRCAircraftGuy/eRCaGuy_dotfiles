@@ -1734,6 +1734,16 @@ git remote update origin --prune
     Update the **local list** of remote branches, (I think) pruning all locally-stored branch names which exist locally but NOT remotely.
     See: [When does Git refresh the list of remote branches?](https://stackoverflow.com/a/36358502/4561887)
 
+git difftool 
+    Show just the changes that are NOT staged for commit (ie: in the index, or "added") since the last commit (HEAD).
+git difftool --cached
+    Show just the changes that ARE staged for commit (ie: in the index, or "added") since the last commit (HEAD).
+git difftool HEAD
+    <====== BEST COMMAND! ======
+    Show BOTH SETS OF CHANGES ABOVE: ie: everything that has changed since the last commit (HEAD), meaning: any changes since then, including both _staged_ (in the index, or "added") AND _unstaged_ (not yet "added") changes!
+    Therefore, `git difftool HEAD` is essentially the combination of `git difftool` PLUS `git difftool --cached`:
+        `git difftool HEAD` = `git difftool` + `git difftool --cached`
+---
 git diff = look at all **unstaged** changes (those NOT yet added with `git add`)
 git difftool = same as above, except view the changes in your "git difftool" (ex: meld) instead of via the `git diff` command line
 git diff --cached = look at just the **staged** changes (those added with `git add`)
