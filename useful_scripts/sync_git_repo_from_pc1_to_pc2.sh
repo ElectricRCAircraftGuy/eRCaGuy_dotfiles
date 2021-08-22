@@ -112,50 +112,70 @@ remote desktop (\"PC2\").
 
 Usage:
 
-    '$SCRIPT_NAME [pc2_target_name]'
-            Synchronize the git repo (whose directory you are currently in when running the command)
-            on the local computer (\"PC1\") to the remote 'pc2_target_name' computer (\"PC2\").
-            'pc2_target_name' is optional. You must set and configure your 'pc2_target_name' options
-            as 'TARGET' variables inside your custom  \"~/.sync_git_repo_private\" file. If
-            'pc2_target_name' is not passed as an argument to this program call, it defaults to
-            'DEFAULT_TARGET' which you must also set inside your custom
-            \"~/.sync_git_repo_private\" file.
+    $SCRIPT_NAME [pc2_target_name [cmd]]
 
-    '$SCRIPT_NAME'
+            Synchronize the git repo (whose directory you are currently in when running the command)
+            on the local computer (\"PC1\") to the remote 'pc2_target_name' computer
+            (\"PC2\"). Then, optionally run the command 'cmd' on PC2 in its target git repository
+            path (ie: directory) when done.
+
+            The input paramter 'pc2_target_name' is optional, UNLESS you want to pass in a 'cmd' to
+            run when done, in which case 'pc2_target_name' is mandatory and must come before 'cmd',
+            as shown above.
+
+            You must set and configure your 'pc2_target_name' options as 'TARGET' variables inside
+            your custom  \"~/.sync_git_repo_private\" file. If 'pc2_target_name' is not passed as
+            an argument to this program call, it defaults to 'DEFAULT_TARGET' which you must also
+            set inside your custom \"~/.sync_git_repo_private\" file.
+
+            When the repo is done synchronizing from PC1 to PC2, it will run 'cmd' on PC2 in the
+            directory of the target git repository on PC2.
+
+    $SCRIPT_NAME
             Run the script with the target set to the value of 'DEFAULT_TARGET', as defined by the
             user in their custom \"~/.sync_git_repo_private\" file.
 
-    '$SCRIPT_NAME -t'
+    $SCRIPT_NAME -t
             Print all user-defined 't'argets the user has defined inside
             \"~/.sync_git_repo_private\".
 
-    '$SCRIPT_NAME -h'
+    $SCRIPT_NAME -h
             print this help menu
 
-    '$SCRIPT_NAME -?'
+    $SCRIPT_NAME -?
             print this help menu
 
-    '$SCRIPT_NAME -v'
+    $SCRIPT_NAME -v
             print the author and version
 
 Private Usage
 (these are calls the script itself automatically makes):
 
-    '$SCRIPT_NAME --update_pc2 <pc2_git_repo_target_dir> <sync_branch>'
+    $SCRIPT_NAME --update_pc2 <pc2_git_repo_target_dir> <sync_branch>
             Finish synchronizing the changes from GitHub to PC2 in PC2's 'pc2_git_repo_target_dir',
             from the remote 'sync_branch'. The script itself calls this automatically on PC2 via an
             ssh command to PC2, when needed.
 
 Examples:
 
-    '$SCRIPT_NAME'
+    $SCRIPT_NAME
             Syncrhonize PC1 to PC2 where PC2 is the \"default\" target.
-    '$SCRIPT_NAME default'
+    $SCRIPT_NAME default
             Same as above, except explicitly specify \"default\" target.
-    '$SCRIPT_NAME desktop'
+    $SCRIPT_NAME desktop
             Synchronize to user-defined \"desktop\" target.
-    '$SCRIPT_NAME desktop2'
+    $SCRIPT_NAME desktop2
             Synchronize to user-defined \"desktop2\" target.
+
+  With an optional 'cmd' parameter:
+
+    $SCRIPT_NAME default 'time bazel build //...'; gs_alert
+            Synchronize from PC1 to PC2, where PC2 is the explicitly-named 'default' target, AND
+            then run the command 'time bazel build //...' on PC2 in the target repo directory
+            on that PC when done synchronizing! Finally, when all of that finishes, run the
+            'gs_alert' alias to beep and open a popup to indicate the operation is complete.
+            Note: the 'gs_alert' alias is found here:
+            https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/home/.bash_aliases
 
 Readme:
     $README_URL
@@ -170,6 +190,7 @@ Source Code:
 COLOR_OFF="\033[m"
 COLOR_RED="\033[31m"
 COLOR_GRN="\033[32m"
+COLOR_BLU="\033[34m"
 
 # ==================================================================================================
 # FUNCTION DEFINITIONS
@@ -183,6 +204,11 @@ echo_red() {
 # echo (print) the passed-in text in green
 echo_grn() {
     echo -e "${COLOR_GRN}$@${COLOR_OFF}"
+}
+
+# echo (print) the passed-in text in blue
+echo_blu() {
+    echo -e "${COLOR_BLU}$@${COLOR_OFF}"
 }
 
 print_help() {
@@ -206,6 +232,7 @@ run_always() {
 parse_args() {
     PC_TO_RUN_ON="pc1"
     pc2_target_name="default"
+    pc2_target_cmd=""
 
     # 1. Intended for private usage
 
@@ -244,9 +271,10 @@ parse_args() {
     # Reminder to self: see bash associative array tutorial here!:
     # https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
 
-    if [ "$#" -eq "1" ];  then
+    if [ "$#" -le "2" ];  then
         pc2_target_name="$1"
-    elif [ "$#" -gt "1" ];  then
+        pc2_target_cmd="$2"
+    elif [ "$#" -gt "2" ];  then
         echo_red "ERROR: too many arguments!"
         exit $RETURN_CODE_ERROR
     fi
@@ -688,9 +716,15 @@ main_pc1 () {
     printf "  To PC2:   %-35s Repo root: %s\n" "${PC2_SSH_USERNAME}@${PC2_SSH_HOST}:" "${PC2_GIT_REPO_TARGET_DIR}"
 
     timestamp="$(date "+%Y.%m.%d %H:%Mhrs:%Ssec")"
-    echo -e "  ${COLOR_GRN}Completed successfully${COLOR_OFF} at timestamp: $timestamp"
+    echo -e "  ${COLOR_GRN}Synchronization to PC2 completed successfully${COLOR_OFF} at timestamp: $timestamp"
 
-    echo_grn "END!"
+    echo     "Running cmd '$pc2_target_cmd' on PC2 in directory \"$PC2_GIT_REPO_TARGET_DIR\":"
+    echo     "    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST \"cd '$PC2_GIT_REPO_TARGET_DIR' && $pc2_target_cmd\""
+    echo_blu "----"
+    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST "cd '$PC2_GIT_REPO_TARGET_DIR' && $pc2_target_cmd"
+    echo_blu "----"
+
+    echo_blu "END!"
 }
 
 # ==================================================================================================
