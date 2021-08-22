@@ -5,6 +5,11 @@ Gabriel Staples
 - These are my Linux Ubuntu configuration files and commonly-used scripts--many of which I've written myself. 
 - This project is well-maintained, highly-used by myself, and highly-functional. It's not experimental, it's what I use every day. Feel free to use or borrow from it yourself. 
 
+
+# Also very useful:
+1. My [eRCaGuy_hello_world](https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world) repo.
+
+
 # Table of Contents
 <details>
 <summary><b>(click to expand)</b></summary>
