@@ -9,7 +9,11 @@ INSTALLATION INSTRUCTIONS:
 0. Install dependencies:
     Source: https://zoomadmin.com/HowToInstall/UbuntuPackage/python-rosbag
         sudo apt install python-rosbag   # for python2 (deprecated)
-        sudo apt install python3-rosbag  # for python3 (required now) <===
+        sudo apt install python3-rosbag  # for python3 (also doesn't seem to work now)
+    If those two commands above don't work, try these cmds instead. Source:
+    https://stackoverflow.com/a/64310922/4561887
+        pip install bagpy
+        pip3 install bagpy               # for python3 (this seems to be the new requirement!) <===
 1. Create a symlink in ~/bin to this script so you can run it from anywhere:
         cd /path/to/here
         mkdir -p ~/bin
