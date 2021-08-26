@@ -191,6 +191,7 @@ COLOR_OFF="\033[m"
 COLOR_RED="\033[31m"
 COLOR_GRN="\033[32m"
 COLOR_BLU="\033[34m"
+COLOR_CYA="\033[36m"
 
 # ==================================================================================================
 # FUNCTION DEFINITIONS
@@ -209,6 +210,11 @@ echo_grn() {
 # echo (print) the passed-in text in blue
 echo_blu() {
     echo -e "${COLOR_BLU}$@${COLOR_OFF}"
+}
+
+# echo (print) the passed-in text in cyan
+echo_cya() {
+    echo -e "${COLOR_CYA}$@${COLOR_OFF}"
 }
 
 print_help() {
@@ -271,7 +277,9 @@ parse_args() {
     # Reminder to self: see bash associative array tutorial here!:
     # https://www.artificialworlds.net/blog/2012/10/17/bash-associative-array-examples/
 
-    if [ "$#" -le "2" ];  then
+    if [ "$#" -eq "1" ];  then
+        pc2_target_name="$1"
+    elif [ "$#" -eq "2" ];  then
         pc2_target_name="$1"
         pc2_target_cmd="$2"
     elif [ "$#" -gt "2" ];  then
@@ -718,11 +726,14 @@ main_pc1 () {
     timestamp="$(date "+%Y.%m.%d %H:%Mhrs:%Ssec")"
     echo -e "  ${COLOR_GRN}Synchronization to PC2 completed successfully${COLOR_OFF} at timestamp: $timestamp"
 
-    echo     "Running cmd '$pc2_target_cmd' on PC2 in directory \"$PC2_GIT_REPO_TARGET_DIR\":"
-    echo     "    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST \"cd '$PC2_GIT_REPO_TARGET_DIR' && $pc2_target_cmd\""
-    echo_blu "----"
-    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST "cd '$PC2_GIT_REPO_TARGET_DIR' && $pc2_target_cmd"
-    echo_blu "----"
+    # Only run the target command on PC2 if one has been specified
+    if [ -n "$pc2_target_cmd" ]; then
+        echo -e  "Running cmd '${COLOR_BLU}${pc2_target_cmd}${COLOR_OFF}' on PC2 in directory \"$PC2_GIT_REPO_TARGET_DIR\":"
+        echo -e  "    ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST \"cd '$PC2_GIT_REPO_TARGET_DIR' && ${COLOR_BLU}${pc2_target_cmd}${COLOR_OFF}\""
+        echo_blu "----"
+        ssh -t $PC2_SSH_USERNAME@$PC2_SSH_HOST "cd '$PC2_GIT_REPO_TARGET_DIR' && $pc2_target_cmd"
+        echo_blu "----"
+    fi
 
     echo_blu "END!"
 }
