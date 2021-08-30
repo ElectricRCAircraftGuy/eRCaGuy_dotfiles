@@ -57,6 +57,12 @@ ssh-add ~/.ssh/id_ed25519
 # 3. Copy your **public** key to your server you'd like to log into. 
 # NB: **NEVER** share your private key. That lets other people act as you. Your public key, however,
 # can be safely shared publicly.
+#
+# vvvvvvvvv
+# Basically, you just need to copy the contents of your public key file ("~/.ssh/id_ed25519.pub" in
+# the example above) into your server's "~/.ssh/authorized_keys" file is all. Below are a couple
+# ways to do so.
+# ^^^^^^^^^
 
 # Option A: if you have password-based ssh login enabled on your server, you can copy your public
 # key remotely to it like this:
@@ -75,9 +81,4 @@ scp ~/.ssh/id_ed25519.pub username@remote_host:~/.ssh && \
 # file, via the NoMachine GUI login, into your server's "~/.ssh/authorized_keys" file. You can also
 # email the **public key** "~/.ssh/id_ed25519.pub" file to your remote server and graphically
 # copy/paste it from your email, or whatever. 
-#
-# vvvvvvvvv
-# Basically, you just need to copy the contents of your "~/.ssh/id_ed25519.pub" public key file into
-# your server's "~/.ssh/authorized_keys" file is all. 
-# ^^^^^^^^^
 ```
