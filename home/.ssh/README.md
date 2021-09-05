@@ -82,3 +82,5 @@ scp ~/.ssh/id_ed25519.pub username@remote_host:~/.ssh && \
 # email the **public key** "~/.ssh/id_ed25519.pub" file to your remote server and graphically
 # copy/paste it from your email, or whatever. 
 ```
+
+<sub>Keywords: ssh instructions; ssh readme; ssh public/private key setup; ssh public-private key setup; set up your public and private ssh keys</sub>

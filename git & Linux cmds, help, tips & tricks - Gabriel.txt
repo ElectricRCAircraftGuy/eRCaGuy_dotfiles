@@ -2847,6 +2847,18 @@ nm-connection-editor
     Open the "Advanced Network Configuration" GUI! Taught to me by BrosTrend Trend-tech in an email to me on 7 Mar. 2021. One thing you can do is set a "Device", by MAC address, in order to limit one WiFi connection to a specific WiFi adapter. Or, you can leave this "Device" field blank to let that connection work with ANY connected network/WiFi adapter! Be sure to **look at the command-line output in the terminal** when running this program, to take note of any feedback or errors the GUI program may be seeing. This is helpful to indicate to you why you may not be able to save new settings, for instance. 
     See my notes on this cmd here: https://github.com/ElectricRCAircraftGuy/BrosTrendWifiAdapterSoftware
 
+A few esoteric networking commands to be aware of:
+See: 
+  - https://www.techrepublic.com/blog/data-center/breaking-down-an-ipv6-address-what-it-all-means/
+  - https://www.techrepublic.com/blog/data-center/ipv6-in-action-how-mythic-beasts-does-it/
+- - - - - 
+host www.raspberrypi.org
+whois raspberrypi.org
+ip addr          
+ifconfig
+iwconfig
+netstat -an
+
 ip help
     show the options and `OBJECT`s available for the `ip [OPTIONS] <OBJECT>` commands!
     - See also MY ANS HERE! https://unix.stackexchange.com/questions/152331/how-can-i-create-a-virtual-ethernet-interface-on-a-machine-without-a-physical-ad/593142#593142

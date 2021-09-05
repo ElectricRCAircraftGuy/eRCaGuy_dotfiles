@@ -47,11 +47,12 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 1. `git blametool`. See: [useful_scripts/README.md](useful_scripts/README.md).
     1. [![](https://i.stack.imgur.com/5D4oE.jpg)](https://i.stack.imgur.com/5D4oE.jpg)
 1. `git branch_`. Same as `git branch` except don't show "hidden", user-backed-up branches. See my answer here: [Hide but still save a branch with GIT?](https://stackoverflow.com/a/66574807/4561887)
+1. [ssh key setup information](home/.ssh)
 1. .bashrc file which contains:
     1. `ls` aliases such as `ll`, `la`, & `l`
     1. Prompt String 1 (`PS1`) modifications to add terminal titles, current git branch name checked out [VERY USEFUL FEATURE!], bash shell level, etc
         1. ![bash shell terminal prompt showing current git branch!](./bashrc_sample_terminal_prompt.png)
-    1. ssh alias
+    1. ssh aliases
     1. function to set terminal title
     1. ability to open up default tabs (with unique titles) for rapid launching of tabs in a terminal for development work
 1. .gitconfig file with meld as my difftool, `git lg` alias, etc
