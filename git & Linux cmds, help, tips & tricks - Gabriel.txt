@@ -7,6 +7,10 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 = Quotes: =
 ====================================================================================================
 
+On confrontation, and how to handle conflicts [Applies to *most* people and situations, NOT all. Some people you *do* need to avoid and not confront, esp. if they are manipulative and/or continually contemptuous towards you]:
+"Whatever the cause of such strife may be, simply ruminating on the issue — or deliberately engaging in conflict avoidance tactics (i.e. people-pleasing), will do nothing to resolve said contention. The fact of the matter is, confrontation is necessary, and if done properly can dramatically increase the quality of our lives — in addition to that of our relationships."
+    - A.J. Deveaux, Why Confrontation is Good, How to properly handle conflict, medium.com (https://medium.com/swlh/why-confrontation-is-good-20aa32a69dd1), 23 May 2019.
+
 "The best code is the 'done' code. (Meaning: it is functional [basic features] and works [runs/accomplishes the need])."
     - Gabriel Staples, 24 Jan. 2021
 
