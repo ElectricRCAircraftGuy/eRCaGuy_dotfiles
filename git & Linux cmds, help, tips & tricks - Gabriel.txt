@@ -2082,6 +2082,17 @@ git cherry-pick commit_start^..commit_end
 git cherry-pick commit1 commit2 commit3
     cherry-pick these commits (up to any number--add as many commit hashes as you want!) onto the current branch; NOT the same as using commit1..commit2, which selects a **range** of commits from 1 commit after commit1, through commit2!
 
+== `git tag`: ==
+
+See:
+1. https://stackoverflow.com/questions/8044583/how-can-i-move-a-tag-on-a-git-branch-to-a-different-commit/28280404#28280404 - How to delete local and remote tags and remake them...TODO [FINISH TAG COMMANDS HERE WHEN ABLE!]
+1. [my answer] https://stackoverflow.com/questions/6269927/how-can-i-list-all-tags-in-my-git-repository-by-the-date-they-were-created/69241512#69241512
+
+git tag
+    List all tags
+git tag -l
+    List all tags (same as above)
+
 == `git ls-files` and `git ls-tree`: ==
 
 HOW TO LIST (ls) FILES IN A GIT REPO: `git ls-files` and `git ls-tree`
