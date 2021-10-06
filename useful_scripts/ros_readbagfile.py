@@ -1,4 +1,15 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+
+# NB: on some systems, you may need to use one of these hash-bang lines above instead:
+#       #!/usr/bin/python3
+#   OR:
+#       #!/usr/local/bin/python3
+#
+# Run `which python3` to see which Python 3 binary executable your system's environment is
+# configured to use by default.
+#
+# See also:
+# https://stackoverflow.com/questions/2429511/why-do-people-write-usr-bin-env-python-on-the-first-line-of-a-python-script
 
 """
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
@@ -8,18 +19,24 @@ Author: Gabriel Staples
 INSTALLATION INSTRUCTIONS:
 0. Install dependencies:
     Source: https://zoomadmin.com/HowToInstall/UbuntuPackage/python-rosbag
-        sudo apt install python-rosbag   # for python2 (deprecated)
-        sudo apt install python3-rosbag  # for python3 (also doesn't seem to work now)
-    If those two commands above don't work, try these cmds instead. Source:
-    https://stackoverflow.com/a/64310922/4561887
-        pip install bagpy
-        pip3 install bagpy               # for python3 (this seems to be the new requirement!) <===
+            sudo apt install python-rosbag   # for python2 (deprecated)
+            sudo apt install python3-rosbag  # for python3 (also doesn't seem to work now)
+    If those two commands above don't work, try these cmds instead.
+    Source:
+    1. https://stackoverflow.com/a/64310922/4561887
+    1. >>>> See also my own answer here <<<<: https://stackoverflow.com/a/69368883/4561887
+            pip install bagpy
+            pip3 install bagpy               # for python3 (this seems to be the new requirement!) <===
+            # OR, if the above cmd ultimately fails due to permissions errors, use `sudo` too:
+            sudo pip3 install bagpy
 1. Create a symlink in ~/bin to this script so you can run it from anywhere:
-        cd /path/to/here
-        mkdir -p ~/bin
-        ln -si "${PWD}/ros_readbagfile.py" ~/bin/gs_ros_readbagfile
-        ln -si "${PWD}/ros_readbagfile.py" ~/bin/ros_readbagfile
-2. Now you can use the command `gs_ros_readbagfile` OR `ros_readbagfile` directly
+            cd /path/to/here
+            mkdir -p ~/bin
+            ln -si "${PWD}/ros_readbagfile.py" ~/bin/gs_ros_readbagfile
+            ln -si "${PWD}/ros_readbagfile.py" ~/bin/ros_readbagfile
+2. If this is the first time ever creating the "~/bin" dir, then log out and log back in to your
+   Ubuntu user account to cause Ubuntu to automatically add your ~/bin dir to your executable PATH.
+3. Now you can use the command `gs_ros_readbagfile` OR `ros_readbagfile` directly
    anywhere you like.
 
 TUTORIAL DEMO:
@@ -60,8 +77,8 @@ READ_ALL_TOPICS = None
 
 def printHelp():
     cmd_name = os.path.basename(sys.argv[0])
-    help = textwrap.dedent("""
-        Usage: {} <mybagfile.bag> [topic1] [topic2] [topic3] [...topicN]
+    help = textwrap.dedent(f"""
+        Usage: {cmd_name} <mybagfile.bag> [topic1] [topic2] [topic3] [...topicN]
 
         Reads and prints all messages published on the specified topics from the specified ROS bag file. If
         no topics are specified, it will print ALL messages published on ALL topics found in the bag file.
@@ -75,12 +92,23 @@ def printHelp():
         Examples:
         1. Print all messages published to the "/speed", "/vel", and "/dist" topics and stored in the
         "mybagfile.bag" ROS bag file to the screen:
-            {} mybagfile.bag /speed /vel /dist
-        2. Same as above, except also stores the printed output into an output file, "output.txt" as well:
-            {} mybagfile.bag /speed /vel /dist | tee output.txt
+            {cmd_name} mybagfile.bag /speed /vel /dist
+        2. Same as above, except also stores the printed output into an output file, "output.yaml" as well:
+            {cmd_name} mybagfile.bag /speed /vel /dist | tee output.yaml
         3. [MY FAVORITE] Same as above, except also times how long the whole process takes:
-            time {} mybagfile.bag /speed /vel /dist | tee output.txt
-        """).format(cmd_name, cmd_name, cmd_name, cmd_name)
+            time {cmd_name} mybagfile.bag /speed /vel /dist | tee output.yaml
+
+        Note: for a basic example of how to import YAML files in Python, so you can then import and
+        manipulate the *.yaml files generated above, see:
+        https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/tree/master/python/yaml_import
+
+        TUTORIAL DEMO:
+        For a usage demo, see this ROS tutorial I wrote here: "Reading messages from a bag file":
+        http://wiki.ros.org/ROS/Tutorials/reading%20msgs%20from%20a%20bag%20file
+
+        '{cmd_name}' is part of eRCaGuy_dotfiles:
+        https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/ros_readbagfile.py
+        """)
 
     print(help)
 
