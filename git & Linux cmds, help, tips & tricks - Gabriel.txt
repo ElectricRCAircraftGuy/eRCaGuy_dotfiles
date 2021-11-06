@@ -60,6 +60,11 @@ That should be a comic.
 "There are two ways to code bug-free; only the third one works."
     - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
 
+"Confusion and clutter are the failure of design, not the attributes of information."
+    - Edward Tufte
+    - I first saw this posted on Adafruit.com's order checkout page, here, near the bottom-right: https://www.adafruit.com/index.php?main_page=checkout_success
+      Keep refreshing the page for more quotes each time!
+
 
 ====================================================================================================
 = My Thoughts on C++: =
@@ -942,8 +947,126 @@ See:
 
 
 ====================================================================================================
+= buildroot: =
+====================================================================================================
+
+keywords: make:
+
+(and emmbedded Linux)
+
+- a build system to build embedded Linux
+- an alternative to yocto
+
+References:
+1. https://buildroot.org/downloads/manual/manual.html - The Official Buildroot user manual
+    1. https://buildroot.org/downloads/manual/manual.html#adding-packages - Chapter 18. Adding new packages to Buildroot
+    1. https://buildroot.org/downloads/manual/manual.html#full-rebuild - 8.2. Understanding **when** a full rebuild is necessary
+    1. https://buildroot.org/downloads/manual/manual.html#rebuild-pkg - 8.3. Understanding **how** to rebuild packages
+1. 3rd-party
+    1. https://bootlin.com/
+    1. https://bootlin.com/doc/training/embedded-linux/embedded-linux-slides.pdf
+    1. https://bootlin.com/doc/training/buildroot/buildroot-slides.pdf
+    1. Getting started with Buildroot - Lab - https://elinux.org/images/4/4b/Getting-Started-With-Buildroot-Lab-ELC2018.pdf 
+    1. Google search for "buildroot choose target board": https://www.google.com/search?q=buildroot+choose+target+board&oq=buildroot+choose+target+board&aqs=chrome..69i57.7996j0j4&sourceid=chrome&ie=UTF-8
+
+Buildroot is a build system. It is NOT NEARLY AS ROBUST, RELIABLE, NOR REPEATABLE as Bazel. Bazel will detect even the most-minute changes and rebuild just what it needs to as a result. Buildroot does NOT do this. Rather, YOU must determine when to do a full rebuild, and *what* to build otherwise. It only has **some** ability to incrementally build or rebuild things automatically as you make changes. See the notes and official manual just below.
+
+Note: the default output directory for the built rootfs root file system tarball is: "output/images/rootfs.tar".
+
+I RECOMMEND THAT YOU **PUT `time` IN FRONT OF ALL `make` COMMANDS BELOW** SO YOU CAN SEE HOW LONG THEY TAKE! This is useful to set your expectations as you build your system, so you can get a feel for what commands take how much time, thereby allowing you to more efficiently plan lunch breaks, bathroom breaks, when to build what, etc.
+
+make
+    Build for the configured target board.
+make all
+    Same as above, since `all` is the default `make` target.
+
+------------------------------
+**When** to do a full rebuild: 
+------------------------------
+https://buildroot.org/downloads/manual/manual.html#full-rebuild
+1. "Again, Buildroot does not track when a package should be rebuilt: **once a package has been built, it is never rebuilt unless explicitly told to do so**."
+1. "Generally speaking, when you’re facing a build error and you’re unsure of the potential consequences of the configuration changes you’ve made, do a full rebuild. If you get the same build error, then you are sure that the error is not related to partial rebuilds of packages..."
+
+make clean all
+    Clean AND force a full rebuild right now! This cleans and then rebuilds! It is the equivalent of calling `make clean && make all`, where `make all` is the same as `make`!
+    <===============
+make clean
+    Just clean, which will force a rebuild **next time** you build, but not now. ie: It won't build at this time.
+make clean && make all
+    Clean (to force a full rebuild) and make. Same as `make clean all`. 
+make clean && make
+    Same as above; same as `make clean && make all` or just `make clean all`.
+make clean; \
+make
+    Same as above, just written as separate commands. ie: "clean", or delete, the entire "output/my-target-board" dir, then rebuild it all again from scratch.
+
+------------------------------
+**How** to rebuild:
+------------------------------
+https://buildroot.org/downloads/manual/manual.html#rebuild-pkg
+- "Removing a package is unsupported by Buildroot without rebuilding from scratch. This is because Buildroot doesn’t keep track of which package installs what files in the output/staging and output/target directories, or which package would be compiled differently depending on the availability of another package."
+- "The easiest way to rebuild a single package from scratch is to remove its build directory in output/build. Buildroot will then re-extract, re-configure, re-compile and re-install this package from scratch. You can ask buildroot to do this with the `make <package>-dirclean` command."
+- "On the other hand, if you only want to restart the build process of a package from its compilation step, you can run `make <package>-rebuild`. It will restart the compilation and installation of the package, but not from scratch: it basically re-executes make and make install inside the package, so it will only rebuild files that changed."
+- "Internally, Buildroot creates so-called stamp files to keep track of which build steps have been completed for each package. They are stored in the package build directory, `output/build/<package>-<version>/` and are named `.stamp_<step-name>`. The commands detailed above simply manipulate these stamp files to force Buildroot to restart a specific set of steps of a package build process."
+
+NB: all `make <package>-...` commands below do NOT trigger recreating the root filesystem image (rootfs)! **If re-creating the root filesystem is necessary**, one should in addition run `make` or `make all` [same thing]" (https://buildroot.org/downloads/manual/manual.html#rebuild-pkg).
+<===============
+
+GS: >>> What is a package? <<< Ans: a package is a directory of source code and/or binaries or libraries intended for use on an embedded-linux target board. Package names are simply **folders** or **subfolders** inside one of the "package" directories. You might store your own custom "packages", for instance, inside "br2-external/package", for instance, while storing buildroot's included packages inside "buildroot/package". There are also a few "special" packages which are somehow defined internally in buildroot. These include "linux" and "uboot", for instance. 
+
+Sample commans to rebuild a package:
+```bash
+make linux-rebuild
+make uboot-rebuild
+make busybox-rebuild
+make dc3dd-rebuild
+```
+...where the package names above are `linux`, `uboot`, `busybox`, `dc3dd`, etc. 
+
+make <package>-dirclean
+    Delete the built package files for <package> from the output build dir. This deletes entire "output/build/<package>" dir. Next time you run `make` (I believe) now, this package will be entirely rebuilt from scratch.
+    See: https://buildroot.org/downloads/manual/manual.html#rebuild-pkg
+make <package>-rebuild
+    Restart the compilation and installation of the package, but **not from scratch**. ie: this "re-executes `make` and `make install` inside the package, so it will only rebuild files that changed."
+    This also calls `make <package>-reinstall`!
+    See: https://buildroot.org/downloads/manual/manual.html#rebuild-pkg
+    <===============
+make <package>-reconfigure
+    Restart the configuration, compilation, and installation of the package [from scratch, it sounds like!]
+    This also calls `make <package>-rebuild`!
+    See: https://buildroot.org/downloads/manual/manual.html#rebuild-pkg
+
+make <package>-rebuild && make all
+    Rebuild the files that changed in package "<package>", AND also re-create the root file system (rootfs)! (`make all` recreates the file system, as `make <package>-rebuild` only rebuilds the package alone, but does NOT rebuild the file system!). See my "NB" notes above. Source: https://buildroot.org/downloads/manual/manual.html#rebuild-pkg.
+    <======= BEST!? ========
+make <package>-rebuild && make
+    Same as above. `make` calls `make all` since "all" is the default make target (ie: the first-listed name which does not begin with a `.`). See: https://www.gnu.org/software/make/manual/html_node/How-Make-Works.html and https://stackoverflow.com/a/2057716/4561887.
+
+
+====================================================================================================
+= yocto: =
+====================================================================================================
+
+- a build system to build embedded Linux
+- an alternative to buildroot
+
+
+====================================================================================================
+= embedded Linux: =
+====================================================================================================
+
+References:
+1. https://bootlin.com/
+1. [NEED TO STUDY & READ!] https://bootlin.com/doc/training/embedded-linux/embedded-linux-slides.pdf
+1. https://bootlin.com/doc/training/buildroot/buildroot-slides.pdf
+1. https://en.wikipedia.org/wiki/Sysfs
+
+
+====================================================================================================
 = gdb and gdbgui: =
 ====================================================================================================
+
+Keywords: help gdb, gdb help
 
 == General Debugging Advice: ==
 
@@ -1815,6 +1938,7 @@ git diff --shortstat   commit_hash
     Sample output:
             $ git diff --shortstat
              3 files changed, 84 insertions(+), 21 deletions(-)
+    - this shows the GitHub-like output with the numbers of files and lines added and deleted!
     <======= MY FAVORITE SHORT STATUS I THINK (^^^) =======
 git diff --dirstat     commit_hash
     Show the percent of changes by directory.
@@ -2829,6 +2953,23 @@ sudo ifconfig INTERFACE_NAME down
 sudo ifconfig wlan0 down
     <===== REALLY USEFUL =======
     turn network interface wlan0 OFF
+sudo ifconfig INTERFACE_NAME down && sudo ifconfig INTERFACE_NAME up
+    <==========
+    Reset an interface by bringing it down then back up again; this can help fix routing tables I believe? (use `route -n` to show routing tables).
+    It seems to me this is kind of like "power cycling" a network interface, and is useful to reset one which isn't working properly! 
+    ***You might want to do this after changing an interface's IP address, for instance.***
+sudo ifconfig INTERFACE_NAME NEW_IP netmask NEW_NETMASK
+    Set a new IP address and netmask to interface "INTERFACE_NAME". 
+    See: https://www.howtogeek.com/118337/stupid-geek-tricks-change-your-ip-address-from-the-command-line-in-linux/
+    Ex:
+sudo ifconfig eth0 192.168.0.1 netmask 255.255.255.0
+    Set interface "eth0"'s IP address to a new value of 192.168.0.1, with a new netmask of 255.255.255.0. 
+    **NB: run `sudo ifconfig eth0 down && sudo ifconfig eth0 up` when done** to "reset" this interface and (apparently?) re-calculate its routing tables shown by `route` or `route -n`! 
+    <===========
+route
+    Show the IP routing table. [I think this tries to find a name server to look up symbolic host names]
+route -n
+    Show the IP routing table with numerical addresses instead of trying to determine symbolic host names. [I'm not sure exactly what this means, but I think it skips the name server symbolic name lookup step; in either case, it runs **way** faster than just the `route` command!]
 
 sudo ip link set wlan0 up
     <===== REALLY USEFUL (NEWER CMD!) =======
@@ -3013,7 +3154,7 @@ GOING FURTHER:
 ====================================================================================================
 = Linux (General): =
 ====================================================================================================
-[general linux; linux general, linux =]
+[general linux; linux general, linux =, linux: =]
 
 Linux Terminal shortcuts: https://www.howtogeek.com/howto/ubuntu/keyboard-shortcuts-for-bash-command-shell-for-ubuntu-debian-suse-redhat-linux-etc/
 Ex:
@@ -3114,6 +3255,10 @@ dirname $(realpath some_file_or_symlink)
     Obtain the full **directory** path of the path above.
 basename $(realpath some_file_or_symlink)
     Obtain the base **filename** of the path above.
+
+lscpu
+    List information about your CPU and cores, whether your CPU is 32 or 64-bit, how many CPUs you have, how many threads per core you have, etc. 
+    From `man lscpu`: "display information about the CPU architecture"
 
 
 == diff: ==
@@ -3409,25 +3554,37 @@ References:
 [find and replace, text replacement in files]
 
 1)
-which <some_executable> = show the path to the executable in your path; ex:
-    $ which locate
-    /usr/bin/locate
+which <some_executable>
+    show the path to the executable in your path; ex:
+        $ which locate
+        /usr/bin/locate
 2)
-locate <some_name> = find all files with "some_name" in their path or filename, searching EVERYWHERE, starting at the root dir (/)! Note: to search just in the current dir and below, use `find` instead:
-    find | grep <some_name>
+locate <some_name>
+    find all files with "some_name" in their path or filename, searching EVERYWHERE, starting at the root dir (/)! Note: to search just in the current dir and below, use `find` instead:
+        find | grep <some_name>
 3)
-find = recursively find and print the relative path to all files and directories in the current directory and below
+find
+    recursively find and print the relative path to all files and directories in the current directory and below
 
-find -type f = recursively find only files (NOT directories)
+find -type f
+    recursively find only files (NOT directories)
+find some_dir -not -type d | sort -V
+    Recursively find anything that is NOT a directory (`-not -type d`), then sort the output list of files. This essentially just finds files and file symlinks and things.    
+    Keywords: find only files; find exclude directories; find exclude things; find not; not find; exclude find
 
-find | grep "my_file" = find any file with "my_file" in its name
-find -L | grep "my_file" = same as above, but also follow symbolic links when searching
+find | grep "my_file"
+    find any file with "my_file" in its name
+find -L | grep "my_file"
+    same as above, but also follow symbolic links when searching
 
-find | grep ".*\.txt$" = find any file which MUST END WITH .txt (the $ searches for an "end of line" character to ensure what's just before it is only at the very end of a string)
+find | grep ".*\.txt$"
+    find any file which MUST END WITH .txt (the $ searches for an "end of line" character to ensure what's just before it is only at the very end of a string)
 
-find | grep -E ".*(\.ino|\.cpp|\.c|\.h|\.hpp|\.hh)" = find any file with one of these extensions
+find | grep -E ".*(\.ino|\.cpp|\.c|\.h|\.hpp|\.hh)"
+    find any file with one of these extensions
 
-find -L build/bin | grep -ni some_filename = quickly find a newly-built output file (such as an auto-generated source file created by some Bazel `genrule()`) inside of Bazel's output build dir, "build/bin". Note the `-L` to force `find` to follow symbolic links. This is required since Bazel makes all dirs in "build", such as "bin", simlinks. <======== VERY HELPFUL TO QUICKLY FIND A BAZEL BUILD OUTPUT FILE! ==========
+find -L build/bin | grep -ni some_filename
+    quickly find a newly-built output file (such as an auto-generated source file created by some Bazel `genrule()`) inside of Bazel's output build dir, "build/bin". Note the `-L` to force `find` to follow symbolic links. This is required since Bazel makes all dirs in "build", such as "bin", simlinks. <======== VERY HELPFUL TO QUICKLY FIND A BAZEL BUILD OUTPUT FILE! ==========
 
 `sed`:
 sed -i "s|regex_pattern_to_match|replacement_string|g" my_file.txt
@@ -3440,23 +3597,27 @@ References:
 1. *****https://stackoverflow.com/questions/10445934/change-multiple-files/30717770#30717770
 1. *****Really good sed reference! https://www.grymoire.com/Unix/Sed.html
 
-find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|regex_pattern|replacement_string|g" = find all files in some/path which end in .ino or .cpp and pipe them to sed. sed will then find and replace all matches of "regex_pattern" with "replacement_string" in these files. <======= BEST NON-WHOLE-WORD MULTI-FILE SEARCH & REPLACE =====
-EXAMPLE:
-find src/arduino -type f | grep -E ".*" | xargs sed -i "s|printf|sprintf|g"
+find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|regex_pattern|replacement_string|g"
+    find all files in some/path which end in .ino or .cpp and pipe them to sed. sed will then find and replace all matches of "regex_pattern" with "replacement_string" in these files. <======= BEST NON-WHOLE-WORD MULTI-FILE SEARCH & REPLACE =====
+    EXAMPLE:
+        find src/arduino -type f | grep -E ".*" | xargs sed -i "s|printf|sprintf|g"
 
 To match whole words, use the regex `\b` word boundaries!
 - See: https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch02s06.html
-find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pattern\b|replacement_string|g" = same as above, except with `\b` `\b` to make it a whole word search! <======= BEST WHOLE-WORD MULTI-FILE SEARCH & REPLACE =====
-EXAMPLE:
-find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
+find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pattern\b|replacement_string|g"
+    same as above, except with `\b` `\b` to make it a whole word search! <======= BEST WHOLE-WORD MULTI-FILE SEARCH & REPLACE =====
+    EXAMPLE:
+        find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
 
 Ripgrep can find and replace too!
 [rg, ripgrep, rip-grep]
 See "Andrew Gallant's Blog", the post titled [ripgrep is faster than {grep, ag, git grep, ucg, pt, sift}](https://blog.burntsushi.net/ripgrep/). Ex:
-rg '([A-Z][a-z]+)\s+([A-Z][a-z]+)' --replace '$2, $1' = find all strings which match the pattern in single quotes (''), and replace them with the matching groups in the format '$2, $1', where `$2` is the 2nd matching group (2nd set of parenthesis in the main regular expression), and `$1` is the 1st matching group (1st set of parenthesis in the main regular expression).
+rg '([A-Z][a-z]+)\s+([A-Z][a-z]+)' --replace '$2, $1'
+    find all strings which match the pattern in single quotes (''), and replace them with the matching groups in the format '$2, $1', where `$2` is the 2nd matching group (2nd set of parenthesis in the main regular expression), and `$1` is the 1st matching group (1st set of parenthesis in the main regular expression).
 
 eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh: usage:
-find_and_replace <path> <filename_regex> <string_regex> <replacement_str> [-w] = find and replace `string_regex` with `replacement_str` for all filenames which match `filename_regex` in path `path`. See `gs_find_and_replace -h` for help and more examples!
+find_and_replace <path> <filename_regex> <string_regex> <replacement_str> [-w]
+    find and replace `string_regex` with `replacement_str` for all filenames which match `filename_regex` in path `path`. See `gs_find_and_replace -h` for help and more examples!
 
 == sed: ==
 sed = "'s'tream 'ed'itor for filtering and transforming text" [stream editor]
