@@ -1,0 +1,57 @@
+// This file should be placed into "~/.config/Code/User/settings.json".
+// Official Documentation: https://code.visualstudio.com/docs/getstarted/settings
+
+{
+    "security.workspace.trust.untrustedFiles": "open",
+    "markdown.extension.toc.orderedList": true,
+    "terminal.integrated.tabs.location": "left",
+    "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}${separator}${appName}",
+    "workbench.colorTheme": "Monokai ST3",
+    "workbench.colorCustomizations": {
+        "[Monokai ST3]": {
+            // "sideBar.background": "#347890"
+        }
+    },
+    // GS: see my tutorial here!:
+    // https://github.com/volosovich/Monokai-ST3-theme-for-vscode/issues/14
+    "editor.tokenColorCustomizations": {
+        "[Monokai ST3]": {
+            // "comments": "#347890",
+            // "variables": "#FF0000",
+            "textMateRules": [
+                {
+                    "name": "Doxygen variable names",
+                    // This works! YOU **MUST** put the wider scope FIRST, and then the narrower
+                    // scope after!
+                    "scope": [
+                        "comment.block.documentation.cpp variable.parameter.cpp",
+                        "comment.line.double-slash.documentation.cpp variable.parameter.cpp",
+                    ],
+                    // "scope": "comment.block.documentation.cpp",
+                    // "scope": "comment.block.documentation.cpp",
+                    // "scope": ["comment.block.documentation.cpp", "variable.parameter.cpp"],
+                    // "scope": ["comment.block.documentation.cpp", "variable.parameter.cpp"],
+                    "settings": {
+                        // "foreground": "#854800"
+                        "foreground": "#a6a292",
+                    },
+                },
+                {
+                    "name": "Doxygen keywords, such as 'param' and 'brief'",
+                    "scope": "storage.type.class.doxygen.cpp",
+                    "settings": {
+                        // "foreground": "#66D9EF",  // default value
+                        "foreground": "#7C8E9C",
+                    }
+                },
+            ]
+        }
+    },
+    "editor.rulers":
+	[
+		// 80,
+		100,
+		120
+    ],
+    "window.zoomLevel": 0,
+}

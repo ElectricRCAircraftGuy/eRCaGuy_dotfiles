@@ -1,0 +1,21 @@
+// Recommended Extensions
+// See here for how this works:
+// https://tattoocoder.com/recommending-vscode-extensions-within-your-open-source-projects/
+{
+    "recommendations": [
+        "bazelbuild.vscode-bazel",
+        "file-icons.file-icons",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-vscode-remote.remote-containers",
+        "ms-vscode-remote.remote-ssh-edit",
+        "ms-vscode-remote.remote-ssh",
+        "ms-vscode.cpptools",
+        "timonwong.shellcheck",
+        "xaver.clang-format",
+        "andreyvolosovich.monokai-st3",
+        "ms-vscode-remote.vscode-remote-extensionpack",
+        "stkb.rewrap"
+    ],
+    "unwantedRecommendations": []
+}
