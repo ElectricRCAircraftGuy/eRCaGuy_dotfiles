@@ -52,6 +52,7 @@ These are the Sublime Text 3 packages I currently have installed and like to hav
         1. [my answer] [Stack Overflow: Markdown to create pages and table of contents?](https://stackoverflow.com/questions/11948245/markdown-to-create-pages-and-table-of-contents/64656967#64656967)
     1. _Caveat:_ the first heading level you use right after the Table of Contents insertion point _must_ be larger than or equal to all subsequent levels, or else subsequent levels which are higher than it will not display. Ex: if you begin with a `## Level 2 Heading`, you cannot then have a `# Level 1 Heading` afterwards, or else the ToC won't be generated properly. Instead, you should either A) begin with a `# Level 1 Heading`, since it's the highest level and can therefore have any level after it, _or_ B) never have any heading greater than the first heading level you use after the ToC. If doing B, that means that a `## Level 2 Heading` followed by another `## Level 2 Heading`, or a `### Level 3 Heading` or lower, would be fine, so long as you never have a `# Level 1 Heading` since you began with a `## Level 2 Heading`.
 1. **SCSS** - syntax highlighting for [SASS](https://sass-lang.com/) ([Syntactically Awesome Style Sheets](https://en.wikipedia.org/wiki/Sass_(stylesheet_language))) (`*.scss` files) in Sublime Text. See: https://stackoverflow.com/questions/42159810/how-to-set-scss-syntax-in-sublime-3/45261710#45261710.
+1. **Devicetree DTS Highlighting** - for syntax highlighting in Linux [devicetree](https://www.devicetree.org/) source files ([.dts](https://en.wikipedia.org/wiki/Devicetree) files).
 
 
 <a id="packages-im-still-evaluating-and-maybe-you-should-install"></a>
@@ -61,3 +62,4 @@ These are the Sublime Text 3 packages I currently have installed and like to hav
     1. https://packagecontrol.io/packages/Git%20blame
     1. https://github.com/frou/st3-gitblame
     1. Issue/feature request I've opened up here: https://github.com/frou/st3-gitblame/issues/59
+    1. **Conclusion:** naaah, you don't need this. I have decided _not_ to use this package. I recommend you just use my [`git blametool` command](../useful_scripts/git-blametool.sh) instead, which opens up the output of `git blame` in your favorite text editor (ex: Sublime Text by default).
