@@ -25,6 +25,8 @@
 # START OF THE STANDARD UBUNTU-18-INSTALLED .bashrc FILE
 # - some minor additions or changes from the original may exist, indicated by comments which
 #   begin with "# GS"
+# - Find a backup copy of Ubuntu's default ~/.bashrc file on Ubuntu in "/etc/skel/.bashrc".
+#   See here: https://askubuntu.com/a/404428/327339
 # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
