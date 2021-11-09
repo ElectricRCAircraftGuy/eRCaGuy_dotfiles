@@ -14,6 +14,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     1. [References:](#references-1)
     1. [Command:](#command)
     1. [Optional \(but recommended\) Alias:](#optional-but-recommended-alias)
+    1. [Configure default Ubuntu settings for ALL users who log into the `root` username on the target device](#configure-default-ubuntu-settings-for-all-users-who-log-into-the-root-username-on-the-target-device)
 
 <!-- /MarkdownTOC -->
 </details>
@@ -150,6 +151,22 @@ alias gs_ssh="sshpass -f ~/pw scp /etc/skel/.bashrc root@192.168.0.2:/tmp \
 # Re-source your ~/.bashrc file when done adding the alias above for the first time. Note that if on
 # Ubuntu this also automatically re-sources your ~/.bash_aliases file if you have one!
 . ~/.bashrc
+```
+
+<a id="configure-default-ubuntu-settings-for-all-users-who-log-into-the-root-username-on-the-target-device"></a>
+## Apply Ubuntu's settings for ALL users who log into the `root` username on the target device
+
+If your target filesystem's home directory is NOT read-only, you can affect the environment for ALL users like this:
+
+```bash
+# Secure-copy over Ubuntu's default .profile AND .bashrc files to the target's home dir
+sshpass -f ~/pw scp /etc/skel/.profile /etc/skel/.bashrc root@192.168.0.2:~
+
+# Now ssh in
+# A. using sshpass which automatically types the password for you
+sshpass -f ~/pw ssh -t root@192.168.0.2 'bash --login'
+# OR B. using normal ssh
+ssh root@192.168.0.2 'bash --login'
 ```
 
 
