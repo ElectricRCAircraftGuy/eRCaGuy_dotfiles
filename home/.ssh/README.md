@@ -142,8 +142,8 @@ sshpass -f ~/pw scp /etc/skel/.bashrc root@192.168.0.2:/tmp \
 ## Optional (but recommended) Alias:
 Now, you can optionally make the above ssh command an alias like this. Notice that I've also added the `-o 'ServerAliveInterval 60'` option to help keep the connection open (similar to [what I recommend in my answer here](https://askubuntu.com/a/942820/327339)).
 ```bash
-# Manually add something like this to your ~/.bash_aliases (or ~/.bashrc) file on the PC you are
-# ssh-ing FROM:
+# Manually add something like this to your ~/.bash_aliases (recommended) or ~/.bashrc file on the PC
+# you are ssh-ing FROM:
 alias gs_ssh="sshpass -f ~/pw scp /etc/skel/.bashrc root@192.168.0.2:/tmp \
 && sshpass -f ~/pw ssh -t -o 'ServerAliveInterval 60' root@192.168.0.2 'bash --rcfile /tmp/.bashrc'"
 
