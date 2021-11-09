@@ -50,6 +50,7 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
     1. [![](https://i.stack.imgur.com/5D4oE.jpg)](https://i.stack.imgur.com/5D4oE.jpg)
 1. `git branch_`. Same as `git branch` except don't show "hidden", user-backed-up branches. See my answer here: [Hide but still save a branch with GIT?](https://stackoverflow.com/a/66574807/4561887)
 1. [ssh key setup information](home/.ssh)
+    1. including a really good `gs_ssh` alias which automatically sources a custom `.bashrc` file in your ssh environment whenever you log in!
 1. .bashrc file which contains:
     1. `ls` aliases such as `ll`, `la`, & `l`
     1. Prompt String 1 (`PS1`) modifications to add terminal titles, current git branch name checked out [VERY USEFUL FEATURE!], bash shell level, etc
