@@ -3109,8 +3109,14 @@ curl -X GET http://some.web.address/some_id
     Assuming the server responded to the previous POST cmd with some ID `some_id`, request some response JSON data object for this `some_id` from the serer. It will come back as a JSON object.
 curl -X GET http://some.web.address/some_id | jq .
     Same as above, except pipe all the output to the `jq` (JQuery?) "Command-line JSON processor" so it can pretty-format it all for us. Now, we can look at the (probably JSON) JSON object returned to us from the server in a nice-to-look-at format!
+curl http://some.web.address/some_id | jq .
+    Same as above (the `-X GET` behavior is the _default_ if not specified!).
 curl -X GET http://some.web.address/some_id | jq .key1
     Same as above, except filter on only the outer-most dict key named `key1`, so that that's all we see in the output of the JSON object!
+curl -X GET http://some.web.address/some_id | jq .key1.key2
+    Same as above, except filter on only the outer-most dict key named `key1`, followed by the sub-level key named `key2`!
+curl -X GET http://some.web.address/some_id | jq .key1.key2.key3
+    Same as above, except filter in on outer key `key1`, sub-key `key2`, and sub-sub-key `key3`, etc. This pattern can continue indefinitely down to as many sub-levels as you want!
 
 telnet
     (Note: install with `sudo apt install telnet`).
