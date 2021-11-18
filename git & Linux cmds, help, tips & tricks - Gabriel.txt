@@ -2931,6 +2931,8 @@ objdump -h /bin/ls
 ====================================================================================================
 = IP & Networking: =
 ====================================================================================================
+Also: Ethernet UDP and TCP command-line commands and tx/rx.
+Keywords: ethernet: =
 
 ifconfig
     show the internet & network configuration/connection information for your system and all of its network cards (both wireless (ex: WIFI) and wired (ex: Ethernet ports))
@@ -3121,6 +3123,34 @@ curl -X GET http://some.web.address/some_id | jq .key1.key2.key3
 telnet
     (Note: install with `sudo apt install telnet`).
 
+
+Use `netcat` (`nc`) for sending and receiving Ethernet packets (either UDP OR TCP) in Linux from the command-line! 
+NB: if using Python, you can use the `socket` library instead!: https://docs.python.org/3/library/socket.html
+Examples: 
+    1. Official examples: https://docs.python.org/3/library/socket.html#example
+    1. [my own example code] https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/python/socket_talk_to_ethernet_device.py
+- - - - - 
+Python `socket` example (see my link just above):
+    ```python
+    import socket
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    HOST = '192.168.0.1'
+    PORT = 9999
+    s.connect((HOST, PORT))
+    s.settimeout(1)
+    s.sendall("my command to send".encode())
+    data = s.recv(4096)
+    print('Received', repr(data))
+    s.close()
+    ```
+- - - - - 
+Equivalent netcat command to send and receive data as above:
+    ```bash
+    printf '%s' "my command to send" | timeout 0.2 nc 192.168.0.1 9999
+    ```
+    NB: do NOT use `echo` in place of `printf` above. See my Q&A here for detailed reasons: https://stackoverflow.com/questions/70001189/piping-echo-to-netcat-fails-while-piping-printf-passes
+
 nc
     (From `man nc` or `man netcat`): "The nc (or netcat) utility is used for just about anything under the sun involving TCP, UDP, or UNIX-domain sockets."
 netcat
@@ -3135,9 +3165,12 @@ nc -u -l 127.0.0.1 -p 30000
     For a list of common TCP and UDP ports, see Wikipedia here: https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers.
 nc -u 127.0.0.1 30000
     Set up a UDP (`-u`) sender (the default, apparently) to the loopback interface (IP `127.0.0.1`, AKA: LOCALHOST) on port (`-p`) 30000. 
-    Now, to send char data, just start typing, then press Enter! So long as you have a listener already open in another terminal (see just above), you'll see the output you send magically show up in the lister's terminal!
+    Now, to send char data, just start typing, then press Enter! So long as you have a listener already open in another terminal (see just above), you'll see the output you send magically show up in the listener's terminal!
+printf '%s' 'my command msg' | timeout 0.2 nc 192.168.0.1 9999 
+    Send the "my command msg" string via netcat to IP 192.168.0.1 on PORT 9999 via TCP over Ethernet with a timeout of 0.2 sec. 
 exit
     Type this to exit any open netcat session you are in!
+---------
 EXERCISE:
 ---------
 1. In one terminal, open up a UDP listener:
@@ -3155,6 +3188,35 @@ GOING FURTHER:
     WORK-IN-PROGRESS/Need to research this more!:
     1. In a 3rd terminal, open up another **listener**, as shown above, and in a 4th terminal, open up another **sender**, as shown above.
     ...
+
+Example of power supply control via string commands over Ethernet TCP using netcat:
+- This is similar to Serial UART-controlled devices, except the command and response strings are simply over Ethernet (either UDP or TCP) instead of over serial.
+- Example Device: Teledyne LeCroy T3PS3000: https://www.digikey.com/en/products/detail/teledyne-lecroy/T3PS3000/9598577
+- Manual (Quick Start Guide): http://cdn.teledynelecroy.com/files/manuals/t3ps3000-quick-start-guide.pdf
+    - p24, "Chapter 3 Remote Control" is where the command interface begins.
+- NB: in all of the commands below, use `printf` as shown below. Do NOT use `echo`! `echo` appends a newline (`\n`) which can interfere with a device's ability to parse the data. It may work with `echo -n`, which suppresses the newline, but `echo` isn't the best way. `printf` is the best way. See my detailed Q&A on this here: https://stackoverflow.com/questions/70001189/piping-echo-to-netcat-fails-while-piping-printf-passes
+- - - - - 
+printf '%s' '*idn?' | timeout 0.2 nc 192.168.0.1 9999
+    Query the identification, make, model, etc, of the device.
+printf '%s' 'measure:voltage? ch1' | timeout 0.2 nc 192.168.0.1 9999
+    Read the voltage (V) on channel 1
+printf '%s' 'measure:current? ch1' | timeout 0.2 nc 192.168.0.1 9999  
+    Read the current (A) on channel 1
+printf '%s' 'measure:power? ch1' | timeout 0.2 nc 192.168.0.1 9999  
+    Read the power (W) on channel 1
+printf '%s' 'ch1:voltage 12' | timeout 0.2 nc 192.168.0.1 9999  
+    Set the Ch1 voltage to 12V
+printf '%s' 'ch1:current 0.5' | timeout 0.2 nc 192.168.0.1 9999  
+    Set the Ch1 current to 0.5A
+printf '%s' 'output ch1,off' | timeout 0.2 nc 192.168.0.1 9999  
+    Turn channel 1 OFF
+printf '%s' 'output ch1,on' | timeout 0.2 nc 192.168.0.1 9999  
+    Turn channel 1 ON
+printf '%s' 'system:error?' | timeout 0.2 nc 192.168.0.1 9999  
+    Query/read the last error message
+printf '%s' 'system:status?' | timeout 0.2 nc 192.168.0.1 9999  
+    Query/read the current system status. See the manual description of this cmd and response on p31. The response will be in hex, where each bit means something special.
+etc. etc. See the manual (Quick Start Guide) linked-to above for the full command sequence, which has about 2x as many commands as described above.
 
 
 ====================================================================================================
