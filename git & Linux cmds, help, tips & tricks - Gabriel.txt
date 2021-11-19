@@ -3088,6 +3088,9 @@ ip address
 ifconfig
     See what IP addresses and interfaces you have (this may not be as complete as the `ip address` cmd above, and it may not show your virtual dummy 'eth10' device you just created above!).
     See my answer here!: https://unix.stackexchange.com/a/593142/114401
+ip route get 10.0.0.1
+    Show which interface is being used to route this IP address.
+    See this comment by @Hauke Laging under my question: https://unix.stackexchange.com/questions/678162/how-to-create-ethernet-interface-at-a-specific-ip-address-that-i-can-ping-and-fo?noredirect=1#comment1280923_678162
 
 ssh -X -o "ServerAliveInterval 60" my_username@my_hostname_or_IP
     ssh into hostname or IP address my_hostname_or_IP with username my_username, enabling X-window forwarding, and with the additional 'o'ption set to send a heartbeat signal (server "keep alive" message) every 60 seconds, so your session never disconnects automatically!
