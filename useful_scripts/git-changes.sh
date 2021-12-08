@@ -55,7 +55,7 @@ EXIT_SUCCESS=0
 EXIT_ERROR=1
 
 HELP_STR="
-Usage: git changes <common_base> <backup_branch> [any other args to pass to git difftool]
+Usage: git changes <common_base> <backup_branch> [any other args to pass to 'git difftool']
 
 Brief description:
 See all changes (via 'git difftool') that were just added to 'HEAD' (the currently-checked-out
@@ -143,4 +143,4 @@ done < <(git diff --name-only -z "$merge_base" $BACKUP_BRANCH)
 # they cannot be options, because the `--` with nothing after it signifies the end of all optional
 # args.
 git difftool $ARGS_3_AND_LATER $BACKUP_BRANCH -- $files_changed_escaped
-echo "Done."
+echo "Done. 'git difftool' was just run. If there were no changes, nothing would have showed up."
