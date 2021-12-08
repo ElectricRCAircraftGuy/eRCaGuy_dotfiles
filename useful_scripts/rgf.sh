@@ -46,6 +46,8 @@ EXAMPLE USAGES:
         rgf \"my regular expression search pattern\"
 4. If you do both a regex pattern and a path, follow the order Ripgrep requires:
         rgf \"regex pattern\" \"path\"
+5. Search only in \"*.cpp\" files!
+        rgf -g \"*.cpp\"
 
 - See also my 'sublf' and 'fsubl' aliases in .bash_aliases.
 - Run 'rg -h' or 'man rg' if you wish to see the RipGrep help menu.
