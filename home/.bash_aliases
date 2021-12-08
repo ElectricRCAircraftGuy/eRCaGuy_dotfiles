@@ -283,6 +283,24 @@ gs_set_title() {
     PS1="${PS1_NO_TITLE}${ESCAPED_TITLE}"
 }
 
+# This opens the fzf fuzzy finder tool (see: https://github.com/junegunn/fzf#usage), then allows
+# you to multiselect (`-m`) files with the TAB key. Press ENTER when done to open them all in
+# Sublime Text. Be sure to install fzf first for this to work.
+# - Watch this YouTube video too for additional help using fzf: https://youtu.be/qgG5Jhi_Els?t=147
+#       alias sublf='subl $(fzf -m)'
+# Even better: also echo the selected files to the screen!
+# USAGE:
+#   Run `sublf`. Type to fuzzy search. Press TAB to select a file. Once you have selected all the
+#   files you'd like to open, press ENTER to print their paths to the terminal and then open them
+#   all up in Sublime Text!
+alias sublf='FILES_SELECTED="$(fzf -m)" \
+&& echo "$FILES_SELECTED" \
+&& subl $(echo "$FILES_SELECTED")'
+# 2nd alias to the same thing
+alias fsubl='sublf'
+alias gs_sublf="sublf"
+alias gs_fsubl="fsubl"
+
 
 # ===================================== SECTION 2 START ============================================
 # 2. PERSONAL (PRIVATE) Bash Setup, Variables, Aliases, & Functions
@@ -475,3 +493,4 @@ if [ "$OPEN_DEFAULT_TABS" == "true" ]; then
 fi
 
 #--------------------------- CUSTOM TERMINAL TABS & TITLES (END) -----------------------------------
+
