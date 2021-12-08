@@ -294,7 +294,7 @@ gs_set_title() {
 #   files you'd like to open, press ENTER to print their paths to the terminal and then open them
 #   all up in Sublime Text!
 alias sublf='FILES_SELECTED="$(fzf -m)" \
-&& echo "$Opening these files in Sublime Text:" \
+&& echo "Opening these files in Sublime Text:" \
 && echo "$FILES_SELECTED" \
 && subl $(echo "$FILES_SELECTED")'
 # 2nd alias to the same thing
