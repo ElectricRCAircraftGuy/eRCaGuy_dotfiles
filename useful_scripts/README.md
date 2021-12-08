@@ -15,4 +15,6 @@ Each script herein has detailed installation and usage information commented in 
     1. **[README_ros_readbagfile.md](README_ros_readbagfile.md)**
     1. Read [ROS (Robot Operating System)](http://wiki.ros.org/) messages on certain topics from within a pre-recorded ROS bag file.
         1. Tutorial I wrote: [Reading messages from a bag file](http://wiki.ros.org/ROS/Tutorials/reading%20msgs%20from%20a%20bag%20file)
+1. **rgf.sh**
+    1. Ripgrep fuzzy finder: this ('rgf') is a RipGrep interactive fuzzy finder of content in files! It is a simple wrapper script around Ripgrep and the [fzf fuzzy finder](https://github.com/junegunn/fzf#3-interactive-ripgrep-integration) that turns RipGrep ('rg') into an easy-to-use interactive fuzzy finder to find content in any files. VERY USEFUL AND EASY TO USE!
 

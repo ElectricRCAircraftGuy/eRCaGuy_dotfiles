@@ -294,12 +294,14 @@ gs_set_title() {
 #   files you'd like to open, press ENTER to print their paths to the terminal and then open them
 #   all up in Sublime Text!
 alias sublf='FILES_SELECTED="$(fzf -m)" \
+&& echo "$Opening these files in Sublime Text:" \
 && echo "$FILES_SELECTED" \
 && subl $(echo "$FILES_SELECTED")'
 # 2nd alias to the same thing
 alias fsubl='sublf'
 alias gs_sublf="sublf"
 alias gs_fsubl="fsubl"
+# SEE ALSO the Ripgrep fuzzy finder wrapper in "useful_scripts/rgf.sh".
 
 
 # ===================================== SECTION 2 START ============================================

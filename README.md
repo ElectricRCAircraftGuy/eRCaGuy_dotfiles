@@ -19,7 +19,7 @@ Gabriel Staples
 
 1. [Project: eRCaGuy_dotfiles](#project-ercaguy_dotfiles)
 1. [Description of contents](#description-of-contents)
-    1. [Here's some of the contents contained herein:](#heres-some-of-the-contents-contained-herein)
+    1. [Here are some of the contents contained herein:](#here-are-some-of-the-contents-contained-herein)
 1. [Installation & Usage:](#installation--usage)
 1. [Useful Applications](#useful-applications)
 1. [Useful Scripts](#useful-scripts)
@@ -39,8 +39,8 @@ https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 # Description of contents
 This project started out as just a few helpful nuggets I like to put in my `~/.bashrc` file, for example, as well as some scripts and other configuration files, but I decided to make it a place I put all sorts of reference scripts, files, shortcuts, Linux tips & tricks, Eclipse documentation, etc, I've built up over the years. 
 
-<a id="heres-some-of-the-contents-contained-herein"></a>
-## Here's some of the contents contained herein:
+<a id="here-are-some-of-the-contents-contained-herein"></a>
+## Here are some of the contents contained herein:
 1. [git & Linux cmds, help, tips & tricks - Gabriel.txt](git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt) - a general note-taking document where I jot down Linux commands, examples, notes about how to use `gdb`, `bazel`, various command-line tools, build tools, etc. 
     1. It's kind of a general place where I write down things I learn which I know I will need later and don't want to forget. _Correction: it's actually more correct to say I **know** I will forget them, so I write them down so I can come back and reference them later._
     1. I can't remember what I learned, but I *can* remember where I wrote it down, so I frequently reference this document to remind myself what I learned.
@@ -73,6 +73,7 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 1. /etc/udev/rules.d/ udev rules
 1. NoMachine remote login setup info
 1. Useful scripts: see [section below](#useful-scripts)
+    1. Ripgrep fuzzy finder, "rgf.sh".
 1. etc.
 
 
