@@ -3221,6 +3221,11 @@ printf '%s' 'system:status?' | timeout 0.2 nc 192.168.0.1 9999
     Query/read the current system status. See the manual description of this cmd and response on p31. The response will be in hex, where each bit means something special.
 etc. etc. See the manual (Quick Start Guide) linked-to above for the full command sequence, which has about 2x as many commands as described above.
 
+tcpdump
+    Use this command to read and print UDP and TCP Ethernet packets! This can be very useful to help you see if certain packets or messages are even coming in to your system!
+    Read also about "pcap" and "wireshark" maybe and how pcap or whatever can help you interpret and parse (I think) incoming packets!
+    - For help on `tcpdump`, see also: https://dzone.com/articles/tcpdump-learning-how-read-udp
+
 
 ====================================================================================================
 = Linux (General): =
@@ -3415,11 +3420,20 @@ htop = much better (ncurses-based?) CLI competitor to gnome-system-monitor!
 
 LIST RUNNING PROCESSES AND THEIR PROCESS IDS (PIDs):
 (See `man ps` for details)
-ps aux = list all running processes on the system (using the BSD syntax) <====== MOST COMMON USAGE =====
-ps -A = list all running processes on the system (using the standard syntax)
-ps -eLf = get info about *threads*
-ps -ejH = print a process tree = very helpful to see **what process called what process(es)**!
-ps aux | grep "some_name" = find only processes named "some_name", or at least with "some_name" in their output line displayed by `ps aux`
+ps aux
+    list all running processes on the system (using the BSD syntax) <====== MOST COMMON USAGE =====
+ps -A
+    list all running processes on the system (using the standard syntax)
+ps -eLf
+    get info about *threads*
+ps -ejH
+    print a process tree = very helpful to see **what process called what process(es)**!
+ps aux | grep "some_name"
+    Find only processes named "some_name", or at least with "some_name" in their output line displayed by `ps aux`
+pgrep "some_name"
+    Similar to the cmd just above. Find the process ID (PID) of the process named "some_name"! This is easier and cleaner than using `ps aux | grep "some_name"`, as shown above!
+    See this YouTube video at this time for where I learned this: https://youtu.be/qgG5Jhi_Els?t=314
+    Keywords: pgrep kill; kill pgrep; kill process; process kill; find process; process finder
 
 KILL RUNNING PROCESSES:
 (see `man kill` for details)
@@ -3470,6 +3484,19 @@ less -RFX myfile.txt = open up myfile.txt in the "less" stream viewer/pager, wit
 See also:
   1. https://stackoverflow.com/questions/2183900/how-do-i-prevent-git-diff-from-using-a-pager/14118014#14118014
   2. https://unix.stackexchange.com/questions/38634/is-there-any-way-to-exit-less-without-clearing-the-screen/38638#38638
+
+grep '' *
+    Read and print out ALL contents (`''`) of ALL files (`*`) within this dir!
+    [keywords: list all files (that would actually be with the `find` cmd); list contents of all files; read and print contents of all files in a dir]
+    <======== VERY USEFUL! =========
+grep '' /path/to/dir/*
+    Read and print out ALL contents (`''`) of ALL files within the "/path/to/dir/" dir (`/path/to/dir/*`)!
+    <======== VERY USEFUL! =========
+watch -n 0.5 'grep '"''"' *'
+    Watch the contents of a bunch of files change by printing out their values by running `grep '' *` every 0.5 sec!
+    - See here for help with these quotes: https://stackoverflow.com/a/1250279/4561887
+        - In the `'"''"'` part, the first single quote ends the previous quote. Then you have two single quotes in double quotes (`"''"`), then you have a single quote to begin the next quoted string.
+    <======== VERY USEFUL! =========
 
 watch -n INTERVAL_IN_SECONDS COMMAND = run COMMAND and display its output every INTERVAL_IN_SECONDS seconds! See: https://linuxize.com/post/linux-watch-command/; ex:
 watch -n 30 'du -h ~/.cache | tail -n 1' = display the disk usage in your ~/.cache dir every 30 sec! Very useful when you are watching a large bazel build cache grow, for instance! Ex:
