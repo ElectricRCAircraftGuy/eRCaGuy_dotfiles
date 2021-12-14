@@ -145,6 +145,7 @@ alias gs_ssh="ssh -X -o \"ServerAliveInterval 60\" username@domain_name"
 # server on your machine. Here's a Google search to get started learning about this:
 # "dropbear ssh remotely decrypt hard drive":
 # https://www.google.com/search?q=dropbear+ssh+remotely+decrypt+hard+drive&oq=dropbear+ssh+remotely+decrypt+hard+drive&aqs=chrome..69i57.193j0j4&sourceid=chrome&ie=UTF-8
+# NB: I recommend you set this below alias in ~/.bash_aliases_private instead of here.
 # alias gs_ssh_dropbear=""
 
 # Mount a remote file system securely over ssh, using sshfs (SSH File System).
