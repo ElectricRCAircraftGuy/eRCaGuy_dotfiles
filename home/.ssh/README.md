@@ -375,6 +375,11 @@ ssh-add ~/.ssh/id_ed25519
 # leave it out if you want--you'll just have to manually type the command each time you ssh into
 # the dropbear server is all.
 
+# When done configuring "/etc/dropbear-initramfs/config"
+# and "/etc/dropbear-initramfs/authorized_keys" above, you can view the contents of all files
+# like this, just to double-check them:
+sudo grep --color=always '' /etc/dropbear-initramfs/*
+
 
 # Now that you've added a public ssh key to your dropbear
 # server's "/etc/dropbear-initramfs/authorized_keys" file: Update your initramfs filesystem image
