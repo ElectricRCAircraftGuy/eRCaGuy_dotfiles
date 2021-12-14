@@ -48,6 +48,8 @@ EXAMPLE USAGES:
         rgf \"regex pattern\" \"path\"
 5. Search only in \"*.cpp\" files!
         rgf -g \"*.cpp\"
+6. Also search hidden files (files that begin with a dot ('.') in Unix or Linux)
+        rgf --hidden
 
 - See also my 'sublf' and 'fsubl' aliases in .bash_aliases.
 - Run 'rg -h' or 'man rg' if you wish to see the RipGrep help menu.
