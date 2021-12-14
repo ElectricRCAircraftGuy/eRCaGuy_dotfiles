@@ -1780,9 +1780,21 @@ tmux source ~/.tmux.conf = (try this instead maybe--looks more legitimate!) same
 = git: =
 ====================================================================================================
 
-General References:
+GENERAL REFERENCES:
 1. Stack Overflow (do general searches)
 2. [GitHub git cheat sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet/)
+
+MY QUICK-REFERENCE SHEET (frequently my own notes/answers):  <========= VERY USEFUL TO HELP MYSELF AND OTHERS =========
+1. BEGINNER:
+    1. [my ans] https://stackoverflow.com/questions/4470523/create-a-branch-in-git-from-another-branch/63418267#63418267
+2. INTERMEDIATE:
+    1. [my ans] https://stackoverflow.com/questions/1670970/how-to-cherry-pick-multiple-commits/69472178#69472178
+    1. [my ans] https://stackoverflow.com/questions/5738797/how-can-i-push-a-local-git-branch-to-a-remote-with-a-different-name-easily/70302053#70302053
+    1. Each branch is actually 3 branches: https://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-locally-and-remotely/23961231#23961231
+    1. [my info] resolving merge conflicts: search this document for the section titled "RESOLVING MERGE CONFLICTS"
+3. ADVANCED:
+    1. [my ans] https://stackoverflow.com/questions/2364147/how-to-get-just-one-file-from-another-branch/65258783#65258783
+    1. [my ans] https://stackoverflow.com/questions/21025314/who-is-us-and-who-is-them-according-to-git/63911630#63911630
 
 .gitignore
     [a gitignore file for EVERYONE for just this repo!] a file commited into a repository to specify files to ignore and not commit in that repository; you can have multiple copies of this file by putting a different copy of the file in a sub-folder in your repo, to apply to only that folder and down
@@ -1984,7 +1996,7 @@ git lg = show the git log history in a condensed form, with graphics lines to sh
     https://coderwall.com/p/euwpig/a-better-git-log for where I originally got it from!
 
 -----
-RESOLVING MERGE CONFLICTS
+RESOLVING MERGE CONFLICTS  <=========== VERY USEFUL! ============
 - Imagine you are on `feature_branch`, merging in the latest `master` into it, to bring the latest upstream changes from `master` into your `feature_branch`. Here's how: 
 [keywords: fix merge conflicts, fixing git merge conflicts, fixing git merge conflicts, git merge help, git merge find changes, find git merge changes, find changes in git merge, find changes during git merge, see git merge changes, seeing git changes during merge, seeing git merge changes, advanced merge conflict resolution, advanced git merge conflict resolution]
 -----
@@ -2144,29 +2156,72 @@ git reset --soft my_first_commit~
 git commit
 ```
 -------------------------------------
-CONCISE SQUASH SUMMARY (2 MAIN WAYS):
+CONCISE SQUASH SUMMARY (2 MAIN WAYS):   <=========== SUPER HELPFUL! ===========
 -------------------------------------
-[keywords: git squashing, squashing in git]
+[keywords: git squashing, squashing in git; squash rebase; rebase squash; reset squash; squash reset; reset style squash; rebase-style squash]
 1) `git rebase -i` way (keeps and combines all commit messages)
         ```
+        # Step 1 of 2
+        
         git checkout feature_branch
         git branch my_branch_BAK  # create backup branch just in case
-        git rebase -i my_first_commit~
-        # OR:
-        # git rebase -i master
+        
+        # Step 2 of 2 (two options)
+
+        # A. [SAFER/GENERALLY RECOMMENDED--only squashes your changes **you** made]
+        git rebase -i my_first_commit~ 
+
+        # B. OR [WILL ALSO BRING IN UPSTREAM CHANGES FROM MASTER if you've recently pulled latest
+        # master and it has upstream changes]:
+        git rebase -i master
+        
+        # For both Options A and B just above:
         # 1. Now, in editor, manually "pick" first entry and set all others afterwards to "squash", or just "s" for short.
         # 2. When you close the editor, the squashing rebase will begin. When it's done, the editor will open again,
         #    with all commit messages from all squashed commits in it, and you can manually edit the messages into a 
         #    single, unified commit message.
+
+        # IMPORTANT NOTE ABOUT OPTION B: if you have recently pulled the latest `master` and it 
+        # has upstream changes not yet on your `feature_branch`, then Option B like this:
+        #       git rebase -i master
+        # ...ALSO pulls in those changes and is kind of like doing Option A **plus** bringing in 
+        # those latest changes from `master` by rebasing onto latest `master`, like this!:
+        #       git rebase -i my_first_commit~  # rebase-style squash
+        #       git fetch origin master:master  # pull latest changes from remote `master` into local `master`
+        #       git rebase master               # Bring those upstream changes from `master` into your `feature_branch`
+        #                                       # by rebasing your `feature_branch` on top of them.
         ```
 2) `git reset --soft` way (you lose the commit messages this way though, but it squashes over merge commits really easily)
         ```
+        # Step 1 of 2
+
         git checkout feature_branch
         git branch my_branch_BAK  # create backup branch just in case
+
+        # Step 2 of 2 (two options)
+
+        # A. [SAFER/GENERALLY RECOMMENDED--only squashes your changes **you** made]
         git reset --soft my_first_commit~
-        # OR:
-        # git reset --soft master
         git commit  # Manually add a new and complete commit message in the editor that opens.
+
+        # B. OR [WILL ALSO BRING IN UPSTREAM CHANGES FROM MASTER if you've recently pulled latest
+        # master and it has upstream changes]:
+        git reset --soft master
+        git commit  # Manually add a new and complete commit message in the editor that opens.
+        
+        # IMPORTANT NOTE ABOUT OPTION B: if you have recently pulled the latest `master` and it 
+        # has upstream changes not yet on your `feature_branch`, then Option B like this:
+        #       git reset --soft master
+        #       git commit
+        # ...ALSO pulls in those changes and is kind of like doing Option A **plus** merging in 
+        # those latest changes from `master`, like this!:
+        #       git reset --soft my_first_commit~  # reset-style squash
+        #       git commit
+        #       git fetch origin master:master  # pull latest changes from remote `master` into local `master`
+        #       git merge master
+        # ...except that instead of **merging** in those latest upstream changes into your 
+        # `feature_branch` as a **new commit**, you're **squashing them in** as part of **the same
+        # commit**.
         ```
 MORE-DETAILED REBASE AND SQUASH NOTES:
 [TWO DISTINCT "SQUASH" AND "REBASE" STYLES!]:
@@ -3220,6 +3275,15 @@ printf '%s' 'system:error?' | timeout 0.2 nc 192.168.0.1 9999
 printf '%s' 'system:status?' | timeout 0.2 nc 192.168.0.1 9999  
     Query/read the current system status. See the manual description of this cmd and response on p31. The response will be in hex, where each bit means something special.
 etc. etc. See the manual (Quick Start Guide) linked-to above for the full command sequence, which has about 2x as many commands as described above.
+watch -n 0.5 'printf "%s" "measure:current? ch1" | timeout 0.2 nc 192.168.0.1 9999'
+    Take a current reading of Ch1 every 0.5 sec.
+trap 'printf "%s\n" "Ctr + C"; run="false";' SIGINT SIGTERM; \
+run="true"; while [ "$run" = "true" ] ; do \
+printf "%s" "measure:current? ch1" | timeout 0.2 nc 192.168.0.1 9999; \
+sleep 0.5; done
+    Similar to the above: take a reading every 0.5 sec! But, instead of showing the value in-place like `watch` does, overwriting the old value with each new value, **print them all to the screen**, scrolling down, instead, so you can manually average some values when done taking a bunch of readings!
+    See also this answer about `trap` in Bash: https://serverfault.com/a/160961/357116
+    <======= EXCELLENT! =======
 
 tcpdump
     Use this command to read and print UDP and TCP Ethernet packets! This can be very useful to help you see if certain packets or messages are even coming in to your system!
@@ -3269,7 +3333,11 @@ sudo whoami
 df -h
     show 'd'isk 'f'ile usage to see how much hard drive/SSD space you have total, used, and remaining
 free -h
-    look at RAM and swap file/swap partition usage [memory free, ram free, swap free]
+    look at RAM and swap file/swap partition usage [memory free, ram free, swap free] in "ibytes" (base 1024) form--ex: GiB = Gibibytes
+free -h --si
+    Show free RAM and swap in human-readable base 1024 form--ex: GB = Gigabytes
+    See: https://askubuntu.com/a/898942/327339
+    - esp. see the comments under this answer--including my own comment!
 swapon --show
     show which swap files or partitions are in use; see my own answer here!: https://askubuntu.com/questions/927854/how-do-i-increase-the-size-of-swapfile-without-removing-it-in-the-terminal/1177620#1177620; you can also do:
 cat /proc/meminfo | grep -B 1000 -A 1000 -i swap
@@ -3335,6 +3403,21 @@ basename $(realpath some_file_or_symlink)
 lscpu
     List information about your CPU and cores, whether your CPU is 32 or 64-bit, how many CPUs you have, how many threads per core you have, etc. 
     From `man lscpu`: "display information about the CPU architecture"
+
+uname
+    Print system information
+uname -r
+    Print the kernel release version
+uname --kernel-release
+    Same as above
+
+shred
+    Better than `rm`! It's more secure. See `man shred`: "overwrite a file to hide its contents, and optionally delete it."
+shred -v --iterations=1 path/to/some_file
+    <====== BEST USAGE ======
+    Overwrite "some_file" with random data to "shred" it one time, showing verbose output. 
+    NB: I read somewhere that on modern SSD's, shredding only **1 time** is recommended, NOT more than that (hene the `--iterations=1` option!), as more than that unnecessarily wears down your flash memory with NO extra security benefit since data gets scrambled all the time on SSD's anyway as a result of wear-leveling. 
+    See where I first saw this cmd: https://www.cyberciti.biz/hardware/cryptsetup-add-enable-luks-disk-encryption-keyfile-linux/
 
 
 == diff: ==
