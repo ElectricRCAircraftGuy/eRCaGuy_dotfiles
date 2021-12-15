@@ -3595,8 +3595,9 @@ References:
 1. [my ans 2] https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264 - includes info. on FreeFileSync (FFSync; Free File Sync) too!
 
 time rsync -rah --dry-run --info=progress2 --stats source destination
-    My favorite `--dry-run` command; do a **dry run** "archival" copy (ie: including all Linux file/folder permissions) from source to destination. 
     <========= MY FAVORITE **DRY-RUN** RSYNC COMMAND ==========
+    My favorite `--dry-run` command; do a **dry run** "archival" copy (ie: including all Linux file/folder permissions) from source to destination. 
+    See: [my ans] https://askubuntu.com/a/1275972/327339
 time rsync -rah --dry-run --info=progress2 --stats source/ destination/
     [version WITH trailing slashes! (`/`)] Dry-run copy the **contents of** "source/" dir to be within the **contents of** "destination/" dir, rather than creating a new folder in the destination dir at path "destination/source", as would be done with_out_ the trailing slashes (`/`)!
 time rsync -rah --info=progress2 --stats source destination
