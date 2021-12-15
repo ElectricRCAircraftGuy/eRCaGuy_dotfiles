@@ -165,6 +165,7 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
 
 1. Install `speedtest` by Ookla:
     1. Go here: https://www.speedtest.net/apps/cli --> scroll to the bottom and click "Download for Linux" --> right-click on the correct architecture option from the download menu dropdown list which shows up, and go to "Copy link address". This is the address used in the `wget` line below. Here, I show it for the `x86_64` (64-bit processor) option.
+
     ```bash
     # Tested in Ubuntu 18.04
     mkdir -p ~/Downloads/Install_Files/speedtest--ookla
@@ -182,6 +183,7 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
     # ~/bin dir, as this will automatically add it to your $PATH variable in Ubuntu.
     # Otherwise, `speedtest` is ready to use immediately.
     ```
+    
     1. After extracting `speedtest` as shown above, a **markdown readme** for it is found in `~/Downloads/Install_Files/speedtest--ookla/ookla-speedtest-1.1.1-linux-x86_64/speedtest.md`.
 
 
