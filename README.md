@@ -170,11 +170,13 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
     # Tested in Ubuntu 18.04
     mkdir -p ~/Downloads/Install_Files/speedtest--ookla
     cd ~/Downloads/Install_Files/speedtest--ookla
-    wget https://bintray.com/ookla/download/download_file?file_path=ookla-speedtest-1.0.0-x86_64-linux.tgz
-    mv 'download_file?file_path=ookla-speedtest-1.0.0-x86_64-linux.tgz' ookla-speedtest-1.0.0-x86_64-linux.tgz
-    mkdir -p ookla-speedtest-1.0.0-x86_64-linux
-    tar -xvzf ookla-speedtest-1.0.0-x86_64-linux.tgz --directory=ookla-speedtest-1.0.0-x86_64-linux
-    cd ookla-speedtest-1.0.0-x86_64-linux
+    wget https://install.speedtest.net/app/cli/ookla-speedtest-1.1.1-linux-x86_64.tgz
+    FILENAME="ookla-speedtest-1.1.1-linux-x86_64.tgz"
+    # strip off extension to derive the dirname; see: https://stackoverflow.com/a/965072/4561887
+    DIRNAME="${FILENAME%.*}"
+    mkdir -p "$DIRNAME"
+    tar -xvzf "$FILENAME" --directory="$DIRNAME"
+    cd "$DIRNAME"
     mkdir -p ~/bin
     ln -si "$(pwd)/speedtest" ~/bin/speedtest
     # log out and log back in now if this is the first time you've created and used the 
@@ -182,6 +184,6 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
     # Otherwise, `speedtest` is ready to use immediately.
     ```
 
-    1. After extracting `speedtest` as shown above, a markdown readme for it is found in "**~/Downloads/Install_Files/speedtest--ookla/ookla-speedtest-1.0.0-x86_64-linux/speedtest.md**".
+    1. After extracting `speedtest` as shown above, a **markdown readme** for it is found in `~/Downloads/Install_Files/speedtest--ookla/ookla-speedtest-1.1.1-linux-x86_64/speedtest.md`.
 
 
