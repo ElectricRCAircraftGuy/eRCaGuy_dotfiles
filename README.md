@@ -182,7 +182,6 @@ Select scripts which I find especially useful are **marked with up to 5 asterisk
     # ~/bin dir, as this will automatically add it to your $PATH variable in Ubuntu.
     # Otherwise, `speedtest` is ready to use immediately.
     ```
-    
     1. After extracting `speedtest` as shown above, a **markdown readme** for it is found in `~/Downloads/Install_Files/speedtest--ookla/ookla-speedtest-1.1.1-linux-x86_64/speedtest.md`.
 
 
