@@ -2,6 +2,7 @@
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+# RipGrep Fuzzyfinder (rgf)
 # This is a simple script that turns RipGrep (`rg`) into a simple interactive fuzzy finder to find
 # content in any files.
 # See: https://github.com/junegunn/fzf#3-interactive-ripgrep-integration
