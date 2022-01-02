@@ -294,7 +294,10 @@ gs_set_title() {
 #   Run `sublf`. Type to fuzzy search. Press TAB to select a file. Once you have selected all the
 #   files you'd like to open, press ENTER to print their paths to the terminal and then open them
 #   all up in Sublime Text!
-alias sublf='FILES_SELECTED="$(fzf -m)" \
+# See also:
+# 1. How to show hidden files in the filename search:
+#    https://github.com/junegunn/fzf/issues/337#issuecomment-136383876
+alias sublf='FILES_SELECTED="$(find . | fzf -m)" \
 && echo "Opening these files in Sublime Text:" \
 && echo "$FILES_SELECTED" \
 && subl $(echo "$FILES_SELECTED")'
