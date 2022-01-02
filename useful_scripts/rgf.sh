@@ -7,18 +7,19 @@
 # See: https://github.com/junegunn/fzf#3-interactive-ripgrep-integration
 
 # INSTALLATION INSTRUCTIONS:
-# 1. Install fzf: https://github.com/junegunn/fzf#installation
+# 1. Install RipGrep: https://github.com/BurntSushi/ripgrep#installation
+# 2. Install `fzf` fuzzy finder: https://github.com/junegunn/fzf#installation
 #    The "Using git" instructions there, for instance, work great.
-# 2. Create a symlink in ~/bin to this script so you can run it from anywhere.
+# 3. Create a symlink in ~/bin to this script so you can run it from anywhere.
 #       cd /path/to/here
 #       mkdir -p ~/bin
 #       ln -si "${PWD}/rgf.sh" ~/bin/rgf     # required
 #       ln -si "${PWD}/rgf.sh" ~/bin/gs_rgf  # optional; replace "gs" with your initials
-# 3. Now you can use this command directly anywhere you like in any of these ways:
+# 4. Now you can use this command directly anywhere you like in any of these ways:
 #   1. `rgf`
 #   2. `gs_rgf`
 
-# References:fsub
+# References:
 # 1. https://github.com/junegunn/fzf#3-interactive-ripgrep-integration
 # 1. See also my `sublf` and `fsubl` aliases in .bash_aliases.
 
