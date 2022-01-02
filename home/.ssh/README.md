@@ -81,12 +81,19 @@ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 # 2. Add your ssh key to the `ssh-agent`
 # See link above
 
-# Ensure the ssh-agent is running
+# Ensure the ssh-agent is running (this starts the `ssh-agent`)
 eval "$(ssh-agent -s)"
 
 # Add your private key to it; update the path to your private key below, as required, based on what
 # path you interactively selected above when generating the key
 ssh-add ~/.ssh/id_ed25519
+
+# Verify what keys have been added to the ssh-agent by listing (`-l`) currently-added keys. 
+# A. If you see "Could not open a connection to your authentication agent.", it means the
+# `ssh-agent` has not been started yet, so you must start it with `eval "$(ssh-agent -s)"`.
+# B. If you see "The agent has no identities.", it means the ssh-agent is running but you haven't
+# added any ssh keys to it, so run `ssh-add path/to/private_key` to add a key to the agent.
+ssh-add -l
 
 
 # 3. Copy your **public** key to your server you'd like to log into. 
