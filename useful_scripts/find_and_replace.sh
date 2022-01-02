@@ -153,7 +153,7 @@ main() {
     # 1. https://stackoverflow.com/questions/24628076/bash-convert-n-delimited-strings-into-array/24628676#24628676
     # 2. https://unix.stackexchange.com/questions/184863/what-is-the-meaning-of-ifs-n-in-bash-scripting/184867#184867
     SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
-    IFS=$'\n'      # Change IFS to new line
+    IFS=$'\n'      # Change IFS (Internal Field Separator) to newline char
     filenames_array=($filenames) # split long string into array, separating by IFS (newline chars)
     IFS=$SAVEIFS   # Restore IFS
 
