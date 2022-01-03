@@ -3792,7 +3792,7 @@ find some/path -type f | grep -E ".*(\.ino|\.cpp)" | xargs sed -i "s|\bregex_pat
         find src/arduino -type f | grep -E ".*" | xargs sed -i "s|\bprintf\b|sprintf|g"
 
 Ripgrep can find and replace too!
-[rg, ripgrep, rip-grep, ripgrep replace in-place]
+[rg, ripgrep, rip-grep, ripgrep replace in-place, rg replace]
 See "Andrew Gallant's Blog", the post titled [ripgrep is faster than {grep, ag, git grep, ucg, pt, sift}](https://blog.burntsushi.net/ripgrep/). Ex:
 rg '([A-Z][a-z]+)\s+([A-Z][a-z]+)' --replace '$2, $1'
     Find all strings which match the pattern in single quotes (''), and replace them with the matching groups in the format '$2, $1', where `$2` is the 2nd matching group (2nd set of parenthesis in the main regular expression), and `$1` is the 1st matching group (1st set of parenthesis in the main regular expression).
@@ -3802,6 +3802,13 @@ rg '([A-Z][a-z]+)\s+([A-Z][a-z]+)' --replace '$2, $1'
             # same as: `sed -i 's/blue/red/g' ip.txt` 
             #       or `sed -i 's|blue|red|g' ip.txt`
             rg --passthru 'blue' -r 'red' ip.txt > tmp.txt && mv tmp.txt ip.txt
+sed -i 's|blue|red|g' ip.txt
+    Replace all instances of "blue" in file "ip.txt" with "red".
+rg --passthru 'blue' -r 'red' ip.txt > tmp.txt && mv tmp.txt ip.txt
+    Same as above, but using `rg` ripgrep instead of `sed`! This technique uses an intermediate temporary file.
+file_contents="$(rg --passthru 'blue' -r 'red' ip.txt)" && printf "%s" "$file_contents" > ip.txt
+    <========= MY APPROACH; BETTER THAN JUST ABOVE I think ==========
+    Same as above, but use `rg` and do NOT use an intermediate temporary file!
 
 eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh: usage:
 find_and_replace <path> <filename_regex> <string_regex> <replacement_str> [-w]
