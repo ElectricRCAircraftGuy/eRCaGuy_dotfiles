@@ -26,8 +26,18 @@
 # References:
 # 1. How to use `rg` to do an in-place replacement in a **single file** at a time:
 #    https://learnbyexample.github.io/substitution-with-ripgrep/#in-place-workaround
+# 1. My feature request to have `rg` do find and replace natively (post link to this wrapper
+#    there when done with it!):
+#    https://github.com/BurntSushi/ripgrep/issues/2115
+# 1. Advanced bash argument parsing example:
+#    https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/blob/master/pdf2searchablepdf.sh#L150-L223
 
-DEBUG_PRINTS_ON="true"  # "true" or "false"
+# TODO:
+# 1. Do advanced bash argument parsing, following the example above, to determine what the regex
+#    search pattern is and what the `-r replacement_text` replacement text is. Use this info. to
+#    complete the find-and-replace below.
+
+DEBUG_PRINTS_ON="false"  # "true" or "false"
 EXECUTABLE_NAME="$(basename "$0")"
 
 HELP_STR="\
@@ -84,6 +94,8 @@ cmd="rg $PASSED_IN_ARGS"
 debug_echo "cmd = \"$cmd\""
 
 file_list="$(rg -l $PASSED_IN_ARGS)"
+########
+file_list="$(rg --stats -l $PASSED_IN_ARGS)"
 debug_echo -e "file_list:\n${file_list}"
 
 # Convert list of files to array of files.
@@ -94,6 +106,15 @@ filenames_array=($file_list) # split long string into array, separating by IFS (
 IFS=$SAVEIFS   # Restore IFS
 
 # iterate over array; see: https://opensource.com/article/18/5/you-dont-know-bash-intro-bash-arrays
+debug_echo "============="
 for filename in ${filenames_array[@]}; do
-  debug_echo "$filename"
+    debug_echo "$filename"
+    # file_contents="$(rg --stats --passthru 'test' -r 'best' git-changes.sh)" && printf "%s" "$file_contents" > git-changes.sh
+    # file_contents_and_stats="$(rg --stats --passthru 'test' -r 'best' git-changes.sh)"
+    file_contents_and_stats="$(rg --stats --passthru $PASSED_IN_ARGS)"
+    NUM_STATS_LINES=9
+    file_contents="$(head -n -$NUM_STATS_LINES "$file_contents_and_stats")"
+    stats="$(tail -n $NUM_STATS_LINES "$file_contents_and_stats")"
+    printf "%s" "$file_contents" > git-changes.sh
+    printf "%s" "$stats"
 done
