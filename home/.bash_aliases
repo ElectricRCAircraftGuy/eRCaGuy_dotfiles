@@ -297,7 +297,9 @@ gs_set_title() {
 # See also:
 # 1. How to show hidden files in the filename search:
 #    https://github.com/junegunn/fzf/issues/337#issuecomment-136383876
-alias sublf='FILES_SELECTED="$(find . | fzf -m)" \
+# Exclude any ".git" or "..git" dir at any level in the search path.
+alias sublf='FILES_SELECTED="$(find -not -path "*/.git*" -not -path "*/..git*" \
+| fzf -m)" \
 && echo "Opening these files in Sublime Text:" \
 && echo "$FILES_SELECTED" \
 && subl $(echo "$FILES_SELECTED")'
