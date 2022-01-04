@@ -324,6 +324,7 @@ sublf() {
         printf "  %s\n" "$file"
     done
 
+    # See: https://stackoverflow.com/a/70572787/4561887
     subl "${files_selected_array[@]}"
 }
 # aliases to the same thing
