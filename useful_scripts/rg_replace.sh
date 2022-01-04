@@ -39,10 +39,11 @@
 #       eRCaGuy_dotfiles$ rgr foo -R boo --stats "git & Linux cmds, help, tips & tricks - Gabriel.txt"
 
 # TODO:
-# 1. Do advanced bash argument parsing, following the example above, to determine what the regex
+# ✓ 1. Do advanced bash argument parsing, following the example above, to determine what the regex
 #    search pattern is and what the `-r replacement_text` replacement text is. Use this info. to
 #    complete the find-and-replace below.
-# 1. Also post here when done: https://unix.stackexchange.com/questions/112023/how-can-i-replace-a-string-in-a-files/580328#580328
+# ✓ 1. Also post here when done: https://unix.stackexchange.com/questions/112023/how-can-i-replace-a-string-in-a-files/580328#580328
+#       Done. See: https://unix.stackexchange.com/a/684926/114401
 
 RETURN_CODE_SUCCESS=0
 RETURN_CODE_ERROR=1
