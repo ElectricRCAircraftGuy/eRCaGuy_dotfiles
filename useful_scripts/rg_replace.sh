@@ -2,11 +2,12 @@
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# WORK IN PROGRESS! <===========
+# STATUS: functional and ready-to-use
+
 # This is a simple wrapper around RipGrep (`rg`) to allow in-place find-and-replace, since the
 # `rg --replace` option replaces only the stdout, NOT the contents of the file.
 # `man rg` under the `--replace` section states: "Neither this flag nor any other ripgrep
-# flag will modify your files."
+# flag will modify your files." This wrapper overcomes that limitation.
 
 # INSTALLATION INSTRUCTIONS:
 # 1. Install RipGrep: https://github.com/BurntSushi/ripgrep#installation
