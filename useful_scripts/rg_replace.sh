@@ -409,7 +409,7 @@ main() {
 
         # WARNING WARNING WARNING! This is the line that makes the actual changes to your
         # file system!
-        # printf_debug "%s" "$file_contents" > "$filename"
+        printf_debug "%s" "$file_contents" > "$filename"
     done
 
     # print the summary output one more time so that if the output is really long the user doesn't
