@@ -298,12 +298,35 @@ gs_set_title() {
 # 1. How to show hidden files in the filename search:
 #    https://github.com/junegunn/fzf/issues/337#issuecomment-136383876
 # Exclude any ".git" or "..git" dir at any level in the search path.
-alias sublf='FILES_SELECTED="$(find -not -path "*/.git/*" -not -path "*/..git/*" \
-| fzf -m)" \
-&& echo "Opening these files in Sublime Text:" \
-&& echo "$FILES_SELECTED" \
-&& subl $(echo "$FILES_SELECTED")'
-# 2nd alias to the same thing
+# Sample usage:
+#       sublf     # start the search in the current directory
+#       # Or
+#       sublf ..  # start the search in the dir up one level
+sublf() {
+    search_path="."
+    if [ $# -gt 0 ]; then
+        search_path="$1"
+    fi
+
+    files_selected="$(find "$search_path" -not -path "*/.git/*" -not -path "*/..git/*" | fzf -m)"
+
+    # Convert list of files to array of files.
+    # See:
+    # 1. "eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh" for an example of this
+    # 1. ***** https://stackoverflow.com/a/24628676/4561887
+    SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
+    IFS=$'\n'      # Change IFS (Internal Field Separator) to newline char
+    files_selected_array=($files_selected) # split long string into array, separating by IFS (newline chars)
+    IFS=$SAVEIFS   # Restore IFS
+
+    echo "Opening these files in Sublime Text:"
+    for file in "${files_selected_array[@]}"; do
+        printf "  %s\n" "$file"
+    done
+
+    subl "${files_selected_array[@]}"
+}
+# aliases to the same thing
 alias fsubl='sublf'
 alias gs_sublf="sublf"
 alias gs_fsubl="fsubl"
