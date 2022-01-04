@@ -31,6 +31,11 @@
 #    https://github.com/BurntSushi/ripgrep/issues/2115
 # 1. Advanced bash argument parsing example:
 #    https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/blob/master/pdf2searchablepdf.sh#L150-L223
+# 1. intro to bash arrays: https://opensource.com/article/18/5/you-dont-know-bash-intro-bash-arrays
+# 1. ***** "eRCaGuy_hello_world/bash/array_practice.sh"
+
+# Test commands:
+#       eRCaGuy_dotfiles$ rgr foo -R boo
 
 # TODO:
 # 1. Do advanced bash argument parsing, following the example above, to determine what the regex
@@ -44,7 +49,15 @@ RETURN_CODE_ERROR=1
 VERSION="0.1.0"
 AUTHOR="Gabriel Staples"
 
-DEBUG_PRINTS_ON="true"  # "true" or "false"; can also be passed in as an option: `-d` or `--debug`
+DEBUG_PRINTS_ON="false"  # "true" or "false"; can also be passed in as an option: `-d` or `--debug`
+
+# ANSI color codes
+# See:
+# 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/git-diffn.sh#L126-L138
+# 1. https://github.com/GNOME/glib/blob/main/gio/gdbus-tool.c#L43-L50
+COLOR_MGN="\033[35m" # magenta
+COLOR_OFF="\033[m"
+
 
 SCRIPT_NAME="$(basename "$0")"
 VERSION_SHORT_STR="rgr ('$SCRIPT_NAME') version $VERSION"
@@ -104,8 +117,16 @@ by Gabriel Staples.
 # A function to do debug prints only if `DEBUG_PRINTS_ON` is set to "true".
 echo_debug() {
     if [ "$DEBUG_PRINTS_ON" = "true" ]; then
-        printf "DEBUG: "
+        printf "%s" "DEBUG: "
         echo "$@"
+    fi
+}
+
+# A function to do debug prints only if `DEBUG_PRINTS_ON` is set to "true".
+printf_debug() {
+    if [ "$DEBUG_PRINTS_ON" = "true" ]; then
+        printf "%s" "DEBUG: "
+        printf "$@"
     fi
 }
 
@@ -141,7 +162,7 @@ parse_args() {
     paths_array=()  # array of paths to search in for the `regex` pattern
     ripgrep_args_array=()  # arguments to always be passed to ripgrep
 
-    while [[ $# -gt 0 ]]; do
+    while [ $# -gt 0 ]; do
         arg="$1"
         # first letter of `arg`; see: https://stackoverflow.com/a/10218528/4561887
         first_letter="${arg:0:1}"
@@ -175,9 +196,29 @@ parse_args() {
             # Replacement text; perform in-place to overwrite file
             "-R"|"--Replace")
                 overwrite_file="true"
-                replacement_text="$2"
-                shift # past argument
-                shift # past value
+                echo "ACTUAL CONTENT WILL BE REPLACED IN YOUR FILESYSTEM."
+
+                # See: https://stackoverflow.com/a/226724/4561887
+                read -p "Are you sure you'd like to continue? (Y or y to continue; any other key or just Enter to exit) " \
+                    yes_or_no
+                case "$yes_or_no" in
+                    [Yy]* )
+                        # nothing to do
+                        ;;
+                    *)
+                        exit $RETURN_CODE_SUCCESS
+                        ;;
+                esac
+
+                if [ $# -gt 1 ]; then
+                    replacement_text="$2"
+                    ripgrep_args_array+=("-r" "$replacement_text")
+                    shift # past argument
+                    shift # past value
+                else
+                    echo "ERROR: Missing value for argument '-R' or '--Replace'."
+                    exit $RETURN_CODE_ERROR
+                fi
                 ;;
 
             # --------------------------------------------------------------------------------------
@@ -215,10 +256,15 @@ parse_args() {
             "--type-add"| \
             "--type-clear"| \
             "-T"|"--type-not")
-                ripgrep_args_array+=("$1")
-                ripgrep_args_array+=("$2")
-                shift # past argument
-                shift # past value
+                if [ $# -gt 1 ]; then
+                    ripgrep_args_array+=("$1")
+                    ripgrep_args_array+=("$2")
+                    shift # past argument
+                    shift # past value
+                else
+                    echo "ERROR: Missing value for Ripgrep argument."
+                    exit $RETURN_CODE_ERROR
+                fi
                 ;;
 
 
@@ -280,19 +326,69 @@ main() {
 
     if [ "$overwrite_file" == "false" ]; then
         # There are no special things this wrapper program needs to do, so just run regular ripgrep!
-
-        # restore original arguments; see: https://stackoverflow.com/a/70572787/4561887
-        # set -- "${all_args_array[@]}"
-        # rg "$@"
-        # rg $(printf '"%s" ' "${all_args_array[@]}")
-        # for arg in "${all_args_array[@]}"; do
-        #     echo_debug "  $arg"
-        # done
+        rg "${all_args_array[@]}"
         exit $RETURN_CODE_SUCCESS
     fi
 
-    # otherwise, run the special find-and-replace in-place
-    file_list="$(rg --stats -l $PASSED_IN_ARGS)"
+
+    # otherwise, run the special find-and-replace in place
+
+    NUM_STATS_LINES=9  # number of extra lines printed at the end by the ripgrep `--stats` option
+
+    args_array=("${ripgrep_args_array[@]}" "--stats" "-l" "$regex" "${paths_array[@]}")
+
+    filenames_list_and_stats="$(rg "${args_array[@]}")"
+    filenames_list="$(printf "%s" "$filenames_list_and_stats" | head -n -$NUM_STATS_LINES)"
+    filenames_stats="$(printf "%s" "$filenames_list_and_stats" | tail -n $NUM_STATS_LINES)"
+
+    echo ""
+    # echo "TOTAL SUMMARY:"
+    # printf "${COLOR_MGN}%s${COLOR_OFF}" "${filenames_list}"
+    # echo "$filenames_stats"
+    # echo ""
+
+    # Convert list of files to array of files.
+    # See:
+    # 1. "eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh" for an example of this
+    # 1. ***** https://stackoverflow.com/a/24628676/4561887
+    SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
+    IFS=$'\n'      # Change IFS (Internal Field Separator) to newline char
+    filenames_array=($filenames_list) # split long string into array, separating by IFS (newline chars)
+    IFS=$SAVEIFS   # Restore IFS
+
+    # Now do the replacement one file at a time, using `rg` only! (no need for `sed`)
+
+    args_array_base=("${ripgrep_args_array[@]}" "--passthru" "$regex")
+    args_array_base_with_color=("${ripgrep_args_array[@]}" "--stats" "--color" "always" \
+        "-n" "$regex")
+
+    for filename in "${filenames_array[@]}"; do
+        echo -e "${COLOR_MGN}${filename}${COLOR_OFF}"
+
+        args_array_final=("${args_array_base[@]}" "$filename")
+        args_array_final_with_color=("${args_array_base_with_color[@]}" "$filename")
+
+        file_changes_and_stats_in_color="$(rg "${args_array_final_with_color[@]}")"
+
+        file_contents_and_stats="$(rg "${args_array_final[@]}")"
+        file_contents="$(printf "%s" "$file_contents_and_stats" | head -n -$NUM_STATS_LINES)"
+        stats="$(printf "%s" "$file_contents_and_stats" | tail -n $NUM_STATS_LINES)"
+
+        printf "%s\n\n" "$file_changes_and_stats_in_color"
+
+        # WARNING WARNING WARNING! This is the line that makes the actual changes to your
+        # file system!
+        # printf_debug "%s" "$file_contents" > "$filename"
+    done
+
+    # print the summary output one more time so that if the output is really long the user doesn't
+    # have to scroll up forever to see it
+    filenames_array_len=${#filenames_array[@]}
+    if [ "$filenames_array_len" -gt 1 ]; then
+        echo ""
+        printf "${COLOR_MGN}%s${COLOR_OFF}" "${filenames_list}"
+        echo "$filenames_stats"
+    fi
 } # main
 
 # ----------------------------------------------------------------------------------------------------------------------
