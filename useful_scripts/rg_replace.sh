@@ -70,45 +70,61 @@ See '$SCRIPT_NAME -h' for more info.
 HELP_STR="\
 $VERSION_SHORT_STR
 
-possible letters (these are the only free lowercase single-letter 'rg' options as of 3 Jan. 2021):
-    -d, -k, -y,
+RipGrep Replace (rgr). This program is a wrapper around RipGrep ('rg') in order to allow some
+extra features, such as find and replace in-place in files. It doesn't rely on 'sed'. It uses
+RipGrep only. Since it's a wrapper around 'rg', it forwards all options to 'rg', so you can use it
+as a permanent replacement for 'rg' if you like.
 
+Currently, the only significant new option added is '-R' or '--Replace', which is the same as
+RipGrep's '-r' except it MODIFIES THE FILES IN-PLACE ON YOUR FILESYSTEM! This is great! If you
+think so too, go and star this project (link below).
 
-    -d, --in-place
-        Replace in-place. '-i' was taken, so think of '-d' as meaning it will 'd'elete
-        the original file and replace it with a new one.
+USAGE (exact same as 'rg')
+    rgr [options] <regex> [paths...]
 
+OPTIONS
+    ALL OPTIONS ACCEPTED BY RIPGREP ('rg') ARE ALSO ACCEPTED BY THIS PROGRAM. Here are just a few
+    of the options I've amended and/or would like to highlight. Not all Ripgrep options have been
+    tested, and not all of them ever will be by me at least.
 
-////////////////////
-This ('$SCRIPT_NAME') is a RipGrep interactive fuzzy finder of content in files!
-
-It is a simple wrapper script around Ripgrep and the fzf fuzzy finder that turns RipGrep ('rg') into
-an easy-to-use interactive fuzzy finder to find content in any files. Options passed to this
-program are passed to 'rg'.
-
-See also: https://github.com/junegunn/fzf#3-interactive-ripgrep-integration
-
-The default behavior of Ripgrep used under-the-hood here is '--smart-case', which means:
-    Searches case insensitively if the pattern is all lowercase. Search case sensitively otherwise.
+    -h, -?, --help
+        Print help menu
+    -v, --version
+        Print version information.
+    --run_tests
+        Run unit tests (none yet).
+    -d, --debug
+        Turn on debug prints. '-d' is not part of 'rg' but if you use either of these options here
+        it will auto-forward '--debug' to 'rg' under-the-hood.
+    -r <replacement_text>, --replace <replacement_text>
+        Do a dry-run to replace all matches of regular expression 'regex' with 'replacement_text'.
+        This only does the replacement in the stdout output; it does NOT modify your disk!
+    -R <replacement_text>, --Replace <replacement_text>
+        THIS IS THE ONE! Bingo! This is the sole purpose for the creation of this wrapper. This
+        option will actually replace all matches of regular expression 'regex' with
+        'replacement_text' ON YOUR DISK. It actually modifies your file system! This is great
+        for large code-wide replacements when programming in large repos, for instance.
+    --stats
+        Show detailed statistics about the ripgrep search and replacements made.
 
 EXAMPLE USAGES:
 
-1. Pass in '-i' to make Ripgrep act in case 'i'nsensitive mode:
-        rgf -i
-2. You can specify a path to search in as well:
-        rgf \"path/to/some/dir/to/search/in\"
-3. Providing an initial search regular expression is allowed, but only optional:
-        rgf \"my regular expression search pattern\"
-4. If you do both a regex pattern and a path, follow the order Ripgrep requires:
-        rgf \"regex pattern\" \"path\"
-5. Search only in \"*.cpp\" files!
-        rgf -g \"*.cpp\"
-6. Also search hidden files (files that begin with a dot ('.') in Unix or Linux)
-        rgf --hidden
+    rgr foo -r boo
+        Do a *dry run* to replace all instances of 'foo' with 'boo' in this folder and down.
+    rgr foo -R boo
+        ACTUALLY REPLACE ON YOUR DISK all instances of 'foo' with 'boo' in this folder and down.
+    rgr foo -R boo file1.c file2.c file3.c
+        Same as above, but only in these 3 files.
+    rgr foo -R boo -g '*.txt'
+        Use a glob filter to replace on your disk all instances of 'foo' with 'boo' in .txt files
+        ONLY, inside this folder and down. Learn more about RipGrep's glob feature here:
+        https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#manual-filtering-globs
+    rgr foo -R boo --stats
+        Replace on your disk all instances of 'foo' with 'boo', showing detailed statistics.
 
-- See also my 'sublf' and 'fsubl' aliases in .bash_aliases.
-- Run 'rg -h' or 'man rg' if you wish to see the RipGrep help menu.
-- Run 'fzf -h' or 'man fzf' if you wish to see the fzf fuzzy finder help menu.
+
+Note to self: the only free lowercase letters not yet used by 'rg' as of 3 Jan. 2021 are:
+    -d, -k, -y
 
 This program is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 by Gabriel Staples.
@@ -197,6 +213,7 @@ parse_args() {
             "-R"|"--Replace")
                 overwrite_file="true"
                 echo "ACTUAL CONTENT WILL BE REPLACED IN YOUR FILESYSTEM."
+                echo "If you'd like to do a dry-run instead, cancel the program and run with '-r' instead of '-R'."
 
                 # See: https://stackoverflow.com/a/226724/4561887
                 read -p "Are you sure you'd like to continue? (Y or y to continue; any other key or just Enter to exit) " \
