@@ -107,6 +107,9 @@ OPTIONS
     --stats
         Show detailed statistics about the ripgrep search and replacements made.
 
+    SEE ALSO 'rg -h' AND 'man rg' FOR THE FULL HELP MENU OF RIPGREP ITSELF, WHICH OPTIONS ARE ALSO
+    ALLOWED AND PASSED THROUGH BY THIS 'rgr' WRAPPER PROGRAM.
+
 EXAMPLE USAGES:
 
     rgr foo -r boo
@@ -177,6 +180,7 @@ parse_args() {
     overwrite_file="false"
     paths_array=()  # array of paths to search in for the `regex` pattern
     ripgrep_args_array=()  # arguments to always be passed to ripgrep
+    stats_on="false"
 
     while [ $# -gt 0 ]; do
         arg="$1"
@@ -236,6 +240,11 @@ parse_args() {
                     echo "ERROR: Missing value for argument '-R' or '--Replace'."
                     exit $RETURN_CODE_ERROR
                 fi
+                ;;
+            # Ripgrep Statistics on
+            "--stats")
+                stats_on="true"
+                shift # past argument
                 ;;
 
             # --------------------------------------------------------------------------------------
@@ -386,12 +395,17 @@ main() {
         args_array_final_with_color=("${args_array_base_with_color[@]}" "$filename")
 
         file_changes_and_stats_in_color="$(rg "${args_array_final_with_color[@]}")"
+        file_changes_in_color="$(printf "%s" "$file_changes_and_stats_in_color" | head -n -$NUM_STATS_LINES)"
 
         file_contents_and_stats="$(rg "${args_array_final[@]}")"
         file_contents="$(printf "%s" "$file_contents_and_stats" | head -n -$NUM_STATS_LINES)"
         stats="$(printf "%s" "$file_contents_and_stats" | tail -n $NUM_STATS_LINES)"
 
-        printf "%s\n\n" "$file_changes_and_stats_in_color"
+        if [ "$stats_on" == "true" ]; then
+            printf "%s\n\n" "$file_changes_and_stats_in_color"
+        else
+            printf "%s\n\n" "$file_changes_in_color"
+        fi
 
         # WARNING WARNING WARNING! This is the line that makes the actual changes to your
         # file system!
@@ -401,7 +415,7 @@ main() {
     # print the summary output one more time so that if the output is really long the user doesn't
     # have to scroll up forever to see it
     filenames_array_len=${#filenames_array[@]}
-    if [ "$filenames_array_len" -gt 1 ]; then
+    if [ "$filenames_array_len" -gt 1 ] && [ "$stats_on" == "true" ]; then
         echo ""
         printf "${COLOR_MGN}%s${COLOR_OFF}" "${filenames_list}"
         echo "$filenames_stats"
