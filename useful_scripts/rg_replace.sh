@@ -34,6 +34,11 @@
 #    https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/blob/master/pdf2searchablepdf.sh#L150-L223
 # 1. intro to bash arrays: https://opensource.com/article/18/5/you-dont-know-bash-intro-bash-arrays
 # 1. ***** "eRCaGuy_hello_world/bash/array_practice.sh"
+# 1. See also this simple alternative!:
+#    https://github.com/BurntSushi/ripgrep/issues/74#issuecomment-376659557
+#       rg 'foo' --files-with-matches | xargs sed -i 's/foo/bar/g'
+#       # OR
+#       rg 'foo' --files-with-matches | xargs sed -i 's|foo|bar|g'     <========= SIMPLE ALTERNATIVE ==========
 
 # Test commands:
 #       eRCaGuy_dotfiles$ rgr foo -R boo
