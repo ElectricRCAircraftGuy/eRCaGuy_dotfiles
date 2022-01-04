@@ -36,6 +36,7 @@
 
 # Test commands:
 #       eRCaGuy_dotfiles$ rgr foo -R boo
+#       eRCaGuy_dotfiles$ rgr foo -R boo --stats "git & Linux cmds, help, tips & tricks - Gabriel.txt"
 
 # TODO:
 # 1. Do advanced bash argument parsing, following the example above, to determine what the regex
@@ -397,9 +398,7 @@ main() {
         file_changes_and_stats_in_color="$(rg "${args_array_final_with_color[@]}")"
         file_changes_in_color="$(printf "%s" "$file_changes_and_stats_in_color" | head -n -$NUM_STATS_LINES)"
 
-        file_contents_and_stats="$(rg "${args_array_final[@]}")"
-        file_contents="$(printf "%s" "$file_contents_and_stats" | head -n -$NUM_STATS_LINES)"
-        stats="$(printf "%s" "$file_contents_and_stats" | tail -n $NUM_STATS_LINES)"
+        file_contents="$(rg "${args_array_final[@]}")"
 
         if [ "$stats_on" == "true" ]; then
             printf "%s\n\n" "$file_changes_and_stats_in_color"
@@ -409,7 +408,7 @@ main() {
 
         # WARNING WARNING WARNING! This is the line that makes the actual changes to your
         # file system!
-        printf_debug "%s" "$file_contents" > "$filename"
+        printf "%s" "$file_contents" > "$filename"
     done
 
     # print the summary output one more time so that if the output is really long the user doesn't
