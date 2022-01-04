@@ -74,6 +74,7 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 1. NoMachine remote login setup info
 1. Useful scripts: see [section below](#useful-scripts)
     1. Ripgrep fuzzy finder, "rgf.sh".
+    1. Ripgrep Replace, `rgr` ([useful_scripts/rg_replace.sh](useful_scripts/rg_replace.sh)). This is a wrapper around Ripgrep to give it a find-and-replace feature to replace contents on your disk.
 1. etc.
 
 

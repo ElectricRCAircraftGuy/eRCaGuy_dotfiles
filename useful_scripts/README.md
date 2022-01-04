@@ -17,4 +17,6 @@ Each script herein has detailed installation and usage information commented in 
         1. Tutorial I wrote: [Reading messages from a bag file](http://wiki.ros.org/ROS/Tutorials/reading%20msgs%20from%20a%20bag%20file)
 1. **rgf.sh**
     1. Ripgrep fuzzy finder: this ('rgf') is a RipGrep interactive fuzzy finder of content in files! It is a simple wrapper script around Ripgrep and the [fzf fuzzy finder](https://github.com/junegunn/fzf#3-interactive-ripgrep-integration) that turns RipGrep ('rg') into an easy-to-use interactive fuzzy finder to find content in any files. VERY USEFUL AND EASY TO USE!
+1. **rg_replace.sh** (`rgr`)
+    1. Ripgrep Replace: this is a wrapper around Ripgrep which allows you to do full find-and-replace on your disk. See [rg_replace.sh](rg_replace.sh). Installation instructions are in the top of the file. Sample help menu from it (`rgr -h`): https://github.com/BurntSushi/ripgrep/issues/74#issuecomment-1004583171
 
