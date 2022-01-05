@@ -11,6 +11,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     1. [Example of files you may have in your `~/.ssh` dir](#example-of-files-you-may-have-in-your-~ssh-dir)
     1. [Public/Private ssh generation and copying to your server's `~/.ssh/authorized_keys` file](#publicprivate-ssh-generation-and-copying-to-your-servers-~sshauthorized_keys-file)
     1. [SSH example aliases](#ssh-example-aliases)
+    1. [Auto-starting the the ssh-agent on a remote, ssh-based development machine](#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine)
 1. [2. How to source a custom .bashrc file whenever you ssh into a remote Linux device](#2-how-to-source-a-custom-bashrc-file-whenever-you-ssh-into-a-remote-linux-device)
     1. [References:](#references-1)
     1. [1. When your target Linux device _does_ have the `bash` shell](#1-when-your-target-linux-device-does-have-the-bash-shell)
@@ -40,6 +41,7 @@ https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-
 1. [EXCELLENT!] Great, generic ssh key-generation steps and instructions, as well as how to add your public key to GitHub so you can access your repos remotely from the git command-line: 
 https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 1. How to run commands over ssh: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
+
 
 <a id="example-of-files-you-may-have-in-your-~ssh-dir"></a>
 ## Example of files you may have in your `~/.ssh` dir
@@ -158,6 +160,54 @@ ssh my-ssh-alias
 my_ssh_alias
 # 3. full ssh command manually typed in
 ssh root@192.168.0.2 -p 22 -i ~/.ssh/id_rsa
+```
+
+<a id="auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine"></a>
+## Auto-starting the the ssh-agent on a remote, ssh-based development machine
+
+When you graphically log in to a system, the window manager manages your ssh-agent for you. For example, on Ubuntu 18.04 and 20.04, gnome manages the ssh-agent by running this command that runs from the _Startup Applications_ GUI when you first log in: 
+```bash
+# Name: SSH Key Agent
+/usr/bin/gnome-keyring-daemon --start --components=ssh  # Command
+# Comment: GNOME Keyring: SSH Agent
+```
+When you _ssh into_ this same Ubuntu machine, however, the gnome window manager does NOT get to run this application to ensure the ssh-agent is running and ready-to-go, so you must do it _manually_ yourself, which can be a pain-in-the-butt. Here are some references on how this can be done:
+
+1. Google search for ["make ssh-agent start at boot"](https://www.google.com/search?q=make+ssh-agent+start+at+boot&oq=make+ssh-agent+start+at+boot&aqs=chrome..69i57.4893j0j7&sourceid=chrome&ie=UTF-8)
+    1. https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt
+        1. [EXCELLENT] https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt/217223#217223
+        1. [great additional detail and options] https://unix.stackexchange.com/questions/90853/how-can-i-run-ssh-add-automatically-without-a-password-prompt/90869#90869
+    1. https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
+
+In short, which method you choose is a trade-off balance between security and convenience. The most-_convenient_ technique is to remove your password on your private ssh key entirely so that you _never_ have to type a password to decrypt your private ssh key, and the most _secure_ technique is to not use the ssh-agent at all, so that you have to specify your private key and type your private ssh password _every time you use it._ The following approach is a balance between the two, favoring slightly more towards the side of convenience. It allows you to have a secure private ssh encryption key password but stores your ssh key in an open ssh-agent socket which is opened _once per reboot_! This means you only have type your private ssh key password _once per reboot_, which is great! 
+
+Simply copy and paste the following code block into your `~/.bash_aliases` (preferred) or `~/.bashrc` file on the computer you'd like it to run on. See also the notes just above the code block below.
+
+Based on: https://unix.stackexchange.com/a/217223/114401
+```bash
+# Auto-start the ssh agent and add necessary keys once per reboot. 
+#
+# This is recommended to be added to your ~/.bash_aliases (preferred) or ~/.bashrc file on any
+# remote ssh server development machine that you generally ssh into, and from which you must ssh
+# into other machines or servers, such as to push code to GitHub over ssh. If you only graphically
+# log into this machine, however, there is no need to do this, as Ubuntu's Gnome window manager,
+# for instance, will automatically start and manage the `ssh-agent` for you instead.
+#
+# See: 
+# https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home/.ssh#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine
+
+if [ ! -S ~/.ssh/ssh_auth_sock ]; then
+    echo "'ssh-agent' has not been started since the last reboot. Starting 'ssh-agent' now."
+    eval "$(ssh-agent -s)"
+    ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+fi
+export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+# see if any key files are already added to the ssh-agent, and if not, add them
+ssh-add -l > /dev/null
+if [ "$?" -ne "0" ]; then
+    echo "No ssh keys have been added to your 'ssh-agent' since the last reboot. Adding default keys now."
+    ssh-add
+fi
 ```
 
 

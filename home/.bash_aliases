@@ -526,3 +526,17 @@ fi
 
 #--------------------------- CUSTOM TERMINAL TABS & TITLES (END) -----------------------------------
 
+# Auto-start the ssh agent and add necessary keys once per reboot.
+#
+# This is recommended to be added to your ~/.bash_aliases (preferred) or ~/.bashrc file on any
+# remote ssh server development machine that you generally ssh into, and from which you must ssh
+# into other machines or servers, such as to push code to GitHub over ssh. If you only graphically
+# log into this machine, however, there is no need to do this, as Ubuntu's Gnome window manager,
+# for instance, will automatically start and manage the `ssh-agent` for you instead.
+#
+# See:
+# https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home/.ssh#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine
+#
+# ^^ COPY AND PASTE THE LATEST CODE BLOCK FROM THE LINK JUST ABOVE INTO THIS SPACE BELOW IF THE
+# DESCRIPTION JUST ABOVE APPLIES TO THIS MACHINE AND YOU'D LIKE TO AUTOMATICALLY START THE SSH-AGENT
+# AND AUTOMATICALLY ADD YOUR SSH-KEYS TO IT ONCE PER REBOOT.

@@ -114,6 +114,9 @@ Usage:
 
     $SCRIPT_NAME [pc2_target_name [cmd]]
 
+            Example:
+                    $SCRIPT_NAME desktop 'time bazel build //...; gs_alert'
+
             Synchronize the git repo (whose directory you are currently in when running the command)
             on the local computer (\"PC1\") to the remote 'pc2_target_name' computer
             (\"PC2\"). Then, optionally run the command 'cmd' on PC2 in its target git repository
@@ -583,10 +586,36 @@ sync_pc1_to_remote_branch () {
     fi
 }
 
+# This command is intended to only run on PC2 (the destination).
+# It ensures the ssh-agent is running and ssh keys are added so that PC2 can use its ssh keys to
+# pull from GitHub over ssh withOUT forcing you to type in your ssh password every time you run
+# this script!
+# - This code block is copy-pasted from my ssh readme here:
+#   https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home/.ssh#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine
+start_ssh_agent_on_pc2() {
+    if [ ! -S ~/.ssh/ssh_auth_sock ]; then
+        echo "'ssh-agent' has not been started since the last reboot. Starting 'ssh-agent' now."
+        echo "See: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home/.ssh#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine"
+        eval "$(ssh-agent -s)"
+        ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+    fi
+    export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+    # see if any key files are already added to the ssh-agent, and if not, add them
+    ssh-add -l > /dev/null
+    if [ "$?" -ne "0" ]; then
+        echo "No ssh keys have been added to your 'ssh-agent' since the last reboot. Adding default keys now."
+        echo "See: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home/.ssh#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine"
+        ssh-add
+    fi
+}
+
+# This command is only intended to **run on PC2** (the destination), NOT PC1 (the source)!
 # This is the main command to run on PC2 via ssh from PC1 in order to sync the remote branch to PC2!
 # Call syntax: `update_pc2 "$PC2_GIT_REPO_TARGET_DIR"`
 update_pc2 () {
     echo "---\"update_pc2\" script start---"
+
+    start_ssh_agent_on_pc2
 
     PC2_GIT_REPO_TARGET_DIR="$1"
 
@@ -625,6 +654,7 @@ update_pc2 () {
     # TODO: figure out if origin is even available (ex: via a ping or something), and if not, error out right here!
     echo "ENSURE YOU HAVE YOUR PROPER SSH KEYS FOR GITHUB LOADED INTO YOUR SSH AGENT"
     echo "  (w/'ssh-add <my_github_key>') OR ELSE THESE FOLLOWING STEPS WILL FAIL!"
+    echo "  See here for help: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home/.ssh#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine"
     echo "Force pulling from remote \"${SYNC_BRANCH}\" branch to overwrite local copy of this branch."
     echo "  1/4: 'git fetch origin \"${SYNC_BRANCH}\"'"
     git fetch origin "${SYNC_BRANCH}"           # MAY NEED TO COMMENT OUT DURING TESTING
