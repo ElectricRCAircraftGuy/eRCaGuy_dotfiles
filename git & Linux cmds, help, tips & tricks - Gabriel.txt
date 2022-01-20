@@ -3996,7 +3996,26 @@ mkdir -p images && pdftoppm -jpeg -r 1200 mypdf.pdf images/pg
 
 == images to PDF: ==
 
+See:
+1. *****[my answer] https://askubuntu.com/questions/303849/create-a-single-pdf-from-multiple-text-images-or-pdf-files/1385947#1385947; includes:
+    1. images to pdf
+    1. text to pdf
+    1. pdf to single pdf
+1. Use ImageMagick's `convert`
+    1. To fix the broken convert program: https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion/53180170#53180170
+    1. https://averagelinuxuser.com/convert-images-to-pdf-on-linux/
+    1. https://stackoverflow.com/questions/8955425/how-can-i-convert-a-series-of-images-to-a-pdf-from-the-command-line-on-linux
+
 TODO
+
+== text to pdf: ==
+
+enscript -p file.ps file.txt && ps2pdf file.ps file.pdf
+    Convert file.txt to file.ps and then file.ps to file.pdf.
+    See: 
+    - https://stackoverflow.com/questions/20129029/a-light-solution-to-convert-text-to-pdf-in-linux/20129300#20129300
+    - `ps2pdf` documentation: https://linux.die.net/man/1/ps2pdf
+
 
 == Combine PDFs: ==
 
