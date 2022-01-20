@@ -3580,11 +3580,39 @@ watch -n 0.5 'grep '"''"' *'
     - See here for help with these quotes: https://stackoverflow.com/a/1250279/4561887
         - In the `'"''"'` part, the first single quote ends the previous quote. Then you have two single quotes in double quotes (`"''"`), then you have a single quote to begin the next quoted string.
     <======== VERY USEFUL! =========
+watch -n 0.5 "grep '' *"
+    Same as above--but simpler since it turns out this command can be done with double quotes around the outside instead of single quotes since we don't need to block any variable expansion that would otherwise happen 1-level too soon when within double quotes!
+    <======== VERY USEFUL! =========
+watch -n 0.5 "grep '' path/to/some/dir/*"
+    Same as above, but showing that you can grep what's in some other dir explicitly instead of just whatever files are in your current dir.
 
 watch -n INTERVAL_IN_SECONDS COMMAND = run COMMAND and display its output every INTERVAL_IN_SECONDS seconds! See: https://linuxize.com/post/linux-watch-command/; ex:
 watch -n 30 'du -h ~/.cache | tail -n 1' = display the disk usage in your ~/.cache dir every 30 sec! Very useful when you are watching a large bazel build cache grow, for instance! Ex:
 watch -n 30 'du -h ~/.cache/bazel | tail -n 1' = watch your bazel build cache (in ~/.cache/bazel) grow every 30 seconds--ex: during a large build; it can be useful to watch the directory grow as evidence that the build is progressing properly; note: you may need to use sudo in the command `watch` is running for it to check the size of *all* objects:
 watch -n 30 'sudo du -h ~/.cache/bazel | tail -n 1' = same as above, except with the subcommand, `du`, as root, so it can read *all* items, even those in your cache which may be owned by root
+
+
+[Keywords: continually watch a file grow; ex: a growing log file, by "following" it. This means you load the new contents at the end as it grows; watch growing log file; cat growing log file; continually watch log file; continually watch growing log file; watch growing file; watch file grow]
+
+less -N +F path/to/some/growing/log_file.log
+    <=============== EXCELLENT--MY FAVORITE ================
+    View a file, showing line numbers (`-N`), and follow it to continually watch it grow live ('+F'). 
+    See my answer here: https://unix.stackexchange.com/a/687072/114401
+less -N +G path/to/some/growing/log_file.log
+    Similar to above, but just jump to the end of the file once. To begin following it live from this point, press `F` OR Ctrl + End while `less` is open and running.
+    See my answer here: https://unix.stackexchange.com/a/687072/114401
+tail -f path/to/some/growing/log_file.log
+    <=============== EXCELLENT--MY FAVORITE ON EMBEDDED LINUX SYSTEMS RUNNING BUSYBOX since `less +F` doesn't work on those ================
+    Watch a file grow live, showing only new contents as they come in. 
+    See my answer here: https://unix.stackexchange.com/a/687072/114401
+tail -f -s 2 path/to/some/growing/log_file.log
+    Same as above, but only check and load new contents at the end of the file every 2 seconds.
+tail +1 -f path/to/some/growing/log_file.log
+    Similar to above, but also print the entire file first, starting at the first line (`+1`), before following and loading new contents continually
+    See my answer here: https://unix.stackexchange.com/a/687072/114401
+watch -n 1 'tail -n 20 path/to/some/growing/log_file.log'
+    Continually view the last 20 messages of the log file every 1 second.
+    See my answer here: https://unix.stackexchange.com/a/687072/114401
 
 
 == rsync: ==
@@ -3965,6 +3993,10 @@ mkdir -p images && pdftoppm -jpeg -r 600 mypdf.pdf images/pg
     If you need more resolution, you can try 600 DPI.
 mkdir -p images && pdftoppm -jpeg -r 1200 mypdf.pdf images/pg
     ...or 1200 DPI.
+
+== images to PDF: ==
+
+TODO
 
 == Combine PDFs: ==
 
