@@ -56,6 +56,36 @@ from pathlib import Path
 
 # https://docs.python.org/3/library/logging.html
 
+"""
+To view live log output, run this.
+See my ans: https://unix.stackexchange.com/a/687072/114401
+        less -N +F ~/cpu_log.log
+
+
+        #########
+        # Print the whole file once to the screen
+        cat ~/cpu_log.log
+
+        # Interactively look at the file from the beginning to the end;
+        # use `-N` to show line numbers
+        less -N ~/cpu_log.log
+
+        # Continually view the most-recent lines in the log file output
+
+        # Option A: with `watch`
+        watch -n 1 'tail -n 10 ~/cpu_log.log'
+
+        # Option B [BEST!] with `less`  <========= BEST WAY TO VIEW CONTINUAL OUTPUT ==========
+        less -N +F ~/cpu_log.log
+        # See: https://unix.stackexchange.com/a/373540/114401
+        # This is the same as typing this:
+        less -N ~/cpu_log.log
+        # ...and then pressing Ctrl + End to have `less` continually load the latest content in the
+        # file. Press Ctrl + C to interrupt this behavior and go back to being able to use
+        # `less` like normal, scrolling up and down to view data as you desire. Then press
+        # q to exit, like normal.
+"""
+
 
 logger = logging.getLogger('my_logger')
 logger.setLevel(logging.DEBUG)
@@ -76,7 +106,7 @@ logger.addHandler(handler)
 # for _ in range(10000):
 #     logger.info('Hello world!')
 
-t_measurement_sec = 2
+t_measurement_sec = 4
 while True:
     cpu_percent_cores = psutil.cpu_percent(interval=t_measurement_sec, percpu=True)
     avg = sum(cpu_percent_cores)/len(cpu_percent_cores)
@@ -84,7 +114,7 @@ while True:
     cpu_percent_cores_str = [('%5.2f' % x) + '%' for x in cpu_percent_cores]
     cpu_percent_cores_str = ', '.join(cpu_percent_cores_str)
 
-    logger.info('Overall:, {}, Individual CPUs:, {}'.format(
+    logger.info('   ==> Overall: {} <==,    Individual CPUs: {} '.format(
         cpu_percent_overall_str,
         cpu_percent_cores_str))
 
@@ -113,20 +143,25 @@ while True:
         individual_cpu_usage_pct = float(line[0])
         cmd = line[1]
 
-        CPU_THRESHOLD_PCT = 30
+        CPU_THRESHOLD_PCT = 15
         if individual_cpu_usage_pct > CPU_THRESHOLD_PCT:
             high_cpu_processes_list.append([('%5.2f' % individual_cpu_usage_pct) + "%", cmd])
 
     # print(high_cpu_processes_list)
+    handler.setFormatter(None) # remove formatter for this log msg only
+    high_cpu_processes_list.sort(reverse=True)  # sort highest-cpu-usage first
     for process in high_cpu_processes_list:
         individual_cpu_usage_pct = process[0]
         cmd = process[1]
 
-        handler.setFormatter(None) # remove formatter for this log msg only
-        logger.info('    {}, cmd:, {}'.format(individual_cpu_usage_pct, cmd))
-        handler.setFormatter(formatter)  # restore format for next logs
+        logger.info('    {}, cmd: {}'.format(individual_cpu_usage_pct, cmd))
+    if not high_cpu_processes_list:
+        # logger.info('    No processes are using > {}% of a single CPU.'.format(CPU_THRESHOLD_PCT))
+        pass
+    handler.setFormatter(formatter)  # restore format for next logs
 
-    time.sleep(t_measurement_sec)
+
+    # time.sleep(t_measurement_sec)
 
 
 
