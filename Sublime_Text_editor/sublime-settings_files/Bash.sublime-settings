@@ -8,6 +8,9 @@
         ".bazelrc",
         "nemo_action",
         "conf",
-        ".bash_aliases_private"
+        ".bash_aliases_private",
+        "in",
+        "profile",
+        ".git_branch_prefixes",
     ]
 }
