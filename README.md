@@ -115,50 +115,87 @@ Here is a list of all of the scripts provided in the "useful_scripts" directory.
 
 **Therefore, I have created an additional readme to describe a few of these scripts in greater detail here: [useful_scripts/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts#ercaguy_dotfilesuseful_scripts).**
 
+Here is a list of some select scripts which I find _especially useful_, in a rough order of which ones I use most first:
+1. touchpad_toggle.sh
+1. open_programming_tools.sh
+1. git-diffn.sh
+1. git-changes.sh
+1. git-blametool.sh
+1. sync_git_repo_from_pc1_to_pc2.sh
+1. git-branch_.sh
+1. rgr / rg_replace
+1. sublf.sh
+1. ros_readbagfile.py
+1. git-filechange-search.sh
+1. find_and_replace.sh
+1. tmux-session.sh
+
+
 (tree generated w/`tree eRCaGuy_dotfiles/useful_scripts`):
 
-Select scripts which I find especially useful are **marked with up to 5 asterisks (\*\*\*\*\*):**
+```
+eRCaGuy_dotfiles$ tree useful_scripts/
+useful_scripts/
+├── apt-cacher-server_proxy.sh
+├── apt-cacher-server_proxy_status.sh
+├── apt-cacher-server_proxy_toggle.sh
+├── chm2html.py
+├── desktop_file_install.sh -> ../Desktop_launchers/desktop_file_install.sh
+├── desktop_file_uninstall.sh -> ../Desktop_launchers/desktop_file_uninstall.sh
+├── find_and_replace.sh
+├── find_and_replace_test_folder
+│   ├── readme.md
+│   ├── test1.cpp
+│   ├── test1.txt
+│   ├── test2.cpp
+│   ├── test2.txt
+│   └── test3.txt
+├── git-blametool.sh
+├── git-branch_.sh
+├── git-changes.sh
+├── git-diffc.sh
+├── git-diffn_screenshot_cropped.png
+├── git-diffn_screenshot.png
+├── git-diffn.sh
+├── git-disable-all-repos_test_subrepo
+│   └── test_repo
+│       ├── new text file (another copy).txt
+│       ├── new text file (copy).txt
+│       └── new text file.txt
+├── git-disable-repos.sh
+├── git-filechange-search.sh
+├── git-tree.txt
+├── install_all.sh -> ../install_all.sh
+├── Link to ElectricRCAircraftGuy - Chrome-Case-Sensitive-Find A case-sensitive Find tool (recommended to use Ctrl + Alt + F) for the Google Chrome Browser.desktop
+├── Link to ElectricRCAircraftGuy - eRCaGuy_PyTerm A datalogging serial terminal-console written in Python (I hope to extend it to Telnet and others later).desktop
+├── Link to ElectricRCAircraftGuy - git-tree New git features 1) graphically view all your branches in a hierarchical fashion based on forking or desired dependencies; 2) cascade recursive rebases down the line.desktop
+├── Link to ElectricRCAircraftGuy - PDF2SearchablePDF `pdf2searchablepdf input.pdf` = voila! ''input_searchable.pdf'' is created & now has searchable text!.desktop
+├── open_programming_tools.sh
+├── ping_loop.sh
+├── README_git-diffn.md
+├── README_git-sync_repo_from_pc1_to_pc2.md
+├── README.md
+├── README_ros_readbagfile.md
+├── rgf.sh
+├── rgr -> rg_replace.sh
+├── rg_replace.sh
+├── ros_readbagfile.py
+├── ros_readbagfile_sample_output
+│   ├── README.md
+│   └── topics.yaml
+├── scratch_work
+│   └── gawk_git_diff_with_line_numbers.sh
+├── sublf.sh
+├── sync_git_repo_from_pc1_to_pc2--notes.md
+├── sync_git_repo_from_pc1_to_pc2.sh
+├── tmux-session.sh
+├── touchpad_toggle.sh
+└── wip
+    ├── git-logn.sh
+    └── !GS note--wip = "work in progress".txt
 
-    $ tree useful_scripts/
-    useful_scripts/
-    ├── apt-cacher-server_proxy.sh
-    ├── apt-cacher-server_proxy_status.sh
-    ├── apt-cacher-server_proxy_toggle.sh
-    ├── desktop_file_install.sh -> ../Desktop_launchers/desktop_file_install.sh
-    ├── desktop_file_uninstall.sh -> ../Desktop_launchers/desktop_file_uninstall.sh
-    ├── *****find_and_replace.sh
-    ├── find_and_replace_test_folder
-    │   ├── readme.md
-    │   ├── test1.cpp
-    │   ├── test1.txt
-    │   ├── test2.cpp
-    │   ├── test2.txt
-    │   └── test3.txt
-    ├── *****git-changes.sh
-    ├── git-diffc.sh
-    ├── git-diffn_screenshot_cropped.png
-    ├── git-diffn_screenshot.png
-    ├── *****git-diffn.sh
-    ├── *****git-filechange-search.sh
-    ├── git-tree.txt
-    ├── install_all.sh -> ../install_all.sh
-    ├── Link to ElectricRCAircraftGuy - Chrome-Case-Sensitive-Find A case-sensitive Find tool (recommended to use Ctrl + Alt + F) for the Google Chrome Browser.desktop
-    ├── Link to ElectricRCAircraftGuy - eRCaGuy_PyTerm A datalogging serial terminal-console written in Python (I hope to extend it to Telnet and others later).desktop
-    ├── Link to ElectricRCAircraftGuy - git-tree New git features 1) graphically view all your branches in a hierarchical fashion based on forking or desired dependencies; 2) cascade recursive rebases down the line.desktop
-    ├── Link to ElectricRCAircraftGuy - PDF2SearchablePDF `pdf2searchablepdf input.pdf` = voila! ''input_searchable.pdf'' is created & now has searchable text!.desktop
-    ├── *****open_programming_tools.sh
-    ├── README_git-diffn.md
-    ├── README_git-sync_repo_from_pc1_to_pc2.md
-    ├── README.md
-    ├── ****ros_readbagfile.py
-    ├── scratch_work
-    │   └── gawk_git_diff_with_line_numbers.sh
-    ├── sync_git_repo_from_pc1_to_pc2--notes.txt
-    ├── *****sync_git_repo_from_pc1_to_pc2.sh
-    ├── *****tmux-session.sh
-    └── *****touchpad_toggle.sh
-
-    2 directories, 34 files
+6 directories, 51 files
+```
 
 
 <a id="misc-install-instructions"></a>
