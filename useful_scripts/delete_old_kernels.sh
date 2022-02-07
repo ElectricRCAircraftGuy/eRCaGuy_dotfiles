@@ -27,7 +27,7 @@
 # 1. ***** https://stackoverflow.com/questions/70572744/how-can-i-create-and-use-a-backup-copy-of-all-input-args-in-bash/70572787#70572787
 
 # save this number of old kernels prior to the current kernel
-NUM_PREVIOUS_KERNELS_TO_SAVE="10"
+NUM_PREVIOUS_KERNELS_TO_SAVE="1"
 
 print_boot_partition_size() {
     df -h | grep --color=never -E "^Filesystem|/boot$"
@@ -66,15 +66,18 @@ for kernel in "${linux_kernel_array[@]}"; do
     fi
     ((i++))
 done
-i_last_kernel_to_delete=$((i - NUM_PREVIOUS_KERNELS_TO_SAVE))
-echo "i_last_kernel_to_delete = $i_last_kernel_to_delete"  # debugging
+i_oldest_kernel_to_keep=$((i - NUM_PREVIOUS_KERNELS_TO_SAVE))
+# echo "i_oldest_kernel_to_keep = $i_oldest_kernel_to_keep"  # debugging
 
 
-echo "Let's delete all kernel versions which are older than $NUM_PREVIOUS_KERNELS_TO_SAVE" \
-     "versions prior to the current version ($current_linux_kernel)."
+echo "Let's delete all kernel versions which are **older** than" \
+     "**${NUM_PREVIOUS_KERNELS_TO_SAVE}** version(s) prior to the current version" \
+     "($current_linux_kernel)."
 echo "The following old kernels will be deleted. Okay?"
 
-if [ "$i_last_kernel_to_delete" -lt "0" ]; then
+# Note: we will delete all kernels with indices prior to (less than) the index
+# `i_oldest_kernel_to_keep`
+if [ "$i_oldest_kernel_to_keep" -le "0" ]; then
     echo "  (NOTHING TO DELETE)"
     echo "Exiting early."
     exit
@@ -82,7 +85,7 @@ fi
 
 echo "WARNING: Ensure your current kernel is NOT in this list."
 kernels_to_delete=()
-for (( i=0; i<"$i_last_kernel_to_delete"; i++ )); do
+for (( i=0; i<"$i_oldest_kernel_to_keep"; i++ )); do
     kernel="${linux_kernel_array[$i]}"
     kernels_to_delete+=("$kernel")
     echo "    ${kernels_to_delete[i]}"
@@ -99,7 +102,7 @@ echo "Deleting those old kernels listed above."
 # See: https://askubuntu.com/a/298986/327339
 # set -x  # turn ON echoing commands; see: https://stackoverflow.com/a/2853811/4561887
 # echo "${kernels_to_delete[@]}"  # for debugging (uncomment this and comment out below for debugging)
-# sudo apt-get purge "${kernels_to_delete[@]}"  # THE KERNEL DELETE COMMAND
+sudo apt-get purge "${kernels_to_delete[@]}"  # THE ACTUAL KERNEL DELETE COMMAND
 # set +x  # turn OFF echoing commands
 echo ""
 
@@ -117,6 +120,8 @@ echo ""
 
 
 # SAMPLE RUN AND OUTPUT:
+#
+# RUN 1:
 #
 #       eRCaGuy_dotfiles/useful_scripts$ gs_delete_old_kernels
 #       "/boot" partition size BEFORE deleting old kernels:
@@ -364,4 +369,68 @@ echo ""
 #       /dev/sda2                  705M  484M  170M  74% /boot
 #
 #       Done!
+#
+#
+#
+# RUN 2:
+#
+#       eRCaGuy_dotfiles/useful_scripts$ gs_delete_old_kernels
+#       "/boot" partition size BEFORE deleting old kernels:
+#       Filesystem                 Size  Used Avail Use% Mounted on
+#       /dev/sda2                  705M  484M  170M  74% /boot
+#
+#       current_linux_kernel = 5.13.0-25-generic
+#
+#       Linux kernel versions currently installed (active version is highlighted):
+#       rc  linux-image-5.11.0-43-generic              5.11.0-43.47~20.04.2                  amd64        Signed kernel image generic
+#       rc  linux-image-5.11.0-44-generic              5.11.0-44.48~20.04.2                  amd64        Signed kernel image generic
+#       ii  linux-image-5.11.0-46-generic              5.11.0-46.51~20.04.1                  amd64        Signed kernel image generic
+#       ii  linux-image-5.13.0-25-generic              5.13.0-25.26~20.04.1                  amd64        Signed kernel image generic
+#       ii  linux-image-5.13.0-27-generic              5.13.0-27.29~20.04.1                  amd64        Signed kernel image generic
+#       ii  linux-image-5.13.0-28-generic              5.13.0-28.31~20.04.1                  amd64        Signed kernel image generic
+#       ii  linux-image-generic-hwe-20.04              5.13.0.28.31~20.04.15                 amd64        Generic Linux kernel image
+#
+#       Let's delete all kernel versions which are **older** than **1** version(s) prior to the current version (5.13.0-25-generic).
+#       The following old kernels will be deleted. Okay?
+#       WARNING: Ensure your current kernel is NOT in this list.
+#           linux-image-5.11.0-43-generic
+#           linux-image-5.11.0-44-generic
+#       Continue? (y/N): Y
+#       Deleting those old kernels listed above.
+#       [sudo] password for gabriel:
+#       Sorry, try again.
+#       [sudo] password for gabriel:
+#       Sorry, try again.
+#       [sudo] password for gabriel:
+#       Reading package lists... Done
+#       Building dependency tree
+#       Reading state information... Done
+#       The following packages were automatically installed and are no longer required:
+#         blender blender-data fonts-cantarell fonts-dejavu gconf2 libart-2.0-2 libblosc1 libbonobo2-0 libbonobo2-common libbonoboui2-0 libbonoboui2-common libdcmtk14 libfprint-2-tod1 libglade2-0 libgnome-2-0
+#         libgnome-keyring-common libgnome-keyring0 libgnome2-canvas-perl libgnome2-common libgnome2-gconf-perl libgnome2-perl libgnome2-vfs-perl libgnome2-wnck-perl libgnomecanvas2-0 libgnomecanvas2-common
+#         libgnomeui-0 libgnomeui-common libgnomevfs2-0 libgnomevfs2-common libgnomevfs2-extra libgoo-canvas-perl libgoocanvas-common libgoocanvas3 libgtk2-appindicator-perl libgtk2-imageview-perl
+#         libgtk2-unique-perl libgtkimageview0 libjemalloc2 libllvm11 libllvm9 libopenimageio2.1 libopenshot-audio6 libopenshot16 libopenvdb6.2 liborbit-2-0 libosdcpu3.4.0 libosdgpu3.4.0 libsass1 libsquish0
+#         libunique-1.0-0 libwnck-common libwnck22 linux-modules-5.4.0-59-generic linux-modules-5.8.0-63-generic openshot-qt python3-openshot python3-pyqt5.qtsvg python3-pyqt5.qtwebkit python3-zmq shim
+#       Use 'sudo apt autoremove' to remove them.
+#       The following packages will be REMOVED:
+#         linux-image-5.11.0-43-generic* linux-image-5.11.0-44-generic*
+#       0 upgraded, 0 newly installed, 2 to remove and 13 not upgraded.
+#       After this operation, 0 B of additional disk space will be used.
+#       Do you want to continue? [Y/n] y
+#       (Reading database ... 483311 files and directories currently installed.)
+#       Purging configuration files for linux-image-5.11.0-44-generic (5.11.0-44.48~20.04.2) ...
+#       rmdir: failed to remove '/lib/modules/5.11.0-44-generic': Directory not empty
+#       Purging configuration files for linux-image-5.11.0-43-generic (5.11.0-43.47~20.04.2) ...
+#       rmdir: failed to remove '/lib/modules/5.11.0-43-generic': Directory not empty
+#
+#       "/boot" partition size BEFORE deleting old kernels:
+#       Filesystem                 Size  Used Avail Use% Mounted on
+#       /dev/sda2                  705M  484M  170M  74% /boot
+#
+#       "/boot" partition size AFTER deleting old kernels:
+#       Filesystem                 Size  Used Avail Use% Mounted on
+#       /dev/sda2                  705M  484M  170M  74% /boot
+#
+#       Done!
+#
 #
