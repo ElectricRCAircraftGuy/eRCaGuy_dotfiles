@@ -21,8 +21,8 @@
 # 3. Now you can use this command directly anywhere you like in any of these ways:
 #   1. `rgr`
 #   2. `rg_replace`
-#   1. `gs_rgr`
-#   3. `gs_rg_replace`
+#   3. `gs_rgr`
+#   4. `gs_rg_replace`
 
 # References:
 # 1. How to use `rg` to do an in-place replacement in a **single file** at a time:
