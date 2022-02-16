@@ -7,7 +7,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 = Quotes: =
 ====================================================================================================
 
-On confrontation, and how to handle conflicts [Applies to *most* people and situations, NOT all. Some people you *do* need to avoid and not confront, esp. if they are manipulative and/or continually contemptuous towards you]:
+    On confrontation, and how to handle conflicts [Applies to *most* people and situations, NOT all. Some people you *do* need to avoid and not confront, esp. if they are manipulative and/or continually contemptuous towards you]:
 "Whatever the cause of such strife may be, simply ruminating on the issue — or deliberately engaging in conflict avoidance tactics (i.e. people-pleasing), will do nothing to resolve said contention. The fact of the matter is, confrontation is necessary, and if done properly can dramatically increase the quality of our lives — in addition to that of our relationships."
     - A.J. Deveaux, Why Confrontation is Good, How to properly handle conflict, medium.com (https://medium.com/swlh/why-confrontation-is-good-20aa32a69dd1), 23 May 2019.
 
@@ -64,6 +64,20 @@ That should be a comic.
     - Edward Tufte
     - I first saw this posted on Adafruit.com's order checkout page, here, near the bottom-right: https://www.adafruit.com/index.php?main_page=checkout_success
       Keep refreshing the page for more quotes each time!
+
+"The only valid measurement of code quality: WTFs/minute." 
+    - Robert C. Martin
+      Where I saw it: https://stackoverflow.com/users/583833/borgleader
+    - *****My thoughts: this is actually a pretty insightful. I have VERY OFTEN looked at code and thought to myself: "What the heck does this mean!?" "Why are they doing that!?" etc. Apparently, I am not alone, which is good to know. I wasn't sure if it was just me, as I frequently wonder if most other programmers are just much smarter than me and I'm the only one "not getting it". This quote seems to indicate that is not the case. I have also noticed that the less often I have to wonder what the heck is going on when reading someone else's code, the better and higher-quality I consider that code to be, so I can affirm the validity of this quote!
+
+"Any technology distinguishable from magic is insufficiently advanced."
+    - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
+    - This is super funny! 😂 Actually made me laugh out-loud since they're making a joke of the other phrase similar to it.
+
+"Maybe it's overconfidence, but I have a mentality that another human figured it out, so I can, too, even if maybe it takes me longer."
+    - Sam Zeloof, home-made garage IC chip designer and fabricator, doing it in his parents' garage since high school
+    - https://arstechnica.com/information-technology/2022/01/this-22-year-old-builds-chips-in-his-parents-garage/
+  ..."The reason for doing it was honestly because I thought it would be funny,"" he says. "I wanted to make a statement that we should be more careful when we hear that something's impossible."
 
 
 ====================================================================================================
@@ -1919,7 +1933,7 @@ git whatchanged --diff-filter=A
     Same as above, but show only Added files.
     See my answer here!: https://superuser.com/a/1636160/425838
 git log --name-status
-    <======= VERY USEFUL! MY FAVORITE I THINK! ========
+    <======= VERY USEFUL ========
     See all changed files over time. Like `git log`, but showing all files changed too and whether they were `A`dded, `M`odified, etc.
     Very similar to `git whatchanged`, but even simpler output, with slightly less information at the left-hand-side of each file shown.
     See my answer here!: https://superuser.com/a/1636160/425838
@@ -1927,16 +1941,25 @@ git log --name-status --diff-filter=AM
     Same as above, but show only Added and Modified files.
     See my answer here!: https://superuser.com/a/1636160/425838
 ====^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^====
-git diff --stat        commit_hash
-    a graphical +++--- representation of changes, with color! Very nice! See the last line of this output for totals.
+git diff --stat commit_hash...
+    [keywords: standup update stats; update stats for standups]
+    <=================== BEST DETAILED STATUS! ===================
+    Show detailed statistics of what you've added on your branch since commit `commit_hash`.
+    This is a graphical +++--- representation of changes, with color! Very nice! See the last line of this output for totals. 
+    Github uses this to show changes in your PR, I think!
     Sample output:
             $ git diff --stat
              file1.h      |  2 +-
              file2.h      | 94 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
              file3.h      |  9 ++++++++
              3 files changed, 84 insertions(+), 21 deletions(-)
-    <======= MY FAVORITE DETAILED STATUS I THINK (^^^) =======
-git diff --numstat     commit_hash
+git log --oneline commit_hash...HEAD | wc -l
+    [keywords: standup update stats; update stats for standups]
+    <================ GOES WELL WITH STATS ABOVE! ================
+    Count and display the number of commits I have added after commit `commit_hash` through to the current commit, `HEAD`.
+    This is a useful statistic to display along with the one above! 
+    Useful to report during team "standup" meetings, for instance, so people can be aware of the quantity of changes you're making.
+git diff --numstat commit_hash
     if you sum all the numbers in both columns this outputs, you'll get the same results as `--shortstat` below, which is what GitHub uses to show the number of files changed, lines added, and lines deleted! See the last line of this output for that done for you. 
     Sample output: 
     (notice that the 1st column is _lines added_, and the 2nd column is _lines deleted_):
@@ -2123,38 +2146,174 @@ git reset --hard <commit_hash>
     WARNING WARNING WARNING! ALL CHANGES YOU ARE UNCOMMITTING WILL BE **LOST**! Same as above, except DELETE the changes instead of just uncommitting and unstaging them. DANGER DANGER DANGER! This cannot be easily undone (you'd need to go back to a backup branch or use `git reflog` to find the HEAD you were on before calling this command), so be careful when doing this.
 
 -------------------------------------------------------------
-TWO WAYS TO SQUASH ["git squash"; squash in git; git squash]:
+TWO WAYS (Nay, 3) TO "REBASE" (`git merge`-style "rebase" vs `git rebase`-style rebase)
+== THREE WAYS TO "REBASE" ==
 -------------------------------------------------------------
-1) the `git rebase -i <commit_hash>` way (this keeps and combines all commit messages)
+keywords: git merge rebase; git rebase; git merge-style rebase; git merge style rebase; 2 ways to rebase; two ways to rebase; 3 ways to rebase; three ways to rebase; rebase styles; git rebase techniques; ways to merge; how to rebase; how to merge; how to git rebase; how to git merge; how to do a git rebase; how to do a git merge
+
+In this context, "rebase" colloquially means to "put your changes onto the latest changes", or otherwise stated, "bring in the latest upstream changes (which occurred since you forked off of the main branch some time ago) back into your feature branch." Therefore, BOTH the `git merge` and `git rebase` commands can be used to accomplish this "rebase". 
+
+STEPS:
+
+1. `git rebase`-style rebase
+    ```
+    # update main branch, withOUT having to check out main first
+    git fetch origin main:main
+
+    # back up your branch just in case you botch it!
+    # See my answer here on branching: 
+    # https://stackoverflow.com/a/63418267/4561887
+    git branch feature_branch_BAK_20200814-1320hrs_about_to_rebase
+    
+    # rebase your currently-checked-out branch onto latest main
+    git rebase -i main
+    # OR
+    git rebase -i my_first_commit~
+
+    # manually resolve any conflicts, then `git add` the resolved files and
+    # do `git rebase --continue` to finish up.
+    # - Search this document for "RESOLVING MERGE CONFLICTS" (whole word, case-sensitive) for my own
+    # detailed instructions on how to resolve conflicts. 
+    #
+    # If you find yourself resolving the same conflict again and again, once
+    # per commit you have, you might want to `git rebase --abort` and then 
+    # squash your commits into 1 commit and start again, OR do the merge-style
+    # rebase instead!
+
+    # force-push to upstream (using `-f` is required just **the first time** pushing
+    # after rebasing)
+    git push -f
+    ```
+2. `git merge`-style "rebase" [GENERALLY THE EASIEST STYLE TO USE; IF IN DOUBT, JUST DO THIS ONE]
+    ```
+    # update main branch, withOUT having to check out main first
+    git fetch origin main:main
+
+    # back up your branch just in case you botch it!
+    # See my answer here on branching: 
+    # https://stackoverflow.com/a/63418267/4561887
+    git branch feature_branch_BAK_20200814-1320hrs_about_to_rebase
+
+    # merge in the latest upstream changes from main to your feature branch
+    # you currently have checked-out
+    git merge main
+
+    # Manually resolve conflicts if necessary, then `git add` the resolved files
+    # and do `git merge --continue` to finish up.
+    # - Search this document for "RESOLVING MERGE CONFLICTS" (whole word, case-sensitive) for my own
+    # detailed instructions on how to resolve conflicts. 
+    #
+    # Once you have merged, however, `git log` will show your commits all 
+    # intermingled with a bunch of upstream commits from other people which
+    # you just merged in! This is confusing. To force `git log` to NOT show
+    # those other commits, simply do this:
+    #
+    # Show only commits which are NOT in `main` (hence `^main`) but which ARE in your 
+    # currently-checked-out feature branch (`HEAD`)
+    git log ^main HEAD
+
+    # push to upstream (force-push is NOT required, which is good!)
+    git push
+    ```
+There is actually a 3rd "rebase" style which uses "cherry-picking". It looks like this:
+3. `git cherry-pick`-style "rebase"
+    ```
+    # update main branch, withOUT having to check out main first
+    git fetch origin main:main
+
+    # back up your branch just in case you botch it!
+    # See my answer here on branching: 
+    # https://stackoverflow.com/a/63418267/4561887
+    git branch feature_branch_BAK_20200814-1320hrs_about_to_rebase
+
+    # check out a new branch from main
+    # See my answer here on branching: 
+    # https://stackoverflow.com/a/63418267/4561887
+    git checkout -b new_feature_branch main
+
+    # cherry-pick your commits onto it
+    # See my answer here on cherry-picking: 
+    # https://stackoverflow.com/a/69472178/4561887
+    git cherry-pick my_first_commit~..my_last_commit
+
+    # Manually resolve conflicts if necessary, then `git add` the resolved files
+    # and do `git rebase --continue` to finish up.
+    # - Search this document for "RESOLVING MERGE CONFLICTS" (whole word, case-sensitive) for my own
+    # detailed instructions on how to resolve conflicts. 
+    #
+    # Done! Now you have a new feature branch with your changes on top of the 
+    # latest changes. The end result is the same as the `git rebase`-style 
+    # rebase above.
+
+    # push to upstream (since it's your first time pushing to upstream, after running the below
+    # command it should tell you to add `-u` or something to "set your upstream"; just do whatever
+    # it says)
+    git push
+    ```
+
+PROS AND CONS LIST OF EACH STYLE OF "REBASE":
+1. `git rebase`-style rebase [HARDER, BUT CLEANER RESULT]
+    1. PROS:
+        1. keeps a clean, linear `git log` history
+        1. If there are no conflicts, it's **super easy!**
+    1. CONS:
+        1. If you have a ton of commits and there are conflicts, you may end up resolving the same conflict once per commit, which is **horrible**! In that case you should either A) squash all your commits into a single commit and then do it again, OR B) do a `git merge` style "rebase" instead.
+        1. Squashing all your commits into 1 single commit first is recommended.
+        1. Since this is rewriting your history, you must force push (`git push -f`) the first `git push` when done
+2. `git merge`-style "rebase" [IF IN DOUBT, JUST CHOOSE THIS ONE!]
+    1. PROS:
+        1. easiest
+        1. if there are conflicts, you always resolve them **once**, no matter how many commits you have! (unlike rebase and cherry-pick styles)
+    1. CONS:
+        1. Creates a non-linear `git log` history. Once you do a `git merge` into your feature branch, from that point on you need to do `git log ^main HEAD` to see ONLY commits which *are* in your HEAD (feature branch) but which are NOT in main (hence the `^main`).
+3. `git cherry-pick`-style "rebase" [SOMETIMES USEFUL IF YOU JUST WANT TO "START OVER" on your feature branch]
+    1. PROS:
+        1. Easy to "start over" your feature branch in case you botch a `git rebase`.
+        1. keeps a clean, linear `git log` history (like `git rebase`)
+    1. CONS:
+        1. Similar to `git rebase`, you may end up having to resolve the same conflict once per commit unless you squash first.
+
+
+-------------------------------------------------------------
+== TWO WAYS TO SQUASH == 
+-------------------------------------------------------------
+keywords: "git squash"; squash in git; git squash
+
+1) `git rebase`-style squash
+The `git rebase -i <commit_hash>` way (this keeps and combines all commit messages)
 <========== BEST WAY TO SQUASH IN GIT if squashing a **linear** git history and you want to preserve commit messages! ===========
-```
-git checkout feature_branch
-git rebase -i master
-    ...then manually change all "pick" commit entries in the editor to "squash", or just "s" for short.
-    Done!
-```
-OR:
-```
-git checkout feature_branch
-git rebase -i my_first_commit~
-# manually "pick" first entry and set all others afterwards to "squash", or just "s" for short.
-```
-2) the `git reset --soft <commit_hash>` way (you lose the commit messages this way though)
+    ```
+    git checkout feature_branch
+    git rebase -i master
+        ...then manually change all "pick" commit entries in the editor to "squash", or just "s" for short.
+        Done!
+    ```
+    OR:
+    ```
+    git checkout feature_branch
+    git rebase -i my_first_commit~
+    # manually "pick" first entry and set all others afterwards to "squash", or just "s" for short.
+    ```
+2) `git reset --soft`-style squash [GENERALLY THE EASIEST STYLE TO USE; IF IN DOUBT, JUST DO THIS ONE]
+The `git reset --soft <commit_hash>` way (you lose the commit messages this way though) []
 <========== BEST WAY TO SQUASH IN GIT if squashing across merges or branches! ===========
-```
-git checkout feature_branch
-git reset --soft master
-    uncommit all changes which are in the `feature_branch` but NOT in the `master` branch; `--soft` leaves all these changes "staged", however.
-git commit -m "Commit all \"squashed\" feature_branch branch changes not in master"
-    Commit these "squashed" changes now.
-    Done!
-```
-OR:
-```
-git branch my_branch_BAK  # create backup branch just in case
-git reset --soft my_first_commit~
-git commit
-```
+    ```
+    # 1. generally the safer approach (does NOT also bring in upstream changes during the squash); 
+    #    see details below
+    git branch my_branch_BAK  # create backup branch just in case
+    git reset --soft my_first_commit~
+    git commit
+    ```
+    OR:
+    ```
+    # 2. also brings in upstream changes from `master` at the same time; see details below
+    git checkout feature_branch
+    git reset --soft master
+        uncommit all changes which are in the `feature_branch` but NOT in the `master` branch; `--soft` leaves all these changes "staged", however.
+    git commit -m "Commit all \"squashed\" feature_branch branch changes not in master"
+        Commit these "squashed" changes now.
+        Done!
+    ```
 -------------------------------------
 CONCISE SQUASH SUMMARY (2 MAIN WAYS):   <=========== SUPER HELPFUL! ===========
 -------------------------------------
@@ -3592,12 +3751,17 @@ watch -n 30 'du -h ~/.cache/bazel | tail -n 1' = watch your bazel build cache (i
 watch -n 30 'sudo du -h ~/.cache/bazel | tail -n 1' = same as above, except with the subcommand, `du`, as root, so it can read *all* items, even those in your cache which may be owned by root
 
 
-[Keywords: continually watch a file grow; ex: a growing log file, by "following" it. This means you load the new contents at the end as it grows; watch growing log file; cat growing log file; continually watch log file; continually watch growing log file; watch growing file; watch file grow]
+[Keywords: continually watch a file grow; ex: a growing log file, by "following" it. This means you load the new contents at the end as it grows; watch growing log file; cat growing log file; continually watch log file; continually watch growing log file; watch growing file; watch file grow; less follow file; tail follow file; follow log file; track log file; tail watch less; tail, watch, and less; tail, watch, & less; tail watch and less; tail watch & less]
 
 less -N +F path/to/some/growing/log_file.log
-    <=============== EXCELLENT--MY FAVORITE ================
     View a file, showing line numbers (`-N`), and follow it to continually watch it grow live ('+F'). 
     See my answer here: https://unix.stackexchange.com/a/687072/114401
+less -N --follow-name +F path/to/some/growing/log_file.log
+    <=============== EXCELLENT--MY FAVORITE OPTION OVERALL! ================
+    Same as above, but also do `--follow-name` to follow the **name** of the file "log_file.log" instead of the file descriptor originally opened when this file was opened. This ensures you keep tracking the latest rotating log file instead of watching a stale backed-up log file renamed from `log_file.log` to `log_file.log.1` or something. 
+    Note that `tail`'s equivalent of `--follow-name` is `follow=name`.
+    See my answer here: https://unix.stackexchange.com/a/687072/114401
+    See also here: https://unix.stackexchange.com/a/196349/114401
 less -N +G path/to/some/growing/log_file.log
     Similar to above, but just jump to the end of the file once. To begin following it live from this point, press `F` OR Ctrl + End while `less` is open and running.
     See my answer here: https://unix.stackexchange.com/a/687072/114401
@@ -3605,14 +3769,20 @@ tail -f path/to/some/growing/log_file.log
     <=============== EXCELLENT--MY FAVORITE ON EMBEDDED LINUX SYSTEMS RUNNING BUSYBOX since `less +F` doesn't work on those ================
     Watch a file grow live, showing only new contents as they come in. 
     See my answer here: https://unix.stackexchange.com/a/687072/114401
+tail -f --follow=name path/to/some/growing/log_file.log
+    <===== EXCELLENT OPTION for `tail` if NOT using BusyBox =====
 tail -f -s 2 path/to/some/growing/log_file.log
     Same as above, but only check and load new contents at the end of the file every 2 seconds.
 tail +1 -f path/to/some/growing/log_file.log
     Similar to above, but also print the entire file first, starting at the first line (`+1`), before following and loading new contents continually
     See my answer here: https://unix.stackexchange.com/a/687072/114401
 watch -n 1 'tail -n 20 path/to/some/growing/log_file.log'
+    <======== VERY GOOD =======
     Continually view the last 20 messages of the log file every 1 second.
     See my answer here: https://unix.stackexchange.com/a/687072/114401
+watch -n 1 'head -n 2 log_file.log; tail -n 10 log_file.log'
+    <======== BEST WHEN YOU NEED A HEADER TO VIEW AT THE TOP OF AN UPDATING LOG FILE ========
+    Every 1 second, print the first 2 lines of `log_file.log` (which contain log **header** information, for instance), followed by the last 10 lines of the log file. This way you'll see a frozen header at the top of the output, with a constantly-updating stream of new data underneath that as the log file grows!
 
 
 == rsync: ==
@@ -3642,6 +3812,29 @@ TODO: need to add this information in here so I don't forget it.
 
 == USB, serial, devices, etc.: ==
 
+setserial -g /dev/ttyS* | sort -V
+    Display (and sort) serial information for all /dev/ttyS* devices.
+    See my answer: https://unix.stackexchange.com/a/688772/114401
+setserial -g /dev/ttyUSB* | sort -V
+    Display (and sort) serial information for all /dev/ttyUSB* devices
+    See my answer: https://unix.stackexchange.com/a/688772/114401
+setserial -g -G /dev/ttyS* | sort -V
+    <===========
+    Same as 1st cmd above, but also show extra info., such as the baud rate too.
+    See my answer: https://unix.stackexchange.com/a/688772/114401
+setserial -g -G /dev/ttyUSB* | sort -V
+    <===========
+    Same as 2nd cmd above, but also show extra info., such as the baud rate too.
+    See my answer: https://unix.stackexchange.com/a/688772/114401
+
+dmesg | grep ttyS
+    <===========
+    Show UART information, incl. baudrate, for /dev/ttyS* devices.
+    See my answer: https://unix.stackexchange.com/a/688772/114401
+dmesg | grep ttyUSB
+    <===========
+    Show UART information, incl. baudrate, for /dev/USB* devices.
+    See my answer: https://unix.stackexchange.com/a/688772/114401
 dmesg
     print all messages from the Linux kernel ring buffer, which includes all entries for USB enumeration and stuff, including entries for each time you plug in or unplug any USB device, USB HID keyboard or mouse or gamepad or similar, USB to serial UARTs/converters (on nearly all Arduino boards), etc.
 dmesg | tail
@@ -3969,6 +4162,28 @@ time ffmpeg -i input.mp4 -vcodec libx265 -crf 28 output.mp4 = [PRODUCE "SMALL" V
     - a 503 MB 6 min .mov video might take 60 minutes to convert (on a slow computer [2-core/4-thread, Pentium i3 or similar], ~1/0.1, or 10x time factor to convert) and take as little as 32 MB when done! 32MB/503MB = ~6% of original size, or about 100% - 6% = 94% compression ratio!
         - Note: on a faster, modern computer [4-core/8-thread or 6-core/12-thread, Pentium i7 or similar] the whole conversion process might take only 4 to 10 minutes instead of 60 minutes! So, buy a nice computer.
 time ffmpeg -i input.mp4 -vcodec libx265 -crf 24 output.mp4 = [PRODUCE "LARGE" VIDEO OUTPUT FILES!] exact same as above except with CRF of 24 instead of 28 in order to get a touch **higher quality** out of the video! <============ MY FAVORITE FOR SLIGHTLY HIGHER QUALITY! ===========
+
+== QR codes: ==
+[QR code generators; qr code generation; qr code readers; create qr code in Linux; linux create qr code]
+
+References:
+1. See my answer here: https://stackoverflow.com/a/70934014/4561887
+1. See my demo here: "eRCaGuy_hello_world/bash/qrencode_send_text_to_phone.sh"
+1. Where I first learned about `qrencode`: 
+   https://www.linux-magazine.com/Online/Features/Generating-QR-Codes-in-Linux
+
+sudo apt update && sudo apt install qrencode
+    Install it.
+qrencode -m 4 -o /tmp/qr.png "www.google.com" \
+&& ((eog /tmp/qr.png &); sleep 1; rm /tmp/qr.png)
+    <======= BEST FROM A URL ========
+    A 1-line cmd to make, open, and delete a QR code image from a URL.
+    See my answer here: https://stackoverflow.com/a/70934014/4561887
+cat "path/to/file.txt" | qrencode -m 4 -o /tmp/qr.png \
+&& ((eog /tmp/qr.png &); sleep 1; rm /tmp/qr.png)
+    <======= BEST FROM A FILE ========
+    A 1-line cmd to make, open, and delete a QR code image from an entire file.
+    See my answer here: https://stackoverflow.com/a/70934014/4561887
 
 
 ====================================================================================================
