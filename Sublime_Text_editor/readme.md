@@ -53,6 +53,12 @@ These are the Sublime Text 3 packages I currently have installed and like to hav
     1. _Caveat:_ the first heading level you use right after the Table of Contents insertion point _must_ be larger than or equal to all subsequent levels, or else subsequent levels which are higher than it will not display. Ex: if you begin with a `## Level 2 Heading`, you cannot then have a `# Level 1 Heading` afterwards, or else the ToC won't be generated properly. Instead, you should either A) begin with a `# Level 1 Heading`, since it's the highest level and can therefore have any level after it, _or_ B) never have any heading greater than the first heading level you use after the ToC. If doing B, that means that a `## Level 2 Heading` followed by another `## Level 2 Heading`, or a `### Level 3 Heading` or lower, would be fine, so long as you never have a `# Level 1 Heading` since you began with a `## Level 2 Heading`.
 1. **SCSS** - syntax highlighting for [SASS](https://sass-lang.com/) ([Syntactically Awesome Style Sheets](https://en.wikipedia.org/wiki/Sass_(stylesheet_language))) (`*.scss` files) in Sublime Text. See: https://stackoverflow.com/questions/42159810/how-to-set-scss-syntax-in-sublime-3/45261710#45261710.
 1. **Devicetree DTS Highlighting** - for syntax highlighting in Linux [devicetree](https://www.devicetree.org/) source files ([.dts](https://en.wikipedia.org/wiki/Devicetree) files).
+1. **CaseConversion** - for quickly converting between camelCase and snake_case. See:
+    1. Where I learned about it: https://superuser.com/a/635718/425838
+    1. GitHub page: https://github.com/jdavisclark/CaseConversion
+1. **Terminus** - a built-in terminal that runs either in a _panel_ at the bottom of the Sublime Text main window, OR in a _tab_ just like an open file. 
+    1. Where I first learned about it (with animated gifs): [Sublime Text 3 - integrated terminal?](https://stackoverflow.com/a/55484753/4561887)
+    1. Official Package Control page: https://packagecontrol.io/packages/Terminus
 
 
 <a id="packages-im-still-evaluating-and-maybe-you-should-install"></a>
