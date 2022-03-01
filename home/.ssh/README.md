@@ -195,9 +195,12 @@ Based on: https://unix.stackexchange.com/a/217223/114401
 #
 # See: 
 # https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home/.ssh#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine
+# and my answer to "How can I run ssh-add automatically, without a password prompt?":
+# https://unix.stackexchange.com/a/686110/114401
 
 if [ ! -S ~/.ssh/ssh_auth_sock ]; then
-    echo "'ssh-agent' has not been started since the last reboot. Starting 'ssh-agent' now."
+    echo "'ssh-agent' has not been started since the last reboot." \
+         "Starting 'ssh-agent' now."
     eval "$(ssh-agent -s)"
     ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
 fi
@@ -205,10 +208,13 @@ export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 # see if any key files are already added to the ssh-agent, and if not, add them
 ssh-add -l > /dev/null
 if [ "$?" -ne "0" ]; then
-    echo "No ssh keys have been added to your 'ssh-agent' since the last reboot. Adding default keys now."
+    echo "No ssh keys have been added to your 'ssh-agent' since the last" \
+         "reboot. Adding default keys now."
     ssh-add
 fi
 ```
+
+SEE ALSO this `keychain` program as a possible alternative to my custom solution just above!: [cyberciti.biz: keychain: Set Up Secure Passwordless SSH Access For Backup Scripts on Linux](https://www.cyberciti.biz/faq/ssh-passwordless-login-with-keychain-for-scripts/)
 
 
 <a id="2-how-to-source-a-custom-bashrc-file-whenever-you-ssh-into-a-remote-linux-device"></a>
