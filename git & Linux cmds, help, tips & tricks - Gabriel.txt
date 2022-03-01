@@ -3,6 +3,19 @@ Gabriel Staples
 
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+HOW TO FUZZY-SEARCH THIS FILE:
+---
+cat "path/to/eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt" | fzf -m --reverse
+    [GOOD] Fuzzy search this file withOUT showing line numbers.
+    See my comment: https://github.com/junegunn/fzf/issues/1034#issuecomment-1054558594
+grep -n '' "path/to/eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt" | fzf -m --reverse
+    [BETTER] Fuzzy search this file WITH showing line numbers!
+    See my comment: https://github.com/junegunn/fzf/issues/1034#issuecomment-1054558594
+gs_fzf_git_and_linux_cmds_doc
+    <========= FUZZY SEARCH THIS DOCUMENT! =========
+    [BEST] Same as above, but use my bash function which is defined in ".eRCaGuy_dotfiles/home/.bash_aliases" instead!
+
+
 ====================================================================================================
 = Quotes: =
 ====================================================================================================
@@ -658,6 +671,8 @@ bazel info bazel-bin
 
 bazel help
     See generic bazel help information, including the `bazel help info-keys` cmd.
+bazel --help
+    Same as above
 bazel help info
     See bazel help for the `bazel info` cmd used just above! This is a lot of information, so, even better: pipe it to `less`!:
 bazel help info | less -RFX
@@ -735,7 +750,9 @@ bazel info | grep -o '.*: ' | rev | cut -c3- | rev
 bazel info | grep -o '.*: ' | grep -o '[^: ]*'
     Alternative way to get the exact same list of keys from the `bazel info` output as shown just above!
 bazel info output_base
-    Show the output directory of the bazel build + sources, including external sources. Sample output:
+    Show the output directory of the bazel build + sources, including external sources. 
+    See: https://bazel.build/docs/external?hl=en#layout
+    Sample output:
             $ bazel info output_base
             /home/gabriel/.cache/bazel/_bazel_gabriel/04bc77638a312ceaca7e62e095dc00bc
 ls "$(bazel info output_base)"
@@ -780,6 +797,40 @@ ls "$(bazel info output_base)/external"
         # OR just locally for yourself in your private `.git/info/exclude` file:
         echo '/GS/' >> .git/info/exclude
         ```
+bazel fetch //path/to/some_dir:some_target
+    Fetch all dependencies (ex: sub-repos, submodules, executables, libraries, etc.) to path "$(bazel info output_base)/external" which are needed by this target!
+bazel fetch //path/to/some_dir/...
+    Fetch all dependencies (ex: sub-repos, submodules, executables, libraries, etc.) to path "$(bazel info output_base)/external" which are needed by **these several targets!**
+bazel fetch <targets>
+    General form of the above.
+bazel help fetch
+    See all options for `bazel fetch`. Note: run `bazel help` or `bazel --help` instead to see a list of all bazel cmds, such as `bazel fetch`.
+---
+UPDATE: FETCHING IS NOT ENOUGH! 
+See my full description of what to do here: https://github.com/bazelbuild/bazel/issues/14058#issuecomment-1055015665
+Do this!:
+```
+BUILD_TARGET="//some/path/to/a/build/target/which:requires_my_dependency"
+# manually delete the "external" folder you've edited, once you're done editing it and
+# want to restore it to how it was originally
+{EXTERNAL_DEPS_ROOT}="$(bazel info output_base)/external"
+EXTERNAL_DEP="some_dependency_repo_name" 
+rm -rf "${EXTERNAL_DEPS_ROOT}/${EXTERNAL_DEP}"
+# force bazel to re-download this dependency!:
+# Note: this is a bit of a hack, but it works. 
+# See: https://github.com/bazelbuild/bazel/issues/14058#issuecomment-1031520021
+time bazel sync --only=$BUILD_TARGET
+time bazel fetch $BUILD_TARGET
+```
+---
+time bazel sync --only=//some:build_target && \
+time bazel fetch //some:build_target
+    <==========
+    Re-download (fetch/update) a build dependency into path `"$(bazel info output_base)/external/some_dependency_dir"`.
+    See my long comment & description: https://github.com/bazelbuild/bazel/issues/14058#issuecomment-1055015665
+time bazel sync --only=<target> && \
+time bazel fetch <target>
+    The generic form of the cmd just above.
 
 time bazel build //...
     build the whole project
@@ -2147,9 +2198,9 @@ git reset --hard <commit_hash>
 
 -------------------------------------------------------------
 TWO WAYS (Nay, 3) TO "REBASE" (`git merge`-style "rebase" vs `git rebase`-style rebase)
-== THREE WAYS TO "REBASE" ==
+== THREE WAYS TO "REBASE" ONTO "LATEST `MAIN` BRANCH" ==
 -------------------------------------------------------------
-keywords: git merge rebase; git rebase; git merge-style rebase; git merge style rebase; 2 ways to rebase; two ways to rebase; 3 ways to rebase; three ways to rebase; rebase styles; git rebase techniques; ways to merge; how to rebase; how to merge; how to git rebase; how to git merge; how to do a git rebase; how to do a git merge
+keywords: git merge rebase; git rebase; git merge-style rebase; git merge style rebase; 2 ways to rebase; two ways to rebase; 3 ways to rebase; three ways to rebase; rebase styles; git rebase techniques; ways to merge; how to rebase; how to merge; how to git rebase; how to git merge; how to do a git rebase; how to do a git merge; rebase onto latest master branch; rebase onto latest main branch; rebase onto latest develop branch
 
 In this context, "rebase" colloquially means to "put your changes onto the latest changes", or otherwise stated, "bring in the latest upstream changes (which occurred since you forked off of the main branch some time ago) back into your feature branch." Therefore, BOTH the `git merge` and `git rebase` commands can be used to accomplish this "rebase". 
 
@@ -2272,6 +2323,8 @@ PROS AND CONS LIST OF EACH STYLE OF "REBASE":
         1. keeps a clean, linear `git log` history (like `git rebase`)
     1. CONS:
         1. Similar to `git rebase`, you may end up having to resolve the same conflict once per commit unless you squash first.
+        1. The process requires creating a **new branch** and cherry-picking your changes onto it, rather than just **working on the branch you already had**. 
+        1. When done, you have to push to remote and set your "upstream" branch again for this new branch you created. Setting upstream can be a little confusing and is annoying to have to do each time you "rebase" when you use this style. 
 
 
 -------------------------------------------------------------
@@ -3055,9 +3108,18 @@ References:
     1. Installation (see the section for "Debian"/"Ubuntu"): https://github.com/BurntSushi/ripgrep#installation
 1. https://mariusschulz.com/blog/fast-searching-with-ripgrep
 
-rg 'regex_search' = ripgrep search for pattern 'regex_search'
-rg -L 'regex_search' = ripgrep search for pattern 'regex_search', FOLLOWING SYMBOLIC 'L'INKS [symbolic links] while traversing directories! <=========== VERY USEFUL! ==========
-rg 'regex_search' -g '*.h' = search for pattern 'regex_search' while searching ONLY in files/paths which match Linux/Unix file glob pattern '*.h'. Source: from the creater of ripgrep himself! https://unix.stackexchange.com/questions/503161/ripgrep-path-pattern/503170#503170 <========== ALSO VERY USEFUL ==========
+rg 'regex_search'
+    ripgrep search for pattern 'regex_search'
+rg -L 'regex_search'
+    <=========== VERY USEFUL! ==========
+    ripgrep search for pattern 'regex_search', FOLLOWING SYMBOLIC 'L'INKS [symbolic links] while traversing directories! 
+rg 'regex_search' -g '*.h'
+    <========== ALSO VERY USEFUL ==========
+    search for pattern 'regex_search' while searching ONLY in files/paths which match Linux/Unix file glob pattern '*.h'. Source: from the creater of ripgrep himself! https://unix.stackexchange.com/questions/503161/ripgrep-path-pattern/503170#503170 
+rg -L --no-ignore 'some regular expression' -g "*.c" 2>/dev/null
+    <=============== VERY GOOD! ===============
+    Search for all .c files in your git repo, searching down symbolic linkes (`-L`) and down paths which are in your .gitignore files (hence `--no-ignore`!), sending all stderr error output to /dev/null to ignore it (hence `2>/dev/null`). 
+    [keywords: regex ripgrep rg search git repo and output build directories dirs too!; search git output; search git build dir; search build dir; search output dir; rg ignore]
 
 == Comparison of `grep` to `rg` (ripgrep): ==
 [grep to ripgrep, grep to rg command comparison]
@@ -3578,6 +3640,14 @@ shred -v --iterations=1 path/to/some_file
     NB: I read somewhere that on modern SSD's, shredding only **1 time** is recommended, NOT more than that (hene the `--iterations=1` option!), as more than that unnecessarily wears down your flash memory with NO extra security benefit since data gets scrambled all the time on SSD's anyway as a result of wear-leveling. 
     See where I first saw this cmd: https://www.cyberciti.biz/hardware/cryptsetup-add-enable-luks-disk-encryption-keyfile-linux/
 
+fzf:
+cat "path/to/eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt" | fzf -m --reverse
+    [GOOD] Fuzzy search this file withOUT showing line numbers.
+    See my comment: https://github.com/junegunn/fzf/issues/1034#issuecomment-1054558594
+grep -n '' "path/to/eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt" | fzf -m --reverse
+    [BETTER] Fuzzy search this file WITH showing line numbers!
+    See my comment: https://github.com/junegunn/fzf/issues/1034#issuecomment-1054558594
+
 
 == diff: ==
 [plain diff; NOT git diff; regular diff; diff only; only diff; diff alone; alone diff]
@@ -3601,12 +3671,21 @@ diff -u=10 file1.txt file2.txt
 diff --color=always file1.txt file2.txt
     show color output!
 diff -u --color=always file1.txt file2.txt
-    JUST LIKE `git diff`! SHOW COLOR, WITH UNIFIED LINE-BY-LINE CONTEXT, JUST LIKE git diff! <============== BEST ANSWER! [identical output to `git diff`] ===============
+    <============== BEST ANSWER! [identical output to `git diff`] ===============
+    JUST LIKE `git diff`! SHOW COLOR, WITH UNIFIED LINE-BY-LINE CONTEXT, JUST LIKE git diff! 
 diff -u --color=always left_file.txt right_file.txt
     same as above, except with me accentuating the position of the "left" and "right" files in the command <=============
 git diff --no-index -- file.a file.b
     same as `diff -u --color=always file1.txt file2.txt`! ie: this (`--no-index`) allows you to use `git diff` on files NOT tracked in/tracked by any git repo!
     See: https://stackoverflow.com/a/15110387/4561887
+diff -r path/to/dir1 path/to/dir2
+    <======= COMPARE 2 DIRS =========
+    Compare (diff) two directories to see if their contents are equal.
+diff -rq path/to/dir1 path/to/dir2
+    Similar to above, but include the `-q` `--brief` option, whatever that means.
+diff -r --brief path/to/dir1 path/to/dir2
+    <======= COMPARE 2 DIRS =========
+    Same as above. 
 
 - Note that `man diff` shows that you can use `-` as one of the two files to read from stdinput for that file instead! It says, "FILES  are  'FILE1  FILE2' or 'DIR1 DIR2' or 'DIR FILE' or 'FILE DIR'.  If --from-file or --to-file is given, there are no restrictions on FILE(s).  If a FILE is '-', read standard input.  Exit status is 0 if inputs are the same, 1 if different, 2 if trouble." So, you can do this!:
 ---
