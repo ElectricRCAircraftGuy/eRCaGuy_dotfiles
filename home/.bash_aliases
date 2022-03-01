@@ -15,6 +15,18 @@
 # ALL my custom aliases AND functions AND executable scripts, type `gs_` then press Tab Tab
 # (Tab two times).
 
+# Get the path to this file and then also to the eRCaGuy_dotfiles repo root dir.
+# See my ans: https://stackoverflow.com/a/60157372/4561887
+FULL_PATH_TO_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
+SCRIPT_DIRECTORY="$(dirname "$FULL_PATH_TO_SCRIPT")"
+SCRIPT_FILENAME="$(basename "$FULL_PATH_TO_SCRIPT")"
+# This assumes that ~/.bash_aliases is a **symlink** to this file in the repo
+ERCAGUY_DOTFILES_ROOT_DIR="$(dirname "$SCRIPT_DIRECTORY")"
+# echo "FULL_PATH_TO_SCRIPT = $FULL_PATH_TO_SCRIPT"  # debugging
+# echo "SCRIPT_DIRECTORY = $SCRIPT_DIRECTORY"  # debugging
+# echo "SCRIPT_FILENAME = $SCRIPT_FILENAME"  # debugging
+# echo "ERCAGUY_DOTFILES_ROOT_DIR = $ERCAGUY_DOTFILES_ROOT_DIR"  # debugging
+
 # ==================================================================================================
 # 1. GENERAL (PUBLICLY SHARED) Bash Setup, Variables, Aliases, & Functions
 # ==================================================================================================
@@ -284,55 +296,6 @@ gs_set_title() {
     PS1="${PS1_NO_TITLE}${ESCAPED_TITLE}"
 }
 
-# This opens the fzf fuzzy finder tool (see: https://github.com/junegunn/fzf#usage), then allows
-# you to multiselect (`-m`) files with the TAB key. Press ENTER when done to open them all in
-# Sublime Text. Be sure to install fzf first for this to work.
-# - Watch this YouTube video too for additional help using fzf: https://youtu.be/qgG5Jhi_Els?t=147
-#       alias sublf='subl $(fzf -m)'
-# Even better: also echo the selected files to the screen!
-# USAGE:
-#   Run `sublf`. Type to fuzzy search. Press TAB to select a file. Once you have selected all the
-#   files you'd like to open, press ENTER to print their paths to the terminal and then open them
-#   all up in Sublime Text!
-# See also:
-# 1. How to show hidden files in the filename search:
-#    https://github.com/junegunn/fzf/issues/337#issuecomment-136383876
-# Exclude any ".git" or "..git" dir at any level in the search path.
-# Sample usage:
-#       sublf     # start the search in the current directory
-#       # Or
-#       sublf ..  # start the search in the dir up one level
-sublf() {
-    search_path="."
-    if [ $# -gt 0 ]; then
-        search_path="$1"
-    fi
-
-    files_selected="$(find "$search_path" -not -path "*/.git/*" -not -path "*/..git/*" | fzf -m)"
-
-    # Convert list of files to array of files.
-    # See:
-    # 1. "eRCaGuy_dotfiles/useful_scripts/find_and_replace.sh" for an example of this
-    # 1. ***** https://stackoverflow.com/a/24628676/4561887
-    SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
-    IFS=$'\n'      # Change IFS (Internal Field Separator) to newline char
-    files_selected_array=($files_selected) # split long string into array, separating by IFS (newline chars)
-    IFS=$SAVEIFS   # Restore IFS
-
-    echo "Opening these files in Sublime Text:"
-    for file in "${files_selected_array[@]}"; do
-        printf "  %s\n" "$file"
-    done
-
-    # See: https://stackoverflow.com/a/70572787/4561887
-    subl "${files_selected_array[@]}"
-}
-# aliases to the same thing
-alias fsubl='sublf'
-alias gs_sublf="sublf"
-alias gs_fsubl="fsubl"
-# SEE ALSO the Ripgrep fuzzy finder wrapper in "useful_scripts/rgf.sh".
-
 
 # ===================================== SECTION 2 START ============================================
 # 2. PERSONAL (PRIVATE) Bash Setup, Variables, Aliases, & Functions
@@ -540,3 +503,32 @@ fi
 # ^^ COPY AND PASTE THE LATEST CODE BLOCK FROM THE LINK JUST ABOVE INTO THIS SPACE BELOW IF THE
 # DESCRIPTION JUST ABOVE APPLIES TO THIS MACHINE AND YOU'D LIKE TO AUTOMATICALLY START THE SSH-AGENT
 # AND AUTOMATICALLY ADD YOUR SSH-KEYS TO IT ONCE PER REBOOT.
+
+# Continually watch the live log output from "eRCaGuy_dotfiles/useful_scripts/cpu_logger.py"
+alias gs_cpu_logger_watch='less -N --follow-name +F ~/cpu_log.log'
+
+# # Do `git add -A && git commit` all at once. Example
+# #       git add-commit -m 'My commit message'
+# # See [my answer] https://stackoverflow.com/a/71150235/4561887
+# # Nah, just use a git alias, like this: https://stackoverflow.com/a/4299159/4561887
+# git-add-commit() {
+#     starting_dir="$PWD"
+#     # See: https://stackoverflow.com/a/957978/4561887
+#     repo_root_dir="$(git rev-parse --show-toplevel)"
+#     cd "$repo_root_dir"
+#     git add -A
+#     git commit "$@"
+#     cd "starting_dir"
+# }
+
+# Fuzzy search my "git & Linux cmds doc"
+# See my comment: https://github.com/junegunn/fzf/issues/1034#issuecomment-1054558594
+# alias gs_fzf_git_and_linux_cmds_doc="grep -n '' \
+#     '$ERCAGUY_DOTFILES_ROOT_DIR/git & Linux cmds, help, tips & tricks - Gabriel.txt' \
+#     | fzf -m --reverse"
+# Make this a function instead, which accepts additional arguments!
+gs_fzf_git_and_linux_cmds_doc() {
+    grep -n '' \
+    '$ERCAGUY_DOTFILES_ROOT_DIR/git & Linux cmds, help, tips & tricks - Gabriel.txt' \
+    | fzf -m --reverse "$@"
+}
