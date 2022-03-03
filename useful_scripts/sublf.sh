@@ -2,7 +2,13 @@
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# STATUS: WORK-IN-PROGRESS! **NOT** YET READY FOR USE.
+# This program allows you to quickly open up any file you want in Sublime Text by selecting files
+# with the `fzf` fuzzy finder and then passing them to `subl`. Just run it and you'll see what I
+# mean!
+
+# STATUS: WORK-IN-PROGRESS! It works, but it needs some massive cleanup in the comments and I need
+# to generally clean up and refactor the code as necessary. It does work though, so feel free
+# to use it.
 
 ####### sample alias
 # see also: https://stackoverflow.com/a/69830768/4561887
@@ -56,11 +62,13 @@
 # SEE ALSO MY ANSWER HERE: https://stackoverflow.com/a/70658963/4561887
 sublf() {
     echo "DEBUG: all args = $@"  # FOR DEBUGGING
+
     search_path="."
     if [ $# -gt 0 ]; then
         search_path="$1"
         shift  # remove $1 from input args array
     fi
+
     all_find_args_array=()
     all_find_args_array+=("$search_path")
     all_find_args_array+=("$@")  # pass through all other args to `find`
@@ -70,6 +78,14 @@ sublf() {
     #   2. and my answer here: https://stackoverflow.com/a/69830768/4561887
     all_find_args_array+=(-not \( -path "*/.git/*" -prune \))
     all_find_args_array+=(-not \( -path "*/..git/*" -prune \))
+
+    # Add additional custom user args or excludes
+    additional_find_args_or_excludes=()
+    if [ -f ~/.sublf_config.sh ]; then
+        . ~/.sublf_config.sh
+    fi
+    all_find_args_array+=("${additional_find_args_or_excludes[@]}")
+
     echo "DEBUG: all_find_args_array = ${all_find_args_array[@]}"  # FOR DEBUGGING
 
     files_selected="$(find "${all_find_args_array[@]}" | fzf -m)"
@@ -88,9 +104,12 @@ sublf() {
     files_selected_array=($files_selected) # split long string into array, separating by IFS (newline chars)
     IFS=$SAVEIFS   # Restore IFS
 
-    echo "Opening these files in Sublime Text:"
+    echo "Opening these files or folders in Sublime Text:"
+    num_files="${#files_selected_array[@]}"
+    i=1
     for file in "${files_selected_array[@]}"; do
-        printf "  %s\n" "$file"
+        printf "  %2i/%-2i: %s\n" "$i" "$num_files" "$file"
+        ((i++))
     done
 
     # See: https://stackoverflow.com/a/70572787/4561887
