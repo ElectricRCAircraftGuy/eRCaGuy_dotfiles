@@ -10,6 +10,8 @@
 #       mkdir -p ~/bin
 #       ln -s "${PWD}/apt-cacher-server_proxy_status.sh" ~/bin/apt-cacher-status
 #       ln -s "${PWD}/apt-cacher-server_proxy_toggle.sh" ~/bin/apt-cacher-toggle
+#       ln -s "${PWD}/apt-cacher-server_proxy_status.sh" ~/bin/gs_apt-cacher-status
+#       ln -s "${PWD}/apt-cacher-server_proxy_toggle.sh" ~/bin/gs_apt-cacher-toggle
 # 2. Now check to see if you're using the apt-cacher server with `apt-cacher-status`, and toggle its usage ON/OFF
 #    with `sudo apt-cacher-toggle`
 #    - NB: this requires that your user's "~/bin" dir ($HOME/bin) be in your PATH variable! If it is not, 
