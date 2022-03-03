@@ -115,7 +115,9 @@ Usage:
     $SCRIPT_NAME [pc2_target_name [cmd]]
 
             Example:
-                    $SCRIPT_NAME desktop 'time bazel build //...; gs_alert'
+                    # note that the 'time bazel build //...' command here runs remotely on pc2,
+                    # while the 'gs_alert' part runs on your local machine
+                    $SCRIPT_NAME desktop 'time bazel build //...'; gs_alert
 
             Synchronize the git repo (whose directory you are currently in when running the command)
             on the local computer (\"PC1\") to the remote 'pc2_target_name' computer
