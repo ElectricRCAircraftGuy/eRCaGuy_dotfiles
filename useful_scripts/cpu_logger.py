@@ -2,7 +2,9 @@
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# STATUS: work-in-progress; NOT YET FUNCTIONAL!
+# STATUS: WORKS and is usable, but the comments aren't finalized (ex: see the installation
+# instructions below), and the program could use some cleaning up when I have time. Anyway, it does
+# work at least!
 
 # Print out basic stats on cpu load.
 
@@ -59,7 +61,8 @@ from pathlib import Path
 """
 To view live log output, run this.
 See my ans: https://unix.stackexchange.com/a/687072/114401
-        less -N +F ~/cpu_log.log
+        less -N --follow-name +F ~/cpu_log.log
+        alias gs_cpu_logger_watch='less -N --follow-name +F ~/cpu_log.log'
 
 
         #########
@@ -110,11 +113,12 @@ t_measurement_sec = 4
 while True:
     cpu_percent_cores = psutil.cpu_percent(interval=t_measurement_sec, percpu=True)
     avg = sum(cpu_percent_cores)/len(cpu_percent_cores)
-    cpu_percent_overall_str = ('%5.2f' % avg) + '%'
+    cpu_percent_overall = avg
+    cpu_percent_overall_str = ('%5.2f' % cpu_percent_overall) + '%'
     cpu_percent_cores_str = [('%5.2f' % x) + '%' for x in cpu_percent_cores]
     cpu_percent_cores_str = ', '.join(cpu_percent_cores_str)
 
-    logger.info('   ==> Overall: {} <==,    Individual CPUs: {} '.format(
+    logger.info('       ==> Overall: {} <==,        Individual CPUs: {} '.format(
         cpu_percent_overall_str,
         cpu_percent_cores_str))
 
@@ -137,32 +141,44 @@ while True:
     splitlines = [line.split(maxsplit=1) for line in lines]
     # print(splitlines)
 
-    # filter output to only retain high-cpu processes
-    high_cpu_processes_list = []
+    # Convert to a list of [float cpu_pct, str cmd]
+    cpu_processes_list = []
     for line in splitlines[1:]: # Skip first line since it contains a heading: `%CPU COMMAND`
         individual_cpu_usage_pct = float(line[0])
         cmd = line[1]
+        cpu_processes_list.append([individual_cpu_usage_pct, cmd])
+    cpu_processes_list.sort(reverse=True)  # sort highest-cpu-usage first
 
+    # Obtain a list of the top 10 processes, and another list of the processes > X% cpu usage
+    cpu_processes_top10_list = cpu_processes_list[:10]
+    cpu_processes_above_threshold_list = []
+    for process in cpu_processes_list:
         CPU_THRESHOLD_PCT = 15
-        if individual_cpu_usage_pct > CPU_THRESHOLD_PCT:
-            high_cpu_processes_list.append([('%5.2f' % individual_cpu_usage_pct) + "%", cmd])
-
-    # print(high_cpu_processes_list)
-    handler.setFormatter(None) # remove formatter for this log msg only
-    high_cpu_processes_list.sort(reverse=True)  # sort highest-cpu-usage first
-    for process in high_cpu_processes_list:
         individual_cpu_usage_pct = process[0]
-        cmd = process[1]
+        if individual_cpu_usage_pct >= CPU_THRESHOLD_PCT:
+            cpu_processes_above_threshold_list.append(process)
 
-        logger.info('    {}, cmd: {}'.format(individual_cpu_usage_pct, cmd))
-    if not high_cpu_processes_list:
-        # logger.info('    No processes are using > {}% of a single CPU.'.format(CPU_THRESHOLD_PCT))
-        pass
+    # If overall cpu usage is > Y, log all processes > X, OR the top 10 processes, whichever is
+    # the greater number of processes. This ensures that when the overall cpu usage is high, we log
+    # *something*, instead of nothing, in the event no single process is > X
+    OVERALL_CPU_THRESHOLD_PCT = 50
+    cpu_processes_list = cpu_processes_above_threshold_list
+    if cpu_percent_overall > OVERALL_CPU_THRESHOLD_PCT:
+        if len(cpu_processes_top10_list) > len(cpu_processes_above_threshold_list):
+            cpu_processes_list = cpu_processes_top10_list
+
+    # Log the high-cpu-usage processes
+    handler.setFormatter(None) # remove formatter for these log msgs only
+    num = 0
+    for process in cpu_processes_list:
+        num += 1
+        num_str = "%2i" % num
+        individual_cpu_usage_pct = process[0]
+        individual_cpu_usage_pct_str = ('%5.2f' % individual_cpu_usage_pct) + "%"
+        cmd_str = process[1]
+
+        logger.info('    {}/{}) {}, cmd: {}'.format(num_str, len(cpu_processes_list), individual_cpu_usage_pct_str, cmd_str))
     handler.setFormatter(formatter)  # restore format for next logs
-
-
-    # time.sleep(t_measurement_sec)
-
 
 
 
