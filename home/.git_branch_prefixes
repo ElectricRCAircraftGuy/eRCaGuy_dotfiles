@@ -1,0 +1,24 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# This is a custom configuration file accompanies the script
+# named "eRCaGuy_dotfiles/useful_scripts/git-branch_.sh".
+
+# INSTALLATION & USAGE INSTRUCTIONS:
+# 1. If you'd like THE BELOW IGNORED `git branch` BRANCH NAME PREFIXES TO SUPERSEDE AND TAKE
+#    PRIORITY OVER ANY DEFINED INSIDE "eRCaGuy_dotfiles/useful_scripts/git-branch_.sh", simply copy
+#    and paste this file into your home directory (`~`) and update it as you see fit.
+#           cp -i path/to/eRCaGuy_dotfiles/home/.git_branch_prefixes ~
+# 2. Also follow the installation instructions inside
+#    "eRCaGuy_dotfiles/useful_scripts/git-branch_.sh"
+
+IGNORED_PREFIXES=()  # create array
+
+# Append any prefixes to this array which you'd like to ignore!
+
+# DEFAULT BRANCH PREFIXES TO IGNORE
+IGNORED_PREFIXES+=("z-bak")
+IGNORED_PREFIXES+=("_")
+
+# YOUR CUSTOM BRANCH PREFIXES TO IGNORE
+# IGNORED_PREFIXES+=("custom_prefix_1")
+# IGNORED_PREFIXES+=("custom_prefix_2")

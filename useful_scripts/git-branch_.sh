@@ -38,10 +38,32 @@
 
 # Ignore (don't print with `git branch_`) branch names which begin with
 # these prefix strings
-PREFIX1="z-bak"
-PREFIX2="_"
+IGNORED_PREFIXES=()  # create array
+# Append any prefixes to this array which you'd like to ignore!
+IGNORED_PREFIXES+=("z-bak")
+IGNORED_PREFIXES+=("_")
 
-git branch --color=always "$@" \
-| grep --color=never -v "^  $PREFIX1" \
-| grep --color=never -v "^  $PREFIX2"
+# TO OVERRIDE THESE PREFIXES ABOVE:
+# Copy/paste the "eRCaGuy_dotfiles/home/.git_branch_prefixes" file into your
+# home dir (`~`) and customize it as you wish.
+if [ -f ~/.git_branch_prefixes ]; then
+    . ~/.git_branch_prefixes
+fi
 
+# debug prints:
+# echo "len = ${#IGNORED_PREFIXES[@]}" # debugging
+# echo "IGNORED_PREFIXES = ${IGNORED_PREFIXES[@]}" # debugging
+
+# read all branch names
+filtered_branch_list="$(git branch --color=always "$@")"
+
+# now filter out the ones with prefixes we don't want to see!
+for prefix in "${IGNORED_PREFIXES[@]}"; do
+    regex="^  $prefix"
+    # Filter out (ie: remove--hence the `grep -v`) all lines which match the above `regex` search
+    # pattern
+    filtered_branch_list="$(printf "%s" "$filtered_branch_list" \
+        | grep --color=never -v "$regex")"
+done
+
+printf "%s\n" "$filtered_branch_list"
