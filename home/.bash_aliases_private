@@ -126,3 +126,8 @@ TERMINAL_TAB_CMD_07="cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get rea
 # size build/bin/path/to/my/executable1; \
 # echo "$ size build/bin/path/to/my/executable2" && \
 # size build/bin/path/to/my/executable2'
+
+# TODO: finish this thought; I haven't finished testing or developing this little blob or idea.
+# This requires this script: "eRCaGuy_dotfiles/useful_scripts/sublf.sh"
+# See also my answer on `find`: https://stackoverflow.com/a/69830768/4561887
+# alias sublf_custom='sublf -not \( -path "./build*" -prune \)'
