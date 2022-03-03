@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
@@ -41,6 +41,8 @@ if [ -z $IP_ADDR ]; then
     exit $RETURN_CODE_ERROR
 fi
 
+# TODO: WRAP THE STUFF BELOW IN A FUNCTION!
+
 # Capture the Ctrl + C command and specify what to do when it is pressed. This allows us to exit
 # the otherwise unexitable infinite while loop by pressing Ctrl + C!
 # See [see my comments under this answer too!]: https://serverfault.com/a/105390/357116
@@ -50,7 +52,7 @@ count=0
 while true; do
     echo "Attempt: $count"
     ((count++))
-    ping -c 1 -W 1 "$IP_ADDR"
+    ping -c 1 -W 2 "$IP_ADDR"
 
     return_code=$?
     # Exit if the IP address is alive and responding to the ping, so the return code is 0,
