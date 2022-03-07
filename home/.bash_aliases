@@ -57,22 +57,10 @@ gs_git_show_branch() {
 PS1="\e[7m\$(gs_git_show_branch)\e[m\n$PS1" # comment out to NOT show git branch!
 PS1='\$SHLVL'":$SHLVL $PS1"                 # comment out to NOT show shell level!
 
-# See which files have changed since some prior commit named `MY_FIRST_COMMIT`.
-# Usage:
-#       gs_git_files_changed MY_FIRST_COMMIT~
-# OR (same thing):
-#       gs_git_files_changed BASE_COMMIT
-# Known limitations: works only on filenames which have no spaces or special bash chars. To make
-# it handle these chars, it will require using `git diff --name-only -z`, with some more
-# fancy bash trickery. See my ans:
-# https://stackoverflow.com/questions/28109520/how-to-cope-with-spaces-in-file-names-when-iterating-results-from-git-diff-nam/62853776#62853776
-gs_git_list_files_changed() {
-    files="$(git diff --name-only "$1")"
-    echo "These are the changed files:"
-    echo "$files"
-    # Now optionally create a new function from this and do something with these files here if you
-    # want!
-}
+# Import this ".git_aliases" file, if it exists.
+if [ -f "$SCRIPT_DIRECTORY/.git_aliases" ]; then
+    . "$SCRIPT_DIRECTORY/.git_aliases"
+fi
 
 # Find a file built by Bazel and therefor sitting in the "build/bin" dir.
 alias gs_find_bazel_build_file='find -L build/bin | grep'
@@ -82,67 +70,6 @@ alias gs_find_bazel_build_file_i='find -L build/bin | grep -i'
 # Put computer to sleep (ie: suspend it).
 # See: https://askubuntu.com/questions/1792/how-can-i-suspend-hibernate-from-command-line/1795#1795
 alias gs_suspend='systemctl suspend'
-
-############ TODO: fix this up!
-# 1. make it stand-alone
-# 2. make it work as `git branch_hash_bak [optional message]`
-#   - let the optional message just be the remainder of the arguments, so it doesn't require a quote
-#   - however, force it to not contain spaces, so replace spaces with underscores
-#   - add the optional message into the filename itself at the end
-############
-# GS: git branch backups: useful to back up git branch hashes before deleting branches, so you can
-# always have their hashes to go back to to checkout rather than having to dig through your `git
-# reflog` forever.
-# - Note that this currently requires that the GIT_BRANCH_HASH_BAK_DIR directory already exists.
-# - TODO: fail more gracefully: make it check to see if this dir exists & prompt the user for
-#   permission to auto-create it with `mkdir -p ${GIT_BRANCH_HASH_BAK_DIR}` if it does not.
-#
-# Syntax: `gs_git_branch_hash_bak [dir]` = back up to a backup file in directory "dir" if a dir is
-# passed in.
-GIT_BRANCH_HASH_BAK_DEFAULT_DIR="./git_branch_hash_backups"
-gs_git_branch_hash_bak () {
-    CMD="gs_git_branch_hash_bak"
-    GIT_BRANCH_HASH_BAK_DIR="$GIT_BRANCH_HASH_BAK_DEFAULT_DIR"
-    EXIT_SUCCESS=0
-    EXIT_ERROR=1
-
-    # Help menu
-    if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
-        echo "This is a bash function in \"~/.bash_aliases\" which backs up git branch"
-        echo "names & short hashes to your local \"${GIT_BRANCH_HASH_BAK_DEFAULT_DIR}\" (or other"
-        echo "specified) dir."
-        echo ""
-        echo "Usage: $CMD [dir]"
-        echo "    Back up branch names and hashes to a backup file in directory \"dir\"."
-        return $EXIT_SUCCESS
-    fi
-
-    if [ -n "$1" ]; then
-        # If an arg is passed in, then use it instead of the default directory!
-        GIT_BRANCH_HASH_BAK_DIR="$1"
-    fi
-
-    DATE=`date +%Y%m%d-%H%Mhrs-%Ssec`
-    BRANCH="$(gs_git_show_branch)"
-    DIR=$(pwd)
-    REPO=$(basename "$DIR") # repository name
-    # Replace any spaces in the repository name with underscores
-    # See: https://stackoverflow.com/questions/19661267/replace-spaces-with-underscores-via-bash/19661428#19661428
-    REPO="${REPO// /_}"
-    FILE="${GIT_BRANCH_HASH_BAK_DIR}/${REPO}_git_branch_bak--${DATE}.txt"
-
-    echo "Backing up 'git branch -vv' info to \"$FILE\"."
-    echo -e "date = \"$DATE\"" > $FILE
-    echo -e "repo (folder) name = \"$REPO\"" >> $FILE
-    echo -e "pwd = \"$DIR\"" >> $FILE
-    echo -e "current branch name = \"$BRANCH\"" >> $FILE
-    echo -e "\n=== \`git branch -vv\` ===\n" >> $FILE
-    git branch -vv >> $FILE
-    echo "Done!"
-}
-# Alias to do the git hash backups in a directory one higher so you don't have to add this backup
-# dir to this git project's .gitignore file
-alias gs_git_branch_hash_bak_up1="gs_git_branch_hash_bak \"../git_branch_hash_backups\""
 
 # ssh into another computer. Override this ssh command by re-defining it in
 # "~/.bash_aliases_private"! Make the username, domain_name, & options what they should be for you.
