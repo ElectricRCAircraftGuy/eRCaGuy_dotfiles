@@ -22,6 +22,11 @@
     # Source for this `git lg` "better git log" alias: https://coderwall.com/p/euwpig/a-better-git-log
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
+    # See:
+    # 1. [original source] https://stackoverflow.com/a/4299159/4561887
+    # 1. [my answer] https://stackoverflow.com/a/71150235/4561887
+    add-commit = !git add -A && git commit
+
 # For 'git blametool'. See: "eRCaGuy_dotfiles/useful_scripts/git-blametool.sh".
 # Example:
 # - Create an entry below with: `git config --global blametool.editor subl`
