@@ -12,5 +12,6 @@
         "in",
         "profile",
         ".git_branch_prefixes",
-    ]
-}
+        "OWNERS",
+        ".git_aliases",
+    ],
