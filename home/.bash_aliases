@@ -22,6 +22,17 @@ SCRIPT_DIRECTORY="$(dirname "$FULL_PATH_TO_SCRIPT")"
 SCRIPT_FILENAME="$(basename "$FULL_PATH_TO_SCRIPT")"
 # This assumes that ~/.bash_aliases is a **symlink** to this file in the repo
 ERCAGUY_DOTFILES_ROOT_DIR="$(dirname "$SCRIPT_DIRECTORY")"
+# This assumes that this repo is inside of my main "dev" development folder
+DEV_ROOT_DIR="$ERCAGUY_DOTFILES_ROOT_DIR/.."
+
+# cd into my/your main "dev" development directory where I store my repos and do my engineering and
+# code development. This path for me is usually: "$HOME/GS/dev", which generally expands to
+# "/home/gabriel/GS/dev". However, for you it may be different, so this trick will cd into the dir
+# you have which contains this repo, assuming that that location is **your** main "dev" type
+# directory, just as it is for me!
+alias gs_cd_to_dev="cd \"$DEV_ROOT_DIR\""
+
+# DEUG PRINTS:
 # echo "FULL_PATH_TO_SCRIPT = $FULL_PATH_TO_SCRIPT"  # debugging
 # echo "SCRIPT_DIRECTORY = $SCRIPT_DIRECTORY"  # debugging
 # echo "SCRIPT_FILENAME = $SCRIPT_FILENAME"  # debugging
