@@ -1,7 +1,13 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+# ==================================================================================================
 # These are bash "git aliases", meaning that they are bash aliases that are intended to be related
 # to or used by `git`. This file is sourced by the ".bash_aliases" file.
+#
+# NB: Most of my custom git commands and scripts are NOT in this alias file. Rather, they are in
+# the "eRCaGuy_dotfiles/useful_scripts" folder, and are generally named "git-*".
+# ==================================================================================================
+
 
 # See which files have changed since some prior commit named `MY_FIRST_COMMIT`.
 # Usage:
@@ -81,3 +87,103 @@ gs_git_branch_hash_bak () {
 # dir to this git project's .gitignore file
 alias gs_git_branch_hash_bak_up1="gs_git_branch_hash_bak \"../git_branch_hash_backups\""
 
+# Get just the date stamp of the last commit. You can optionally pass in a branch name or commit
+# hash.
+# Usage:
+#       gs_git_log_get_last_commit_date [commit_hash]
+gs_git_log_get_last_commit_date() {
+    # get the committer date; see this A to my Q: https://stackoverflow.com/a/71385517/4561887
+    committer_date="$(git log -1 --format="%cd" "$@")"
+
+    # Now strip off the last space-separated word in order to throw away the time zone portion
+    # of the date
+    str_array=($committer_date)
+    str_array_len="${#str_array[@]}"
+    str_array_len_minus_one=$((str_array_len - 1))
+
+    committer_date="${str_array[@]:0:$str_array_len_minus_one}"
+    echo "$committer_date"
+}
+
+# Git commit range:
+# Run `git commit` with a random time and date stamp for both the **author** (via the `--date`
+# option) AND the **committer** (via the `GIT_COMMITTER_DATE` variable). This is a demo script
+# to show how to rewrite git history, correct dates, do `date` math with `date -d`, use random
+# numbers, etc.  Use it as a learning starting point if you ever need to do something weird like
+# this to correct errors in timestamps in your repo.
+# NB: To see `git log` with **author** AND **committer** dates, run:
+#       git log --pretty=fuller
+# Usage:
+#       gs_git_commit [<min_minutes> <max_minutes>]
+# References:
+# 1. My Q here: How to make `git log` show only the commit date, nothing else:
+#    https://stackoverflow.com/q/71384830/4561887
+# 1. How can one change the timestamp of an old commit in Git?:
+#    https://stackoverflow.com/a/9701130/4561887
+gs_git_commit_r() {
+    # help menu
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        echo "Git commit range: run 'git commit' with a random time and date stamp."
+        echo "Usage:  gs_git_commit_r [<min_minutes> <max_minutes>]"
+        echo "Run 'git log --pretty=fuller' to see 'git log' with both **author** AND" \
+             "**commit** dates!"
+        return 0
+    fi
+
+    # 'gs_git_commit'
+    if [ $# -eq 0 ]; then
+        # set defaults
+        min_minutes="2"
+        max_minutes="12"
+    elif [ $# -eq 1 ]; then
+        echo "ERROR: incorrect number of arguments (you must pass 0 or 2 args; see '--help' menu)."
+        return 1
+    # 'gs_git_commit min_minutes max_minutes'
+    elif [ $# -eq 2 ]; then
+        min_minutes="$1"
+        max_minutes="$2"
+    else
+        echo "ERROR: too many arguments."
+        return 1
+    fi
+
+
+    SECONDS_PER_MINUTE=60
+    range_minutes=$((max_minutes - min_minutes))
+
+    min_seconds=$((min_minutes*SECONDS_PER_MINUTE))
+    max_seconds=$((max_minutes*SECONDS_PER_MINUTE))
+    range_seconds=$((max_seconds - min_seconds))
+
+    random_seconds="$(random "$min_seconds" "$max_seconds")"
+    random_minutes="$(bc <<< "scale=2; $random_seconds/$SECONDS_PER_MINUTE")"
+    last_commit_date="$(gs_git_log_get_last_commit_date)"
+    new_date="$(date +"%a %b %-d %H:%M:%S %Y %z" -d "$last_commit_date + $random_seconds seconds")"
+
+    # debug prints
+    echo "DEBUG PRINTS:"
+    echo "  min_minutes       = $min_minutes"
+    echo "  max_minutes       = $max_minutes"
+    echo "  range_minutes     = $range_minutes"
+    echo "  ---"
+    echo "  min_seconds       = $min_seconds"
+    echo "  max_seconds       = $max_seconds"
+    echo "  range_seconds     = $range_seconds"
+    echo "  ==="
+    echo "  random_seconds    = $random_seconds"
+    echo "  random_minutes    = $random_minutes"
+    echo "  last_commit_date  = $last_commit_date"
+    echo "  new_date          = $new_date"
+    echo ""
+
+    # NB: The `--date` option sets the **author** date stamp, and the variable `GIT_COMMITTER_DATE`
+    # sets the **committer** date stamp.
+    # See:
+    # 1. My Q here: How to make `git log` show only the commit date, nothing else:
+    #    https://stackoverflow.com/q/71384830/4561887
+    # 1. How can one change the timestamp of an old commit in Git?:
+    #    https://stackoverflow.com/a/9701130/4561887
+    GIT_COMMITTER_DATE="$new_date" git commit --date "$new_date"
+}
+alias git_commit_r="gs_git_commit_r"
+alias gcr="gs_git_commit_r"

@@ -470,3 +470,15 @@ gs_fzf_git_and_linux_cmds_doc() {
     '$ERCAGUY_DOTFILES_ROOT_DIR/git & Linux cmds, help, tips & tricks - Gabriel.txt' \
     | fzf -m --reverse "$@"
 }
+
+# Re-authenticate into your Google cloud (gcloud) account withOUT launching a browser, in case you
+# are in an ssh session where launching the browser wouldn't show up since it's a GUI launching
+# on the remote machine.
+# Note that in newer versions of `gcloud`, `--no-launch-browser` is the old flag and is now
+# deprecated. Use `--no-browser` instead.
+# See:
+# 1. https://cloud.google.com/sdk/gcloud/reference/auth/login
+# 1. https://cloud.google.com/sdk/gcloud/reference/auth/login#--no-browser
+# 1. https://cloud.google.com/sdk/gcloud/reference/auth/login#--launch-browser
+# 1. `gcloud auth login --help`
+alias gs_gcloud_get_new_credentials="gcloud auth login --no-launch-browser"
