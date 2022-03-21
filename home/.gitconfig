@@ -6,8 +6,8 @@
 # Option 2) append contents to existing .gitconfig file: `cat .gitconfig >> ~/.gitconfig`
 
 [user]
-    name = FIRSTNAME LASTNAME
-    email = MY_EMAIL@gmail.com
+    name = # FIRSTNAME LASTNAME
+    email = # MY_EMAIL@gmail.com
 [diff]
     # Choose your `git difftool` editor. If you comment out the below line, then run `git difftool`,
     # you'll see git print out this message, showing a list of commonly-available difftools:

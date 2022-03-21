@@ -93,6 +93,8 @@ alias gs_git_branch_hash_bak_up1="gs_git_branch_hash_bak \"../git_branch_hash_ba
 #       gs_git_log_get_last_commit_date [commit_hash]
 gs_git_log_get_last_commit_date() {
     # get the committer date; see this A to my Q: https://stackoverflow.com/a/71385517/4561887
+    # Use `"%ad"` for Author Date, or `"%cd"` for Commit Date (aka: Committer Date).
+    # author_date="$(git log -1 --format="%ad" "$@")"
     committer_date="$(git log -1 --format="%cd" "$@")"
 
     # Now strip off the last space-separated word in order to throw away the time zone portion
