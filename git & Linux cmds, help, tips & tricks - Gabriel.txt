@@ -2604,7 +2604,10 @@ DATE="Wed Jan 01 23:00:00 2020 -0700"; GIT_COMMITTER_DATE="$DATE" git commit --d
     Same as above (set both the **author** date (`%ad`) **and** the **committer** date (`%cd`) when committing!), except you only have to specify the date once. 
     - The `--date` option sets the **author** date stamp, and the variable `GIT_COMMITTER_DATE` sets the **committer** date stamp.
     - NB: you must NOT have a semicolon after the `GIT_COMMITTER_DATE="$DATE"` part and before the `git commit --date "$DATE"` part or else it will NOT work to set the **committer** date!
-    - To see both types of dates in your `git log` output, run `git log --pretty=fuller`. 
+    - To see both types of dates in your `git log` output, run:
+            git log --pretty=fuller
+    - To get the date _now_ in the same format as git would use, run: 
+            date +"%a %b %-d %H:%M:%S %Y %z"
     - See:
         1. My `gs_git_commit_r` alias in "eRCaGuy_dotfiles/home/.git_aliases".
         1. My Q here: How to make `git log` show only the commit date, nothing else: https://stackoverflow.com/q/71384830/4561887
@@ -2612,6 +2615,9 @@ DATE="Wed Jan 01 23:00:00 2020 -0700"; GIT_COMMITTER_DATE="$DATE" git commit --d
 GIT_COMMITTER_DATE="Wed Jan 01 23:00:00 2020 -0700" git commit --amend
     <========
     Keep the same **committer** date as before when amending too!
+DATE="Wed Jan 01 23:00:00 2020 -0700"; GIT_COMMITTER_DATE="$DATE" git commit --amend
+    <================
+    Same as above, but easier.
 
 
 git push origin my_local_branchname:my_remote_branchname = push my_local_branchname to origin/my_remote_branchname; normally `git push`ing only allows pushing to a remote branch of the *same* branch name, so this is the work-around! See: https://stackoverflow.com/questions/13897717/push-commits-to-another-branch/13897766#13897766.
