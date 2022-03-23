@@ -5,9 +5,25 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 I will put links to Google Docs drawings and other UML or UML-like diagrams I make here. **You can copy and paste them to use them as templates.** They are useful for design reviews, software write-ups and design documents, describing program flow, etc.
 
 
-## [Folder with all of my Google Drive Templates or Diagrams](https://drive.google.com/drive/folders/16grm0qiZNtoxYaDtqD07EOP-h6RlLCX-?usp=sharing)
+# Table of Contents
+<details>
+<summary><b>(click to expand)</b></summary>
+<!-- MarkdownTOC -->
+
+1. [Folder with all of my Google Drive Templates or Diagrams](#folder-with-all-of-my-google-drive-templates-or-diagrams)
+    1. [Instructions for use](#instructions-for-use)
+    1. [Tips, Limitations/Weird Behaviors, and Work-arounds](#tips-limitationsweird-behaviors-and-work-arounds)
+    1. [My Drawings/Diagrams to use as Templates](#my-drawingsdiagrams-to-use-as-templates)
+
+<!-- /MarkdownTOC -->
+</details>
 
 
+<a id="folder-with-all-of-my-google-drive-templates-or-diagrams"></a>
+# [Folder with all of my Google Drive Templates or Diagrams](https://drive.google.com/drive/folders/16grm0qiZNtoxYaDtqD07EOP-h6RlLCX-?usp=sharing)
+
+
+<a id="instructions-for-use"></a>
 ## Instructions for use
 To copy and paste one of my drawings as a starting point for your own _inside of a Google Doc_, do the following:
 
@@ -20,10 +36,11 @@ To copy and paste one of my drawings as a starting point for your own _inside of
 1. Click "Save and Close" in the top-right of the drawing editor when done editing the drawing. 
 
 
+<a id="tips-limitationsweird-behaviors-and-work-arounds"></a>
 ## Tips, Limitations/Weird Behaviors, and Work-arounds
 1. Use the below diagrams on Google Drive in Google Docs or in Google Drawings as templates and starting points for your own designs. 
 1. To insert a brand new drawing inside of a Google Doc, go to `Insert` --> `Drawing` --> `New`.
-    1. **IMPORTANT QUIRK/BUG:** the _size_ of the drawing canvas when inserting a drawing inside of a Google Doc like this is NOT editable nor configurable. Furthermore, _the canvas size will dynamically vary at the moment you insert the new drawing according to your current browser **window size** and **screen resolution**._ So, on a low-resolution monitor the drawing canvas might be only 6x5 inches. On a [large 32" 4K monitor such as my own](https://gabrielstaples.com/work-from-home-work-station/), however, it will be greater than 13x9 inches, as you can see in the image above. 
+    1. **IMPORTANT QUIRK/BUG:** the _size_ of the drawing canvas when inserting a drawing inside of a Google Doc like this is NOT editable nor configurable. Furthermore, _the canvas size will dynamically vary at the moment you insert the new drawing according to your current browser **window size** and **screen resolution**._ So, on a low-resolution monitor the drawing canvas might be only 6x5 inches. On a large 32" 4K monitor such as my own (see [my full desktop setup here](https://gabrielstaples.com/work-from-home-work-station/), however, it will be greater than 13x9 inches, as you can see in the image above. 
     1. So, to ensure you get the larger canvas size like I have, either drag your browser window onto your largest monitor and maximize the window before inserting a new drawing, OR just copy/paste one of my own drawings into your Google Doc as a starting point.
 1. To use my drawings as a starting point, copy/paste them from my Google Doc into your Google Doc as described in the "Instructions for use" section above.
 1. To open and edit an existing drawing inside of a Google Doc, just double-left-click it.
@@ -31,6 +48,7 @@ To copy and paste one of my drawings as a starting point for your own _inside of
 1. Shapes such as rectangles in Google Drawings only have 4 connection points to connect arrows to: on the top, bottom, left, and right of the shape. This isn't enough. To add more connector points to a shape, see my answer here where I describe a hack I use in my diagrams below: [Web Applications: Can I add custom connectors on Google Drawings shapes?](https://webapps.stackexchange.com/a/163632/126659). 
 
 
+<a id="my-drawingsdiagrams-to-use-as-templates"></a>
 ## My Drawings/Diagrams to use as Templates
 
 1. **Sequence Diagram**
