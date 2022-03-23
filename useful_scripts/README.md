@@ -1,3 +1,5 @@
+This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
 # eRCaGuy_dotfiles/useful_scripts
 
 Each script herein has detailed installation and usage information commented in the top of it. So, look inside each file for details. For any script which I'd really like to highlight or explain, however, I've provided additional details below. 
