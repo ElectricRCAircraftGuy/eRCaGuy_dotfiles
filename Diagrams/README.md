@@ -46,6 +46,7 @@ To copy and paste one of my drawings as a starting point for your own _inside of
 1. To open and edit an existing drawing inside of a Google Doc, just double-left-click it.
 1. To export an embedded drawing as an image or PDF, open it for editing it and then click the `Actions` button in the top-left of the drawing editor and go to `Download`.
 1. Shapes such as rectangles in Google Drawings only have 4 connection points to connect arrows to: on the top, bottom, left, and right of the shape. This isn't enough. To add more connector points to a shape, see my answer here where I describe a hack I use in my diagrams below: [Web Applications: Can I add custom connectors on Google Drawings shapes?](https://webapps.stackexchange.com/a/163632/126659). 
+1. Use **<kbd>Ctrl</kbd> + <kbd>D</kbd>** to _Duplicate_ a shape in your drawing, such as a method-call box. This is faster than pressing <kbd>Ctrl</kbd> + <kbd>C</kbd> to copy a shape and then <kbd>Ctrl</kbd> + <kbd>V</kbd> to paste a copy of it.
 
 
 <a id="my-drawingsdiagrams-to-use-as-templates"></a>
