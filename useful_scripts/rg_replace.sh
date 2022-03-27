@@ -24,6 +24,15 @@
 #   3. `gs_rgr`
 #   4. `gs_rg_replace`
 
+# SIMPLE FISH IMPLEMENTATION (not using binaries)
+# essentially we create a function that executes rg_replace.sh (named rgr.sh in my config)
+# NOTE: must be placed in your fish config.
+
+# function rgr
+#   set -l DOTFILE_LOC ~/Documents/dotFiles/ # replace the path to the current location of rg_replace.sh
+#   bash "$DOTFILE_LOC"/rgr.sh "$argv"
+# end
+
 # References:
 # 1. How to use `rg` to do an in-place replacement in a **single file** at a time:
 #    https://learnbyexample.github.io/substitution-with-ripgrep/#in-place-workaround
