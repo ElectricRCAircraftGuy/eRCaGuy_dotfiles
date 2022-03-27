@@ -24,12 +24,13 @@
 #   3. `gs_rgr`
 #   4. `gs_rg_replace`
 
-# SIMPLE FISH IMPLEMENTATION (not using bins)
-# essentially we create a function that executes rg_replace.sh (named rgr.sh in my config) 
+# SIMPLE FISH IMPLEMENTATION (not using binaries)
+# essentially we create a function that executes rg_replace.sh (named rgr.sh in my config)
+# NOTE: must be placed in your fish config.
 
 # function rgr
-#   set -l DOOTFILE_LOC ~/Documents/dotFiles/ # replace to the current location of rg_replace.sh
-#   bash "$DOOTFILE_LOC"/rgr.sh "$argv"
+#   set -l DOTFILE_LOC ~/Documents/dotFiles/ # replace the path to the current location of rg_replace.sh
+#   bash "$DOTFILE_LOC"/rgr.sh "$argv"
 # end
 
 # References:
