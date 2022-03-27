@@ -2612,6 +2612,10 @@ DATE="Wed Jan 01 23:00:00 2020 -0700"; GIT_COMMITTER_DATE="$DATE" git commit --d
         1. My `gs_git_commit_r` alias in "eRCaGuy_dotfiles/home/.git_aliases".
         1. My Q here: How to make `git log` show only the commit date, nothing else: https://stackoverflow.com/q/71384830/4561887
         1. How can one change the timestamp of an old commit in Git?: https://stackoverflow.com/a/9701130/4561887
+DATE="Wed Jan 01 23:00:00 2020 -0700"
+GIT_COMMITTER_DATE="$DATE" git commit --date "$DATE"
+    <========== BEST!: CORRECT both your **author** AND **committer** dates! ===========
+    Same as above, but split the two commands onto two separate lines.
 GIT_COMMITTER_DATE="Wed Jan 01 23:00:00 2020 -0700" git commit --amend
     <========
     Keep the same **committer** date as before when amending too!
