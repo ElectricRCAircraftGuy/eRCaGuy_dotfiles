@@ -9,7 +9,7 @@
 # `man rg` under the `--replace` section states: "Neither this flag nor any other ripgrep
 # flag will modify your files." This wrapper overcomes that limitation.
 
-# INSTALLATION INSTRUCTIONS:
+# GENERAL LINUX INSTALLATION INSTRUCTIONS:
 # 1. Install RipGrep: https://github.com/BurntSushi/ripgrep#installation
 # 2. Create a symlink in ~/bin to this script so you can run it from anywhere.
 #       cd /path/to/here
@@ -24,14 +24,19 @@
 #   3. `gs_rgr`
 #   4. `gs_rg_replace`
 
-# SIMPLE FISH IMPLEMENTATION (not using binaries)
-# essentially we create a function that executes rg_replace.sh (named rgr.sh in my config)
-# NOTE: must be placed in your fish config.
-
-# function rgr
-#   set -l DOTFILE_LOC ~/Documents/dotFiles/ # replace the path to the current location of rg_replace.sh
-#   bash "$DOTFILE_LOC"/rgr.sh "$argv"
-# end
+# ALTERNATIVE FISH SHELL (https://fishshell.com/) INSTALLATION INSTRUCTIONS from Henri Vanderscycle
+# (https://github.com/Vanderscycle):
+# Rather than symlinking an executable into a binary dir in your PATH, you can add a simple `rgr`
+# wrapper function into your fish config file. Here is how to create a function which executes
+# "rg_replace.sh" (named "rgr.sh" in my fish config):
+#
+#       # "rgr" Ripgrep Replace wrapper function for Fish Shell
+#       function rgr
+#           EXECUTABLE_NAME="rgr.sh"  # use "rg_replace.sh" instead, if you need to
+#           # Update the path below to your specific dir where you have the executable located.
+#           set -l DOTFILE_PATH ~/Documents/dotFiles/
+#           bash "$DOTFILE_PATH/$EXECUTABLE_NAME" "$argv"
+#       end
 
 # References:
 # 1. How to use `rg` to do an in-place replacement in a **single file** at a time:
