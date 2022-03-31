@@ -22,3 +22,47 @@ Each script herein has detailed installation and usage information commented in 
 1. **rg_replace.sh** (`rgr`)
     1. Ripgrep Replace: this is a wrapper around Ripgrep which allows you to do full find-and-replace on your disk. See [rg_replace.sh](rg_replace.sh). Installation instructions are in the top of the file. Sample help menu from it (`rgr -h`): https://github.com/BurntSushi/ripgrep/issues/74#issuecomment-1004583171
 
+
+# Generic Linux Ubuntu "installation" instructions for literally any executable or script in the world
+
+
+## INSTALLATION INSTRUCTIONS
+1. Create a symlink in `~/bin` to this script so you can run it from anywhere.
+    ```bash
+    cd /path/to/myscript_dir
+    mkdir -p ~/bin
+    # Required
+    ln -si "${PWD}/myscript.sh" ~/bin/myscript
+    # Optional: prefix the script with your initials; replace `gs` with your
+    # initials
+    ln -si "${PWD}/myscript.sh" ~/bin/gs_myscript
+    ```
+1. Log out and log back in if using Ubuntu with a default `~/.profile` file
+which automatically adds `~/bin` to your `PATH` variable. This will cause
+`~/bin` to be automatically added to your path. If you're missing Ubuntu's
+default `~/.profile` file, you can copy it from the `/etc/skel` directory like
+this:
+    ```bash
+    cp -i /etc/skel/.profile ~
+    ```
+    You can alternatively manually add the `~/bin` dir to your `PATH` with this
+    command. Add this to the bottom of your `~/.bashrc` file if you don't have
+    the `~/.profile` file mentioned above:
+    ```bash
+    PATH="$HOME/bin:$PATH"
+    ```
+    Now log out and log back in again if you just added the `~/bin` dir to your
+    `PATH` as described above. 
+1. OR, re-source your `~/.bashrc` file if the `~/bin` dir *did* already exist
+and was *already* in your `PATH`:
+    ```bash
+    # Same as running `source ~/.bashrc`
+    . ~/.bashrc
+    ```
+1. Now you can use this command/executable directly anywhere you like, like
+this:
+    ```bash
+    myscript
+    # OR
+    gs_myscript
+    ```
