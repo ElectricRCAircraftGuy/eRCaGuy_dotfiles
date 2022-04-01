@@ -118,26 +118,31 @@ main() {
     num_chars="${#progress_bar}"
     echo_debug "num_chars in progress bar = $num_chars"
 
-    echo        "Progress: $progress_bar"
-    printf "%s" "          "
+    echo "Progress Bar:"
+    echo "$progress_bar"
     files_copied=0
     dots_printed=0
     # Do the actual back up from remote to local!
     for file in "${files_array[@]}"; do
         # NB: this assumes that all files in the files array are in your home (~) dir!
+        # TODO: consider parallelizing this in the future with multiple processes rather than only
+        # doing it one process at a time!
         scp "$login_info":~/"$file" "$local_backup_dir"
 
         # Update the progress bar.
         ((files_copied++))
         percent_complete=$((files_copied*100/num_files))
         dots_to_have_printed=$((percent_complete*num_chars/100))
+        # the output from `scp` above seems to overwrite this text, so start the progress bar over
+        # each time by resetting it to zero here
+        dots_printed=0
         while [ "$dots_printed" -lt "$dots_to_have_printed" ]; do
             printf "%s" "."
             ((dots_printed++))
         done
+        echo ""
     done
 
-    echo ""
     echo "Done! All files backed up."
 }
 
