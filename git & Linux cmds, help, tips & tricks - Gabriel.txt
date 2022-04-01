@@ -3753,6 +3753,10 @@ date +"%a %b %-d %H:%M:%S %Y %z" -d "Sun Mar 6 13:04:39 2022 + 10 minutes"
 date +"%a %b %-d %H:%M:%S %Y %z" -d "Sun Mar 6 13:04:39 2022 + 70 seconds"
     Same as above, but **add 70 seconds** instead of 10 minutes.
     Output: `Sun Mar 6 13:05:49 2022 -0700`
+date +"%Y%m%d-%H%Mhrs_%Ssec"
+    <===============
+    A good date format for use as a folder name when running automatic backup scripts. Ex. output:
+            20220331-1908hrs_42sec
 
 
 == diff: ==
