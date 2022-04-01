@@ -46,10 +46,13 @@ this:
     cp -i /etc/skel/.profile ~
     ```
     You can alternatively manually add the `~/bin` dir to your `PATH` with this
-    command. Add this to the bottom of your `~/.bashrc` file if you don't have
+    code. Add this to the bottom of your `~/.bashrc` file if you don't have
     the `~/.profile` file mentioned above:
     ```bash
-    PATH="$HOME/bin:$PATH"
+    # set PATH so it includes user's private bin if it exists
+    if [ -d "$HOME/bin" ] ; then
+        PATH="$HOME/bin:$PATH"
+    fi
     ```
     Now log out and log back in again if you just added the `~/bin` dir to your
     `PATH` as described above. 
