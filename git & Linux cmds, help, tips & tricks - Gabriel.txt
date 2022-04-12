@@ -1107,6 +1107,39 @@ make <package>-rebuild && make all
 make <package>-rebuild && make
     Same as above. `make` calls `make all` since "all" is the default make target (ie: the first-listed name which does not begin with a `.`). See: https://www.gnu.org/software/make/manual/html_node/How-Make-Works.html and https://stackoverflow.com/a/2057716/4561887.
 
+------------------------------
+**How** to do a **robust** rebuild:
+------------------------------
+- Keywords: buildroot build; buildroot robust build; buildroot robust rebuild
+- The only reliable or "robust" way I have found, period, to force Buildroot to actually rebuild a package or set of packages, is to DELETE (remove via `rm`) the output build files you'd like to force to rebuild before you begin, like this, for example. You'll probably have to tweak this per your build system and how you have it configured, but this is the idea:
+
+<================ DO SOMETHING LIKE THIS TO TRULY FORCE A REBUILD IN BUILDROOT! ================
+```bash
+# this is the only reliable way I know to FORCE buildroot to rebuild your code and the
+# .swu image
+TARGET="some-target"
+make "target-${TARGET}"  # set the build target
+cat .config  # prove the target is set
+rm -rf \
+    output/$TARGET/build/my_module_1* \
+    output/$TARGET/build/my_module_2* \
+    output/$TARGET/build/my_module_3* \
+    output/$TARGET/build/host-my_module_1* \
+    output/$TARGET/build/host-my_module_2* \
+    output/$TARGET/build/host-my_module_3* \
+    output/$TARGET/images/image.swu && \
+    time make br-my-module-1-reconfigure && \
+    time make br-host-my-module-1-reconfigure && \
+    time make; gs_alert
+```
+- The `time make br-my-module-1-reconfigure` cmd above builds "my_module_1" for the target (embedded Linux board).
+- The `time make br-host-my-module-1-reconfigure` cmd above builds "my_module_1", including its unit tests, for the host (the Linux build computer).
+- The `time make` cmd builds the `.swu` rootfs (root filesystem) image file for the target (embedded linux board).
+- Manually running unit tests after the build commands above can be done with something like this, which you could append to the end of the build command above if you wanted:
+    ```bash
+    time output/${TARGET}/build/host-my_module_1-custom/build/test/__test_my_module_1
+    ```
+
 
 ====================================================================================================
 = yocto: =
