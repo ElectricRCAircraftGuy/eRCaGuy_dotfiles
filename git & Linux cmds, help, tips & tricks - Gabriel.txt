@@ -20,9 +20,29 @@ gs_fzf_git_and_linux_cmds_doc
 = Quotes: =
 ====================================================================================================
 
-    On confrontation, and how to handle conflicts [Applies to *most* people and situations, NOT all. Some people you *do* need to avoid and not confront, esp. if they are manipulative and/or continually contemptuous towards you]:
 "Whatever the cause of such strife may be, simply ruminating on the issue — or deliberately engaging in conflict avoidance tactics (i.e. people-pleasing), will do nothing to resolve said contention. The fact of the matter is, confrontation is necessary, and if done properly can dramatically increase the quality of our lives — in addition to that of our relationships."
     - A.J. Deveaux, Why Confrontation is Good, How to properly handle conflict, medium.com (https://medium.com/swlh/why-confrontation-is-good-20aa32a69dd1), 23 May 2019.
+    - On confrontation, and how to handle conflicts [Applies to *most* people and situations, NOT all. Some people you *do* need to avoid and not confront, esp. if they are manipulative and/or continually contemptuous towards you, or if they have antisocial personality disorder (ASPD: https://www.webmd.com/mental-health/antisocial-personality-disorder-overview)].
+
+"Programming isn't what you know; it's what you can figure out." <===
+    - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed; seen 13 Apr. 2022
+    - GS: in other words: really expert and skilled programmers do NOT know how to do everything! Rather, they simply know **how to figure it out**. They know that to solve the problem, they will have to:
+        1. Identify the problem and the skills they need to solve it.
+        2. Identify which skills they are lacking.
+        3. Find resources and teach themselves these new skills, documenting as they go so they can A) refer to their notes later, and B) share them with others to help others learn too.
+        4. Use the new skills to solve the problem!
+      For a task which takes 4 days to "just do" if you already know how to do it, this total process might take:
+        1. 2 days, spread throughout the project ["just-do-it"_time x 0.5]
+        2. continuously being done
+        3. 8~12 days ["just-do-it"_time x 2~3]
+        4. 4 days ["just-do-it"_time]
+        Total: 14~18 coding work days. 
+          Since there are 10 work days per 2-week sprint, a standard 0.6 workload to account for meetings and fluff leaves you with 10x0.6 = 6 coding work days per sprint. So, 14 coding work days is 14/6 = **2.33 sprints** ~ 18/6 = **3 sprints**.
+          
+      vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv TIME ESTIMATION SKILLS vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+      ==> TIME-ESTIMATION SKILLS: a "4-day" task (meaning: 4 days if you know **exactly** how to do it) which you have never done yourself should take you **2~3 sprints**, for a total of 14~18 head-down coding work days! <==== TIME ESTIMATION SKILLS ====
+      - Looking back at my work and time estimates, this seems very accurate, especially when factoring in writing unit tests, doing quick bench testing, and the code review process, as well as other unfamiliarities which pop up during the process, such as the build system or new syntax or libraries you aren't familiar with. 
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "The best code is the 'done' code. (Meaning: it is functional [basic features] and works [runs/accomplishes the need])."
     - Gabriel Staples, 24 Jan. 2021
