@@ -3616,10 +3616,123 @@ sleep 0.5; done
     See also this answer about `trap` in Bash: https://serverfault.com/a/160961/357116
     <======= EXCELLENT! =======
 
+tcpdump resources:
+1. Google search for "how to use tcpdump": https://www.google.com/search?q=how+to+use+tcpdump&oq=how+to+use+tcpdump&aqs=chrome..69i57j69i65.3038j0j7&sourceid=chrome&ie=UTF-8
+1. *****+++ [MOST EXCELLENT TCPDUMP GETTING-STARTED TUTORIAL!] tcpdump tutorial and examples: https://opensource.com/article/18/10/introduction-tcpdump
+    1. tcpdump man manual pages to describe packet format: https://www.tcpdump.org/manpages/tcpdump.1.html#lbAG
+1. https://dzone.com/articles/tcpdump-learning-how-read-udp
+1. *****https://danielmiessler.com/study/tcpdump/ - good source for a range of examples, but only AFTER you've thoroughly gone through the tutorial above first to learn the basics!
+1. *****+ TCPDUMP & LIBPCAP [the main, official `tcpdump` and Libpcap website!]: https://www.tcpdump.org/
+   "This is the home web site of tcpdump, a powerful command-line packet analyzer; and libpcap, a **portable C/C++ library for network traffic capture**."
+   1. See some of the helpful community links and references right at the top of this file too! ex:
+        1. *****+Tcpdump advanced filters: https://blog.wains.be/2007/2007-10-01-tcpdump-advanced-filters/
+        1. *****++Tcpdump cheat sheet: https://packetlife.net/media/library/12/tcpdump.pdf
+
 tcpdump
     Use this command to read and print UDP and TCP Ethernet packets! This can be very useful to help you see if certain packets or messages are even coming in to your system!
     Read also about "pcap" and "wireshark" maybe and how pcap or whatever can help you interpret and parse (I think) incoming packets!
-    - For help on `tcpdump`, see also: https://dzone.com/articles/tcpdump-learning-how-read-udp
+sudo tcpdump --list-interfaces
+sudo tcpdump -D
+    <=========== LIST ALL INTERFACES AND THEIR STATUS! ==========
+    List all interfaces which you can view traffic on. Very useful! Similar to `ifconfig`. 
+    An "interface" is the main name you see when you run "ifconfig", `sudo tcpdump --list-interfaces`, or `sudo tcpdump -D`. It represents a physical OR virtual Ethernet card/plug in the side of your computer. 
+
+    See section "2. Capturing packets with tcpdump" of this tutorial: *****+https://opensource.com/article/18/10/introduction-tcpdump
+sudo tcpdump --interface any -c20 -nn
+sudo tcpdump -i any -c20 -nn
+    <=========== USEFUL TO GET STARTED SEEING SOME TRAFFIC ========
+    Filter by **interface**. An "interface" is the main name you see when you run "ifconfig", `sudo tcpdump --list-interfaces`, or `sudo tcpdump -D`. It represents a physical OR virtual Ethernet card/plug in the side of your computer. 
+    Capture ANYTHING in this case.
+    On any interface (`--interface any`, or `-i any`), capture 20 packets (`-c20`), NOT looking up their IP addresses (`-n`), nor ports (`-nn`).
+    See section "2. Capturing packets with tcpdump" of this tutorial: *****+https://opensource.com/article/18/10/introduction-tcpdump
+    `man tcpdump` says this too:
+            -n      Don't convert addresses (i.e., host addresses, port numbers, etc.) to names.
+sudo tcpdump -i any -c20 -nn udp
+    Filter by **protocol** (`icmp`, `udp`, `tcp`, etc).
+    Same as above, but capture ONLY UDP packets! (`udp`).
+    See "4. Filtering packets" --> "Protocol", here: https://opensource.com/article/18/10/introduction-tcpdump
+    For more protocols, see this blog post under "Protocol filtering": https://blog.wains.be/2007/2007-10-01-tcpdump-advanced-filters/
+        `arp`, `ip`, `tcp`, `udp`, `icmp`
+    This cheat sheet shows more protocols still!: https://packetlife.net/media/library/12/tcpdump.pdf
+sudo tcpdump -i any -c20 -nn host 127.0.0.1
+    <========= FILTER BY `host`, WHICH IS THE IP OF THE SOURCE (`src`) OR DESTINATION (`dst`)! =========
+    Filter by **host** (IP address). "Host" specifies an IP address which can be a "source (`src`) OR destination (`dst`)!
+    On any interface (`-i any`), capture 20 packets (`-c20`), NOT looking up their IP addresses (`-n`) nor ports (`-nn`), and ONLY filtering on packets _to and from_ **host** (IP address) 127.0.0.1 (`host 127.0.0.1`), which is the local loopback interface for interprocess communication within the same computer.
+    See "4. Filtering packets" --> "Host", here: https://opensource.com/article/18/10/introduction-tcpdump
+    See also: tcpdump cheat sheet: https://packetlife.net/media/library/12/tcpdump.pdf
+time sudo tcpdump host 192.168.1.1
+    <========== HOST MATCHES AN IP AS DESINATION _OR_ SOURCE! ===========
+    Match any traffic involving 192.168.1.1 as destination OR source!
+    From: https://blog.wains.be/2007/2007-10-01-tcpdump-advanced-filters/
+sudo tcpdump -i any -c20 -nn port 80
+    Filter by **port** (ex: 22 for SSH; port numbers are 16-bits and hence range from 0 to 65535). See a list of common port numbers here: https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
+    On any interface (`-i any`), capture 20 packets (`-c20`), NOT looking up their IP addresses (`-n`) nor ports (`-nn`), and ONLY filtering on packets _to and from_ **port** 80 (`port 80`).
+    See "4. Filtering packets" --> "Port", here: https://opensource.com/article/18/10/introduction-tcpdump
+sudo tcpdump -i any -c20 -nn src 192.168.122.98
+    Filter by **source IP address/hostname**.
+    On any interface (`-i any`), capture 20 packets (`-c20`), NOT looking up their IP addresses (`-n`) nor ports (`-nn`), and ONLY filtering on packets _from_ source IP address 192.168.122.98 (`src 192.168.122.98`).
+    See "4. Filtering packets" --> "Source IP/hostname", here: https://opensource.com/article/18/10/introduction-tcpdump
+sudo tcpdump -i any -c20 -nn dst 192.168.122.98
+    Filter by **destination IP address/hostname**.
+    Same as above, except filter only on packets _to_ destination IP 192.168.122.98 (`dst 192.168.122.98`).
+    See "4. Filtering packets" --> "Source IP/hostname", here: https://opensource.com/article/18/10/introduction-tcpdump
+---
+Complex expressions allow `and` and `or`. Use parenthesis, with the entire argument in quotation marks, for more-complex examples. Ex: 
+sudo tcpdump -i any -c20 -nn "port 80 and (src 192.168.122.98 or src 54.204.39.132)"
+    On any interface (`-i any`), capture 20 packets (`-c20`), NOT looking up their IP addresses (`-n`) nor ports (`-nn`), and ONLY filtering on packets _to and from_ port 80 (`port 80`) and from source IP 192.168.122.98 OR from source 54.205.39.132 ("and (src 192.168.122.98 or src 54.204.39.132)").
+    See "4. Filtering packets" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+    See also this cheat sheet: https://packetlife.net/media/library/12/tcpdump.pdf
+        It shows you can use: `! && ||` or `not and or`:
+            `!` or `not`, `&&` or `and`, and `||` or `or`
+---
+sudo tcpdump -i any -c20 -nn src 192.168.122.98 and port 80
+    Filter by **source IP address/hostname** AND **port**.
+    On any interface (`-i any`), capture 20 packets (`-c20`), NOT looking up their IP addresses (`-n`) nor ports (`-nn`), and ONLY filtering on packets _from_ source IP address 192.168.122.98 (`src 192.168.122.98`) _and_ on port 80 (`and port 80`).
+    See "4. Filtering packets" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+sudo tcpdump -i lo -c20 -nn "src 127.0.0.1 and port 50000"
+    <========== GREAT DEMO! ==========
+    Filter by **interface** AND **source IP address/hostname** AND **port**.
+    On the local loopback interface (`-i lo`), capture 20 packets (`-c20`), NOT looking up their IP addresses (`-n`) nor ports (`-nn`), and ONLY filtering on packets _from_ source IP address 127.0.0.1 (the loopback address) AND on port 50000 (`and port 50000`).
+    See "4. Filtering packets" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+sudo tcpdump -i lo -c20 -nn "src 127.0.0.1 and (port 50000 or port 50001)"
+    <========== EVEN BETTER DEMO! =========
+    Same as above, but on port 50000 OR port 50001.
+    See "4. Filtering packets" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+time sudo tcpdump -i lo -c20 -nn "(src 127.0.0.1 and port 50000) and (dst 127.0.0.1 and port 50001)"
+    <========== BEST DEMO SO FAR =============
+    Filter by **interface**, **source IP and port**, and **destination IP and port**.
+    On the local loopback interface (`-i lo`), capture 20 packets (`-c20`), NOT looking up their IP addresses (`-n`) nor ports (`-nn`), and ONLY filtering on packets _from_ source IP address and port 127.0.0.1:50000 which are _to_ destination IP address and port 127.0.0.1:50001. The `time` part times the process, to give you a feel for the packet **rate**, since you know the count is 20 packets. So, rate = 20/time = packets/sec.
+    See "4. Filtering packets" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+time sudo tcpdump -i lo -c20 -nn -A "(src 127.0.0.1 and port 50000) and (dst 127.0.0.1 and port 50001)"
+    <=========== ASCII OUTPUT ==========
+    Same as above, but add `-A` to view the packet content ("minus its link level header") in ASCII output.
+    See "5. Checking packet content" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+time sudo tcpdump -i lo -c20 -nn -X "(src 127.0.0.1 and port 50000) and (dst 127.0.0.1 and port 50001)"
+    <=========== HEX + ASCII OUTPUT ==========
+    Same as above, but add `-X` to view the packet content ("minus its link level header") in hex + ASCII output.
+    See "5. Checking packet content" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+time sudo tcpdump -i lo -c20 -nn -X -w output.pcap "(src 127.0.0.1 and port 50000) and (dst 127.0.0.1 and port 50001)"
+    <=========== SAVE TO A .PCAP BINARY FILE ========
+    Same as above, but add `-w output.pcap` to write the captured packet info. to a "packet capture" .pcap file named "output.pcap".
+    See "6. Saving captures to a file" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+-v
+    Add `-v` or `-vv` for verbose or extra verbose, respectively, output.
+    See "6. Saving captures to a file" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+time tcpdump -i lo -c20 -nn -X -r output.pcap "(src 127.0.0.1 and port 50000) and (dst 127.0.0.1 and port 50001)"
+    <=========== READ FROM A .PCAP BINARY FILE ========
+    Use `-r output.pcap` to read from the "output.pcap" binary "packet capture" file we just saved above, using these specified filters. 
+    Note that `sudo` is NOT required in this case because we are reading from a user file rather than from the system network interfaces.
+    NB: You can use filtering when reading from saved files the same as when reading directly from your network interfaces. 
+    See "6. Saving captures to a file" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
+time sudo tcpdump -i lo -c10 -nn -X "udp and (src 127.0.0.1 and port 50000) and (dst 127.0.0.1 and port 50001)"
+    <================== MY FINAL ANSWER ===================
+    On the local loopback interface (`-i lo`), capture 10 packets (`-c20`), NOT looking up their IP addresses (`-n`) nor ports (`-nn`), also printing the packet content in hex + ASCII (`-X`) (note: use lowercase `-x` for hex only), and ONLY filtering on udp packets (`udp`) which are _from_ source IP address and port 127.0.0.1:50000 and _to_ destination IP address and port 127.0.0.1:50001.
+    See this **excellent** introductory tutorial to tcpdump to get started yourself: https://opensource.com/article/18/10/introduction-tcpdump
+time sudo tcpdump -i lo -c10 -nn -X "udp and host 127.0.0.1 and (port 50000 or port 50001)"
+    <============ EVEN SHORTER AND EASIER THAN ABOVE--SPECIFY HOST IP (SENDER OR RECEIVER) IN ONE =========
+    Monitor traffic on the `lo` loopback interface (`-i lo`), capturing 10 packets (`-c10`), NOT looking up the packet IP addresses (`-n`) nor ports (`-nn`), displaying packet content in hex + ASCII (`-X`), for udp protocol packets (`udp`) with IP address 127.0.0.1 as sender _or_ receiver (`host 127.0.0.1`) and only for packets on port 50000 _or_ port 50001 (`and (port 50000 or port 50001)`).
+    See this cheatsheet for help: *****+https://packetlife.net/media/library/12/tcpdump.pdf
+
 
 ethtool
     (From `man ethtool`): "query or control network driver and hardware settings". An alternative of some sort to `tcpdump`. 
