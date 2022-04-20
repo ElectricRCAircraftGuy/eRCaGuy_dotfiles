@@ -3628,9 +3628,10 @@ tcpdump resources:
         1. *****+Tcpdump advanced filters: https://blog.wains.be/2007/2007-10-01-tcpdump-advanced-filters/
         1. *****++Tcpdump cheat sheet: https://packetlife.net/media/library/12/tcpdump.pdf
 
-tcpdump
+sudo tcpdump
+    Appears to listen to *any* ethernet socket traffic.
     Use this command to read and print UDP and TCP Ethernet packets! This can be very useful to help you see if certain packets or messages are even coming in to your system!
-    Read also about "pcap" and "wireshark" maybe and how pcap or whatever can help you interpret and parse (I think) incoming packets!
+    TODO: read also about "pcap" and "Wireshark" and how some sort of .pcap ("packet capture") definition files or something can help you interpret (I think) and parse incoming packets (in Wireshark, I think)! In other words, I'd like to be able to see binary values in Ethernet packets properly interpreted, automatically, as I look at incoming and outgoing packets in tcpdump or Wireshark.
 sudo tcpdump --list-interfaces
 sudo tcpdump -D
     <=========== LIST ALL INTERFACES AND THEIR STATUS! ==========
