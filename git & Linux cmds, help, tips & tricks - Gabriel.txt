@@ -1140,7 +1140,10 @@ make <package>-rebuild && make
 TARGET="some-target"
 make "target-${TARGET}"  # set the build target
 cat .config  # prove the target is set
-rm -rf \
+# Note: for info on the `time` command here, see my answer: 
+# https://unix.stackexchange.com/a/699728/114401
+time ( \
+    rm -rf \
     output/$TARGET/build/my_module_1* \
     output/$TARGET/build/my_module_2* \
     output/$TARGET/build/my_module_3* \
@@ -1150,7 +1153,8 @@ rm -rf \
     output/$TARGET/images/image.swu && \
     time make br-my-module-1-reconfigure && \
     time make br-host-my-module-1-reconfigure && \
-    time make; gs_alert
+    time make
+); gs_alert
 ```
 - The `time make br-my-module-1-reconfigure` cmd above builds "my_module_1" for the target (embedded Linux board).
 - The `time make br-host-my-module-1-reconfigure` cmd above builds "my_module_1", including its unit tests, for the host (the Linux build computer).
@@ -1159,6 +1163,8 @@ rm -rf \
     ```bash
     time output/${TARGET}/build/host-my_module_1-custom/build/test/__test_my_module_1
     ```
+- `br-` vs `brna-`; building remotely withOUT internet: notice the `br-` part above. This stands for "buildroot". Some customized build systems may build remotely with secure authentication when you choose the `br-<package>` package name to build, and build **locally** and withOUT authentication if you choose the `brna-<package>` instead! In this case, `brna-` stands for "BuildRoot No Authentication". 
+    - Using `brna-` can be 30% faster and allow you to build while on-the-go and traveling, even withOUT internet, which is great!
 
 
 ====================================================================================================
