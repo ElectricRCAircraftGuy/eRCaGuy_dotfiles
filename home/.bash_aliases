@@ -15,6 +15,9 @@
 # ALL my custom aliases AND functions AND executable scripts, type `gs_` then press Tab Tab
 # (Tab two times).
 
+RETURN_CODE_SUCCESS=0
+RETURN_CODE_ERROR=1
+
 # Get the path to this file and then also to the eRCaGuy_dotfiles repo root dir.
 # See my ans: https://stackoverflow.com/a/60157372/4561887
 FULL_PATH_TO_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
@@ -482,3 +485,78 @@ gs_fzf_git_and_linux_cmds_doc() {
 # 1. https://cloud.google.com/sdk/gcloud/reference/auth/login#--launch-browser
 # 1. `gcloud auth login --help`
 alias gs_gcloud_get_new_credentials="gcloud auth login --no-launch-browser"
+
+# Take the sha256sum of all files in an entire dir, and then sha256sum that
+# entire output to obtain a _single_ sha256sum which represents the _entire_
+# dir.
+# See:
+# 1. [my answer] https://stackoverflow.com/a/72070772/4561887
+sha256sum_dir() {
+    return_code="$RETURN_CODE_SUCCESS"
+    if [ "$#" -eq 0 ]; then
+        echo "ERROR: too few arguments."
+        return_code="$RETURN_CODE_ERROR"
+    fi
+    # Print help string if requested
+    if [ "$#" -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        # Help string
+        echo "Obtain a sha256sum of all files in a directory."
+        echo "Usage:  ${FUNCNAME[0]} [-h|--help] <dir>"
+        return "$return_code"
+    fi
+
+    starting_dir="$(pwd)"
+    target_dir="$1"
+    cd "$target_dir"
+
+    # See my answer: https://stackoverflow.com/a/72070772/4561887
+    filenames="$(find . -not -type d | sort -V)"
+    IFS=$'\n' read -r -d '' -a filenames_array <<< "$filenames"
+    time all_hashes_str="$(sha256sum "${filenames_array[@]}")"
+    cd "$starting_dir"
+
+    echo ""
+    echo "Note: you may now call:"
+    echo "1. 'printf \"%s\n\" \"\$all_hashes_str\"' to view the individual" \
+         "hashes of each file in the dir. Or:"
+    echo "2. 'printf \"%s\" \"\$all_hashes_str\" | sha256sum' to see that" \
+         "the hash of that output is what we are using as the final hash" \
+         "for the entire dir."
+    echo ""
+    printf "%s" "$all_hashes_str" | sha256sum | awk '{ print $1 }'
+    return "$?"
+}
+# Note: I prefix this with my initials to find my custom functions easier
+alias gs_sha256sum_dir="sha256sum_dir"
+
+# Compare dir1 against dir2 to see if they are equal or if they differ.
+# See:
+# 1. How to `diff` two dirs: https://stackoverflow.com/a/16404554/4561887
+diff_dir() {
+    return_code="$RETURN_CODE_SUCCESS"
+    if [ "$#" -eq 0 ]; then
+        echo "ERROR: too few arguments."
+        return_code="$RETURN_CODE_ERROR"
+    fi
+    # Print help string if requested
+    if [ "$#" -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        echo "Compare (diff) two directories to see if dir1 contains the same" \
+             "content as dir2."
+        echo "NB: the output will be **empty** if both directories match!"
+        echo "Usage:  ${FUNCNAME[0]} [-h|--help] <dir1> <dir2>"
+        return "$return_code"
+    fi
+
+    dir1="$1"
+    dir2="$2"
+    time diff -r -q "$dir1" "$dir2"
+    return_code="$?"
+    if [ "$return_code" -eq 0 ]; then
+        echo -e "\nDirectories match!"
+    fi
+
+    # echo "$return_code"
+    return "$return_code"
+}
+# Note: I prefix this with my initials to find my custom functions easier
+alias gs_diff_dir="diff_dir"
