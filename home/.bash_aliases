@@ -490,7 +490,9 @@ alias gs_gcloud_get_new_credentials="gcloud auth login --no-launch-browser"
 # entire output to obtain a _single_ sha256sum which represents the _entire_
 # dir.
 # See:
-# 1. [my answer] https://stackoverflow.com/a/72070772/4561887
+# 1. my answer with this function: https://stackoverflow.com/a/72073333/4561887
+# 1. my answer about using `find` to find all non-directory files:
+#    https://stackoverflow.com/a/72070772/4561887
 sha256sum_dir() {
     return_code="$RETURN_CODE_SUCCESS"
     if [ "$#" -eq 0 ]; then
@@ -531,6 +533,7 @@ alias gs_sha256sum_dir="sha256sum_dir"
 
 # Compare dir1 against dir2 to see if they are equal or if they differ.
 # See:
+# 1. my answer with this function: https://stackoverflow.com/a/72073333/4561887
 # 1. How to `diff` two dirs: https://stackoverflow.com/a/16404554/4561887
 diff_dir() {
     return_code="$RETURN_CODE_SUCCESS"
