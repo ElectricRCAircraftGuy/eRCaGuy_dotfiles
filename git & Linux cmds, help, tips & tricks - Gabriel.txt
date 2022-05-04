@@ -3739,6 +3739,7 @@ time sudo tcpdump -i lo -c10 -nn -X "udp and host 127.0.0.1 and (port 50000 or p
     <============ EVEN SHORTER AND EASIER THAN ABOVE--SPECIFY HOST IP (SENDER OR RECEIVER) IN ONE =========
     Monitor traffic on the `lo` loopback interface (`-i lo`), capturing 10 packets (`-c10`), NOT looking up the packet IP addresses (`-n`) nor ports (`-nn`), displaying packet content in hex + ASCII (`-X`), for udp protocol packets (`udp`) with IP address 127.0.0.1 as sender _or_ receiver (`host 127.0.0.1`) and only for packets on port 50000 _or_ port 50001 (`and (port 50000 or port 50001)`).
     See this cheatsheet for help: *****+https://packetlife.net/media/library/12/tcpdump.pdf
+    And: https://opensource.com/article/18/10/introduction-tcpdump
 
 
 ethtool
