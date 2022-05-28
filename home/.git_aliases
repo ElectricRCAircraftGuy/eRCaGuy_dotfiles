@@ -125,10 +125,16 @@ gs_git_log_get_last_commit_date() {
 gs_git_commit_r() {
     # help menu
     if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        DATE="$(date +"%a %b %-d %H:%M:%S %Y %z")"
         echo "Git commit range: run 'git commit' with a random time and date stamp."
         echo "Usage:  gs_git_commit_r [<min_minutes> <max_minutes>]"
         echo "Run 'git log --pretty=fuller' to see 'git log' with both **author** AND" \
              "**commit** dates!"
+        echo "---------"
+        echo 'DATE="$(date +"%a %b %-d %H:%M:%S %Y %z")'
+        echo "DATE=\"$DATE\""
+        echo 'GIT_COMMITTER_DATE="$DATE" git commit --date "$DATE"'
+
         return 0
     fi
 
@@ -174,6 +180,7 @@ gs_git_commit_r() {
     echo "  ==="
     echo "  random_seconds    = $random_seconds"
     echo "  random_minutes    = $random_minutes"
+    echo ""
     echo "  last_commit_date  = $last_commit_date"
     echo "  new_date          = $new_date"
     echo ""

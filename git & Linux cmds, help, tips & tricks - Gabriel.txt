@@ -80,7 +80,7 @@ Or, otherwise stated:
 "You are making progress if each mistake is a new one."
     - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
 
-"Programming isn't what you know; it's what you can figure out."
+"Programming isn't what you know; it's what you can figure out." <=====
     - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2002.5.5" plugin installed
 
 "Cost of copying code from Stack Overflow: $1. Cost of knowing which code to copy from Stack Overflow: $100k~$300k/year."
@@ -3221,7 +3221,8 @@ rg -L --no-ignore 'some regular expression' -g "*.c" 2>/dev/null
 rg -L --no-ignore --hidden 'some regular expression' -g "*.c" 2>/dev/null
     <=================== BEST! ===================
     Same as above, but also search hidden directories--ie: dirs which begin with a dot (.)!
-
+    [keywords: rg --hidden; rg --no-ignore]
+`
 == Comparison of `grep` to `rg` (ripgrep): ==
 [grep to ripgrep, grep to rg command comparison]
 grep -Rn regex_search some/path/to/search/ = search for `regex_search`, 'R'ecursively (following symlinks), only in path "some/path/to/search/", while showing line 'n'umbers where a match is found
@@ -3546,16 +3547,25 @@ nc -h
 netcat -h
     netcat help menu
 nc -u -l 127.0.0.1 -p 30000
+    <======= VERY USEFUL NETCAT UDP SERVER LISTENING FOR DATA FROM CLIENT =========
     Set up a UDP (`-u`) listener (`-l`) to the loopback interface (IP `127.0.0.1`, AKA: LOCALHOST) on port (`-p`) 30000. 
     Note: I arbitrarily chose port 30000. 
     For a list of common TCP and UDP ports, see Wikipedia here: https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers.
 nc -u 127.0.0.1 30000
+    <======= VERY USEFUL NETCAT UDP CLIENT SENDING TO SERVER =========
     Set up a UDP (`-u`) sender (the default, apparently) to the loopback interface (IP `127.0.0.1`, AKA: LOCALHOST) on port (`-p`) 30000. 
     Now, to send char data, just start typing, then press Enter! So long as you have a listener already open in another terminal (see just above), you'll see the output you send magically show up in the listener's terminal!
-printf '%s' 'my command msg' | timeout 0.2 nc 192.168.0.1 9999 
-    Send the "my command msg" string via netcat to IP 192.168.0.1 on PORT 9999 via TCP over Ethernet with a timeout of 0.2 sec. 
 exit
     Type this to exit any open netcat session you are in!
+nc -u 127.0.0.1 30000 < filename.bin
+    <======= SEND A BINARY FILE OVER UDP VIA NETCAT! ========
+    Send binary file `filename.bin` over UDP to IP address 127.0.0.1 on port 30000. 
+    Source: `man netcat` and search for `nc -N host.example.com 1234 < filename.in`, which is where I first learned this format to send a file over netcat!
+    NB: apparently this can also be done over UDP via raw bash commands too, withOUT netcat! See: https://linux-tips.com/t/sending-binary-data-to-a-tcp-or-udp-connection-in-bash/250
+        Ex: `dd if=binary.dat bs=160 count=1 > /dev/udp/192.168.2.5/9000`
+        > Please note that, there is no `/dev/tcp` or `/dev/udp` folder exists in the system, this redirection mechanism is a feature of the bash shell itself.
+printf '%s' 'my command msg' | timeout 0.2 nc 192.168.0.1 9999 
+    Send the "my command msg" string via netcat to IP 192.168.0.1 on PORT 9999 via TCP over Ethernet with a timeout of 0.2 sec. 
 ---------
 EXERCISE:
 ---------
@@ -3576,7 +3586,7 @@ GOING FURTHER:
     ...
 
 Example of power supply control via string commands over Ethernet TCP using netcat:
-[netcat power supply]
+[netcat power supply; power cycle; power cycling; power on; power off]
 - This is similar to Serial UART-controlled devices, except the command and response strings are simply over Ethernet (either UDP or TCP) instead of over serial.
 - Example Device: Teledyne LeCroy T3PS3000: https://www.digikey.com/en/products/detail/teledyne-lecroy/T3PS3000/9598577
     - For help, contact:
