@@ -73,6 +73,9 @@ EXAMPLES:
         - inputpdf1--flyer.pdf
         - inputpdf2--flyer.pdf
         - inputpdf3--flyer.pdf
+
+Source Code:
+https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/make_flyer.sh
 "
 
 print_help() {
