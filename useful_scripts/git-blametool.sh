@@ -152,7 +152,7 @@ parse_args() {
     # https://stackoverflow.com/a/14203146/4561887.
 
     if [ $# -eq 0 ]; then
-        echo "No arguments supplied"
+        echo "No arguments supplied. Printing help menu:"
         print_help
         exit $RETURN_CODE_ERROR
     fi
