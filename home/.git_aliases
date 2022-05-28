@@ -123,6 +123,9 @@ gs_git_log_get_last_commit_date() {
 # 1. How can one change the timestamp of an old commit in Git?:
 #    https://stackoverflow.com/a/9701130/4561887
 gs_git_commit_r() {
+    DEFAULT_MIN_MINUTES="2"
+    DEFAULT_MAX_MINUTES="20"
+
     # help menu
     if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
         DATE="$(date +"%a %b %-d %H:%M:%S %Y %z")"
@@ -131,9 +134,16 @@ gs_git_commit_r() {
         echo "Run 'git log --pretty=fuller' to see 'git log' with both **author** AND" \
              "**commit** dates!"
         echo "---------"
+        echo "DEFAULT_MIN_MINUTES = $DEFAULT_MIN_MINUTES"
+        echo "DEFAULT_MAX_MINUTES = $DEFAULT_MAX_MINUTES"
+        echo "---------"
         echo 'DATE="$(date +"%a %b %-d %H:%M:%S %Y %z")'
+        echo "---"
         echo "DATE=\"$DATE\""
         echo 'GIT_COMMITTER_DATE="$DATE" git commit --date "$DATE"'
+        echo "---"
+        echo "last_date=\"$last_date\""
+        echo 'GIT_COMMITTER_DATE="$last_date" git commit --date "$last_date"'
 
         return 0
     fi
@@ -141,8 +151,8 @@ gs_git_commit_r() {
     # 'gs_git_commit'
     if [ $# -eq 0 ]; then
         # set defaults
-        min_minutes="2"
-        max_minutes="12"
+        min_minutes="$DEFAULT_MIN_MINUTES"
+        max_minutes="$DEFAULT_MAX_MINUTES"
     elif [ $# -eq 1 ]; then
         echo "ERROR: incorrect number of arguments (you must pass 0 or 2 args; see '--help' menu)."
         return 1
@@ -193,6 +203,7 @@ gs_git_commit_r() {
     # 1. How can one change the timestamp of an old commit in Git?:
     #    https://stackoverflow.com/a/9701130/4561887
     GIT_COMMITTER_DATE="$new_date" git commit --date "$new_date"
+    last_date="$new_date"
 }
 alias git_commit_r="gs_git_commit_r"
 alias gcr="gs_git_commit_r"
