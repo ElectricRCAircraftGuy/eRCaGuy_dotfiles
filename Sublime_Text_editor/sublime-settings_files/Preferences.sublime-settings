@@ -20,7 +20,8 @@
 
     "ignored_packages":
     [
-        "Vintage"
+        "Tabright",
+        "Vintage",
     ],
 
     // VERTICAL RULER COLUMNS
@@ -42,13 +43,13 @@
     // modern displays. However, 120 is common too.
     "rulers":
     [
-        // 72,
         // 50,
-        100,
+        // 72,
         // When writing Stack Overflow answers, temporarily shift this "80" line up to be first so
         // Alt + Q will wrap at 80 chars to prevent the horizontal scroll bar from showing up on
         // your answer.
         80,
+        100,
         120,
     ],
 
@@ -93,20 +94,32 @@
     [
         // "added_word1",
         // "added_word2",
-        "https",
-        "www",
-        "github",
-        "accessor",
-        "Arduino",
         "abided",
+        "accessor",
+        "accuracies",
+        "Arduino",
         "clickable",
-        "screenshots"
+        "deserialization",
+        "endianness",
+        "executables",
+        "github",
+        "https",
+        "microcontroller",
+        "microcontrollers",
+        "mutex",
+        "mutexes",
+        "runnable",
+        "screenshots",
+        "typedef",
+        "underflows",
+        "www",
     ],
     // Custom words to ignore and NOT spell-check:
     "ignored_words":
     [
         // "ignored_word1",
         // "ignored_word2",
+        "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
     ],
 
     // "Smooth scrolling" speed. (0 is OFF). "Smooth scrolling" refers to the scrolling
@@ -117,4 +130,6 @@
     // - Set to 0 to disable smooth scrolling. Set to a value between 0 and 1 to
     //   scroll slower, or set to larger than 1 to scroll faster.
     "scroll_speed": 1.0, // Default is 1.0.
+
+    "color_scheme": "Monokai.sublime-color-scheme",
 }
