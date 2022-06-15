@@ -71,7 +71,7 @@ PASSED_IN_ARGS="$@"
 INITIAL_QUERY=""
 RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
 FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY' $PASSED_IN_ARGS" \
-  fzf --bind "change:reload:$RG_PREFIX {q} $PASSED_IN_ARGS || true" \
+  fzf -m --bind "change:reload:$RG_PREFIX {q} $PASSED_IN_ARGS || true" \
       --ansi --disabled --query "$INITIAL_QUERY" \
       --height=50% --layout=reverse
 
