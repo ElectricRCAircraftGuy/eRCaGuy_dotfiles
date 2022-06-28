@@ -4441,7 +4441,7 @@ qpdf --decrypt in.pdf out.pdf
     "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups!
     - Once I do this, I like to rename "out.pdf" to "some useful name [`qpdf --decrypt`ed]" so I can remember right in the name itself how I did this!
 
-[keywords: file password encryption, document password encryption; encrypt decrypt; encryption decryption; document encryption; encrypt document]
+[keywords: file password encryption, document password encryption; encrypt decrypt; encryption decryption; document encryption; encrypt document; encrypt file; document encryption; file encryption]
 gpg -c myfile.txt
     encrypt myfile.txt with a passphrase (symmetric 'c'ipher); a GUI window will pop up, asking you for a password to encrypt the file; enter a password, then it will ask you again; once you enter the password again it will encrypt the file and create a new file called myfile.txt.gpg. You will need to manually delete the old file.
 gpg myfile.txt.gpg
@@ -4562,7 +4562,76 @@ cat "path/to/file.txt" | qrencode -m 4 -o /tmp/qr.png \
 ====================================================================================================
 = PDFs and PDF Manipulation: =
 ====================================================================================================
-[PDFs:, pdf combine, combine pdfs, merge pdfs, make PDFs have searchable text, PDF OCR, PDF Optical Character Recognition, OCR in PDFs, OCR pdfs; split pdfs, extract pages from pdf, extract pgs from pdf; etc.]
+[PDFs:, pdf combine, combine pdfs, merge pdfs, make PDFs have searchable text, PDF OCR, PDF Optical Character Recognition, OCR in PDFs, OCR pdfs; split pdfs, extract pages from pdf, extract pgs from pdf; convert image to pdf]
+
+
+FULL DEMO:
+Convert a bunch of images into PDFs, then those PDFs into 1 combined PDF, then resize all pages to be "letter" (8.5 x 11 in) size, then make the whole thing searchable. This is how I converted all of my college transcripts & diplomas into a single, searchable PDF, for instance:
+1. Optionally, manually create a .md markdown table of contents table at this point.
+   Example contents:
+   **table_of_contents.md:**
+    ```markdown
+    # Name of this document
+
+    | Page  | Document              |
+    | ----  | --------              |
+    | 1     | Table of Contents     |
+    | 2     | Image 1               |
+    | 3     | Image 2               |
+    | 4-5   | Some other pdf 1      |
+    | 6     | Some other pdf 2      |
+    ```
+    Then, open up the .md file in Chrome using the "Markdown Viewer" app (https://chrome.google.com/webstore/detail/markdown-viewer/ckkdlimhmcjmikdlpkmbgfkaikojcbjk), and use it to convert the markdown file into a PDF by printing the output in Chrome to a PDF!
+2. Convert all of the images to pdfs, combine them, make it searchable, etc.
+    ```bash
+    # 0. Convert any necessary images (ex: jpg or png, etc.) to PDF
+    #    See `img2pdf`: https://stackoverflow.com/a/8955457/4561887
+    img2pdf "img1.jpg" -o "img1.pdf"
+    img2pdf "img2.jpg" -o "img2.pdf"
+
+    # OR, a hacky work-around that works right now in pdf2searchablepdf version
+    # 0.5.0:
+    # See my issue/comment: 
+    # https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/issues/23
+    mkdir -p temp \
+        && cp "img1.jpg" temp \
+        && pdf2searchablepdf temp \
+        && mv "temp_searchable.pdf" "img1.pdf"
+    mkdir -p temp \
+        && cp "img2.jpg" temp \
+        && pdf2searchablepdf temp \
+        && mv "temp_searchable.pdf" "img2.pdf"
+    # then manually delete the "temp" dir when done
+
+    # 1. Generate the combined pdf from all of your pdfs
+    #    See `pdfunite`: https://stackoverflow.com/a/11280219/4561887
+    pdfunite \
+    table_of_contents.pdf \
+    img1.pdf \
+    img2.pdf \
+    'some other PDF1.pdf' \
+    'some other PDF2.pdf' \
+    combined.pdf
+
+    # 2. resize all pages to "letter" (8.5 x 11 in) size
+    # See `pdfjam`: https://superuser.com/a/1432848/425838
+    pdfjam --outfile combined_resized.pdf --paper letter "combined.pdf"
+
+    # 3. Make the combined and resized PDF searchable
+    # See my `pdf2searchablepdf` repo: 
+    # https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF
+    pdf2searchablepdf combined_resized.pdf
+
+    # 4. compress the PDF to be smaller
+    # See my ans: https://askubuntu.com/a/1303196/327339
+    gs -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -dNOPAUSE -dBATCH -sOutputFile=combined_resized_searchable_1-large.pdf  combined_resized_searchable.pdf
+    gs -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -dNOPAUSE -dBATCH -sOutputFile=combined_resized_searchable_2-medium.pdf combined_resized_searchable.pdf
+    gs -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -dNOPAUSE -dBATCH -sOutputFile=combined_resized_searchable_3-small.pdf  combined_resized_searchable.pdf
+    # OR:
+    ps2pdf -dPDFSETTINGS=/printer combined_resized_searchable.pdf combined_resized_searchable_1-large.pdf
+    ps2pdf -dPDFSETTINGS=/ebook   combined_resized_searchable.pdf combined_resized_searchable_2-medium.pdf
+    ps2pdf -dPDFSETTINGS=/screen  combined_resized_searchable.pdf combined_resized_searchable_3-small.pdf
+    ```
 
 == PDF to images: ==
 
@@ -4585,7 +4654,8 @@ mkdir -p images && pdftoppm -jpeg -r 1200 mypdf.pdf images/pg
 == images to PDF: ==
 
 See:
-1. *****[my answer] https://askubuntu.com/questions/303849/create-a-single-pdf-from-multiple-text-images-or-pdf-files/1385947#1385947; includes:
+1. *****[my answer] https://askubuntu.com/a/1385947/327339
+   It includes:
     1. images to pdf
     1. text to pdf
     1. pdf to single pdf
@@ -4594,7 +4664,19 @@ See:
     1. https://averagelinuxuser.com/convert-images-to-pdf-on-linux/
     1. https://stackoverflow.com/questions/8955425/how-can-i-convert-a-series-of-images-to-a-pdf-from-the-command-line-on-linux
 
-TODO
+sudo apt update && sudo apt install img2pdf
+    Install img2pdf
+img2pdf img1.png -o out.pdf
+    <=============
+    Convert img1.png to out.pdf. 
+    See: https://stackoverflow.com/a/8955457/4561887
+img2pdf img1.png img2.jpg -o out.pdf
+    <=============
+    Convert img1.png and img2.jpg to out.pdf. 
+    See: https://stackoverflow.com/a/8955457/4561887
+
+See also some of my hacky work-arounds here: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/issues/23
+
 
 == text to pdf: ==
 
@@ -4608,7 +4690,8 @@ enscript -p file.ps file.txt && ps2pdf file.ps file.pdf
 == Combine PDFs: ==
 
 pdfunite in1.pdf in2.pdf in3.pdf out.pdf
-    Combine multiple PDFs into one! CAUTION: the last pdf argument MUST BE a new pdf name, such as out.pdf, or else you'll be accidentally overwriting an input, ruining it! Source for this cmd: see: https://stackoverflow.com/questions/2507766/merge-convert-multiple-pdf-files-into-one-pdf/11280219#11280219
+    Combine multiple PDFs into one! CAUTION: the last pdf argument MUST BE a new pdf name, such as out.pdf, or else you'll be accidentally overwriting an input, ruining it! Source for this cmd: 
+    See: https://stackoverflow.com/a/11280219/4561887
 
 == Make PDFs Searchable/OCR PDFs: ==
 
