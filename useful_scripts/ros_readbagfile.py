@@ -38,6 +38,10 @@ INSTALLATION INSTRUCTIONS:
    Ubuntu user account to cause Ubuntu to automatically add your ~/bin dir to your executable PATH.
 3. Now you can use the command `gs_ros_readbagfile` OR `ros_readbagfile` directly
    anywhere you like.
+4. Note: if your terminal still says it cannot find the command when
+   trying to run it, you may need to ensure `~/bin` is part of your `PATH` variable.
+   See my answer here for details:
+   https://answers.ros.org/question/371583/ros_readbagfile-command-not-found/?answer=403354#post-id-403354
 
 TUTORIAL DEMO:
 For a usage demo, see this ROS tutorial I wrote here: "Reading messages from a bag file":
