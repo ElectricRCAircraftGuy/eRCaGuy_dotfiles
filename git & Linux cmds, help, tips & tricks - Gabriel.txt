@@ -20,6 +20,9 @@ gs_fzf_git_and_linux_cmds_doc
 = Quotes: =
 ====================================================================================================
 
+"Computer Science: solving today's problems, tomorrow."
+    - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2022.6.13a" plugin installed
+
 "Whatever the cause of such strife may be, simply ruminating on the issue — or deliberately engaging in conflict avoidance tactics (i.e. people-pleasing), will do nothing to resolve said contention. The fact of the matter is, confrontation is necessary, and if done properly can dramatically increase the quality of our lives — in addition to that of our relationships."
     - A.J. Deveaux, Why Confrontation is Good, How to properly handle conflict, medium.com (https://medium.com/swlh/why-confrontation-is-good-20aa32a69dd1), 23 May 2019.
     - On confrontation, and how to handle conflicts [Applies to *most* people and situations, NOT all. Some people you *do* need to avoid and not confront, esp. if they are manipulative and/or continually contemptuous towards you, or if they have antisocial personality disorder (ASPD: https://www.webmd.com/mental-health/antisocial-personality-disorder-overview)].
@@ -4165,18 +4168,25 @@ References:
 1. [my ans 1] https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
 1. [my ans 2] https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264 - includes info. on FreeFileSync (FFSync; Free File Sync) too!
 
+1. BASICS:
+
 time rsync -rah --dry-run --info=progress2 --stats source destination
-    <========= MY FAVORITE **DRY-RUN** RSYNC COMMAND ==========
+    <========= MY FAVORITE BASIC **DRY-RUN** RSYNC COMMAND ==========
     My favorite `--dry-run` command; do a **dry run** "archival" copy (ie: including all Linux file/folder permissions) from source to destination. 
     See: [my ans] https://askubuntu.com/a/1275972/327339
 time rsync -rah --dry-run --info=progress2 --stats source/ destination/
     [version WITH trailing slashes! (`/`)] Dry-run copy the **contents of** "source/" dir to be within the **contents of** "destination/" dir, rather than creating a new folder in the destination dir at path "destination/source", as would be done with_out_ the trailing slashes (`/`)!
 time rsync -rah --info=progress2 --stats source destination
+    <================ MY FAVORITE BASIC RSYNC COMMAND =================
     Do an "archival" copy (ie: including all Linux file/folder permissions) from source to destination.
     (Important! Do a dry run first, as shown above, and read the output summary to ensure you're copying what you intend!)
-    My favorite command, AFTER running the `--dry-run` version just above first!; do a **real copy**.  <========= MY FAVORITE RSYNC COMMAND ==========
+    My favorite command, AFTER running the `--dry-run` version just above first!; do a **real copy**.  
     - See my ans: 
       https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
+
+2. ADVANDED:
+
+TODO
 
 
 == CAN Bus and CAN Networking: ==
@@ -4447,6 +4457,38 @@ gpg -c myfile.txt
 gpg myfile.txt.gpg
     decrypt myfile.txt.gpg back into myfile.txt; it will ask you for the password which was originally used to encrypt it!
     - See here for details and where I learned this! https://www.lifewire.com/encrypt-decrypt-password-protect-files-linux-4582604
+
+
+====================================================================================================
+= zip file compression, incl. gzip, tar, xz file and folder compression, etc.: =
+====================================================================================================
+
+References:
+1. *** Proves xz is best: https://www.privex.io/articles/which-compression-algorithm-tool
+1. **** How to use xz: https://www.baeldung.com/linux/xz-compression
+1. ***** great `xz` compress and decompress examples in Linux!: https://www.rootusers.com/13-simple-xz-examples/
+
+TODO: ADD A Q&A ON HOW TO DO THIS TO UNIX & LINUX STACK EXCHANGE!---NOPE! ON PERSONAL WEBSITE INSTEAD!
+
+TODO: improve these descriptions below, test all the commands below, and continue working on documenting the best xz compression commands, below.
+time xz -9 -v -T0 "CFFFP_IMG_20201027_183202_cropped 1 [10 vectors per pixel].3mf"
+    regular replace
+    See: https://www.rootusers.com/13-simple-xz-examples/
+time xz -9e -v -T0 "CFFFP_IMG_20201027_183202_cropped 1 [10 vectors per pixel].3mf"
+    extreme replace
+    See: https://www.rootusers.com/13-simple-xz-examples/
+time xz -9e -v -T0 -k "CFFFP_IMG_20201027_183202_cropped 1 [10 vectors per pixel].3mf"
+    extreme keep
+    See: https://www.rootusers.com/13-simple-xz-examples/
+time xz -9e -v -T0 -c "CFFFP_IMG_20201027_183202_cropped 1 [10 vectors per pixel].3mf" > out.3mf.xz
+    extreme keep and save output in custom output file
+    See: https://www.rootusers.com/13-simple-xz-examples/
+TODO: integrity test
+tar .......... [TODO]
+    See:
+    1. *****https://www.rootusers.com/13-simple-xz-examples/
+    1. *****+ [better article for this **one** `tar` example is all!, since it shows hot to use the `tar --use-compress-program='some_program'` option!] 
+       https://www.baeldung.com/linux/xz-compression
 
 
 ====================================================================================================
