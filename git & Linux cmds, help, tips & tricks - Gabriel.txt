@@ -4161,37 +4161,10 @@ watch -n 1 'head -n 2 log_file.log; tail -n 10 log_file.log'
     Every 1 second, print the first 2 lines of `log_file.log` (which contain log **header** information, for instance), followed by the last 10 lines of the log file. This way you'll see a frozen header at the top of the output, with a constantly-updating stream of new data underneath that as the log file grows!
 
 
-== rsync: ==
-[keywords: copy, copies, copying, copying with progress bar]
-
-References:
-1. [my ans 1] https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
-1. [my ans 2] https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264 - includes info. on FreeFileSync (FFSync; Free File Sync) too!
-
-1. BASICS:
-
-time rsync -rah --dry-run --info=progress2 --stats source destination
-    <========= MY FAVORITE BASIC **DRY-RUN** RSYNC COMMAND ==========
-    My favorite `--dry-run` command; do a **dry run** "archival" copy (ie: including all Linux file/folder permissions) from source to destination. 
-    See: [my ans] https://askubuntu.com/a/1275972/327339
-time rsync -rah --dry-run --info=progress2 --stats source/ destination/
-    [version WITH trailing slashes! (`/`)] Dry-run copy the **contents of** "source/" dir to be within the **contents of** "destination/" dir, rather than creating a new folder in the destination dir at path "destination/source", as would be done with_out_ the trailing slashes (`/`)!
-time rsync -rah --info=progress2 --stats source destination
-    <================ MY FAVORITE BASIC RSYNC COMMAND =================
-    Do an "archival" copy (ie: including all Linux file/folder permissions) from source to destination.
-    (Important! Do a dry run first, as shown above, and read the output summary to ensure you're copying what you intend!)
-    My favorite command, AFTER running the `--dry-run` version just above first!; do a **real copy**.  
-    - See my ans: 
-      https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
-
-2. ADVANDED:
-
-TODO
-
-
 == CAN Bus and CAN Networking: ==
 
 TODO: need to add this information in here so I don't forget it.
+
 
 == USB, serial, devices, etc.: ==
 
@@ -4457,6 +4430,36 @@ gpg -c myfile.txt
 gpg myfile.txt.gpg
     decrypt myfile.txt.gpg back into myfile.txt; it will ask you for the password which was originally used to encrypt it!
     - See here for details and where I learned this! https://www.lifewire.com/encrypt-decrypt-password-protect-files-linux-4582604
+
+
+====================================================================================================
+= rsync: =
+====================================================================================================
+[keywords: copy, copies, copying, copying with progress bar]
+
+References:
+1. [my ans 1] https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
+1. [my ans 2] https://superuser.com/questions/1271882/convert-ntfs-partition-to-ext4-how-to-copy-the-data/1464264#1464264 - includes info. on FreeFileSync (FFSync; Free File Sync) too!
+
+1. BASICS:
+
+time rsync -rah --dry-run --info=progress2 --stats source destination
+    <========= MY FAVORITE BASIC **DRY-RUN** RSYNC COMMAND ==========
+    My favorite `--dry-run` command; do a **dry run** "archival" copy (ie: including all Linux file/folder permissions) from source to destination. 
+    See: [my ans] https://askubuntu.com/a/1275972/327339
+time rsync -rah --dry-run --info=progress2 --stats source/ destination/
+    [version WITH trailing slashes! (`/`)] Dry-run copy the **contents of** "source/" dir to be within the **contents of** "destination/" dir, rather than creating a new folder in the destination dir at path "destination/source", as would be done with_out_ the trailing slashes (`/`)!
+time rsync -rah --info=progress2 --stats source destination
+    <================ MY FAVORITE BASIC RSYNC COMMAND =================
+    Do an "archival" copy (ie: including all Linux file/folder permissions) from source to destination.
+    (Important! Do a dry run first, as shown above, and read the output summary to ensure you're copying what you intend!)
+    My favorite command, AFTER running the `--dry-run` version just above first!; do a **real copy**.  
+    - See my ans: 
+      https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
+
+2. ADVANDED:
+
+TODO
 
 
 ====================================================================================================
