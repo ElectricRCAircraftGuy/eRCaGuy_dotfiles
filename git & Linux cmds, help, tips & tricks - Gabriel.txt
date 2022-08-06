@@ -17,6 +17,37 @@ gs_fzf_git_and_linux_cmds_doc
 
 
 ====================================================================================================
+= Mentorship: =
+====================================================================================================
+[how to be a good mentor]
+
+References:
+1. *****+++ Primary reference: https://hbr.org/2019/08/great-mentors-focus-on-the-whole-person-not-just-their-career
+
+"Great Mentors Focus on the Whole Person, Not Just Their Career"
+    https://hbr.org/2019/08/great-mentors-focus-on-the-whole-person-not-just-their-career
+
+Note: other types of knowledge-sharing and guiding include:
+    - coaching (ex: training in soft skills or job changes)
+    - skill-building (ex: teaching C++, electrical engineering, or controls)
+    - performance feedback (ex: a manager providing work-related performance feedback to someone under them on their team)
+
+> Share your stories. When I meet with a younger person for the first time, I say: “Tell me your story. Start at the beginning and take your time — 20 or 30 minutes. I may ask a few questions, and everything you say will be confidential between us. Then, when you’re finished, I’ll tell you my story if you want me to.” (They always do.) This simple exercise can transform the trajectory of a mentoring relationship because it shows that you’re truly interested in understanding your mentee and his or her journey, not just in dispensing professional advice. It gives you knowledge of the person’s past which enables you to make more probing inquiries over time. When I tell my story, I make sure to describe one or two of the difficult chapters in both my career and personal life, including my marriage. This signals that all aspects of our lives are on the table.
+
+> Ask great questions. Effective mentors develop a storehouse of probing questions on any number of subjects. Examples include:
+>
+> 1. What keeps you up at night?
+> 1. Can you see yourself being stimulated and fulfilled on your current career path for the next five years?
+> 1. What do you do to “reboot” so that the busyness and tech overload in your life does not result in burnout?
+> 1. Who has been most influential in your life?
+> 1. What did you love doing in high school?
+> 1. What would you have done differently in your life if you had the chance?
+> 1. On a scale of 1 to 10, how would you rate your marriage/romantic relationship right now?
+> 1. How was your relationship with your parents?
+> 1. Were you raised in a particular faith or religious tradition?
+
+
+====================================================================================================
 = Quotes: =
 ====================================================================================================
 
