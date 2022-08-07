@@ -3165,6 +3165,15 @@ So, here's how to rewrite the history. See GitHub's instructions here: https://h
 
 
 ====================================================================================================
+= git lfs: =
+====================================================================================================
+
+See my Q&A: How to use git lfs as a basic user: This covers the question: "What is the difference between git lfs fetch, git lfs fetch --all, git lfs pull, and git lfs checkout?": https://stackoverflow.com/a/72610495/4561887
+
+Assuming you have a repo with a MASSIVE set of files managed by `git lfs` (ex: 20 GB), you should configure a cronjob [chron job] to run every night at 2am to pull the latest files, as described here: "eRCaGuy_dotfiles/useful_scripts/cronjobs/README.md".
+
+
+====================================================================================================
 = git submodules: =
 ====================================================================================================
 
@@ -3480,7 +3489,7 @@ rg -L --no-ignore 'some regular expression' -g "*.c" 2>/dev/null
 rg -L --no-ignore --hidden 'some regular expression' -g "*.c" 2>/dev/null
     <=================== BEST! ===================
     Same as above, but also search hidden directories--ie: dirs which begin with a dot (.)!
-    [keywords: rg --hidden; rg --no-ignore]
+    [keywords: rg --hidden; rg --no-ignore; rg hidden; hidden rg]
 `
 == Comparison of `grep` to `rg` (ripgrep): ==
 [grep to ripgrep, grep to rg command comparison]
@@ -3797,6 +3806,11 @@ Equivalent netcat command to send and receive data as above:
     ```
     NB: do NOT use `echo` in place of `printf` above. See my Q&A here for detailed reasons: https://stackoverflow.com/questions/70001189/piping-echo-to-netcat-fails-while-piping-printf-passes
 
+Netcat and socat
+- `socat` is an alternative to netcat (`nc`). See:
+    1. https://unix.stackexchange.com/a/457685/114401
+    1. https://packages.debian.org/stretch/socat
+
 nc
     (From `man nc` or `man netcat`): "The nc (or netcat) utility is used for just about anything under the sun involving TCP, UDP, or UNIX-domain sockets."
 netcat
@@ -3823,6 +3837,19 @@ nc -u 127.0.0.1 30000 < filename.bin
     NB: apparently this can also be done over UDP via raw bash commands too, withOUT netcat! See: https://linux-tips.com/t/sending-binary-data-to-a-tcp-or-udp-connection-in-bash/250
         Ex: `dd if=binary.dat bs=160 count=1 > /dev/udp/192.168.2.5/9000`
         > Please note that, there is no `/dev/tcp` or `/dev/udp` folder exists in the system, this redirection mechanism is a feature of the bash shell itself.
+nc -w 1 -u 127.0.0.1 30000 < filename.bin
+    <======= SEND A BINARY FILE OVER UDP VIA NETCAT! ========
+    Same as above, except also with a timeout ('w'ait period) of 1 second, to return from netcat that amount of time after sending.
+socat udp:127.0.0.1:30000 - < filename.bin
+    <========= SEND A BINARY FILE OVER UDP VIA SOCAT! ==========
+    VERY SIMILAR TO NETCAT ABOVE, except perhaps more-reliable and consistent since apparently there are many netcat implementations but only one socat implementation maybe?
+    See @A.B's comment & links here: https://unix.stackexchange.com/questions/706598/connection-refused-when-i-try-to-send-a-udp-packet-with-netcat-on-an-embedded#comment1337439_706598
+socat -t 0.005 udp:127.0.0.1:30000 - < filename.bin
+    Same as above, except with a **very short timeout** of only 0.005 sec to wait for any incoming message, so as to quickly close the connection so you can then send again.
+socat -t 0 udp:127.0.0.1:30000 - < filename.bin
+    <============ SEND A BINARY FILE OVER UDP VIA SOCAT! =============
+    Same as above, except return **immediately** after sending! Do NOT wait for any response at all! (timeout of zero: `-t 0`)
+
 printf '%s' 'my command msg' | timeout 0.2 nc 192.168.0.1 9999 
     Send the "my command msg" string via netcat to IP 192.168.0.1 on PORT 9999 via TCP over Ethernet with a timeout of 0.2 sec. 
 ---------
@@ -3985,7 +4012,7 @@ time sudo tcpdump -i lo -c20 -nn -A "(src 127.0.0.1 and port 50000) and (dst 127
     See "5. Checking packet content" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
 time sudo tcpdump -i lo -c20 -nn -X "(src 127.0.0.1 and port 50000) and (dst 127.0.0.1 and port 50001)"
     <=========== HEX + ASCII OUTPUT ==========
-    Same as above, but add `-X` to view the packet content ("minus its link level header") in hex + ASCII output.
+    Same as above, but add `-X` to **view the packet content** ("minus its link level header") in hex + ASCII output.
     See "5. Checking packet content" --> "Complex expressions", here: https://opensource.com/article/18/10/introduction-tcpdump
 time sudo tcpdump -i lo -c20 -nn -X -w output.pcap "(src 127.0.0.1 and port 50000) and (dst 127.0.0.1 and port 50001)"
     <=========== SAVE TO A .PCAP BINARY FILE ========
@@ -4037,9 +4064,68 @@ done
 
 
 ====================================================================================================
+= D-Bus, sd-bus, gd-bus, ZeroMQ: =
+====================================================================================================
+[dbus, sdbus, gdbus, zmq, IPC (Inter-Process Communication) mechanisms, systemd]
+
+References:
+1. dbus
+    1. https://en.wikipedia.org/wiki/D-Bus
+    1. *****+ https://www.freedesktop.org/software/systemd/man/index.html - official reference index of all the functions!
+        1. ***** dbus signature types: https://dbus.freedesktop.org/doc/dbus-specification.html#id-1.3.8
+    1. https://0pointer.de/blog/projects/the-biggest-myths.html
+    1. ***** blog by the author, incl. basic source code examples: http://0pointer.net/blog/the-new-sd-bus-api-of-systemd.html
+1. zmq
+    1. https://zeromq.org/
+
+man gdbus
+    view the manual pages
+gdbus --help
+    Oddly enough, this is **not a valid command**! So, it shows the `gdbus help` menu instead, which is exactly what we want :).
+    View the `gdbus` help menu and list of commands.
+gdbus help
+    The **right** way to view the `gdbus` help menu and list of commands. Full output:
+    ```
+    Usage:
+      gdbus COMMAND
+
+    Commands:
+      help         Shows this information
+      introspect   Introspect a remote object
+      monitor      Monitor a remote object
+      call         Invoke a method on a remote object
+      emit         Emit a signal
+      wait         Wait for a bus name to appear
+
+    Use “gdbus COMMAND --help” to get help on each command.
+    ```
+gdbus call --help
+    See the help menu and options for the `gdbus call` command! Output:
+    ```
+    Usage:
+      gdbus call [OPTION…]
+
+    Invoke a method on a remote object.
+
+    Connection Endpoint Options:
+      -y, --system          Connect to the system bus
+      -e, --session         Connect to the session bus
+      -a, --address         Connect to given D-Bus address
+
+    Application Options:
+      -d, --dest            Destination name to invoke method on
+      -o, --object-path     Object path to invoke method on
+      -m, --method          Method and interface name
+      -t, --timeout         Timeout in seconds
+    ```
+
+TODO: ADD AN EXAMPLE GDBUS CALL command!
+
+
+====================================================================================================
 = Linux (General): =
 ====================================================================================================
-[general linux; linux general, linux =, linux: =]
+[general linux cmds; general linux commands; linux general, linux =, linux: =]
 
 Linux Terminal shortcuts: https://www.howtogeek.com/howto/ubuntu/keyboard-shortcuts-for-bash-command-shell-for-ubuntu-debian-suse-redhat-linux-etc/
 Ex:
@@ -4062,6 +4148,12 @@ terminator = *****a terminal program to EASILY allow 4 terminals (2x2) or even 1
 
 
 == ==
+
+ls -d -1 ../some-random-name-*
+    Find and list (`ls`) all directories (`-d`) in one single new-line-delimited column (`-1`) which are one directory up (`../`) and named `some-random-name-*`, where the asterisk (`*`) is a bash shell "glob" character. 
+    This is REALLY USEFUL to integrate into a meson.build file, for instance, when working with Buildroot or some other build system and you need to do a wildcard search or match to find a certain directory, file, files, headers, etc. of interest to bring in to the build system or include somehow!
+    See also Meson's Q&A titled "But I really want to use wildcards!" here: 
+    https://github.com/mesonbuild/meson/blob/master/docs/markdown/FAQ.md#but-i-really-want-to-use-wildcards
 
 uptime
     show how long the computer has been on (since last reboot), how many users are currently logged-in, etc.
@@ -4383,7 +4475,7 @@ watch -n 30 'du -h ~/.cache/bazel | tail -n 1' = watch your bazel build cache (i
 watch -n 30 'sudo du -h ~/.cache/bazel | tail -n 1' = same as above, except with the subcommand, `du`, as root, so it can read *all* items, even those in your cache which may be owned by root
 
 
-[Keywords: continually watch a file grow; ex: a growing log file, by "following" it. This means you load the new contents at the end as it grows; watch growing log file; cat growing log file; continually watch log file; continually watch growing log file; watch growing file; watch file grow; less follow file; tail follow file; follow log file; track log file; tail watch less; tail, watch, and less; tail, watch, & less; tail watch and less; tail watch & less]
+[Keywords: continually watch a file grow; ex: a growing log file, by "following" it. This means you load the new contents at the end as it grows; watch growing log file; cat growing log file; continually watch log file; continually watch growing log file; watch growing file; watch file grow; less follow file; tail follow file; follow log file; track log file (`tail -f my_file.log`); tail watch less; tail, watch, and less; tail, watch, & less; tail watch and less; tail watch & less]
 
 less -N +F path/to/some/growing/log_file.log
     View a file, showing line numbers (`-N`), and follow it to continually watch it grow live ('+F'). 
