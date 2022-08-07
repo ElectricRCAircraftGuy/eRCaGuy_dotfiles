@@ -1075,8 +1075,11 @@ keywords: make:
 
 - a build system to build embedded Linux
 - an alternative to yocto
+- Note: buildroot may use the meson and ninja build systems under-the-hood, or possibly even cmake?
 
 References:
+1. ***** Source code on github: https://github.com/buildroot/buildroot
+    1. ***** List of all packages: https://github.com/buildroot/buildroot/tree/master/package
 1. https://buildroot.org/downloads/manual/manual.html - The Official Buildroot user manual
     1. https://buildroot.org/downloads/manual/manual.html#adding-packages - Chapter 18. Adding new packages to Buildroot
     1. https://buildroot.org/downloads/manual/manual.html#full-rebuild - 8.2. Understanding **when** a full rebuild is necessary
@@ -1200,6 +1203,9 @@ time ( \
 - `br-` vs `brna-` **offline** builds; building remotely withOUT internet: notice the `br-` part above. This stands for "buildroot". Some customized build systems may build remotely with secure authentication when you choose the `br-<package>` package name to build, and build **locally** and withOUT authentication if you choose the `brna-<package>` instead! In this case, `brna-` stands for "BuildRoot No Authentication". 
     - Using `brna-` **offline** builds can be 30% faster and allow you to build while on-the-go and traveling, even withOUT internet, which is great!
 
+TO ADD OR USE A NEW BUILDROOT PACKAGE IN YOUR PACKAGE:
+    See the "CORRECT WAY" description in the "meson" section below!
+
 
 ====================================================================================================
 = yocto: =
@@ -1207,6 +1213,225 @@ time ( \
 
 - a build system to build embedded Linux
 - an alternative to buildroot
+
+
+====================================================================================================
+= make: =
+====================================================================================================
+[make and makefiles make files]
+
+
+====================================================================================================
+= cmake: =
+====================================================================================================
+- Part of GNU Autotools.
+
+See: 
+1. https://opensource.com/article/19/7/introduction-gnu-autotools
+1. https://www.gnu.org/software/automake/faq/autotools-faq.html
+1. Google search for "make autotools": 
+   https://www.google.com/search?q=make+autotools&oq=make+autotools&aqs=chrome..69i57j69i65.3920j0j7&sourceid=chrome&ie=UTF-8
+
+
+====================================================================================================
+= meson: =
+====================================================================================================
+[meson build system and meson.build files; and some Buildroot and make .mk file integration info]
+
+References:
+1. https://mesonbuild.com/
+1. https://mesonbuild.com/Comparisons.html
+1. https://github.com/mesonbuild/meson/blob/master/docs/markdown/FAQ.md#but-i-really-want-to-use-wildcards
+
+Using wildcards in meson search patterns:
+Wildcards are *not* natively supported in meson! If you REALLY need to do a wildcard search for some reason in a meson.build file, here is how. 
+See: https://github.com/mesonbuild/meson/blob/master/docs/markdown/FAQ.md#but-i-really-want-to-use-wildcards
+    1. Create a custom .sh shell script, such as this:
+        "find_some_lib_dir.sh":
+        ```bash
+        #!/usr/bin/env bash
+
+        # Find a directory named "somedir-1234", for instance, one level up, knowing
+        # that the "1234" part changes each build. This is a bash shell script "glob"
+        # pattern.
+
+        ls -d -1 ../somedir-*
+        ```
+    2. In your meson.build file, call `run_command('find_some_lib_dir.sh')` to run the script and capture and use its output, like this:
+        In your module's meson.build file:
+        ```meson
+        # Find the directory of interest; ex: "../somedir-1234"
+        some_lib_directory_list = run_command('find_some_lib_dir.sh')
+        # Assume that directory contains a folder we really need to include as a C++ 
+        # "include" dir. Let's obtain that path and include it. 
+        # Note: the `[0]` part indexes into the first element in this list. If there are
+        # multiple folders matching the pattern in the shell script, only the first one
+        # in the list is obtained in this way.
+        some_lib_directory_name = some_lib_directory_list.stdout().strip().split('\n')[0]
+        some_lib_dep = declare_dependency(
+            include_directories: include_directories(
+                '../' + some_lib_directory_name + '/path/to/include',
+            ),
+        )
+
+        # Now include the above `some_lib_dep` dependency for that library as part of
+        # our total dependency list
+        all_deps = [
+            some_lib_dep,
+            # other meson library dependencies
+            dependency('some_other_lib2'),
+            dependency('some_other_lib3'),
+            dependency('some_other_lib4'),
+        ]
+        ```
+
+Example (THIS IS A HACK!--but it works. See further below for the CORRECT way) for the `json-for-modern-cpp` library in buildroot.
+Here is where that library is in buildroot: https://github.com/buildroot/buildroot/tree/master/package/json-for-modern-cpp:
+
+    find_json_for_modern_cpp_dir.sh
+    ```bash
+    # find the directory, whatever its version number may be attached to that directory name
+    ls -d -1 ../json-for-modern-cpp-*
+    ```
+
+    In your module's meson.build file:
+    ```meson
+    # Find the directory of interest; ex: "../json-for-modern-cpp-3.10.5"
+    json_for_modern_cpp_directory_list = run_command('find_json_for_modern_cpp_dir.sh')
+    json_for_modern_cpp_directory_name = json_for_modern_cpp_directory_list.stdout().strip().split('\n')[0]
+    json_for_modern_cpp_dep = declare_dependency(
+        include_directories: include_directories(
+            # This is a header-only library with the single header located at this path, for example:
+            # "../json-for-modern-cpp-3.10.5/single_include/nlohmann/json.hpp"
+            # See: https://github.com/nlohmann/json/tree/develop/single_include/nlohmann
+            '../' + json_for_modern_cpp_directory_name + '/single_include',
+        ),
+    )
+
+    # Now include the above `json_for_modern_cpp_dep` dependency for that library as part of
+    # our total dependency list
+    all_deps = [
+        json_for_modern_cpp_dep,
+        # other meson library dependencies
+        dependency('some_other_lib2'),
+        dependency('some_other_lib3'),
+        dependency('some_other_lib4'),
+    ]
+    ```
+
+    Now you can include this library in any source or header in this module like this:
+    ```cpp
+    #include <nlohmann/json.hpp>
+    ``` 
+
+    Note: in your module's buildroot "my-module-name.mk" file, you *might* also need to do this:
+    ```make
+    MY_MODULE_NAME_DEPENDENCIES += \
+        some-other-lib1 \
+        some-other-lib2 \
+        json-for-modern-cpp
+
+    HOST_MY_MODULE_NAME_DEPENDENCIES += \
+        host-some-other-lib1 \
+        host-some-other-lib2 \
+        json-for-modern-cpp
+    ```
+
+    Note: the host dependency should actually be `host-json-for-modern-cpp`, but that doesn't work yet in this hack! See below for the proper fix instead!:
+
+
+CORRECT WAY! This is the **correct way** to bring in the json-for-modern-cpp library into your module in Buildroot!
+
+    1. Delete the "find_json_for_modern_cpp_dir.sh" script above. You don't need it.
+    2. Delete all "meson.build" file additions above, and do this instead:
+        ```meson.build
+        # bring in all required libraries as dependencies
+        all_deps = [
+            # NB: this `nlohmann_json` meson.build name can be identified from its public repo's 
+            # meson.build file here: https://github.com/nlohmann/json/blob/develop/meson.build#L1
+            dependency('nlohmann_json')
+            dependency('some_other_lib2'),
+            dependency('some_other_lib3'),
+            dependency('some_other_lib4'),
+        ]
+        ```
+    3. Update this file in the Buildroot repo: https://github.com/buildroot/buildroot/blob/master/package/json-for-modern-cpp/json-for-modern-cpp.mk
+        Add this line to the very bottom: `$(eval $(host-cmake-package))`. Now you have the following, with the last line being what we just added:
+        json-for-modern-cpp.mk: 
+        ```make
+        ################################################################################
+        #
+        # json-for-modern-cpp
+        #
+        ################################################################################
+
+        JSON_FOR_MODERN_CPP_VERSION = 3.10.5
+        JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+        JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
+        JSON_FOR_MODERN_CPP_LICENSE = MIT
+        JSON_FOR_MODERN_CPP_LICENSE_FILES = LICENSE.MIT
+        JSON_FOR_MODERN_CPP_CPE_ID_VENDOR = json-for-modern-cpp_project
+
+        JSON_FOR_MODERN_CPP_INSTALL_STAGING = YES
+        # header only library
+        JSON_FOR_MODERN_CPP_INSTALL_TARGET = NO
+        JSON_FOR_MODERN_CPP_CONF_OPTS = -DJSON_BuildTests=OFF -DJSON_MultipleHeaders=ON
+
+        $(eval $(cmake-package))
+        $(eval $(host-cmake-package))
+        ```
+
+        The `$(eval $(cmake-package))` line is what creates the `json-for-modern-cpp` dependency used by the "my-module-name.mk" Buildroot file above. This is used for the **target embedded Linux board**. 
+        The `$(eval $(host-cmake-package))` line is what creates the `host-json-for-modern-cpp` dependency needed in that Buildroot file for the **host Linux computer** (build machine), so that it can use the json-for-modern-cpp module **in unit tests** on the host build machine!
+
+    4. Update your module's buildroot "my-module-name.mk" file to properly use this newly-available `host-json-for-modern-cpp` library now for the host, instead of **incorrectly** trying to use `json-for-modern-cpp` on the host!:
+        "my-module-name.mk":
+        ```make
+        MY_MODULE_NAME_DEPENDENCIES += \
+            some-other-lib1 \
+            some-other-lib2 \
+            json-for-modern-cpp
+
+        HOST_MY_MODULE_NAME_DEPENDENCIES += \
+            host-some-other-lib1 \
+            host-some-other-lib2 \
+            host-json-for-modern-cpp
+            # This last line just above is now **fixed**!
+        ```
+
+    That's it!
+
+
+Adding dependencies from other meson.build files:
+If you need to add a dependency on a 3rd-party library or something, such as JSON for Modern C++ (https://github.com/nlohmann/json), simply do this:
+    [See the "CORRECT WAY" just above for a full example!]
+    1. Find that project's meson.build file. Ex: https://github.com/nlohmann/json/blob/develop/meson.build
+        Notice the `'nlohmann_json'` project name at the top. Use that in your module's meson.build file:
+        ```meson.build
+        all_deps = [
+            # NB: this `nlohmann_json` meson.build name can be identified from its public repo's 
+            # meson.build file here: https://github.com/nlohmann/json/blob/develop/meson.build#L1
+            dependency('nlohmann_json')
+            dependency('some_other_lib2'),
+            dependency('some_other_lib3'),
+            dependency('some_other_lib4'),
+        ]
+        ```
+    2. Add `$(eval $(host-cmake-package))` to the bottom of the `json-for-modern-cpp.mk` file in Buildroot.
+    3. Use the proper dependencies in your module's Buildroot "my-module-name.mk" file:
+        ```make
+        MY_MODULE_NAME_DEPENDENCIES += \
+            some-other-lib1 \
+            some-other-lib2 \
+            json-for-modern-cpp
+
+        HOST_MY_MODULE_NAME_DEPENDENCIES += \
+            host-some-other-lib1 \
+            host-some-other-lib2 \
+            host-json-for-modern-cpp
+            # This last line just above is now **fixed**!
+        ```
+    Again, see the "CORRECT WAY" above for more details!
 
 
 ====================================================================================================
