@@ -3458,9 +3458,13 @@ So this outputs just "yellowtail", by then excluding anything with "red" in it!:
     $ echo "redhat redwood redbox redding yellowtail" | grep -E -o "(redhat|yellowtail)" | grep -v red
     yellowtail
 
-find -type f | grep -v \.xml | xargs grep --color=always my_regex_search = find only 'f'iles (no directories) which do NOT end in .xml, then search each of those files to see if they contain "my_regex_search" <====== VERY USEFUL! =======
+find -type f | grep -v \.xml | xargs grep --color=always my_regex_search
+    <====== VERY USEFUL! =======
+    find only 'f'iles (no directories) which do NOT end in .xml, then search each of those files to see if they contain "my_regex_search" 
 
-find some/path/ -maxdepth 1 -type d | grep "_messages$" = find only 'd'irectories (`-type d`) in some/path/, only 1 layer deep (`-maxdepth 1`), which have names that end in (`$` indicates a line end) "_messages"
+find some/path/ -maxdepth 1 -type d | grep "_messages$"
+    find only 'd'irectories (`-type d`) in some/path/, only 1 layer deep (`-maxdepth 1`), which have names that end in (`$` indicates a line end) "_messages"
+
 
 ====================================================================================================
 = ripgrep: =
@@ -4772,7 +4776,7 @@ qpdf --decrypt in.pdf out.pdf
     "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups!
     - Once I do this, I like to rename "out.pdf" to "some useful name [`qpdf --decrypt`ed]" so I can remember right in the name itself how I did this!
 
-[keywords: file password encryption, document password encryption; encrypt decrypt; encryption decryption; document encryption; encrypt document; encrypt file; document encryption; file encryption]
+[keywords: file password encryption, document password encryption; encrypt decrypt; encryption decryption; document encryption; encrypt document; encrypt file; document encryption; file encryption; pgp]
 gpg -c myfile.txt
     encrypt myfile.txt with a passphrase (symmetric 'c'ipher); a GUI window will pop up, asking you for a password to encrypt the file; enter a password, then it will ask you again; once you enter the password again it will encrypt the file and create a new file called myfile.txt.gpg. You will need to manually delete the old file.
 gpg myfile.txt.gpg
