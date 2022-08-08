@@ -1,0 +1,3 @@
+[submodule "useful_scripts/ripgrep_replace"]
+	path = useful_scripts/ripgrep_replace
+	url = https://github.com/ElectricRCAircraftGuy/ripgrep_replace.git
