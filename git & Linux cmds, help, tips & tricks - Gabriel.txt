@@ -3190,14 +3190,31 @@ git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_X9C_digital_pot.git
 cd eRCaGuy_X9C_digital_pot
     cd (change directories) into it.
 git submodule add https://github.com/ElectricRCAircraftGuy/eRCaGuy_CodeFormatter.git
+    <=======
     **Clone** AND add AND stage for commit this eRCaGuy_CodeFormatter repo as a repo (submodule) within the current repo. 
     IT IS PROBABLY BEST TO USE THE "https" URL, NOT the "ssh" URL, so that others who may not have ssh keys set up in github can still read from it and clone this repo too, even though they don't have their ssh keys set up--which I think throws an error during cloning if they attempt to use the "ssh" url otherwise. 
     See here: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> see also the "Note" at the bottom of the "Starting with Submodules" section which talks about configuring your own 'PRIVATE_URL' which you have push access to. See also the `git config` command I use just below to set a private push/pull url for just myself!
+git submodule add https://github.com/ElectricRCAircraftGuy/ripgrep_replace.git useful_scripts/ripgrep_replace
+    <=======
+    Same as above, except add the submodule's file contents directly into the repo's sub-directory at "useful_scripts/ripgrep_replace" instead of into the default path at just "ripgrep_replace".
+    See: https://stackoverflow.com/a/9035930/4561887
+    See especially all of my comments underneath that answer too!:
+        > I figured it out! Please update your answer to explain these subtleties. Let's say I want to add my [ripgrep_replace](https://github.com/ElectricRCAircraftGuy/ripgrep_replace) repo as a subrepo inside my [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo, at the path `eRCaGuy_dotfiles/useful_scripts/ripgrep_replace`. To do that using the command style shown in your answer, you must do `cd eRCaGuy_dotfiles`...
+        > 
+        > ...and then `git submodule add https://github.com/ElectricRCAircraftGuy/ripgrep_replace.git useful_scripts/ripgrep_replace`, NOT `git submodule add https://github.com/ElectricRCAircraftGuy/ripgrep_replace.git useful_scripts`! See the difference in the path I specified? I tried the latter command and it gives me the error `'useful_scripts' already exists in the index`. I mistakenly thought that I only had to specify the directory I want the `ripgrep_replace` dir inside, but rather, I must specify the full path I want that repo's _actual files_ inside!
+cd "useful_scripts" && git submodule add https://github.com/ElectricRCAircraftGuy/ripgrep_replace.git
+    <======= ADD SUBMODULE TO SPECIFIC SUB-DIR =======
+    Same as above: add the 'ripgrep_replace' submodule's file contents directly into the currently-checked-out repo's sub-directory at path "useful_scripts/ripgrep_replace". Notice that the `ripgrep_replace` dir is added automatically even though it is *not* manually specified!
+    This is even easier than the command above because you don't have to remember the command above and its folder name nuances! You just `cd` into wherever you want a submodule to go, then call the `git submodule add <path/to/submodule.git>` cmd and the folder "submodule" will automatically be created there, and the file contents of that submodule cloned to be within it!
+    See: https://stackoverflow.com/a/17401451/4561887
 git status
     See the submodule in your current repo, which IS now already staged from the `git submodule add` cmd above, but is NOT yet committed. 
     You will see two new files:
             new file:   .gitmodules
             new file:   eRCaGuy_CodeFormatter
+git submodule status
+    Show which commit hash each submodule is currently set to point to.
+    Where I first learned this: https://stackoverflow.com/a/1030263/4561887
 git diff --cached eRCaGuy_CodeFormatter
     See the cached changes. You'll see eRCaGuy_CodeFormatter as a particular **commit hash** from that repository! Even though it's a folder and a submodule, git tracks it as a particular git commit hash from that repository. 
     See here: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> search for "Instead, Git sees it as a particular commit from that repository."
@@ -3274,6 +3291,9 @@ OTHER, GENERAL NOTES ABOUT GIT SUBMODULE CMDS:
 git diff --submodule
     Show a nicer `git diff` view for submodules. 
 
+git submodule status
+    Show which commit hash each submodule is currently set to point to.
+    Where I first learned this: https://stackoverflow.com/a/1030263/4561887
 git submodule update --init
     Initialize and update (clone) all submodules in this repo to 1-level deep.
     See: https://git-scm.com/book/en/v2/Git-Tools-Submodules
