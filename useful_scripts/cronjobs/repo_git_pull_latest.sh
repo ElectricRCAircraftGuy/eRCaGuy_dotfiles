@@ -69,7 +69,7 @@ begin_logging() {
     echo "========================================================================================="
     echo "Running cronjob \"$FULL_PATH_TO_SCRIPT\""
     echo "on $(date)."
-    echo "Full cmd:  $0 $@"
+    echo "Cmd:  $0 $@"
     echo "========================================================================================="
 }
 
@@ -81,6 +81,13 @@ main() {
     cd "$PATH_TO_REPO"
     branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
+    # Handle the edge case where you are in a 'detached HEAD' state, checked-out on some branch-less
+    # hash
+    if [ "$branch_name" = "HEAD" ]; then
+        # capture the commit hash instead, since no branch name exists
+        branch_name="$(git rev-parse HEAD)"
+    fi
+
     # if on the wrong branch, commit any uncommitted changes first, if any, then
     # check out the main branch
     started_on_different_branch="false"
@@ -88,6 +95,7 @@ main() {
         started_on_different_branch="true"
         echo "= On branch '$branch_name'; need to check out branch '$MAIN_BRANCH_NAME'".
 
+        # Check for uncommitted changes.
         # See my answer, Option 2: https://stackoverflow.com/a/73284206/4561887
         if output="$(git status --porcelain)" && [ -n "$output" ]; then
             echo "= 'git status --porcelain' had no errors AND the working directory" \
@@ -95,24 +103,27 @@ main() {
 
             echo "= committing changes"
             git add -A
-            git commit -m "AUTOMATICALLY COMMITTED CHANGES; UNCOMMIT ME!"
+            git commit -m "THESE ARE AUTOMATICALLY-COMMITTED CHANGES; UNCOMMIT ME!"
+            echo ""
         fi
 
         echo "= checking out branch '$MAIN_BRANCH_NAME'"
         git checkout "$MAIN_BRANCH_NAME"
+        echo ""
     fi
 
-    echo "= Pulling latest git changes"
+    echo "= Pulling latest git changes:  time git pull "$REMOTE_NAME" "$MAIN_BRANCH_NAME""
     time git pull "$REMOTE_NAME" "$MAIN_BRANCH_NAME"
     echo ""
 
-    echo "= Pulling latest git lfs changes"
+    echo "= Pulling latest git lfs changes:  time git lfs pull "$REMOTE_NAME" "$MAIN_BRANCH_NAME""
     time git lfs pull "$REMOTE_NAME" "$MAIN_BRANCH_NAME"
     echo ""
 
     if [ "$started_on_different_branch" = "true" ]; then
-        echo "= checking out branch '$branch_name'"
+        echo "= checking out branch '$branch_name' again"
         git checkout "$branch_name"
+        echo ""
     fi
 
     echo "= DONE."
