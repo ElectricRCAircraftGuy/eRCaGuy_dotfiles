@@ -49,7 +49,8 @@ See: https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix
 ```bash
 # Open the crontab editor
 crontab -e
-# Paste this cronjob cmd into it, and save the file and exit:
+# Paste this cronjob cmd into it. Update all of the variables which precede the command, as
+# necessary, to configure it to your needs. When done, save the file and exit.
 0 2 * * * REMOTE_NAME="origin" MAIN_BRANCH_NAME="main" PATH_TO_REPO="$HOME/GS/dev/some_repo" "$HOME/GS/dev/eRCaGuy_dotfiles/useful_scripts/cronjobs/repo_git_pull_latest.sh"
 # When done, verify your entry by listing (`-l`) all cron jobs in the crontab file.
 # See: https://phoenixnap.com/kb/set-up-cron-job-linux
