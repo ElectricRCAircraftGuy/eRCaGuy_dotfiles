@@ -69,7 +69,7 @@ begin_logging() {
     echo "========================================================================================="
     echo "Running cronjob \"$FULL_PATH_TO_SCRIPT\""
     echo "on $(date)."
-    echo "Cmd:  $0 $@"
+    echo "Cmd:  REMOTE_NAME=\"$REMOTE_NAME\" MAIN_BRANCH_NAME=\"$MAIN_BRANCH_NAME\" PATH_TO_REPO=\"$PATH_TO_REPO\" \"$0\" $@"
     echo "========================================================================================="
 }
 
