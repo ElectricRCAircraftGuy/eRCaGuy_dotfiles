@@ -69,6 +69,7 @@ begin_logging() {
     echo "========================================================================================="
     echo "Running cronjob \"$FULL_PATH_TO_SCRIPT\""
     echo "on $(date)."
+    echo "Full cmd:  $0 $@"
     echo "========================================================================================="
 }
 
@@ -80,21 +81,46 @@ main() {
     cd "$PATH_TO_REPO"
     branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
+    # if on the wrong branch, commit any uncommitted changes first, if any, then
+    # check out the main branch
+    started_on_different_branch="false"
+    if [ "$branch_name" != "$MAIN_BRANCH_NAME" ]; then
+        started_on_different_branch="true"
+        echo "= On branch '$branch_name'; need to check out branch '$MAIN_BRANCH_NAME'".
 
-    echo "= Running 'time git fetch "$REMOTE_NAME" "$MAIN_BRANCH_NAME"' ="
-    time git fetch "$REMOTE_NAME" "$MAIN_BRANCH_NAME"
+        # See my answer, Option 2: https://stackoverflow.com/a/73284206/4561887
+        if output="$(git status --porcelain)" && [ -n "$output" ]; then
+            echo "= 'git status --porcelain' had no errors AND the working directory" \
+                 "is dirty (has UNCOMMITTED changes)."
+
+            echo "= committing changes"
+            git add -A
+            git commit -m "AUTOMATICALLY COMMITTED CHANGES; UNCOMMIT ME!"
+        fi
+
+        echo "= checking out branch '$MAIN_BRANCH_NAME'"
+        git checkout "$MAIN_BRANCH_NAME"
+    fi
+
+    echo "= Pulling latest git changes"
+    time git pull "$REMOTE_NAME" "$MAIN_BRANCH_NAME"
     echo ""
 
-    echo "= Running 'time git lfs fetch "$REMOTE_NAME" "$MAIN_BRANCH_NAME"' ="
-    time git lfs fetch "$REMOTE_NAME" "$MAIN_BRANCH_NAME"
+    echo "= Pulling latest git lfs changes"
+    time git lfs pull "$REMOTE_NAME" "$MAIN_BRANCH_NAME"
     echo ""
 
-    echo "= DONE. ="
+    if [ "$started_on_different_branch" = "true" ]; then
+        echo "= checking out branch '$branch_name'"
+        git checkout "$branch_name"
+    fi
+
+    echo "= DONE."
     echo ""
 }
 
 # --------------------------------------------------------------------------------------------------
 # main program entry point
 # --------------------------------------------------------------------------------------------------
-begin_logging
+begin_logging "$@"
 time main "$@"
