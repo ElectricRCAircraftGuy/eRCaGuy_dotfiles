@@ -486,6 +486,39 @@ gs_fzf_git_and_linux_cmds_doc() {
 # 1. `gcloud auth login --help`
 alias gs_gcloud_get_new_credentials="gcloud auth login --no-launch-browser"
 
+# HashiCorp vault: used inside some build systems by some companies for user authentication,
+# for example.
+# [keywords: `vault login`]
+#
+# References:
+# 1. https://learn.hashicorp.com/tutorials/vault/getting-started-intro?in=vault/getting-started
+# 1. *****+ Install `vault`:
+#    https://learn.hashicorp.com/tutorials/vault/getting-started-install?in=vault/getting-started#install-vault
+# 1. Authentication:
+#    https://learn.hashicorp.com/tutorials/vault/getting-started-authentication?in=vault/getting-started
+# 1. *****+ Okta Auth Method in `vault`: https://www.vaultproject.io/docs/auth/okta
+# 1. Commands: https://www.vaultproject.io/docs/commands
+#
+# Common commands:
+#       vault --help
+#           view the main help menu
+#       vault
+#           same as above--show the help menu
+#       vault login --help | less
+#           view the `vault login` help menu
+#       vault --version
+#           view version information
+#
+#
+# VAULT_TOKEN_PATH example: https://github.com/hashicorp/vault/issues/1492#issuecomment-453527482
+VAULT_TOKEN_PATH_DEFAULT="$HOME/.vault-token"
+# NB: you may need to set this to `$VAULT_TOKEN_PATH_DEFAULT` instead. Set it to that by default,
+# and change it only if you need to.
+# export VAULT_TOKEN_PATH="$VAULT_TOKEN_PATH_DEFAULT"
+export VAULT_TOKEN_PATH="$HOME"
+# alias to manually log into the vault whenever you need to authenticate again
+alias gs_vault_login='vault login -method=okta username=$USER; gs_gcloud_get_new_credentials'
+
 # Take the sha256sum of all files in an entire dir, and then sha256sum that
 # entire output to obtain a _single_ sha256sum which represents the _entire_
 # dir.
