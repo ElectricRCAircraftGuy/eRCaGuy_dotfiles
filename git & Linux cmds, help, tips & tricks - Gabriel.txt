@@ -4811,6 +4811,16 @@ gpg myfile.txt.gpg
     decrypt myfile.txt.gpg back into myfile.txt; it will ask you for the password which was originally used to encrypt it!
     - See here for details and where I learned this! https://www.lifewire.com/encrypt-decrypt-password-protect-files-linux-4582604
 
+timeout [options] <duration> <command>
+    "Start COMMAND, and kill it if still running after DURATION." 
+    See `man timeout`.
+    Example usage: search this document for `timeout 0.2`. See also my answer here: https://stackoverflow.com/a/73297645/4561887
+timeout 0.5s sleep 5
+    Kill `sleep 5` after 0.5 sec, causing it to return early!
+time timeout 0.5s sleep 5
+    <=======
+    Same as above, except also prove that it was killed after almost exactly 0.5 sec.
+
 
 ====================================================================================================
 = rsync: =

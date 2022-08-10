@@ -81,6 +81,19 @@ main() {
     cd "$PATH_TO_REPO"
     branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
+    # Just exit immediately if the git server is not available. See my answer:
+    # https://stackoverflow.com/a/73297645/4561887
+    TIMEOUT="40s"
+    echo "= Checking to see if the git server is up and running (will time out after $TIMEOUT)..."
+    if timeout "$TIMEOUT" git ls-remote --tags > /dev/null 2>&1; then
+        # Note: it takes 2~4 sec to get to here.
+        echo "= git server IS available"
+    else
+        # Note: it takes N seconds (as specified by `timeout Ns` above) to get to here.
+        echo "= git server is NOT available (check your VPN, if applicable); exiting now"
+        exit 1
+    fi
+
     # Handle the edge case where you are in a 'detached HEAD' state, checked-out on some branch-less
     # hash
     if [ "$branch_name" = "HEAD" ]; then
