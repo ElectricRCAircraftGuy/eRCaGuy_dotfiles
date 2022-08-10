@@ -141,9 +141,11 @@ gs_git_commit_r() {
         echo "---"
         echo "DATE=\"$DATE\""
         echo 'GIT_COMMITTER_DATE="$DATE" git commit --date "$DATE"'
+        echo 'GIT_COMMITTER_DATE="$DATE" git commit --amend'
         echo "---"
         echo "last_date=\"$last_date\""
         echo 'GIT_COMMITTER_DATE="$last_date" git commit --date "$last_date"'
+        echo 'GIT_COMMITTER_DATE="$last_date" git commit --amend'
 
         return 0
     fi
