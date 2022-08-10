@@ -498,6 +498,7 @@ alias gs_gcloud_get_new_credentials="gcloud auth login --no-launch-browser"
 #    https://learn.hashicorp.com/tutorials/vault/getting-started-authentication?in=vault/getting-started
 # 1. *****+ Okta Auth Method in `vault`: https://www.vaultproject.io/docs/auth/okta
 # 1. Commands: https://www.vaultproject.io/docs/commands
+# 1. *****+ Source code on GitHub!: https://github.com/hashicorp/vault
 #
 # Common commands:
 #       vault --help
@@ -510,7 +511,9 @@ alias gs_gcloud_get_new_credentials="gcloud auth login --no-launch-browser"
 #           view version information
 #
 #
-# VAULT_TOKEN_PATH example: https://github.com/hashicorp/vault/issues/1492#issuecomment-453527482
+# `VAULT_TOKEN_PATH` examples & info.:
+# 1. https://github.com/hashicorp/vault/issues/1492#issuecomment-453527482
+# 1. https://socket.dev/npm/package/@twentyfourg/vault
 VAULT_TOKEN_PATH_DEFAULT="$HOME/.vault-token"
 # NB: you may need to set this to `$VAULT_TOKEN_PATH_DEFAULT` instead. Set it to that by default,
 # and change it only if you need to.
