@@ -5,9 +5,10 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 ## References
 
+1. Google search for [linux configure cron job](https://www.google.com/search?q=linux+configure+cron+job&oq=linux+configure+cron+job&aqs=chrome.0.69i59.164j0j9&sourceid=chrome&ie=UTF-8)
 1. *****https://www.cyberciti.biz/faq/how-do-i-add-jobs-to-cron-under-linux-or-unix-oses/
 1. https://phoenixnap.com/kb/set-up-cron-job-linux
-1. https://en.wikipedia.org/wiki/Cron
+1. *****https://en.wikipedia.org/wiki/Cron - contains a nice graphical chart/image describing each column before the command to run
 
 
 ## Main commands
