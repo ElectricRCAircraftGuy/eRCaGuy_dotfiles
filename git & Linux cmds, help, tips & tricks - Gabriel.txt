@@ -1285,6 +1285,8 @@ See: https://github.com/mesonbuild/meson/blob/master/docs/markdown/FAQ.md#but-i-
         ]
         ```
 
+[Keywords: Buildroot json library; json for modern cpp c++; nlohmann json library]
+
 Example (THIS IS A HACK!--but it works. See further below for the CORRECT way) for the `json-for-modern-cpp` library in buildroot.
 Here is where that library is in buildroot: https://github.com/buildroot/buildroot/tree/master/package/json-for-modern-cpp:
 
