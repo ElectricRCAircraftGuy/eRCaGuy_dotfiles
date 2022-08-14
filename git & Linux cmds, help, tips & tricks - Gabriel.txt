@@ -3,6 +3,13 @@ Gabriel Staples
 
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+Video of HOW IT FEELS TO *NOT* BE DOING CONTROLS OR MOTION PLANNING, OR SENSORS OR ACTUATORS IN MY DAY-JOB:
+https://www.linkedin.com/feed/update/urn:li:activity:6964107799882575873/
+Need that kind of work done? Hire me. 
+MY RESUME: https://drive.google.com/file/d/1qgDBc1nYYgqGs79IVOfYlSQ7wInOENkN/view?usp=sharing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 HOW TO FUZZY-SEARCH THIS FILE:
 ---
 cat "path/to/eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt" | fzf -m --reverse
