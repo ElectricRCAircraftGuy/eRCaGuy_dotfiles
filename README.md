@@ -4,8 +4,9 @@
 
 Gabriel Staples
 
-- These are my Linux Ubuntu configuration files and commonly-used scripts--many of which I've written myself. 
+- These are my Linux Ubuntu configuration files and commonly-used scripts--most of which I've written myself. 
 - This project is well-maintained, highly-used by myself, and highly-functional. It's not experimental, it's what I use every day. Feel free to use or borrow from it yourself. 
+- Disclaimer: any content herein is my own unless stated otherwise. This repo contains my own beliefs, opinions, words and works. They are _not_ endorsed by nor espoused by any of my past nor present employers.
 
 
 ## Also very useful:
@@ -225,3 +226,6 @@ useful_scripts/
     1. After extracting `speedtest` as shown above, a **markdown readme** for it is found in `~/Downloads/Install_Files/speedtest--ookla/ookla-speedtest-1.1.1-linux-x86_64/speedtest.md`.
 
 
+---
+
+_This repo contains my own content and opinions and does not reflect opinions nor content on behalf of any employer._
