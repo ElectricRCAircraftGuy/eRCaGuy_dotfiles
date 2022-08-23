@@ -8,20 +8,43 @@
 
 # Print out basic stats on cpu load.
 
-# INSTALLATION INSTRUCTIONS:#########3
+# CPU LOGGER INSTALLATION INSTRUCTIONS:
+# 1. Add this alias to your ~/.bash_aliases file. Use it to view the log live at any time.
+#       # Continually watch the live log output from "eRCaGuy_dotfiles/useful_scripts/cpu_logger.py"
+#       alias gs_cpu_logger_watch='less -N --follow-name +F ~/cpu_log.log'
+# 2. Auto-start the logger at boot by adding the following to your Ubuntu "Startup Applications" GUI program:
+#   New "Startup Program" entry:
+#       Name:       GS cpu_logger.py
+#       Command:    /home/gabriel/GS/dev/eRCaGuy_dotfiles/useful_scripts/cpu_logger.py
+#       Comment:    Start up the CPU logger, with auto-rotating logs, at boot.
+# 3. Also install this executable by following the installation instructions at the top of the file:
+#   "eRCaGuy_dotfiles/useful_scripts/cpu_load.py".
+#   Run `cpu_load` to see your current CPU usage.
+#   Sample run and output:
+#       $ gs_cpu_load
+#       Measuring CPU load for 2 seconds...
+#       Overall: 15.21%
+#       Individual CPUs: 13.60%  12.20%  15.20%  14.90%  14.60%  18.50%  15.80%  16.90%
+
+# References
+# 1. [my answer] https://stackoverflow.com/a/70760502/4561887
+# 1. [my Q&A] https://unix.stackexchange.com/q/686424/114401
+
+
+####### OLD NOTES TO UPDATE, START #######
+
+# INSTALLATION INSTRUCTIONS:#### UPDATE THESE #####
 # 1. Install RipGrep: https://github.com/BurntSushi/ripgrep#installation
 # 2. Create a symlink in ~/bin to this script so you can run it from anywhere.
 #       cd /path/to/here
 #       mkdir -p ~/bin
-#       ln -si "${PWD}/cpu_load.py" ~/bin/cpu_load            # required
-#       ln -si "${PWD}/cpu_load.py" ~/bin/gs_cpu_load         # optional; replace "gs" with your initials
+#       ln -si "${PWD}/cpu_logger.py" ~/bin/cpu_logger            # required
+#       ln -si "${PWD}/cpu_logger.py" ~/bin/gs_cpu_logger         # optional; replace "gs" with your initials
 # 3. Now you can use this command directly anywhere you like in any of these ways:
-#   1. `rgr`
-#   2. `rg_replace`
-#   1. `gs_rgr`
-#   3. `gs_rg_replace`
+#   1. `cpu_logger`
+#   2. `gs_cpu_logger`
 
-# References: ########
+# References: #### UPDATE THESE ####
 # 1. https://askubuntu.com/questions/22021/how-to-log-cpu-load
 # 1. https://unix.stackexchange.com/questions/295599/how-to-show-processes-that-use-more-than-30-cpu/295608#295608
 # 1. https://stackoverflow.com/a/40088591/4561887
@@ -30,6 +53,8 @@
 # Test commands:
 #       eRCaGuy_dotfiles$ rgr foo -R boo
 #       eRCaGuy_dotfiles$ rgr foo -R boo --stats "git & Linux cmds, help, tips & tricks - Gabriel.txt"
+
+####### OLD NOTES TO UPDATE, END #######
 
 
 ##### https://unix.stackexchange.com/a/295608/114401   <========

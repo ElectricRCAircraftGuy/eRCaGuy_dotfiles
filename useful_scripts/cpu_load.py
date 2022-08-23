@@ -6,25 +6,25 @@
 
 # Print out basic stats on cpu load.
 
-# INSTALLATION INSTRUCTIONS:#########3
-# 1. Install RipGrep: https://github.com/BurntSushi/ripgrep#installation
-# 2. Create a symlink in ~/bin to this script so you can run it from anywhere.
+# INSTALLATION INSTRUCTIONS:##### UPDATE THESE! ####
+# 1. Create a symlink in ~/bin to this script so you can run it from anywhere.
 #       cd /path/to/here
 #       mkdir -p ~/bin
 #       ln -si "${PWD}/cpu_load.py" ~/bin/cpu_load            # required
 #       ln -si "${PWD}/cpu_load.py" ~/bin/gs_cpu_load         # optional; replace "gs" with your initials
-# 3. Now you can use this command directly anywhere you like in any of these ways:
-#   1. `rgr`
-#   2. `rg_replace`
-#   1. `gs_rgr`
-#   3. `gs_rg_replace`
+# 2. Now you can use this command directly anywhere you like in any of these ways:
+#   1. `cpu_load`
+#   2. `gs_cpu_load`
 
 # References:
-# 1.
+# 1. [my answer] https://askubuntu.com/a/1423003/327339
 
-# Test commands:
-#       eRCaGuy_dotfiles$ rgr foo -R boo
-#       eRCaGuy_dotfiles$ rgr foo -R boo --stats "git & Linux cmds, help, tips & tricks - Gabriel.txt"
+# Sample run and output:
+#       $ gs_cpu_load
+#       Measuring CPU load for 2 seconds...
+#       Overall: 15.21%
+#       Individual CPUs: 13.60%  12.20%  15.20%  14.90%  14.60%  18.50%  15.80%  16.90%
+
 
 
 ##### https://unix.stackexchange.com/a/295608/114401   <========
