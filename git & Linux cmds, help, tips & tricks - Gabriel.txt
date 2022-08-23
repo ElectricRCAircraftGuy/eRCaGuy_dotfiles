@@ -6,7 +6,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 Video of HOW IT FEELS TO *NOT* BE DOING CONTROLS OR MOTION PLANNING, OR SENSORS OR ACTUATORS IN MY DAY-JOB:
 https://www.linkedin.com/feed/update/urn:li:activity:6964107799882575873/
-Need that kind of work done? Hire me. 
+I'd rather do that kind of work--it would pump up my spirits. Need that kind of work done? Hire me. 
 MY RESUME: https://drive.google.com/file/d/1qgDBc1nYYgqGs79IVOfYlSQ7wInOENkN/view?usp=sharing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -4428,7 +4428,8 @@ htop = much better (ncurses-based?) CLI competitor to gnome-system-monitor!
 LIST RUNNING PROCESSES AND THEIR PROCESS IDS (PIDs):
 (See `man ps` for details)
 ps aux
-    list all running processes on the system (using the BSD syntax) <====== MOST COMMON USAGE =====
+    <====== MOST COMMON USAGE =====
+    list all running processes on the system (using the BSD syntax) 
 ps -A
     list all running processes on the system (using the standard syntax)
 ps -eLf
@@ -4829,6 +4830,29 @@ timeout 0.5s sleep 5
 time timeout 0.5s sleep 5
     <=======
     Same as above, except also prove that it was killed after almost exactly 0.5 sec.
+
+[keywords: extract compressed zip .tar.gz file too]
+binwalk path/to/file.bin
+    Search binary file "file.bin" for "binay images" of "embedded files and executable code." ie: Show what files can be extracted from within this binary file.
+    See:
+    1. `man binwalk` and
+    1. https://programmingwithstyle.com/posts/howihackedmycar/
+binwalk -e path/to/file.bin
+    Same as above, but actually extract (`-e`, or `--extract`) files from within binary file "file.bin"! This automatically creates an appropriately-named folder it places all extracted contents into!
+    See:
+    1. `man binwalk` and
+    1. https://programmingwithstyle.com/posts/howihackedmycar/
+
+[Mount/remount/unmount/umount filesystem or file image]
+> If no part of your filesystem is writable by default, then you may need to unmount it and remount it as read-writable (rw) first, as shown below. ... When done, you can mount it back as read-only (ro) as shown here:
+See my answer: https://serverfault.com/a/1105451/357116
+---
+mount -o remount,rw /
+    Remount your root dir (/) as read-writable (rw)
+    See my answer: https://serverfault.com/a/1105451/357116
+mount -o remount,ro /
+    Remount your root dir (/) as read-only (ro)
+    See my answer: https://serverfault.com/a/1105451/357116
 
 
 ====================================================================================================
