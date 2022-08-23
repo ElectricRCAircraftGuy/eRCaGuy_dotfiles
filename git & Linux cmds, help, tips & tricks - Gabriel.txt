@@ -3172,6 +3172,26 @@ So, here's how to rewrite the history. See GitHub's instructions here: https://h
         name = Your_Correct_Full_Name
         email = correct_email@gmail.com
 
+== == 
+
+[Obtain git repo stats to see who has contributed how much (ex: how many commits or how many lines); git stats; count git lines; count git commits; git commit stats]
+
+References:
+1. Google search for "git count lines changed by certain author": 
+   https://www.google.com/search?q=git+count+lines+changed+by+certain+author&oq=git+count+lines+changed+by+certain+author&aqs=chrome..69i57.11889j0j7&sourceid=chrome&ie=UTF-8
+1. How to count total lines changed by a specific author in a Git repository? - https://stackoverflow.com/a/7010890/4561887
+1. arzzen/git-quick-stats: https://github.com/arzzen/git-quick-stats
+
+git quick-stats
+    [then press `11`]
+    Show git commits per author, sorted from most to least.
+    See: 
+    1. Installation instructions: https://github.com/arzzen/git-quick-stats#installation
+    1. https://stackoverflow.com/a/7010890/4561887
+git log --author="Gabriel Staples" --pretty=tformat: --numstat | gawk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s removed lines: %s total lines: %s\n", add, subs, loc }' -
+    Count lines added, removed, and net total (added - removed) for author "Gabriel Staples" in the current repo and branch.
+    See: https://stackoverflow.com/a/7010890/4561887
+
 
 ====================================================================================================
 = cron jobs: =
