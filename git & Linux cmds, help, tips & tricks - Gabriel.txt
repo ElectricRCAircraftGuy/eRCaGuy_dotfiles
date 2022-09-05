@@ -58,6 +58,10 @@ Note: other types of knowledge-sharing and guiding include:
 = Quotes: =
 ====================================================================================================
 
+"Just keep trying. Care enough to make it right, and it will really separate you from a staggering amount of more-talented wood-workers." [GS: or engineers, software developers, or whatever it is you do].
+    - Blacktail Studio owner (Cameron Banderson, I think, based on his [Ebay auctioneer name](https://www.ebay.com/itm/195320349148), at 22:50 in this YouTube video here: https://www.youtube.com/watch?v=8wYDq9F8J7M&t=1370s
+    GS notes: I think this applies to any talent or profession. See my comment here: https://www.youtube.com/watch?v=8wYDq9F8J7M&lc=UgzAaYEFmsJd5-K_bOd4AaABAg
+
 "Computer Science: solving today's problems, tomorrow."
     - One of the many random quotes displayed on the Eclipse IDE splash screen during startup when you have the "Darkest Dark Theme with DevStyle 2022.6.13a" plugin installed
 
@@ -1644,6 +1648,9 @@ info sources
 info functions
     list all available functions; see URL above
     [weird work-around to grep the above output]: https://stackoverflow.com/questions/41965454/gdb-grep-info-sources-files/41965636#41965636
+info locals
+    List all local variables on the current stack. These are all variables you can print with `p` or `print`. 
+    See: https://stackoverflow.com/a/6261502/4561887
 
 info break
     show all break points (delete them with `del <NUM>`); see: https://stackoverflow.com/questions/4340718/how-do-i-remove-a-single-breakpoint-with-gdb/11799263#11799263
@@ -3174,7 +3181,7 @@ So, here's how to rewrite the history. See GitHub's instructions here: https://h
 
 == == 
 
-[Obtain git repo stats to see who has contributed how much (ex: how many commits or how many lines); git stats; count git lines; count git commits; git commit stats]
+[Obtain git repo stats to see who has contributed how much (ex: how many commits or how many lines); git stats; count git lines; count git commits; git commit stats; git quick stats]
 
 References:
 1. Google search for "git count lines changed by certain author": 
@@ -3829,6 +3836,19 @@ curl -X GET http://some.web.address/some_id | jq .key1.key2
     Same as above, except filter on only the outer-most dict key named `key1`, followed by the sub-level key named `key2`!
 curl -X GET http://some.web.address/some_id | jq .key1.key2.key3
     Same as above, except filter in on outer key `key1`, sub-key `key2`, and sub-sub-key `key3`, etc. This pattern can continue indefinitely down to as many sub-levels as you want!
+curl -X POST -F "file=@path/to/some_binary_firmware_image.bin" http://192.168.0.2/api/update_firmware
+    <========= POTENTIAL WAY TO UPDATE A LINUX BOARD'S ROOTFS IMAGE VIA AN HTTP REST API `POST -F` CMD ===========
+    Upload a file via a post to this URL address! The `-F` means "form", but when you have `-F file=@<file>`, it indicates that the "form" is actually a local file you are uploading to some HTTP REST API web server! In this case, the purpose of the web server could be to update a Linux rootfs image on the embedded Linux board running the web server, for instance!
+    For details on the `curl` command and `-F` option, see: `man curl` and search for "-F".
+    Regarding the meaning of `-F` and `@`, `man curl` states:
+    > This [`-F`] enables uploading of binary files etc. **To force the 'content' part to be a file,
+      prefix the file name with an `@` sign.** To just get the content part from a file, prefix the
+      file name with the symbol `<`. The difference between `@` and `<` is then that `@` makes a 
+      file get attached in the post as a file upload, while the `<` makes a text field and just get
+      the contents for that text field from a file.
+curl --connect-timeout 10 --max-time 30 --data '{"some key 1":"some value 1","some key 2":"some value 2", "some key 3":"some value 3"}' -X POST http://some.web.address
+    <=========
+    Set curl connect and total timeouts as well!
 
 telnet
     (Note: install with `sudo apt install telnet`).
@@ -4874,7 +4894,94 @@ mount -o remount,ro /
     Remount your root dir (/) as read-only (ro)
     See my answer: https://serverfault.com/a/1105451/357116
 
+`compgen` References:
+[Note: "compgen" apparently stands for (auto)-"completion generator"]
+1. [my answer & links] https://unix.stackexchange.com/a/715426/114401
+1. https://unix.stackexchange.com/a/120825/114401
+   `compgen -A <cmd>`
+1. https://unix.stackexchange.com/a/23919/114401
+1. Manual pages
+    ```bash
+    compgen --help
+    help compgen  # same output as above.
+    man bash      # and search for "compgen"; see especially the "-A action"
+                  # documentation section under the "complete" command
+                  # under "compgen"; all of the "complete -A action" commands
+                  # apply equally to `compgen` too!
+    ```
+---
+[tab tab replacement; tab tab autocompletion]
+compgen -c gs_
+    Run (auto) "completion generator" on partial command "gs_" to output all possible commands as though you had typed "gs_" and then pressed Tab Tab to auto-complete the list of possible commands! This is useful to script things or to pipe to `grep`, for instance. See:
+    1. https://unix.stackexchange.com/a/23919/114401 - Unix & Linux: How to pipe the list of commands displayed by "tab complete"?
+    1. `help compgen`
+    1. `man bash` and search for "compgen"
+compgen -c gs_ | grep git
+    Search all commands/executables in my PATH for commands which begin with "gs_" and contain the word "git" in them! See: 
+    1. https://unix.stackexchange.com/a/23919/114401 - Unix & Linux: How to pipe the list of commands displayed by "tab complete"?
+compgen -A command <cmd>
+    Same as `compgen -c <cmd>`.
+    See: `man bash` and search for "compgen" and "-A action".
+compgen -f /etc/
+    Auto-complete lists of **file names** (`-f`) as though you had typed `/etc/` and then pressed Tab Tab (tab twice).
+compgen -A file /etc/
+    Same as above.  
+    See: `man bash` and search for "compgen" and "-A action".
+compgen -c | sort -V
+    <====== VERY USEFUL =======
+    List ALL possible executable commands and aliases, sorted. 
+compgen -A command | sort -V
+    Same as above. 
+    See: `man bash` and search for "compgen" and "-A action".
+compgen -a | sort -V
+    <=======
+    List all possible aliases only, sorted. See also `compgen -c`, which lists executable commands **plus** aliases. 
+compgen -A alias | sort -V
+    Same as above.
+    See: `man bash` and search for "compgen" and "-A action".
+compgen -b | sort -V
+    <=======
+    List all possible shell builtin commands, sorted. 
+compgen -A builtin | sort -V
+    Same as above. 
+    See: `man bash` and search for "compgen" and "-A action".
+OTHER `compgen -A <cmd>` COMMANDS FROM `man bash`:
+    -A action
+          The action may be one of the following to generate a list of possible completions:
+          alias   Alias names.  May also be specified as -a.
+          arrayvar
+                  Array variable names.
+          binding Readline key binding names.
+          builtin Names of shell builtin commands.  May also be specified as -b.
+          command Command names.  May also be specified as -c.
+          directory
+                  Directory names.  May also be specified as -d.
+          disabled
+                  Names of disabled shell builtins.
+          enabled Names of enabled shell builtins.
+          export  Names of exported shell variables.  May also be specified as -e.
+          file    File names.  May also be specified as -f.
+          function
+                  Names of shell functions.
+          group   Group names.  May also be specified as -g.
+          helptopic
+                  Help topics as accepted by the help builtin.
+          hostname
+                  Hostnames, as taken from the file specified by the HOSTFILE shell variable.
+          job     Job names, if job control is active.  May also be specified as -j.
+          keyword Shell reserved words.  May also be specified as -k.
+          running Names of running jobs, if job control is active.
+          service Service names.  May also be specified as -s.
+          setopt  Valid arguments for the -o option to the set builtin.
+          shopt   Shell option names as accepted by the shopt builtin.
+          signal  Signal names.
+          stopped Names of stopped jobs, if job control is active.
+          user    User names.  May also be specified as -u.
+          variable
+                  Names of all shell variables.  May also be specified as -v.
 
+
+END OF = Linux (General): =
 ====================================================================================================
 = rsync: =
 ====================================================================================================
