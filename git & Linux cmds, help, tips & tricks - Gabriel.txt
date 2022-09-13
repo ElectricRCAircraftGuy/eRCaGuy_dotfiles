@@ -4236,6 +4236,13 @@ ls -d -1 ../some-random-name-*
     See also Meson's Q&A titled "But I really want to use wildcards!" here: 
     https://github.com/mesonbuild/meson/blob/master/docs/markdown/FAQ.md#but-i-really-want-to-use-wildcards
 
+lsof
+    List all open files and see which command and process PID has them open!
+    See: https://www.tecmint.com/find-out-who-is-using-a-file-in-linux/
+lsof /dev/null
+    See only this one open file (`/dev/null` in this case) and see which processes and PIDs have it open.
+    See: https://www.tecmint.com/find-out-who-is-using-a-file-in-linux/
+
 uptime
     show how long the computer has been on (since last reboot), how many users are currently logged-in, etc.
 who
@@ -5006,10 +5013,30 @@ time rsync -rah --info=progress2 --stats source destination
     My favorite command, AFTER running the `--dry-run` version just above first!; do a **real copy**.  
     - See my ans: 
       https://askubuntu.com/questions/17275/how-to-show-the-transfer-progress-and-speed-when-copying-files-with-cp/1275972#1275972
+time rsync -rah --compress --info=progress2 --stats source destination
+    <======== WITH COMPRESSION (DEFAULT COMPRESSION LEVEL IS 6)! USE THIS! ==========
+    Also does the default level of compression (6 of 9) during the send in order to save bandwidth over a slow network, at the cost of CPU cycles on each end to compress and decompress. 
+    I'm not sure whether level 6 (default compression) or level 9 (maximum compression) is faster over a network of 20 Mbps to 200 Mbps, but I think the default level 6 is probably fastest, so probably just stick to it for now!
+    See: 
+    1. https://serverfault.com/a/1055177/357116
+    2. `man rsync` and search for "compress-level".
+time rsync -rah --compress-level=9 --info=progress2 --stats source destination
+    <======== WITH MAXIMUM COMPRESSION (SETTING TO LEVEL 9)! ==========
+    Does the maximum level of compression during the send in order to save bandwidth over a slow network, at the cost of CPU cycles on each end to compress and decompress.
+    I'm not sure whether level 6 (default compression) or level 9 (maximum compression) is faster over a network of 20 Mbps to 200 Mbps, but I think the default level 6 is probably fastest, so probably just stick to it for now!
+    See: 
+    1. https://serverfault.com/a/1055177/357116
+    2. `man rsync` and search for "compress-level".
+time rsync -rah --compress --info=progress2 --stats my_username@192.168.0.1:~/some_dir ~
+    <========================= ALSO COMPRESS, AND SEND OVER NETWORK ===========================
+    Copy the "~/some_dir" directory over ssh from some remote target PC to my local PC's home dir, while using compression to reduce network bandwidth usage!
 
 2. ADVANDED:
 
-TODO
+--delete --delete-excluded [--dry-run]
+    CAREFUL!: Add the `--delete --delete-excluded` flags to also delete files and folders in the destination that are *not* in the source. This produces a true **image** from left to right rather than just an **update** or whatever from left to right. 
+    Always run with `--dry-run` first, to ensure you don't accidentally delete stuff in the destination which you'd like to keep.
+    See my notes here: https://superuser.com/a/1464264/425838
 
 
 ====================================================================================================
