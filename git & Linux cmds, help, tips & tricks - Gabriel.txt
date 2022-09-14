@@ -4989,6 +4989,108 @@ OTHER `compgen -A <cmd>` COMMANDS FROM `man bash`:
 
 
 END OF = Linux (General): =
+
+
+====================================================================================================
+= syslog-ng: =
+====================================================================================================
+[and logrotation log rotation logrotate.d]
+
+Features & Notes:
+1. `syslog-ng` is a Linux logging replacement alternative for `syslog`. It is apparently more-powerful and can automatically send Linux logs to remote logging servers for remote storage, viewing, and retrieval. 
+1. It is available on Buildroot for embedded Linux boards.
+    1. Its default configuration file on Buildroot is here, for instance: https://github.com/buildroot/buildroot/blob/master/package/syslog-ng/syslog-ng.conf. Notice that the kernel logs are collected in the source via the `/proc/kmsg` file. Read more about that file here: https://unix.stackexchange.com/a/585922/114401. 
+        ```
+        @version: 3.37
+
+        source s_sys {
+            file("/proc/kmsg" program_override("kernel"));
+            unix-stream ("/dev/log");
+            internal();
+        };
+
+        destination d_all {
+            file("/var/log/messages");
+        };
+
+        log {
+            source(s_sys);
+            destination(d_all);
+        };
+        ```
+1. Note that if using syslog-ng to forward logs to a remote server, you should probably forward both the kernel logs from `/proc/kmsg` or `/dev/kmsg` (see: https://unix.stackexchange.com/questions/585919/what-is-the-difference-between-proc-kmsg-and-dev-kmsg/585922#585922) **and** whatever custom daemon or custom process logs your programs produce. 
+1. Apparently (I need to research this some more) systemd, a modern Linux kernel startup service, and alternative to SysvInit and Runit, can also push and manage remote logging? 
+    1. Research what systemd service can do this, and how it works!
+1. For log rotation, see, for instance, here: 
+    1. https://www.networkworld.com/article/3218728/how-log-rotation-works-with-logrotate.html
+    1. https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.17/administration-guide/32
+        > When using this destination, update the configuration of your log rotation program to rotate these files. Otherwise, the log files can become very large.
+        > 
+        > Also, after rotating the log files, reload syslog-ng OSE using the `syslog-ng-ctl reload` command [GS: see below], or use another method to send a `SIGHUP` to syslog-ng OSE.
+    1. See logrotated (log rotate daemon) configuration files in the "/etc/logrotate.d" dir via: `ls /etc/logrotate.d`. Ex: 
+        ```bash
+        cat /etc/logrotate.d/rsyslog  # on Ubuntu
+        # OR perhaps:
+        cat /etc/logrotate.d/syslog   # perhaps on an embedded Linux device
+        ```
+    1. Sample configuration of an "/etc/logrotate.d/syslog" file. 
+        This will keep 7 rotated log files (ex: "/var/log/messages" + ["/var/log/messages.1", "/var/log/messages.2", etc., through "/var/log/messages.7", inclusive]), rotating them every time the size of each active log file hits 20 MB:
+        ```
+        /var/log/auth.log 
+        /var/log/user.log
+        /var/log/messages  
+        {
+            rotate 7
+            size 20M
+            delaycompress
+            missingok
+            # Required for syslog-ng after each rotation, to cause it to restart to it can begin
+            # logging to the new unrotated main active file under a new file descriptor; see:
+            # https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.17/administration-guide/32
+            postrotate
+                # wip
+            endscript
+        }
+        ```
+        See `man 8 logrotate` for some example configuration files, similar to the above. 
+        See that manual page online here: https://linux.die.net/man/8/logrotate. 
+        All of the above logrotate.d/ configuration file parameters are described in the manual pages above.
+
+(Gernally Paid), Remote-logging Servers:  
+Possible paid-as-a-service log servers you can log to include, for example:
+1. Humio: https://www.humio.com/
+    1. If I ever want to try logging my Arduino sensor smart home data or something, Humio Community Edition offers FREE logging indefinitely (no limited trial period), with the following features and limitations. See: https://www.humio.com/getting-started/:
+        > Humio Community Edition  
+        > Unleash the power of streaming observability at no cost.
+        > 
+        > Ingest up to 16GB per day  
+        > 7-day retention  
+        > Ongoing usage with no trial period and no credit card required  
+1. Sumo Logic: https://www.sumologic.com/
+1. (Maybe free if you host your own Redwood server?) RedwoodJS logging server: https://redwoodjs.com/docs/logger
+
+References:
+1. Main website/manual ex. pg: https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.17/administration-guide/32 
+1. logrotate and "/etc/logrotate.d/<config_files>": https://linux.die.net/man/8/logrotate
+
+
+Commands:
+
+syslog-ng-ctl --help
+    See the "syslog-ng control" help menu on any Linux system running syslog-ng for internal logging, such as on an embedded Linux board. 
+syslog-ng-ctl reload
+    Reload the syslog-ng service. This must be called each time your log rotate daemon rotates the logs in the "/var/log/messages" files, for instance. 
+    See: 
+    https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.17/administration-guide/32
+syslog-ng-ctl export-config-graph | jq .
+    View the syslog-ng configuration graph of all settings and source to destination logs configured. Pipe it to JQuery (`jq`) to view it in a pretty, human-readable JSON format. 
+    See: `syslog-ng-ctl --help`
+syslog-ng-ctl config
+    View the currently-loaded syslog-ng.conf configuration file. It will likely match what is in "/etc/syslog-ng.conf", since that is where the configuration file is stored. See:
+    1. `syslog-ng-ctl --help`
+    1. `cat /etc/syslog-ng.conf`
+
+
 ====================================================================================================
 = rsync: =
 ====================================================================================================
