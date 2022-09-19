@@ -4542,10 +4542,10 @@ See also:
 
 grep '' *
     Read and print out ALL contents (`''`) of ALL files (`*`) within this dir!
-    [keywords: list all files (that would actually be with the `find` cmd); list contents of all files; read and print contents of all files in a dir]
+    [keywords: list all files (that would actually be with the `find` cmd); list contents of all files; read and print contents of all files in a dir; list all file contents; print all file contents]
     <======== VERY USEFUL! =========
 grep '' /path/to/dir/*
-    Read and print out ALL contents (`''`) of ALL files within the "/path/to/dir/" dir (`/path/to/dir/*`)!
+    Read and print out ALL contents (`''`) of ALL files within the "/path/to/dir/" dir (`/path/to/dir/*`)! [print all; read all; print all files; cat all files]
     <======== VERY USEFUL! =========
 watch -n 0.5 'grep '"''"' *'
     Watch the contents of a bunch of files change by printing out their values by running `grep '' *` every 0.5 sec!
@@ -5055,6 +5055,24 @@ Features & Notes:
         See `man 8 logrotate` for some example configuration files, similar to the above. 
         See that manual page online here: https://linux.die.net/man/8/logrotate. 
         All of the above logrotate.d/ configuration file parameters are described in the manual pages above.
+    1. See also the default Buildroot configuration file for the logrotate daemon for the syslog (or syslog-ng) "/var/log/messages" file, here!: https://github.com/buildroot/buildroot/blob/master/package/logrotate/logrotate.conf :
+        logrotate.conf:
+        ```
+        compress
+
+        include /etc/logrotate.d
+
+        /var/log/messages /var/log/auth.log /var/log/user.log {
+            rotate 7
+            daily
+            delaycompress
+            missingok
+            sharedscripts
+            postrotate
+                /usr/bin/killall -HUP syslogd
+            endscript
+        }
+        ```
 
 (Gernally Paid), Remote-logging Servers:  
 Possible paid-as-a-service log servers you can log to include, for example:
