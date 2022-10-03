@@ -3326,6 +3326,9 @@ SEE: https://git-scm.com/book/en/v2/Git-Tools-Submodules --> "Pulling Upstream C
 git pull
     Pull all upstream changes in the repo as well as submodules. This apparently does NOT, I think, check out the submodule changes just pulled, however--maybe they are just fetched?
 git submodule update --init --recursive
+    <====================
+    (See the more-preferred option order just below).
+git submodule update --recursive --init
     <========== USE THIS! ==========
     Update (clone) all submodule changes too. 
     GS: as determined through experimental testing, this also **checks out the appropriate commit hash** for each submodule, in a "detached head" (`HEAD detached at commit_id`) state! You can `cd` into each submodule directory and run `git status` and `git log` to see what I mean!
