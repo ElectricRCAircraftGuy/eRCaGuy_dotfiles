@@ -2,7 +2,24 @@
 
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+# GS
+# 7 Feb. 2022
+
 # STATUS: wip; NOT yet functional!
+######################
+# WRITE AN ANSWER HERE ASAP!:
+# https://askubuntu.com/questions/298487/not-enough-free-disk-space-when-upgrading/298986#298986
+#
+# General format:
+# 1. General process
+# 2. Automatic example (using my script)
+# 3. Manual example
+#
+# https://askubuntu.com/questions/298487/not-enough-free-disk-space-when-upgrading/298986#298986
+#
+# Also incorporate and clean up this Python script to read the output of `ncdu`!:
+# https://unix.stackexchange.com/a/689673/114401
+
 
 # DESCRIPTION:
 # This script automates the deletion of old Linux kernels which are filling up your "/boot"
@@ -25,6 +42,8 @@
 # 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/array_practice.sh
 # 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/array_pass_as_bash_parameter.sh
 # 1. ***** https://stackoverflow.com/questions/70572744/how-can-i-create-and-use-a-backup-copy-of-all-input-args-in-bash/70572787#70572787
+
+
 
 # save this number of old kernels prior to the current kernel
 NUM_PREVIOUS_KERNELS_TO_SAVE="1"
@@ -99,14 +118,18 @@ if [[ "$confirm" != [yY] && "$confirm" != [yY][eE][sS] ]]; then
 fi
 
 echo "Deleting those old kernels listed above."
-# See: https://askubuntu.com/a/298986/327339
-# set -x  # turn ON echoing commands; see: https://stackoverflow.com/a/2853811/4561887
-# echo "${kernels_to_delete[@]}"  # for debugging (uncomment this and comment out below for debugging)
-sudo apt-get purge "${kernels_to_delete[@]}"  # THE ACTUAL KERNEL DELETE COMMAND
-# set +x  # turn OFF echoing commands
 echo ""
+# See: https://askubuntu.com/a/298986/327339
+# Comment this next line out when done debugging
+set -x  # turn ON echoing commands; see: https://stackoverflow.com/a/2853811/4561887
+# echo "${kernels_to_delete[@]}"  # for debugging (uncomment this and comment out below for debugging)
+sudo apt-get purge "${kernels_to_delete[@]}"  # <============ THE ACTUAL KERNEL DELETE COMMAND ============
+sudo apt autoremove
+# Comment this next line out when done debugging
+set +x  # turn OFF echoing commands
 
 boot_size_after="$(print_boot_partition_size)"
+echo ""
 echo '"/boot" partition size BEFORE deleting old kernels:'
 echo "$boot_size_before"
 echo ""
@@ -433,4 +456,263 @@ echo ""
 #
 #       Done!
 #
+#
+# RUN 3 [after letting the system updater update to the latest kernel and then after rebooting the PC]
+#
+#
+#       eRCaGuy_dotfiles$ gs_delete_old_kernels
+#       "/boot" partition size BEFORE deleting old kernels:
+#       Filesystem                 Size  Used Avail Use% Mounted on
+#       /dev/sda2                  705M  474M  181M  73% /boot
+#
+#       current_linux_kernel = 5.13.0-28-generic
+#
+#       Linux kernel versions currently installed (active version is highlighted):
+#       ii  linux-image-5.11.0-46-generic              5.11.0-46.51~20.04.1                  amd64        Signed kernel image generic
+#       ii  linux-image-5.13.0-25-generic              5.13.0-25.26~20.04.1                  amd64        Signed kernel image generic
+#       ii  linux-image-5.13.0-27-generic              5.13.0-27.29~20.04.1                  amd64        Signed kernel image generic
+#       ii  linux-image-5.13.0-28-generic              5.13.0-28.31~20.04.1                  amd64        Signed kernel image generic
+#       ii  linux-image-generic-hwe-20.04              5.13.0.28.31~20.04.15                 amd64        Generic Linux kernel image
+#
+#       Let's delete all kernel versions which are **older** than **1** version(s) prior to the current version (5.13.0-28-generic).
+#       The following old kernels will be deleted. Okay?
+#       WARNING: Ensure your current kernel is NOT in this list.
+#           linux-image-5.11.0-46-generic
+#           linux-image-5.13.0-25-generic
+#       Continue? (y/N): y
+#       Deleting those old kernels listed above.
+#
+#       [sudo] password for gabriel:
+#       Reading package lists... Done
+#       Building dependency tree
+#       Reading state information... Done
+#       The following additional packages will be installed:
+#         linux-image-unsigned-5.11.0-46-generic linux-image-unsigned-5.13.0-25-generic
+#       Suggested packages:
+#         fdutils linux-doc | linux-hwe-5.11-source-5.11.0 linux-hwe-5.11-tools linux-doc | linux-hwe-5.13-source-5.13.0 linux-hwe-5.13-tools
+#       The following packages will be REMOVED:
+#         linux-image-5.11.0-46-generic* linux-image-5.13.0-25-generic*
+#       The following NEW packages will be installed:
+#         linux-image-unsigned-5.11.0-46-generic linux-image-unsigned-5.13.0-25-generic
+#       0 upgraded, 2 newly installed, 2 to remove and 0 not upgraded.
+#       Need to get 21.6 MB of archives.
+#       After this operation, 700 kB of additional disk space will be used.
+#       Do you want to continue? [Y/n]
+#       Get:1 http://us.archive.ubuntu.com/ubuntu focal-updates/main amd64 linux-image-unsigned-5.11.0-46-generic amd64 5.11.0-46.51~20.04.1 [11.6 MB]
+#       Get:2 http://us.archive.ubuntu.com/ubuntu focal-updates/main amd64 linux-image-unsigned-5.13.0-25-generic amd64 5.13.0-25.26~20.04.1 [10.1 MB]
+#       Fetched 21.6 MB in 2s (8,740 kB/s)
+#       dpkg: linux-image-5.11.0-46-generic: dependency problems, but removing anyway as you requested:
+#        linux-modules-extra-5.11.0-46-generic depends on linux-image-5.11.0-46-generic | linux-image-unsigned-5.11.0-46-generic; however:
+#         Package linux-image-5.11.0-46-generic is to be removed.
+#         Package linux-image-unsigned-5.11.0-46-generic is not installed.
+#        linux-modules-5.11.0-46-generic depends on linux-image-5.11.0-46-generic | linux-image-unsigned-5.11.0-46-generic; however:
+#         Package linux-image-5.11.0-46-generic is to be removed.
+#         Package linux-image-unsigned-5.11.0-46-generic is not installed.
+#
+#       (Reading database ... 474781 files and directories currently installed.)
+#       Removing linux-image-5.11.0-46-generic (5.11.0-46.51~20.04.1) ...
+#       /etc/kernel/prerm.d/dkms:
+#       dkms: removing: bcmwl 6.30.223.271+bdcom (5.11.0-46-generic) (x86_64)
+#
+#       -------- Uninstall Beginning --------
+#       Module:  bcmwl
+#       Version: 6.30.223.271+bdcom
+#       Kernel:  5.11.0-46-generic (x86_64)
+#       -------------------------------------
+#
+#       Status: Before uninstall, this module version was ACTIVE on this kernel.
+#
+#       wl.ko:
+#        - Uninstallation
+#          - Deleting from: /lib/modules/5.11.0-46-generic/updates/dkms/
+#        - Original module
+#          - No original module was found for this module on this kernel.
+#          - Use the dkms install command to reinstall any previous module version.
+#
+#       depmod.....
+#
+#       DKMS: uninstall completed.
+#       dkms: removing: rtl88x2bu 5.8.7.4.37264.20200922 (5.11.0-46-generic) (x86_64)
+#
+#       -------- Uninstall Beginning --------
+#       Module:  rtl88x2bu
+#       Version: 5.8.7.4.37264.20200922
+#       Kernel:  5.11.0-46-generic (x86_64)
+#       -------------------------------------
+#
+#       Status: Before uninstall, this module version was ACTIVE on this kernel.
+#
+#       88x2bu.ko:
+#        - Uninstallation
+#          - Deleting from: /lib/modules/5.11.0-46-generic/updates/dkms/
+#        - Original module
+#          - No original module was found for this module on this kernel.
+#          - Use the dkms install command to reinstall any previous module version.
+#
+#       depmod...
+#
+#       DKMS: uninstall completed.
+#       dkms: removing: v4l2loopback 0.12.3 (5.11.0-46-generic) (x86_64)
+#
+#       -------- Uninstall Beginning --------
+#       Module:  v4l2loopback
+#       Version: 0.12.3
+#       Kernel:  5.11.0-46-generic (x86_64)
+#       -------------------------------------
+#
+#       Status: Before uninstall, this module version was ACTIVE on this kernel.
+#
+#       v4l2loopback.ko:
+#        - Uninstallation
+#          - Deleting from: /lib/modules/5.11.0-46-generic/updates/dkms/
+#        - Original module
+#          - No original module was found for this module on this kernel.
+#          - Use the dkms install command to reinstall any previous module version.
+#
+#       depmod...
+#
+#       DKMS: uninstall completed.
+#       /etc/kernel/postrm.d/initramfs-tools:
+#       update-initramfs: Deleting /boot/initrd.img-5.11.0-46-generic
+#       /etc/kernel/postrm.d/zz-update-grub:
+#       Sourcing file `/etc/default/grub'
+#       Sourcing file `/etc/default/grub.d/init-select.cfg'
+#       Generating grub configuration file ...
+#       Found linux image: /boot/vmlinuz-5.13.0-28-generic
+#       Found initrd image: /boot/initrd.img-5.13.0-28-generic
+#       Found linux image: /boot/vmlinuz-5.13.0-27-generic
+#       Found initrd image: /boot/initrd.img-5.13.0-27-generic
+#       Found linux image: /boot/vmlinuz-5.13.0-25-generic
+#       Found initrd image: /boot/initrd.img-5.13.0-25-generic
+#       Adding boot menu entry for UEFI Firmware Settings
+#       done
+#       Selecting previously unselected package linux-image-unsigned-5.11.0-46-generic.
+#       (Reading database ... 474777 files and directories currently installed.)
+#       Preparing to unpack .../linux-image-unsigned-5.11.0-46-generic_5.11.0-46.51~20.04.1_amd64.deb ...
+#       Unpacking linux-image-unsigned-5.11.0-46-generic (5.11.0-46.51~20.04.1) ...
+#       dpkg: linux-image-5.13.0-25-generic: dependency problems, but removing anyway as you requested:
+#        linux-modules-extra-5.13.0-25-generic depends on linux-image-5.13.0-25-generic | linux-image-unsigned-5.13.0-25-generic; however:
+#         Package linux-image-5.13.0-25-generic is to be removed.
+#         Package linux-image-unsigned-5.13.0-25-generic is not installed.
+#        linux-modules-5.13.0-25-generic depends on linux-image-5.13.0-25-generic | linux-image-unsigned-5.13.0-25-generic; however:
+#         Package linux-image-5.13.0-25-generic is to be removed.
+#         Package linux-image-unsigned-5.13.0-25-generic is not installed.
+#
+#       (Reading database ... 474781 files and directories currently installed.)
+#       Removing linux-image-5.13.0-25-generic (5.13.0-25.26~20.04.1) ...
+#       /etc/kernel/prerm.d/dkms:
+#       dkms: removing: bcmwl 6.30.223.271+bdcom (5.13.0-25-generic) (x86_64)
+#
+#       -------- Uninstall Beginning --------
+#       Module:  bcmwl
+#       Version: 6.30.223.271+bdcom
+#       Kernel:  5.13.0-25-generic (x86_64)
+#       -------------------------------------
+#
+#       Status: Before uninstall, this module version was ACTIVE on this kernel.
+#
+#       wl.ko:
+#        - Uninstallation
+#          - Deleting from: /lib/modules/5.13.0-25-generic/updates/dkms/
+#        - Original module
+#          - No original module was found for this module on this kernel.
+#          - Use the dkms install command to reinstall any previous module version.
+#
+#       depmod.....
+#
+#       DKMS: uninstall completed.
+#       dkms: removing: rtl88x2bu 5.8.7.4.37264.20200922 (5.13.0-25-generic) (x86_64)
+#
+#       -------- Uninstall Beginning --------
+#       Module:  rtl88x2bu
+#       Version: 5.8.7.4.37264.20200922
+#       Kernel:  5.13.0-25-generic (x86_64)
+#       -------------------------------------
+#
+#       Status: Before uninstall, this module version was ACTIVE on this kernel.
+#
+#       88x2bu.ko:
+#        - Uninstallation
+#          - Deleting from: /lib/modules/5.13.0-25-generic/updates/dkms/
+#        - Original module
+#          - No original module was found for this module on this kernel.
+#          - Use the dkms install command to reinstall any previous module version.
+#
+#       depmod...
+#
+#       DKMS: uninstall completed.
+#       dkms: removing: v4l2loopback 0.12.3 (5.13.0-25-generic) (x86_64)
+#
+#       -------- Uninstall Beginning --------
+#       Module:  v4l2loopback
+#       Version: 0.12.3
+#       Kernel:  5.13.0-25-generic (x86_64)
+#       -------------------------------------
+#
+#       Status: Before uninstall, this module version was ACTIVE on this kernel.
+#
+#       v4l2loopback.ko:
+#        - Uninstallation
+#          - Deleting from: /lib/modules/5.13.0-25-generic/updates/dkms/
+#        - Original module
+#          - No original module was found for this module on this kernel.
+#          - Use the dkms install command to reinstall any previous module version.
+#
+#       depmod...
+#
+#       DKMS: uninstall completed.
+#       /etc/kernel/postrm.d/initramfs-tools:
+#       update-initramfs: Deleting /boot/initrd.img-5.13.0-25-generic
+#       /etc/kernel/postrm.d/zz-update-grub:
+#       Sourcing file `/etc/default/grub'
+#       Sourcing file `/etc/default/grub.d/init-select.cfg'
+#       Generating grub configuration file ...
+#       Found linux image: /boot/vmlinuz-5.13.0-28-generic
+#       Found initrd image: /boot/initrd.img-5.13.0-28-generic
+#       Found linux image: /boot/vmlinuz-5.13.0-27-generic
+#       Found initrd image: /boot/initrd.img-5.13.0-27-generic
+#       Found linux image: /boot/vmlinuz-5.11.0-46-generic
+#       Adding boot menu entry for UEFI Firmware Settings
+#       done
+#       Selecting previously unselected package linux-image-unsigned-5.13.0-25-generic.
+#       (Reading database ... 474777 files and directories currently installed.)
+#       Preparing to unpack .../linux-image-unsigned-5.13.0-25-generic_5.13.0-25.26~20.04.1_amd64.deb ...
+#       Unpacking linux-image-unsigned-5.13.0-25-generic (5.13.0-25.26~20.04.1) ...
+#       Setting up linux-image-unsigned-5.13.0-25-generic (5.13.0-25.26~20.04.1) ...
+#       I: /boot/vmlinuz.old is now a symlink to vmlinuz-5.13.0-28-generic
+#       I: /boot/initrd.img.old is now a symlink to initrd.img-5.13.0-28-generic
+#       I: /boot/vmlinuz is now a symlink to vmlinuz-5.13.0-25-generic
+#       I: /boot/initrd.img is now a symlink to initrd.img-5.13.0-25-generic
+#       Setting up linux-image-unsigned-5.11.0-46-generic (5.11.0-46.51~20.04.1) ...
+#       I: /boot/vmlinuz.old is now a symlink to vmlinuz-5.13.0-25-generic
+#       I: /boot/vmlinuz is now a symlink to vmlinuz-5.11.0-46-generic
+#       I: /boot/initrd.img is now a symlink to initrd.img-5.11.0-46-generic
+#       (Reading database ... 474781 files and directories currently installed.)
+#       Purging configuration files for linux-image-5.13.0-25-generic (5.13.0-25.26~20.04.1) ...
+#       I: /boot/vmlinuz.old is now a symlink to vmlinuz-5.13.0-28-generic
+#       I: /boot/initrd.img.old is now a symlink to initrd.img-5.13.0-28-generic
+#       /var/lib/dpkg/info/linux-image-5.13.0-25-generic.postrm ... removing pending trigger
+#       rmdir: failed to remove '/lib/modules/5.13.0-25-generic': Directory not empty
+#       Purging configuration files for linux-image-5.11.0-46-generic (5.11.0-46.51~20.04.1) ...
+#       I: /boot/vmlinuz.old is now a symlink to vmlinuz-5.13.0-27-generic
+#       I: /boot/initrd.img.old is now a symlink to initrd.img-5.13.0-27-generic
+#       I: /boot/vmlinuz is now a symlink to vmlinuz-5.13.0-28-generic
+#       I: /boot/initrd.img is now a symlink to initrd.img-5.13.0-28-generic
+#       /var/lib/dpkg/info/linux-image-5.11.0-46-generic.postrm ... removing pending trigger
+#       rmdir: failed to remove '/lib/modules/5.11.0-46-generic': Directory not empty
+#       Processing triggers for linux-image-unsigned-5.11.0-46-generic (5.11.0-46.51~20.04.1) ...
+#       Processing triggers for linux-image-unsigned-5.13.0-25-generic (5.13.0-25.26~20.04.1) ...
+#       Reading package lists... Done
+#       Building dependency tree
+#       Reading state information... Done
+#       0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#       "/boot" partition size BEFORE deleting old kernels:
+#       Filesystem                 Size  Used Avail Use% Mounted on
+#       /dev/sda2                  705M  474M  181M  73% /boot
+#
+#       "/boot" partition size AFTER deleting old kernels:
+#       Filesystem                 Size  Used Avail Use% Mounted on
+#       /dev/sda2                  705M  275M  379M  42% /boot
+#
+#       Done!
 #
