@@ -113,16 +113,23 @@ gs_git_log_get_last_commit_date() {
 # to show how to rewrite git history, correct dates, do `date` math with `date -d`, use random
 # numbers, etc.  Use it as a learning starting point if you ever need to do something weird like
 # this to correct errors in timestamps in your repo.
+#
 # NB: To see `git log` with **author** AND **committer** dates, run:
 #       git log --pretty=fuller
+# NB: install `random` from: "eRCaGuy_dotfiles/useful_scripts/random.sh"
+#
 # Usage:
 #       gs_git_commit [<min_minutes> <max_minutes>]
+#
 # References:
 # 1. My Q here: How to make `git log` show only the commit date, nothing else:
 #    https://stackoverflow.com/q/71384830/4561887
 # 1. How can one change the timestamp of an old commit in Git?:
 #    https://stackoverflow.com/a/9701130/4561887
 gs_git_commit_r() {
+    local RETURN_CODE_SUCCESS=0
+    local RETURN_CODE_ERROR=1
+
     DEFAULT_MIN_MINUTES="2"
     DEFAULT_MAX_MINUTES="20"
 
@@ -175,7 +182,15 @@ gs_git_commit_r() {
     max_seconds=$((max_minutes*SECONDS_PER_MINUTE))
     range_seconds=$((max_seconds - min_seconds))
 
+    # NB: install `random` from: "eRCaGuy_dotfiles/useful_scripts/random.sh"
     random_seconds="$(random "$min_seconds" "$max_seconds")"
+    ret_code="$?"
+    if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
+        echo "ERROR: 'random' failed. It may not be installed. Install it from" \
+             "\"eRCaGuy_dotfiles/useful_scripts/random.sh\"."
+        return $RETURN_CODE_ERROR
+    fi
+
     random_minutes="$(bc <<< "scale=2; $random_seconds/$SECONDS_PER_MINUTE")"
     last_commit_date="$(gs_git_log_get_last_commit_date)"
     new_date="$(date +"%a %b %-d %H:%M:%S %Y %z" -d "$last_commit_date + $random_seconds seconds")"
