@@ -5161,6 +5161,12 @@ time rsync -rah --compress --info=progress2 --stats my_username@192.168.0.1:~/so
     Always run with `--dry-run` first, to ensure you don't accidentally delete stuff in the destination which you'd like to keep.
     See my notes here: https://superuser.com/a/1464264/425838
 
+3. MISC. NOTES:
+
+Started 10 June 2019.
+
+TODO
+
 
 ====================================================================================================
 = zip file compression, incl. gzip, tar, xz file and folder compression, etc.: =
