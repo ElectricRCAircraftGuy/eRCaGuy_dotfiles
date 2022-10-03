@@ -53,6 +53,12 @@ Note: other types of knowledge-sharing and guiding include:
 > 1. How was your relationship with your parents?
 > 1. Were you raised in a particular faith or religious tradition?
 
+Words of wisdom:
+[Practice "defensive employment"]
+1. Don't go 110%!: https://www.tiktok.com/@phong.thieu/video/7131489984686640390?is_from_webapp=v1&item_id=7131489984686640390
+1. Let it burn! 🔥🔥: https://www.tiktok.com/@phong.thieu/video/7138809958451121414?is_copy_url=1&is_from_webapp=v1&item_id=7138809958451121414
+    1. If deadlines truly are unreachable, they should burn 🔥. It's the only way leadership ever realizes there's a problem, you know?
+
 
 ====================================================================================================
 = Quotes: =
@@ -164,6 +170,15 @@ That should be a comic.
 
 "Every chance you get, eliminate a template. If you can write _clean_ code without using a template, do so. Simplicity is better."
     - Gabriel Staples, 22 Oct. 2020
+
+I frequently tell people:
+> If the syntax of C is like Spanish, the syntax of C++ is like Spanish + English + French + Italian + Portuguese + German.
+> 
+> And the problem is that even if you write the most perfect and beautiful Spanish in C++, the Frenchers will hate it. And even if you write the most beautiful and perfect French in C++, the Germans will hate it.
+> 
+> That's the problem with C++.  
+    ~ Gabriel Staples
+    Written down 28 Sept. 2022, even though I've been telling people this for a couple years now.
 
 23 Oct. 2020:
 
@@ -1201,7 +1216,7 @@ time ( \
     output/$TARGET/images/image.swu && \
     time make br-my-module-1-reconfigure && \
     time make br-host-my-module-1-reconfigure && \
-    time make
+    time make \
 ); gs_alert
 ```
 - The `time make br-my-module-1-reconfigure` cmd above builds "my_module_1" for the target (embedded Linux board).
@@ -4436,13 +4451,30 @@ clang-format myfile.cpp | diff -u --color=always myfile.cpp - = run clang-format
 
 HASH SUM COMMANDS [hash sums, checksums, cryptography, cryptographic checksums, data integrity checksums]:
 sha256sum somefile.txt
+    Calculate a SHA-256 hash over somefile.txt.
 sha512sum somefile.txt
-md5sum somefile.txt = do an MD5 checksum of somefile.txt; note: according to my online research, MD5 checksums are NOT cryptographically sound, but are still ok for use as general-purpose data integrity checksums.
-shasum --algorithm 256 somefile.txt = same as `sha256sum somefile.txt`
-shasum -a 256 somefile.txt = same as above = same as `sha256sum somefile.txt`
-shasum -a 512 somefile.txt = same as `sha512sum somefile.txt`
+    Calculate a SHA-512 hash over somefile.txt.
+md5sum somefile.txt
+    do an MD5 checksum of somefile.txt; note: according to my online research, MD5 checksums are NOT cryptographically sound, but are still ok for use as general-purpose data integrity checksums.
+shasum --algorithm 256 somefile.txt
+    same as `sha256sum somefile.txt`
+shasum -a 256 somefile.txt
+    same as above = same as `sha256sum somefile.txt`
+shasum -a 512 somefile.txt
+    same as `sha512sum somefile.txt`
 
-strings my_binary_file > temp_strings.txt = extract all ASCII strings from the binary file my_binary_file and store them into the text file temp_strings.txt.
+strings <binary_file>
+strings my_binary_file > temp_strings.txt
+    extract all ASCII strings from the binary file my_binary_file and store them into the text file temp_strings.txt.
+
+strip <object_file>
+strip <executable_file>
+strip my_executable_file
+    Strip and remove (discard) symbol data from C and C++ executables/object files. This can be used to reduce the size of a Linux executable, for instance, when you want to move it to a very memory-constrained small embedded Linux device or Linux distribution.
+    See:
+    1. `man strip`
+    1. Where I first learned about this: https://github.com/npat-efault/picocom#compilation--installation
+        > [Stripping] the binary is not required, it just reduces its size by a few kilobytes
 
 hexdump -C my_file
     print all chars of the binary or ASCII file, my_file, in hex+ASCII mode (`-C` means "'C'anonical hex+ASCII display"). 
@@ -4997,7 +5029,7 @@ END OF = Linux (General): =
 ====================================================================================================
 = syslog-ng: =
 ====================================================================================================
-[and logrotation log rotation logrotate.d]
+[and logrotation log rotation logrotate.d; = logrotate: =]
 
 Features & Notes:
 1. `syslog-ng` is a Linux logging replacement alternative for `syslog`. It is apparently more-powerful and can automatically send Linux logs to remote logging servers for remote storage, viewing, and retrieval. 
@@ -5036,46 +5068,148 @@ Features & Notes:
         # OR perhaps:
         cat /etc/logrotate.d/syslog   # perhaps on an embedded Linux device
         ```
-    1. Sample configuration of an "/etc/logrotate.d/syslog" file. 
-        This will keep 7 rotated log files (ex: "/var/log/messages" + ["/var/log/messages.1", "/var/log/messages.2", etc., through "/var/log/messages.7", inclusive]), rotating them every time the size of each active log file hits 20 MB:
-        ```
-        /var/log/auth.log 
-        /var/log/user.log
-        /var/log/messages  
-        {
-            rotate 7
-            size 20M
-            delaycompress
-            missingok
-            # Required for syslog-ng after each rotation, to cause it to restart to it can begin
-            # logging to the new unrotated main active file under a new file descriptor; see:
-            # https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.17/administration-guide/32
-            postrotate
-                # wip
-            endscript
-        }
-        ```
-        See `man 8 logrotate` for some example configuration files, similar to the above. 
-        See that manual page online here: https://linux.die.net/man/8/logrotate. 
-        All of the above logrotate.d/ configuration file parameters are described in the manual pages above.
-    1. See also the default Buildroot configuration file for the logrotate daemon for the syslog (or syslog-ng) "/var/log/messages" file, here!: https://github.com/buildroot/buildroot/blob/master/package/logrotate/logrotate.conf :
-        logrotate.conf:
-        ```
+
+Logrotate/Log rotation:
+References:
+    1. `man logrotate` - see also the example files here
+        1. https://linux.die.net/man/8/logrotate
+        1. https://man7.org/linux/man-pages/man8/logrotate.8.html
+    1. `cat /etc/logrotate.conf` - see what's in the master logrotate file on your Ubuntu or embedded Linux machine.
+    1. `ls -1 /etc/logrotate.d` - list all logrotate files which will be included by the main "/etc/logrotate.conf" file.
+
+1. Sample main logrotate file on Ubuntu:
+    Notice that the `include /etc/logrotate.d` line below is what includes all other custom logrotate configuration files from the "/etc/logrotate.d/" dir!
+
+    `cat /etc/logrotate.conf`:
+    ```bash
+    # see "man logrotate" for details
+    # rotate log files weekly
+    weekly
+
+    # use the syslog group by default, since this is the owning group
+    # of /var/log/syslog.
+    su root syslog
+
+    # keep 4 weeks worth of backlogs
+    rotate 4
+
+    # create new (empty) log files after rotating old ones
+    create
+
+    # uncomment this if you want your log files compressed
+    #compress
+
+    # packages drop log rotation information into this directory
+    include /etc/logrotate.d
+
+    # no packages own wtmp, or btmp -- we'll rotate them here
+    /var/log/wtmp {
+        missingok
+        monthly
+        create 0664 root utmp
+        rotate 1
+    }
+
+    /var/log/btmp {
+        missingok
+        monthly
+        create 0660 root utmp
+        rotate 1
+    }
+
+    # system-specific logs may be configured here
+    ```
+1. Sample rsyslog logrotate file on Ubuntu:
+    `cat /etc/logrotate.d/rsyslog`:
+    ```bash
+    /var/log/syslog
+    {
+        rotate 7
+        daily
+        missingok
+        notifempty
+        delaycompress
         compress
+        postrotate
+            /usr/lib/rsyslog/rsyslog-rotate
+        endscript
+    }
 
-        include /etc/logrotate.d
+    /var/log/mail.info
+    /var/log/mail.warn
+    /var/log/mail.err
+    /var/log/mail.log
+    /var/log/daemon.log
+    /var/log/kern.log
+    /var/log/auth.log
+    /var/log/user.log
+    /var/log/lpr.log
+    /var/log/cron.log
+    /var/log/debug
+    /var/log/messages
+    {
+        rotate 4
+        weekly
+        missingok
+        notifempty
+        compress
+        delaycompress
+        sharedscripts
+        postrotate
+            /usr/lib/rsyslog/rsyslog-rotate
+        endscript
+    }
+    ```
+1. Sample configuration of an "/etc/logrotate.d/syslog" file for **`syslog-ng`** on an embedded Linux board. 
+    This will keep 7 rotated log files (ex: "/var/log/messages" + ["/var/log/messages.1", "/var/log/messages.2", etc., through "/var/log/messages.7", inclusive]), rotating them and manually restarting `syslog` every time the size of the active log file ("/var/log/messages") hits 20 MB. 
+    For example: 
+    ```bash
+    /var/log/auth.log 
+    /var/log/user.log
+    /var/log/messages  
+    {
+        rotate 7
+        size 20M
+        delaycompress
+        missingok
+        # Required for syslog-ng after each rotation, to cause it to restart so it can begin
+        # logging to the new unrotated main active file under a new file descriptor; see link below.
+        postrotate
+            # "After rotating the log files, reload syslog-ng OSE using the `syslog-ng-ctl reload`
+            # command, or use another method to send a SIGHUP to syslog-ng OSE." See:
+            # https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.17/administration-guide/32
+            # This ensures that syslog-ng will move its file descriptor to begin logging into the
+            # main "/var/log/messages" log file again, instead of into the
+            # now-rotated "/var/log/messages.1" file, which the old file descriptor (fd) is now
+            # pointing to since that fd's filename was just renamed from "/var/log/messages"
+            # to "/var/log/messages.1" during the log rotation.
+            # - Note: Buildroot configures the meaning of the `reload` cmd in this file here:
+            #   https://github.com/buildroot/buildroot/blob/master/package/syslog-ng/S01syslog-ng
+            syslog-ng-ctl reload
+        endscript
+    }
+    ```
+    See `man 8 logrotate` for some example configuration files, similar to the above. 
+    See that manual page online here: https://linux.die.net/man/8/logrotate. 
+    All of the above logrotate.d/ configuration file parameters are described in the manual pages above.
+1. See also the default Buildroot configuration file for the logrotate daemon for the syslog (or syslog-ng) "/var/log/messages" file, here!: https://github.com/buildroot/buildroot/blob/master/package/logrotate/logrotate.conf :
+    /etc/logrotate.conf:
+    ```
+    compress
 
-        /var/log/messages /var/log/auth.log /var/log/user.log {
-            rotate 7
-            daily
-            delaycompress
-            missingok
-            sharedscripts
-            postrotate
-                /usr/bin/killall -HUP syslogd
-            endscript
-        }
-        ```
+    include /etc/logrotate.d
+
+    /var/log/messages /var/log/auth.log /var/log/user.log {
+        rotate 7
+        daily
+        delaycompress
+        missingok
+        sharedscripts
+        postrotate
+            /usr/bin/killall -HUP syslogd
+        endscript
+    }
+    ```
 
 (Gernally Paid), Remote-logging Servers:  
 Possible paid-as-a-service log servers you can log to include, for example:
@@ -5090,7 +5224,7 @@ Possible paid-as-a-service log servers you can log to include, for example:
 1. Sumo Logic: https://www.sumologic.com/
 1. (Maybe free if you host your own Redwood server?) RedwoodJS logging server: https://redwoodjs.com/docs/logger
 
-References:
+Syslog-ng References:
 1. Main website/manual ex. pg: https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.17/administration-guide/32 
 1. logrotate and "/etc/logrotate.d/<config_files>": https://linux.die.net/man/8/logrotate
 
@@ -5110,6 +5244,17 @@ syslog-ng-ctl config
     View the currently-loaded syslog-ng.conf configuration file. It will likely match what is in "/etc/syslog-ng.conf", since that is where the configuration file is stored. See:
     1. `syslog-ng-ctl --help`
     1. `cat /etc/syslog-ng.conf`
+
+sv restart my-runit-started-process
+    Tell `runsv`, the runit server (apparently), to restart the "my-runit-started-process" service, which was previously started by runit!
+    See also: `man sv`.
+sv status my-runit-started-process
+    See the PID and status of the runit-managed-and-started service named "my-runit-started-process". Example output:
+    ```
+    run: my-runit-started-process: (pid 1319) 1381s; run: log: (pid 1276) 1381s
+    ```
+    TODO: find out: what is the meaning of the "log pid" above?? Why is one PID 1276 and the other is 1319?
+    See also: `man sv`.
 
 
 ====================================================================================================
