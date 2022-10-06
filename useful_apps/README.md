@@ -87,3 +87,72 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
     1. Install info: https://github.com/github/git-sizer#getting-started
     1. GitHub's official repo size documentation: https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github
     1. [my ans] https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com/70427664#70427664
+1. Ookla `speedtest` CLI. 
+    1. For full installation instructions, see the [main readme's "Misc. Install Instructions" section](../README.md#misc-install-instructions).
+1. `picocom` [my preferred command-line serial terminal program]: a serial terminal command-line program to communicate with serial devices such as Arduinos or embedded Linux boards over serial. Use it as an alternative to [`minicom`](https://linux.die.net/man/1/minicom) or the Arduino Serial Monitor.
+    1. https://github.com/npat-efault/picocom
+    1. First, add yourself to the `dialout` group so you can access serial devices without using `sudo` or being root. See my instructions here: [../arduino/README.md](../arduino/README.md).
+        ```bash
+        # Add your user to the "dialout" group
+        sudo usermod -a -G dialout $USERNAME
+        # Now, log out entirely from Ubuntu, then log back in. You will now have the privileges of
+        # this group! Let's verify that. You should see `dialout` as one of the words printed 
+        # when you run this:
+        groups $USERNAME
+        ```
+    1. Install & use:
+        ```bash
+        # 1. Download and build the program
+
+        # cd to wherever you'd like to download the program
+        cd ~/GS/dev
+        git clone https://github.com/npat-efault/picocom.git
+        cd picocom
+        make
+
+        # You can now run the program like this. 
+        # - To exit, type Ctrl + A, Ctrl + X. See the readme here:
+        #   https://github.com/npat-efault/picocom
+        # - Ctrl + C does NOT exit the program because you may want Ctrl + C to actually be 
+        #   forwarded to your remote serial device instead! So, Ctrl + C gets forwarded to your 
+        #   device. Ctrl + A, Ctrl + X, therefore, is required to exit picocom. 
+        ./picocom --baud 115200 /dev/ttyUSB0
+
+        # check the version by viewing the first line output by the help menu
+        ./picocom --help
+
+        # View the "man" (manual) pages manually like this:
+        man ./picocom.1
+
+
+        # 2. Install the program
+
+        # create the ~/bin dir if it doesn't already exist
+        mkdir -p ~/bin
+        # add a symlink to the executable
+        ln -si "$PWD/picocom" ~/bin
+        # add a symlink to the man page so you can do `man picocom`
+        # See: https://askubuntu.com/a/244810/327339
+        sudo ln -si "$PWD/picocom.1" /usr/local/share/man/man1
+
+        # re-source your bash initialization file; don't know what "source" means? Read my answer
+        # here: https://stackoverflow.com/a/62626515/4561887
+        . ~/.bashrc
+
+        # now log out and log back in if this is your first time creating the ~/bin dir
+
+        # now you can run the program without specifying the whole path to it
+        picocom --baud 115200 /dev/ttyUSB0
+        picocom --help
+        man picocom
+        ```
+    1. Logging
+        ```bash
+        # You can data-log all serial input/output by appending to a log file like this; 
+        # see `man picocom` and search for `--logfile` for details
+        picocom --baud 115200 --logfile serial_log.txt /dev/ttyUSB0
+        ```
+1. [eRCaGuy_PyTerm](https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm) - a datalogging serial terminal/console program which I wrote, written in Python.
+    1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm
+    1. Can be used in place of `minicom`, `picocom`, or the Arduino Serial Monitor.
+    1. This program works fine, but for general logging, you might consider `picocom`, however, instead. See its logging command just above. 
