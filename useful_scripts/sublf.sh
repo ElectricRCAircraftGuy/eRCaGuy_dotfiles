@@ -60,6 +60,18 @@
 #       sublf -not \( -path './output/*' -prune \)
 ########### MAKE THIS A STAND-ALONE FUNCTION IN MY USEFUL_SCRIPTS DIR!
 # SEE ALSO MY ANSWER HERE: https://stackoverflow.com/a/70658963/4561887
+
+
+# Note: to skip this script and quickly search for files, do this:
+#       find | fzf -m
+# Then, use the arrow keys to move the selector up and down. Press Tab to toggle
+# a file selection on and off. Press Enter to return from the program and print
+# out the paths to your selected files. Open these manually in whatever editor
+# you see fit.
+#
+# OR, run `sublf`, below, to do all this for you, automatically opening them up
+# in Sublime Text or the editor of your choice.
+
 sublf() {
     echo "DEBUG: all args = $@"  # FOR DEBUGGING
 
