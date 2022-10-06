@@ -3272,7 +3272,8 @@ git status
             new file:   .gitmodules
             new file:   eRCaGuy_CodeFormatter
 git submodule status
-    Show which commit hash each submodule is currently set to point to.
+    <================
+    List all submodules (sub-repos) in your repo, and show which commit hash each submodule is currently set to point to.
     Where I first learned this: https://stackoverflow.com/a/1030263/4561887
 git diff --cached eRCaGuy_CodeFormatter
     See the cached changes. You'll see eRCaGuy_CodeFormatter as a particular **commit hash** from that repository! Even though it's a folder and a submodule, git tracks it as a particular git commit hash from that repository. 
