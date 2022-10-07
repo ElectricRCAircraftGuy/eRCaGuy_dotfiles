@@ -89,6 +89,7 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
     1. [my ans] https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com/70427664#70427664
 1. Ookla `speedtest` CLI. 
     1. For full installation instructions, see the [main readme's "Misc. Install Instructions" section](../README.md#misc-install-instructions).
+<a id="picocom"></a>
 1. `picocom` [my preferred command-line serial terminal program]: a serial terminal command-line program to communicate with serial devices such as Arduinos or embedded Linux boards over serial. Use it as an alternative to [`minicom`](https://linux.die.net/man/1/minicom) or the Arduino Serial Monitor.
     1. https://github.com/npat-efault/picocom
     1. First, add yourself to the `dialout` group so you can access serial devices without using `sudo` or being root. See my instructions here: [../arduino/README.md](../arduino/README.md).
@@ -123,7 +124,6 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
 
         # View the "man" (manual) pages manually like this:
         man ./picocom.1
-
 
         # 2. Install the program
 

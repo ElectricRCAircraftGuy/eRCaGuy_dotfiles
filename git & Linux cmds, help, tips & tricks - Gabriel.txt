@@ -4555,6 +4555,15 @@ kill -TERM 123 543 2341 3453    = same as above
 kill -SIGTERM 123 543 2341 3453 = same as above  <======= VERY COMMON USAGE ========
 kill -15 123 543 2341 3453      = same as above
 
+kill "$(cat /var/run/process_name.pid)"
+    Kill the process whose name is `process_name` and whose PID (process ID) is stored inside the file "/var/run/process_name.pid".
+pid="$(cat /var/run/syslog-ng.pid)" kill -SIGUSR1 $pid
+    Reopen the log files being written-to by `syslog-ng`. This is good to call after logrotate. 
+    This sends the `SIGUSR1` kill signal to the `syslog-ng` process via its PID stored in that file. 
+    In this particular case, it is equivalent to `syslog-ng-ctl reopen`. 
+    See my notes here: https://github.com/syslog-ng/syslog-ng/issues/1774#issuecomment-1270517815
+
+
 [disk usage; disk free space; disk space usage]
 - See: https://www.ubuntupit.com/best-disk-analyzer-tools-for-linux-system/
 sudo baobab = disk usage analyzer GUI (now called simply "Disk Usage Analyzer" in Ubuntu, and it comes with Ubuntu!)
@@ -4640,6 +4649,22 @@ TODO: need to add this information in here so I don't forget it.
 
 
 == USB, serial, devices, etc.: ==
+
+Serial terminal tools:
+1. picocom [my favorite]
+    1. See my installation instructions & notes: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_apps#picocom
+    1. Source code: https://github.com/npat-efault/picocom
+1. minicom
+1. Arduino Serial Monitor
+1. eRCaGuy_PyTerm
+    1. My repo: https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm
+
+picocom --help
+    Show the version (1st line) and help menu.
+picocom --baud 115200 /dev/ttyUSB0
+    Connect to device /dev/ttyUSB0 at 115200 baud
+man picocom
+    See the manual pages for `picocom`.
 
 setserial -g /dev/ttyS* | sort -V
     Display (and sort) serial information for all /dev/ttyS* devices.
@@ -5161,9 +5186,10 @@ References:
         endscript
     }
     ```
-1. Sample configuration of an "/etc/logrotate.d/syslog" file for **`syslog-ng`** on an embedded Linux board. 
+1. Sample configuration of an "/etc/logrotate.d/syslog-ng" file for **`syslog-ng`** on an embedded Linux board. 
     This will keep 7 rotated log files (ex: "/var/log/messages" + ["/var/log/messages.1", "/var/log/messages.2", etc., through "/var/log/messages.7", inclusive]), rotating them and manually restarting `syslog` every time the size of the active log file ("/var/log/messages") hits 20 MB. 
-    For example: 
+    Sample "/etc/logrotate.d/syslog-ng" logrotate config file:
+    See my notes & example here: https://github.com/syslog-ng/syslog-ng/issues/1774#issuecomment-1270517815
     ```bash
     /var/log/auth.log 
     /var/log/user.log
@@ -5173,20 +5199,29 @@ References:
         size 20M
         delaycompress
         missingok
-        # Required for syslog-ng after each rotation, to cause it to restart so it can begin
-        # logging to the new unrotated main active file under a new file descriptor; see link below.
+        # Required for syslog-ng after each rotation, to cause it to reopen log files so it can begin
+        # logging to the new log file under a new file descriptor, rather than to the old log file
+        # which has now been rotated and renamed. 
         postrotate
-            # "After rotating the log files, reload syslog-ng OSE using the `syslog-ng-ctl reload`
-            # command, or use another method to send a SIGHUP to syslog-ng OSE." See:
-            # https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.17/administration-guide/32
-            # This ensures that syslog-ng will move its file descriptor to begin logging into the
-            # main "/var/log/messages" log file again, instead of into the
+            # After rotating the log files, cause syslog-ng to reopen the destination log files so it
+            # will log into the newly-created log files rather than into the now-rotated and renamed 
+            # ones.
+            #
+            # This ensures, for example, that syslog-ng will move its file descriptor to begin logging
+            # into the main "/var/log/messages" log file again, instead of into the
             # now-rotated "/var/log/messages.1" file, which the old file descriptor (fd) is now
             # pointing to since that fd's filename was just renamed from "/var/log/messages"
             # to "/var/log/messages.1" during the log rotation.
-            # - Note: Buildroot configures the meaning of the `reload` cmd in this file here:
-            #   https://github.com/buildroot/buildroot/blob/master/package/syslog-ng/S01syslog-ng
-            syslog-ng-ctl reload
+
+            # Option 0 (no longer recommended): call the heavier `reload` command after log rotation
+            # syslog-ng-ctl reload
+
+            # Option 1 (recommended): call the new `reopen` command after log rotation
+            syslog-ng-ctl reopen
+
+            # Option 2 (same thing as Option 1 above): send the `SIGUSR1` kill signal to the 
+            # running `syslog-ng` process
+            # pid="$(cat /var/run/syslog-ng.pid)" kill -SIGUSR1 $pid
         endscript
     }
     ```
@@ -5238,6 +5273,12 @@ syslog-ng-ctl reload
     Reload the syslog-ng service. This must be called each time your log rotate daemon rotates the logs in the "/var/log/messages" files, for instance. 
     See: 
     https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.17/administration-guide/32
+    Update: use the lighter-weight `syslog-ng-ctl reopen` after log rotation instead! See my comments:
+    https://github.com/syslog-ng/syslog-ng/issues/1774#issuecomment-1270517815
+syslog-ng-ctl reopen
+    <=============
+    Reopen log files being written to by `syslog-ng`. Call this after each `logrotate` log rotation! See my notes here:
+    https://github.com/syslog-ng/syslog-ng/issues/1774#issuecomment-1270517815
 syslog-ng-ctl export-config-graph | jq .
     View the syslog-ng configuration graph of all settings and source to destination logs configured. Pipe it to JQuery (`jq`) to view it in a pretty, human-readable JSON format. 
     See: `syslog-ng-ctl --help`
