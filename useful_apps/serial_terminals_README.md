@@ -24,9 +24,9 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 <a id="serial-terminal-programs"></a>
 # Serial terminal programs
 
-1. picocom [my favorite]
-    1. See my installation instructions & notes: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_apps#picocom
-    1. Source code: https://github.com/npat-efault/picocom
+1. [picocom](https://github.com/npat-efault/picocom) [my favorite]
+    1. https://github.com/npat-efault/picocom
+    1. See my installation instructions & notes below.
 1. minicom
 1. Arduino Serial Monitor and Serial Plotter
 1. [eRCaGuy_PyTerm](https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm) - a datalogging serial terminal/console program which I wrote, written in Python.
@@ -38,8 +38,6 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 <a id="picocom"></a>
 # `picocom`
 
-
-<a id="picocom"></a>
 1. `picocom` [my preferred command-line serial terminal program]: a serial terminal command-line program to communicate with serial devices such as Arduinos or embedded Linux boards over serial. Use it as an alternative to [`minicom`](https://linux.die.net/man/1/minicom) or the Arduino Serial Monitor.
     1. https://github.com/npat-efault/picocom
     1. First, add yourself to the `dialout` group so you can access serial devices without using `sudo` or being root. See my instructions here: [../arduino/README.md](../arduino/README.md).
