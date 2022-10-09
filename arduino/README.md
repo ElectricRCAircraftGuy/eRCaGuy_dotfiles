@@ -1,6 +1,12 @@
 **This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles**
 
+
 # Arduino Readme
+
+
+## See also
+1. [serial_terminals_README.md](../useful_apps/serial_terminals_README.md)
+
 
 ## Download & Install:
 
@@ -9,6 +15,7 @@ Download the Arduino IDE here: https://www.arduino.cc/en/Main/Software
 More recent versions of the IDE include a Linux Install script, `install.sh`, and uninstall script, `uninstall.sh`. Use them. The alternative is fine too: just use the arduino desktop file included in this project to create shortcuts, as the executable is ready to use simply by decompressing the Arduino download.
 
 FOR OFFICIAL HELP FROM ARDUINO ON USING IT ON LINUX, read this article here: https://www.arduino.cc/en/guide/linux.
+
 
 ## 1. Problem uploading to board / need to add user to dialout group [<== DO THIS!]:
 
@@ -39,6 +46,7 @@ FOR OFFICIAL HELP FROM ARDUINO ON USING IT ON LINUX, read this article here: htt
         groups $USERNAME
 
     This shows which groups your username is a part of. You should now see "dialout" as one of the groups printed. If so, uploading to boards should work now.
+
 
 ## 2. USBasp: add udev rule to allow the "dialout" group to use this programmer
 
