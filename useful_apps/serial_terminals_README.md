@@ -14,6 +14,10 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     1. [General Usage](#general-usage)
 1. [Transferring files over serial](#transferring-files-over-serial)
     1. [Background](#background-1)
+    1. [Scenario 1: transferring a file over serial from a Linux or other computer to a _custom bare-metal or RTOS-based microcontroller_ such as Arduino or STM32](#scenario-1-transferring-a-file-over-serial-from-a-linux-or-other-computer-to-a-custom-bare-metal-or-rtos-based-microcontroller-such-as-arduino-or-stm32)
+    1. [Scenario 2: transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat` but does NOT have access to the `sz` and `rz` ZMODEM protocol executables](#scenario-2-transferring-a-file-over-serial-from-a-linux-computer-to-a-linux-computer-where-the-destination-computer-does-have-cat-but-does-not-have-access-to-the-sz-and-rz-zmodem-protocol-executables)
+    1. [Scenario 3: transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat`, AND the `sz` and `rz` ZMODEM protocol executables](#scenario-3-transferring-a-file-over-serial-from-a-linux-computer-to-a-linux-computer-where-the-destination-computer-does-have-cat-and-the-sz-and-rz-zmodem-protocol-executables)
+    1. [References](#references)
 
 <!-- /MarkdownTOC -->
 </details>
@@ -217,5 +221,156 @@ Transfering files over serial can be done via ZMODEM. See: [Unix & Linux: How to
     sudo apt install lrzsz
     ```
 1. To learn about the ingenuity of the ZMODEM auto-resend and error-checking protocol, see here: https://en.wikipedia.org/wiki/ZMODEM:
-> ZMODEM replaced the packet number with the actual location in the file, indicated by a 32-bit number. This allowed it to send NAK messages that re-wound the transfer to the point of failure, regardless of how long the file might be. This same feature was also used to re-start transfers if they failed or were deliberately interrupted. In this case, the receiver would look to see how much data had been previously received and then send a NAK with that location, automatically triggering the sender to start from that point.
+    > ZMODEM replaced the packet number with the actual location in the file, indicated by a 32-bit number. This allowed it to send NAK messages that re-wound the transfer to the point of failure, regardless of how long the file might be. This same feature was also used to re-start transfers if they failed or were deliberately interrupted. In this case, the receiver would look to see how much data had been previously received and then send a NAK with that location, automatically triggering the sender to start from that point.
+
+
+<a id="scenario-1-transferring-a-file-over-serial-from-a-linux-or-other-computer-to-a-custom-bare-metal-or-rtos-based-microcontroller-such-as-arduino-or-stm32"></a>
+## Scenario 1: transferring a file over serial from a Linux or other computer to a _custom bare-metal or RTOS-based microcontroller_ such as Arduino or STM32
+
+In other words: the target serial device does NOT have access to the Linux tools such as `cat` or `rz` or `sz` which we will use in the other scenarios below.
+
+You'll have to do this all custom. Modelling your approach after how [ZMODEM](https://en.wikipedia.org/wiki/ZMODEM) (see quote from this link just above) works would be a great idea. You'll have to write a custom application on both the remote serial device *as well as* on your local host machine. 
+
+1. Write a Python, C, or C++ program to send serial data from your host computer to the serial device. 
+1. Start out by sending a CLI command such as `send_file` to the remote serial device. Have this make it switch from an "ASCII CLI-interface" mode to a "binary file receive" mode. 
+1. The remote device will then send a NAK (negative acknowledgement) to the host machine specifying that it needs the host machine to begin sending the file at byte 0. 
+    1. The NAK will contain a `uint32_t i_file` index which specifies the index location in the file which it would like to receive next, and at which point the sender (host machine) should start sending.
+    1. Make this a binary packet with header, payload, trailer. In C++, that might look like this:
+        ```cpp
+        // NB: the NAK packet is a **fixed size** packet.
+
+        constexpr uint32_t PACKET_NAK_START = 1234567890;
+        constexpr uint32_t PACKET_NAK_END = 987654321;
+
+        struct __attribute__ ((__packed__)) HeaderNak
+        {
+            /// A unique, random 4-byte number to indicate the start of this
+            /// type of packet
+            const uint32_t packet_start = PACKET_NAK_START;
+            /// A NAK packet counter to help detect missed packets
+            uint32_t packet_counter = 0;
+            /// A timestamp of the time at which this was sent from the sender
+            uint64_t timestamp_ns;
+        };
+
+        struct __attribute__ ((__packed__)) PayloadNak
+        {
+            /// The file index at which point the device would like the sender
+            /// to begin sending the file data again
+            uint32_t i_file;
+        };
+
+        struct __attribute__ ((__packed__)) TrailerNak
+        {
+            /// Some sort of packet integrity checksum, such as an XOR, CRC,
+            /// MD5, SHA256, etc, over the header and payload portions of the
+            /// packet.
+            /// - Make this a CMAC or HMAC, which is basically just
+            /// a SHA256 hash over the whole packet plus a pre-shared key, 
+            /// if you'd like to also ensure packet authenticity to ensure the
+            /// packet came from a trusted source.
+            uint32_t checksum;
+            /// A unique, random 4-byte number to indicate the end of this 
+            /// type of packet.
+            const uint32_t packet_end = PACKET_NAK_END;
+        };
+
+        struct __attribute__ ((__packed__)) PacketNak
+        {
+            HeaderNak header;
+            PayloadNak payload;
+            TrailerNak trailer;
+        };
+        ```
+1. The NAK packet will be identified and parsed by the magic starting number, known size, magic ending number, and checksum. 
+1. The host machine will then begin sending over the file to the remote serial device using a packet structure which might look like this in C++:
+    ```cpp
+    // NB: the FILE data packet is a **variable size** packet, with a payload of
+    // perhaps 1 to 512 bytes or so. This means that the number of bytes
+    // actually serialized and sent over the wire can vary, but the 
+    // `sizeof(PacketFile)` is fixed and known at compile-time. 
+
+    constexpr uint16_t MAX_NUM_BYTES = 512;
+
+    constexpr uint32_t PACKET_FILE_START = 5555567890;
+    constexpr uint32_t PACKET_FILE_END = 987655555;
+
+    struct __attribute__ ((__packed__)) HeaderFile
+    {
+        /// A unique, random 4-byte number to indicate the start of this 
+        /// type of packet
+        const uint32_t packet_start = PACKET_FILE_START;
+        /// A File packet counter to help detect missed packets
+        uint32_t packet_counter = 0;
+        /// A timestamp of the time at which this was sent from the sender
+        uint64_t timestamp_ns;
+    };
+
+    struct __attribute__ ((__packed__)) PayloadFile
+    {
+        /// The total number of bytes in this file being sent.
+        uint32_t file_size;
+        /// The file index at which point the bytes being sent in this packet
+        /// begin.
+        uint32_t i_file;
+        /// The number of bytes (actually used and sent over serial) in the data
+        /// array below, for this packet.
+        uint16_t num_bytes;
+        /// An array of the file bytes being sent over by this packet. 
+        /// NB: this array must be sized to hold up to `MAX_NUM_BYTES` for 
+        /// processing on each end, even though only **num_bytes** of it 
+        /// will actually be serialized and sent over the serial wire!
+        uint8_t bytes[MAX_NUM_BYTES];
+    };
+
+    struct __attribute__ ((__packed__)) TrailerFile
+    {
+        /// Some sort of packet integrity checksum, such as an XOR, CRC,
+        /// MD5, SHA256, etc, over the header and payload portions of the
+        /// packet.
+        /// - Make this a CMAC or HMAC, which is basically just
+        /// a SHA256 hash over the whole packet plus a pre-shared key, 
+        /// if you'd like to also ensure packet authenticity to ensure the
+        /// packet came from a trusted source.
+        uint32_t checksum;
+        /// A unique, random 4-byte number to indicate the end of this 
+        /// type of packet.
+        const uint32_t packet_end = PACKET_FILE_END;
+    };
+
+    struct __attribute__ ((__packed__)) PacketFile
+    {
+        HeaderFile header;
+        PayloadFile payload;
+        TrailerFile trailer;
+    };
+    ```
+1. Since each packet contains the `file_size`, the `i_file` index at which point in the file this data begins, and the `num_bytes` of the file sent in this packet, the remote serial device receiving the file can easily know when the while file has been received. 
+    1. If it ever detects a corrupted or missing packet, it will send a NAK packet to the sender to indicate where it needs the sender to begin sending again, and then it will pick up from there, reconstructing the file with the newly-received data.
+
+
+That's the gist of it! Go make it happen. :)
+
+Packetizing and error-checking serial data is actually pretty fun, I think. It's one of the more-enjoyable aspects of embedded software, to me. I love using sophisticated techniques like that described above to send complex data over primitive interfaces. I enjoy that challenge. 
+
+
+<a id="scenario-2-transferring-a-file-over-serial-from-a-linux-computer-to-a-linux-computer-where-the-destination-computer-does-have-cat-but-does-not-have-access-to-the-sz-and-rz-zmodem-protocol-executables"></a>
+## Scenario 2: transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat` but does NOT have access to the `sz` and `rz` ZMODEM protocol executables
+
+
+
+
+
+<a id="scenario-3-transferring-a-file-over-serial-from-a-linux-computer-to-a-linux-computer-where-the-destination-computer-does-have-cat-and-the-sz-and-rz-zmodem-protocol-executables"></a>
+## Scenario 3: transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat`, AND the `sz` and `rz` ZMODEM protocol executables
+
+
+
+<a id="references"></a>
+## References
+
+I absolutely could not have solved Scenario 2 nor Scenario 3 above without help from these 2 answers here. I had never even heard of ZMODEM, nor did I know `cat` could be used to receive data over `stdin` like this, prior to reading them. These answers were invaluable to me.
+1. [Unix & Linux: How to get file to a host when all you have is a serial console?--by @J. M. Becker](https://unix.stackexchange.com/a/296752/114401)
+1. [Unix & Linux: How to get file to a host when all you have is a serial console?--by @Warren Young](https://unix.stackexchange.com/a/431/114401)
+
 
