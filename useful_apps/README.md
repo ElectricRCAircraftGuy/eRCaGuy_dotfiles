@@ -152,6 +152,22 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
         # see `man picocom` and search for `--logfile` for details
         picocom --baud 115200 --logfile serial_log.txt /dev/ttyUSB0
         ```
+    1. Transferring files over serial. 
+        1. Transfering files over serial can be done. See: [Unix & Linux: How to get file to a host when all you have is a serial console?](https://unix.stackexchange.com/q/312/114401). The preferred technique would be to use the ZMODEM error-checking protocol (see here: [Wikipedia: ZMODEM](https://en.wikipedia.org/wiki/ZMODEM)) via [`lrzsz`](https://www.ohse.de/uwe/software/lrzsz.html), which provides the `rx`, `rb`, and `rz` modem file receive functions (and [is available on Buildroot too](https://github.com/buildroot/buildroot/tree/master/package/lrzsz)), and the `sx`, `sb`, and `sz` modem file receive functions. 
+        1. Or, you could use the [kermit](https://en.wikipedia.org/wiki/Kermit_(protocol)) protocol in case XMODEM (`rx` and `sx`), YMODEM (`rb` and `sb`), and ZMODEM (`rz` and `sz`) are not available. 
+        1. However, if neither `lrzsz` nor `kermit` is available, then you can encode binary files into text using `uuencode` (I can't get this to work at all for me) or `base64` (preferred), and then just manually send them over using `picocom` and `cat` or `picocom` and `ascii-xfr`, [as mostly explained by this answer here](https://unix.stackexchange.com/a/296752/114401). 
+        1. To install `lrzsz` and `ascii-xfr` on Linux Ubuntu, do this:
+            ```bash
+            sudo apt update
+            # NB: installing `minicom` **alone** includes both `minicom` **and** `lrzsz`!
+            # (and `minicom` includes the `ascii-xfr` executable too).
+            sudo apt install minicom 
+
+            # Or, to install just `lrzsz`:
+            sudo apt install lrzsz
+            ```
+        1. To learn about the ingenuity of the ZMODEM auto-resend and error-checking protocol, see here: https://en.wikipedia.org/wiki/ZMODEM:
+        > ZMODEM replaced the packet number with the actual location in the file, indicated by a 32-bit number. This allowed it to send NAK messages that re-wound the transfer to the point of failure, regardless of how long the file might be. This same feature was also used to re-start transfers if they failed or were deliberately interrupted. In this case, the receiver would look to see how much data had been previously received and then send a NAK with that location, automatically triggering the sender to start from that point.
 1. [eRCaGuy_PyTerm](https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm) - a datalogging serial terminal/console program which I wrote, written in Python.
     1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm
     1. Can be used in place of `minicom`, `picocom`, or the Arduino Serial Monitor.
