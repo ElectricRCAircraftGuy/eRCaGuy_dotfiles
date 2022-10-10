@@ -110,12 +110,11 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     # See: https://askubuntu.com/a/244810/327339
     sudo ln -si "$PWD/picocom.1" /usr/local/share/man/man1
 
-    # re-source your bash initialization file; don't know what "source" means?
+    # re-source your ~/.profile file; don't know what "source" means?
     # Read my answer here: https://stackoverflow.com/a/62626515/4561887
-    . ~/.bashrc
+    . ~/.profile
 
-    # now log out and log back in if this is your first time creating the ~/bin
-    # dir, and `picocom` will now be in your PATH since Linux Ubuntu's default
+    # `picocom` will now be in your PATH since Linux Ubuntu's default
     # ~/.profile file adds it to the path like this:
     #
     #       # set PATH so it includes user's private bin if it exists
@@ -239,6 +238,7 @@ You'll have to do this all custom. Modelling your approach after how [ZMODEM](ht
         ```cpp
         // NB: the NAK packet is a **fixed size** packet.
 
+        // Magic numbers to mark the start and end of a NAK packet.
         constexpr uint32_t PACKET_NAK_START = 1234567890;
         constexpr uint32_t PACKET_NAK_END = 987654321;
 
@@ -291,7 +291,8 @@ You'll have to do this all custom. Modelling your approach after how [ZMODEM](ht
     // `sizeof(PacketFile)` is fixed and known at compile-time. 
 
     constexpr uint16_t MAX_NUM_BYTES = 512;
-
+        
+    // Magic numbers to mark the start and end of a FILE contents packet.
     constexpr uint32_t PACKET_FILE_START = 5555567890;
     constexpr uint32_t PACKET_FILE_END = 987655555;
 
@@ -357,7 +358,74 @@ Packetizing and error-checking serial data is actually pretty fun, I think. It's
 <a id="scenario-2-transferring-a-file-over-serial-from-a-linux-computer-to-a-linux-computer-where-the-destination-computer-does-have-cat-but-does-not-have-access-to-the-sz-and-rz-zmodem-protocol-executables"></a>
 ## Scenario 2: transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat` but does NOT have access to the `sz` and `rz` ZMODEM protocol executables
 
+If you don't have access to a good binary file transfer program like ZMODEM's `sz` and `rz` programs, then you can either:
+1. Write your own, following my layout in Scenario 1 above (hard), OR
+1. Just send the file over as encoded text using common Linux tools (easy).
 
+I'll cover how to do the latter: 
+
+**How to send a file over serial as encoded text using common Linux tools:**
+
+1. On your local machine, install [picocom](https://github.com/npat-efault/picocom). Follow my instructions above. In short:
+    ```bash
+    # cd to wherever you'd like to download the program
+    cd ~/GS/dev
+    git clone https://github.com/npat-efault/picocom.git
+    cd picocom
+    make  
+
+    # create the ~/bin dir if it doesn't already exist
+    mkdir -p ~/bin
+    # add a symlink to the executable
+    ln -si "$PWD/picocom" ~/bin
+    # add a symlink to the man page so you can do `man picocom`
+    sudo ln -si "$PWD/picocom.1" /usr/local/share/man/man1
+
+    # re-source your ~/.profile file; don't know what "source" means?
+    # Read my answer here: https://stackoverflow.com/a/62626515/4561887
+    . ~/.profile
+
+    # `picocom` will now be in your PATH since Linux Ubuntu's default
+    # ~/.profile file adds it to the path like this:
+    #
+    #       # set PATH so it includes user's private bin if it exists
+    #       if [ -d "$HOME/bin" ] ; then
+    #           PATH="$HOME/bin:$PATH"
+    #       fi
+
+    # Try running `picocom --help`. If it doesn't work and show the version you
+    # just installed at the top of the help menu, log out and log back in to
+    # finish adding ~/bin to your PATH, and then try `picocom --help` again.
+    ```
+1. 
+
+WIP
+
+```bash
+# prepare file on sending side
+split
+# encode
+base64
+
+# connect on picocom
+cat > file  # on destination
+pv # the file over to see a progress bar; OR:
+cat file > /dev/ttyUSB0  # from sender
+
+# Ctrl + C the receiver
+sha256sum # verify it
+
+
+# decode
+# recombine
+# done!
+
+# Improvements:
+# 1. increase baud rate until you start to see errors
+#  For me, on a device capable of 3 Mbaud, the highest I could go without errors was the one just above 115200
+# If using an error-checking scheme such as Scenario 1 or Scenario 3, you could probably go much higher baud rate.
+# 2. cross-compile lrzsz using Buildroot, send it over, then move to Scenario 3 for bigger file (ex: 80 MB)
+```
 
 
 
@@ -369,8 +437,8 @@ Packetizing and error-checking serial data is actually pretty fun, I think. It's
 <a id="references"></a>
 ## References
 
-I absolutely could not have solved Scenario 2 nor Scenario 3 above without help from these 2 answers here. I had never even heard of ZMODEM, nor did I know `cat` could be used to receive data over `stdin` like this, prior to reading them. These answers were invaluable to me.
-1. [Unix & Linux: How to get file to a host when all you have is a serial console?--by @J. M. Becker](https://unix.stackexchange.com/a/296752/114401)
-1. [Unix & Linux: How to get file to a host when all you have is a serial console?--by @Warren Young](https://unix.stackexchange.com/a/431/114401)
-
+1. I absolutely could not have solved Scenario 2 nor Scenario 3 above without help from these 2 answers here. I had never even heard of ZMODEM, nor did I know `cat` could be used to receive data over `stdin` like this, prior to reading them. These answers were invaluable to me.
+    1. [Unix & Linux: How to get file to a host when all you have is a serial console?--by @J. M. Becker](https://unix.stackexchange.com/a/296752/114401)
+    1. [Unix & Linux: How to get file to a host when all you have is a serial console?--by @Warren Young](https://unix.stackexchange.com/a/431/114401)
+1. The content in this _question itself_ was also very useful: [Unix & Linux: How do I use a serial port on Linux like a pipe or netcat?](https://unix.stackexchange.com/q/96718/114401)
 
