@@ -14,9 +14,9 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     1. [General Usage](#general-usage)
 1. [Transferring files over serial](#transferring-files-over-serial)
     1. [Background](#background-1)
-    1. [Scenario 1: transferring a file over serial from a Linux or other computer to a _custom bare-metal or RTOS-based microcontroller_ such as Arduino or STM32](#scenario-1-transferring-a-file-over-serial-from-a-linux-or-other-computer-to-a-custom-bare-metal-or-rtos-based-microcontroller-such-as-arduino-or-stm32)
-    1. [Scenario 2: transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat` but does NOT have access to the `sz` and `rz` ZMODEM protocol executables](#scenario-2-transferring-a-file-over-serial-from-a-linux-computer-to-a-linux-computer-where-the-destination-computer-does-have-cat-but-does-not-have-access-to-the-sz-and-rz-zmodem-protocol-executables)
-    1. [Scenario 3: transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat`, AND the `sz` and `rz` ZMODEM protocol executables](#scenario-3-transferring-a-file-over-serial-from-a-linux-computer-to-a-linux-computer-where-the-destination-computer-does-have-cat-and-the-sz-and-rz-zmodem-protocol-executables)
+    1. [Scenario 1: computer to bare-metal or RTOS-based microcontroller](#scenario-1-computer-to-bare-metal-or-rtos-based-microcontroller)
+    1. [Scenario 2: Linux to Linux as plain text withOUT ZMODEM](#scenario-2-linux-to-linux-as-plain-text-without-zmodem)
+    1. [Scenario 3: Linux to Linux WITH ZMODEM](#scenario-3-linux-to-linux-with-zmodem)
     1. [References](#references)
 
 <!-- /MarkdownTOC -->
@@ -53,6 +53,11 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 1. `picocom` [my preferred command-line serial terminal program]: a serial terminal command-line program to communicate with serial devices such as Arduinos or embedded Linux boards over serial. Use it as an alternative to [`minicom`](https://linux.die.net/man/1/minicom) or the Arduino Serial Monitor.
 1. https://github.com/npat-efault/picocom
+    1. Manual pages:
+        1. `man` format: [picocom.1](https://github.com/npat-efault/picocom/blob/master/picocom.1)
+        1. HTML: [picocom.1.html](https://github.com/npat-efault/picocom/blob/master/picocom.1.html)
+        1. Markdown [my preference]: [picocom.1.md](https://github.com/npat-efault/picocom/blob/master/picocom.1.md)
+        1. PDF: [picocom.1.pdf](https://github.com/npat-efault/picocom/blob/master/picocom.1.pdf)
 
 
 <a id="installation"></a>
@@ -190,7 +195,7 @@ picocom --baud 115200 --logfile serial_log.txt /dev/ttyUSB0
     1. See also `man picocom` and search for "Write hex".
 1. <kbd>Ctrl</kbd> + <kbd>A</kbd>, <kbd>Ctrl</kbd> + <kbd>S</kbd> = send a file over serial *to* the remote device.
     1. By default, this requires the ZMODEM `sz` (send) and `rz` (receive) executables to be available on **both** the host computer **and** the remote serial device, in order to work. Those executables are usually part of the `lrzsz` package, and can also be built as part of Buildroot. See more on this below.
-    1. See also `man picocom` and search for the section titled "SENDING AND RECEIVING FILES". You can read it (possibly an older version of the man pages?) online here: https://linux.die.net/man/8/picocom.
+    1. See also `man picocom` and search for the section titled "SENDING AND RECEIVING FILES". You can read the latest version of the man pages online here: https://github.com/npat-efault/picocom/blob/master/picocom.1.md.
 1. <kbd>Ctrl</kbd> + <kbd>A</kbd>, <kbd>Ctrl</kbd> + <kbd>R</kbd> = receive a file over serial *from* the remote device.
     1. Same requirement as the send command, described just above.
 1. <kbd>Ctrl</kbd> + <kbd>A</kbd>, <kbd>Ctrl</kbd> + <kbd>V</kbd> = show port settings, such as baud rate, flow control, parity, databits, stop bits, etc.
@@ -223,8 +228,10 @@ Transfering files over serial can be done via ZMODEM. See: [Unix & Linux: How to
     > ZMODEM replaced the packet number with the actual location in the file, indicated by a 32-bit number. This allowed it to send NAK messages that re-wound the transfer to the point of failure, regardless of how long the file might be. This same feature was also used to re-start transfers if they failed or were deliberately interrupted. In this case, the receiver would look to see how much data had been previously received and then send a NAK with that location, automatically triggering the sender to start from that point.
 
 
-<a id="scenario-1-transferring-a-file-over-serial-from-a-linux-or-other-computer-to-a-custom-bare-metal-or-rtos-based-microcontroller-such-as-arduino-or-stm32"></a>
-## Scenario 1: transferring a file over serial from a Linux or other computer to a _custom bare-metal or RTOS-based microcontroller_ such as Arduino or STM32
+<a id="scenario-1-computer-to-bare-metal-or-rtos-based-microcontroller"></a>
+## Scenario 1: computer to bare-metal or RTOS-based microcontroller
+
+**Transferring a file over serial from a Linux or other computer to a _custom bare-metal or RTOS-based microcontroller_ such as Arduino or STM32:**
 
 In other words: the target serial device does NOT have access to the Linux tools such as `cat` or `rz` or `sz` which we will use in the other scenarios below.
 
@@ -242,6 +249,8 @@ You'll have to do this all custom. Modelling your approach after how [ZMODEM](ht
         constexpr uint32_t PACKET_NAK_START = 1234567890;
         constexpr uint32_t PACKET_NAK_END = 987654321;
 
+        #define FILENAME_MAX_LEN 20
+
         struct __attribute__ ((__packed__)) HeaderNak
         {
             /// A unique, random 4-byte number to indicate the start of this
@@ -255,6 +264,8 @@ You'll have to do this all custom. Modelling your approach after how [ZMODEM](ht
 
         struct __attribute__ ((__packed__)) PayloadNak
         {
+            /// Name of the file requested
+            char filename[FILENAME_MAX_LEN];
             /// The file index at which point the device would like the sender
             /// to begin sending the file data again
             uint32_t i_file;
@@ -309,6 +320,8 @@ You'll have to do this all custom. Modelling your approach after how [ZMODEM](ht
 
     struct __attribute__ ((__packed__)) PayloadFile
     {
+        /// Name of the file being sent
+        char filename[FILENAME_MAX_LEN];
         /// The total number of bytes in this file being sent.
         uint32_t file_size;
         /// The file index at which point the bytes being sent in this packet
@@ -346,6 +359,8 @@ You'll have to do this all custom. Modelling your approach after how [ZMODEM](ht
         TrailerFile trailer;
     };
     ```
+1. You may need to make the sender wait a bit after sending each file packet. 
+    1. Depending on the baud rate and processing speed of the recipient (ie: if the baud rate is too high and/or the processing speed of the recipient too slow), you may need to make the sender delay a small amount after sending each file chunk packet, to give the receiver time to process the new packet, including computing the hash, ensuring the packet is valid, etc.
 1. Since each packet contains the `file_size`, the `i_file` index at which point in the file this data begins, and the `num_bytes` of the file sent in this packet, the remote serial device receiving the file can easily know when the while file has been received. 
     1. If it ever detects a corrupted or missing packet, it will send a NAK packet to the sender to indicate where it needs the sender to begin sending again, and then it will pick up from there, reconstructing the file with the newly-received data.
 
@@ -355,8 +370,10 @@ That's the gist of it! Go make it happen. :)
 Packetizing and error-checking serial data is actually pretty fun, I think. It's one of the more-enjoyable aspects of embedded software, to me. I love using sophisticated techniques like that described above to send complex data over primitive interfaces. I enjoy that challenge. 
 
 
-<a id="scenario-2-transferring-a-file-over-serial-from-a-linux-computer-to-a-linux-computer-where-the-destination-computer-does-have-cat-but-does-not-have-access-to-the-sz-and-rz-zmodem-protocol-executables"></a>
-## Scenario 2: transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat` but does NOT have access to the `sz` and `rz` ZMODEM protocol executables
+<a id="scenario-2-linux-to-linux-as-plain-text-without-zmodem"></a>
+## Scenario 2: Linux to Linux as plain text withOUT ZMODEM
+
+**Transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat` but does NOT have access to the `sz` and `rz` ZMODEM protocol executables:**
 
 If you don't have access to a good binary file transfer program like ZMODEM's `sz` and `rz` programs, then you can either:
 1. Write your own, following my layout in Scenario 1 above (hard), OR
@@ -429,16 +446,25 @@ sha256sum # verify it
 
 
 
-<a id="scenario-3-transferring-a-file-over-serial-from-a-linux-computer-to-a-linux-computer-where-the-destination-computer-does-have-cat-and-the-sz-and-rz-zmodem-protocol-executables"></a>
-## Scenario 3: transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat`, AND the `sz` and `rz` ZMODEM protocol executables
+<a id="scenario-3-linux-to-linux-with-zmodem"></a>
+## Scenario 3: Linux to Linux WITH ZMODEM 
+
+**Transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat`, AND the `sz` and `rz` ZMODEM protocol executables:**
 
 
 
 <a id="references"></a>
 ## References
 
-1. I absolutely could not have solved Scenario 2 nor Scenario 3 above without help from these 2 answers here. I had never even heard of ZMODEM, nor did I know `cat` could be used to receive data over `stdin` like this, prior to reading them. These answers were invaluable to me.
-    1. [Unix & Linux: How to get file to a host when all you have is a serial console?--by @J. M. Becker](https://unix.stackexchange.com/a/296752/114401)
-    1. [Unix & Linux: How to get file to a host when all you have is a serial console?--by @Warren Young](https://unix.stackexchange.com/a/431/114401)
+I absolutely could not have solved Scenario 2 nor Scenario 3 above without help from these answers here. I had never even heard of ZMODEM, nor did I know `cat` could be used to receive data over `stdin` like this, prior to reading them. These answers were invaluable to me.
+
+1. \*\*\*\*\* [Unix & Linux: How to get file to a host when all you have is a serial console?--by @J. M. Becker](https://unix.stackexchange.com/a/296752/114401)
+1. \*\*\*\*\* [Unix & Linux: How to get file to a host when all you have is a serial console?--by @Warren Young](https://unix.stackexchange.com/a/431/114401)
 1. The content in this _question itself_ was also very useful: [Unix & Linux: How do I use a serial port on Linux like a pipe or netcat?](https://unix.stackexchange.com/q/96718/114401)
+1. [Unix & Linux: What is the complementary command to 'rx' for xmodem transfer?](https://unix.stackexchange.com/a/186723/114401) - taught me about the existence of XMODEM (the first), YMODEM (an improvement), and ZMODEM (the best!)
+1. Binary transfer script for minicom, as a GitHub gist: https://gist.github.com/cstrahan/5796653 - where I first learned of the `pv` command to track file transfer speed and progress (percent complete). Ex: `pv -B 10K file_to_send.txt > /dev/ttyUSB0`
+1. [Unix & Linux: How do I use a serial port on Linux like a pipe or netcat?](https://unix.stackexchange.com/q/96718/114401) - **excellent** content in the question itself, including how to create and use a local pipe (an inter-process communication (IPC) mechanism) via `mkfifo`, which is really cool.
+    1. I've added an answer here too: https://unix.stackexchange.com/a/720397/114401
+1. [SuperUser: What is the fastest and most reliable way to split a 50GB binary file into chunks of 5GB or less, and then reassemble it later?](https://superuser.com/a/160367/425838) - how to `split` large files, then recombine them using `cat`.
+1. [How to write automated scripts for `picocom`](https://github.com/npat-efault/picocom/issues/76#issuecomment-354186674) - very useful! Use `picocom -rX -b 115200` or `picocom --noreset --exit --baud 115200` (same thing) to simply configure the serial port, in place of `stty`, then exit, leaving the serial port open, configured, and connected so you can `cat` or otherwise manually write to or read from it.
 
