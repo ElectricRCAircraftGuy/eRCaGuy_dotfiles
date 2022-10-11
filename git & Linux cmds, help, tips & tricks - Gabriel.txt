@@ -1229,6 +1229,12 @@ time ( \
 - `br-` vs `brna-` **offline** builds; building remotely withOUT internet: notice the `br-` part above. This stands for "buildroot". Some customized build systems may build remotely with secure authentication when you choose the `br-<package>` package name to build, and build **locally** and withOUT authentication if you choose the `brna-<package>` instead! In this case, `brna-` stands for "BuildRoot No Authentication". 
     - Using `brna-` **offline** builds can be 30% faster and allow you to build while on-the-go and traveling, even withOUT internet, which is great!
 
+time make br-all
+    <===========
+    Force-rebuild the rootfs .swu image and rootfs overlay (similar to force-removing "output/$TARGET/images/image.swu" first, as shown above).
+time make brna-all
+    Same as above, but via an offline build.
+
 TO ADD OR USE A NEW BUILDROOT PACKAGE IN YOUR PACKAGE:
     See the "CORRECT WAY" description in the "meson" section below!
 
@@ -1784,7 +1790,7 @@ delete 1
     delete the 1st breakpoint
 
 GDB LOGGING:
-[gdb log to file, gdb file logging, gdb logging to file, logging gdb to file, log gdb to file]
+[gdb log to file, gdb file logging, gdb logging to file, logging gdb to file, log gdb to file; logging in gdb debugger]
 See: https://sourceware.org/gdb/current/onlinedocs/gdb/Logging-Output.html
 
 set logging on
@@ -3972,7 +3978,7 @@ GOING FURTHER:
     ...
 
 Example of power supply control via string commands over Ethernet TCP using netcat:
-[netcat power supply; power cycle; power cycling; power on; power off]
+[netcat power supply; power cycle; power cycling; power on; power off; power supply commands]
 - This is similar to Serial UART-controlled devices, except the command and response strings are simply over Ethernet (either UDP or TCP) instead of over serial.
 - Example Device: Teledyne LeCroy T3PS3000: https://www.digikey.com/en/products/detail/teledyne-lecroy/T3PS3000/9598577
     - For help, contact:
@@ -4504,6 +4510,45 @@ hexdump -c my_file
         0000020   m   a   n   g   o   |   8  \r                                
         0000028
 
+xxd
+    Some sort of hexdump-like tool similar to `hexdump`. From `man xxd`: "xxd - make a hexdump or do the reverse."
+xxd -ia file > file.c
+    Create a C file which can be included in a C program to encode binary data into a C program! From `man xxd`:
+    >     -i | -include
+    >            output in C include file style. A complete static array definition is written (named after the input file), unless xxd reads from stdin.
+    Full example:
+    Notice that `xxd -ia file > file.c` places the entire contents of `file` into `file.c` as a C array of bytes, with all bytes written in hex! You can then use this "file.c" directly in any C or C++ program!
+    ---
+    ```bash
+    $ printf "%s" "hello world" > file
+    $ xxd -ia file > file.c
+    $ cat file.c
+    unsigned char file[] = {
+      0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64
+    };
+    unsigned int file_len = 11;
+    ```
+    ---
+    NB: for a C source file that contains:
+    file.c:
+    ```c
+    unsigned char file[] = {
+      0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64
+    };
+    unsigned int file_len = 11;
+    ```
+    an appropriate includable header file, file.h, would look like this:
+    file.h:
+    ```c
+    // Now when you include this header file, you get access to these variables because 
+    // the compiler is made aware that **they exist** via the `extern` keyword, but including
+    // the header will NOT include this huge object each time. Rather, the linker will find its
+    // corresponding object file at link time.
+    extern unsigned char* file;
+    extern unsigned int file_len;
+    ```
+
+
 gnome-system-monitor = CPU/RAM/network usage monitor GUI
 top = basic CLI competitor to gnome-system-monitor
 htop = much better (ncurses-based?) CLI competitor to gnome-system-monitor!
@@ -4652,10 +4697,10 @@ TODO: need to add this information in here so I don't forget it.
 
 Serial terminal tools:
 1. picocom [my favorite]
-    1. See my installation instructions & notes: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_apps#picocom
+    1. See my installation instructions & notes: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_apps/serial_terminals_README.md
     1. Source code: https://github.com/npat-efault/picocom
 1. minicom
-1. Arduino Serial Monitor
+1. Arduino Serial Monitor and Serial Plotter
 1. eRCaGuy_PyTerm
     1. My repo: https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm
 
@@ -4731,6 +4776,42 @@ Note: an excellent way to get as much info. as possible about a device you just 
     # 3. Unplug it again then run `dmesg` one more time to see the messages of what was
     #    just UNplugged!
     dmesg | tail -n 30
+
+stty -echo
+    Disable echo (printing chars you type, as received by stdin) in your current standard Linux TTY (TeleTYpe) terminal.
+    NB: this is a universal concept, and really has nothing to do with *serial* terminals in particular.
+    See: https://stackoverflow.com/a/62642654/4561887
+stty echo
+    Re-enable echo (printing chars you type, as received by stdin) in your current standard Linux TTY (TeleTYpe) terminal.
+    NB: this is a universal concept, and really has nothing to do with *serial* terminals in particular.
+    See: https://stackoverflow.com/a/62642654/4561887
+stty 
+    Prints all current terminal line settings **of the active terminal**. 
+    Ex: in a standard Linux Ubuntu terminal its output might look like this:
+    ```bash
+    $ stty
+    speed 38400 baud; line = 0;
+    -brkint -imaxbel iutf8
+    ``` 
+    And on a remote embedded Linux system to which you are connected over an actual serial cable, it will show the actual serial baud rate, and might look like this. Notice that the real baud rate in this case is 115200:
+    ```bash
+    $ stty
+    speed 115200 baud; line = 0;
+    intr = ^C; quit = ^\; erase = ^?; kill = ^U; eof = ^D; eol = 
+    ; eol2 = <undef>;
+    swtch = <undef>; start = ^Q; stop = ^S; susp = ^Z; rprnt = ^R; werase = ^W;
+    lnext = ^V; flush = ^O; min = 1; time = 0;
+    -brkint ixoff -imaxbel
+    -iexten
+    ```
+stty 115200
+    Change the serial baud rate **of the active terminal** to 115200.
+stty -F /dev/ttyUSB0 115200
+    Change the serial baud rate of serial device "/dev/ttyUSB0" to 115200.
+---
+NB: to list all possible serial baud rates of a particular serial device, OR to list all possible serial baud rates of ALL serial devices on your system, see these brilliant scripts here!: Is there any way to check which baud rates are supported on a serial device?: 
+https://superuser.com/a/1482079/425838
+---
 
 
 == `head` and `tail`: ==
