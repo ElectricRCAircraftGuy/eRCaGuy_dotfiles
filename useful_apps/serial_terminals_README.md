@@ -12,6 +12,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     1. [Background](#background)
     1. [Installation](#installation)
     1. [General Usage](#general-usage)
+1. [Scripting the sending and receiving of commands over serial](#scripting-the-sending-and-receiving-of-commands-over-serial)
 1. [Transferring files over serial](#transferring-files-over-serial)
     1. [Background](#background-1)
     1. [Scenario 1: computer to bare-metal or RTOS-based microcontroller](#scenario-1-computer-to-bare-metal-or-rtos-based-microcontroller)
@@ -199,6 +200,109 @@ picocom --baud 115200 --logfile serial_log.txt /dev/ttyUSB0
 1. <kbd>Ctrl</kbd> + <kbd>A</kbd>, <kbd>Ctrl</kbd> + <kbd>R</kbd> = receive a file over serial *from* the remote device.
     1. Same requirement as the send command, described just above.
 1. <kbd>Ctrl</kbd> + <kbd>A</kbd>, <kbd>Ctrl</kbd> + <kbd>V</kbd> = show port settings, such as baud rate, flow control, parity, databits, stop bits, etc.
+
+
+<a id="scripting-the-sending-and-receiving-of-commands-over-serial"></a>
+# Scripting the sending and receiving of commands over serial
+
+See here for starters: [How to write automated scripts for `picocom`](https://github.com/npat-efault/picocom/issues/76#issuecomment-354186674). See this link and more info. in my "References" section below too.
+
+WIP:
+
+ATTEMPT 2: WORKS! (but ONLY if picocom is open in another terminal 1st) (update: it just works now since I added the sleep 0.1!)
+This is a pretty complicated synchronization problem. You need to: 
+start listening, wait a moment, send the cmd, wait a moment, stop listening, block on sending to the pipe, have the first thread read from the pipe after the 2nd thread blocks on writing to it. Done.
+```bash
+#!/usr/bin/env bash
+
+# some test commands to automatically send over serial (and receive the replies)
+cmds_array=()
+cmds_array+=("ls /sys")
+cmds_array+=("uname")
+cmds_array+=("pwd")
+
+response_array=()
+
+# First, configure, open, and leave open the serial port
+picocom --noreset --exit --quiet --baud 115200 /dev/ttyUSB0
+
+if [ ! -p "/tmp/serial_pipe" ]; then
+    mkfifo /tmp/serial_pipe
+fi
+
+read_serial_response_and_pipe_it_back() {
+    response_str="$(timeout 0.5 cat /dev/ttyUSB0)"
+    printf "%s" "$response_str"
+    printf "%s" "$response_str" > /tmp/serial_pipe
+}
+
+# send all commands and receive all their responses
+for i in "${!cmds_array[@]}"; do
+    read_serial_response_and_pipe_it_back &
+    sleep 0.1  # ensure the cmd above has time to start reading before we continue
+
+    cmd="${cmds_array["$i"]}"
+    printf "%s\n" "$cmd" > /dev/ttyUSB0
+    # printf "%s\n" "ls /" > /dev/ttyUSB0
+    sleep 0.5
+
+    response_array+=("$(cat /tmp/serial_pipe)")
+done
+
+# print all responses
+for response_str in "${response_array[@]}"; do
+    printf "==start==\n%s\n==end==\n\n" "$response_str"
+done
+```
+
+
+
+
+
+ATTEMPT 1:
+```bash
+#!/usr/bin/env bash
+
+# some test commands to automatically send over serial (and receive the replies)
+cmds_array=()
+cmds_array+=("ls /sys")
+cmds_array+=("uname")
+cmds_array+=("pwd")
+
+response_array=()
+
+# First, configure, open, and leave open the serial port
+picocom --noreset --exit --quiet --baud 115200 /dev/ttyUSB0
+# make a pipe we will need below for some basic inter-process communication
+# (IPC)
+if [ ! -p "/tmp/serial_pipe" ]; then
+    mkfifo /tmp/serial_pipe
+fi
+
+# send all commands and receive all their responses
+for i in "${!cmds_array[@]}"; do
+    # 1. spawn a background process to start listening for the serial response, 
+    # passing the response to a pipe to be read by this process
+    cat /dev/ttyUSB0 > /tmp/serial_pipe &
+    spawned_pid="$!"
+
+    # 2. send the cmd; the response will get received by the spawned process
+    # above and then piped back to this process
+    cmd="${cmds_array["$i"]}"
+    printf "%s\n" "$cmd" > /dev/ttyUSB0
+
+    # 3. delay a bit to let the spawned process receive the command, then read
+    # from the pipe and kill the spawned process above
+    sleep 0.5
+    response_array+="$(cat "/tmp/serial_pipe")"
+    kill "$spawned_pid"
+done
+
+# print all responses
+for response_str in "${response_array[@]}"; do
+    printf "=====\n%s\n=====\n" "$response_str"
+done
+```
 
 
 <a id="transferring-files-over-serial"></a>
@@ -466,5 +570,5 @@ I absolutely could not have solved Scenario 2 nor Scenario 3 above without help 
 1. [Unix & Linux: How do I use a serial port on Linux like a pipe or netcat?](https://unix.stackexchange.com/q/96718/114401) - **excellent** content in the question itself, including how to create and use a local pipe (an inter-process communication (IPC) mechanism) via `mkfifo`, which is really cool.
     1. I've added an answer here too: https://unix.stackexchange.com/a/720397/114401
 1. [SuperUser: What is the fastest and most reliable way to split a 50GB binary file into chunks of 5GB or less, and then reassemble it later?](https://superuser.com/a/160367/425838) - how to `split` large files, then recombine them using `cat`.
-1. [How to write automated scripts for `picocom`](https://github.com/npat-efault/picocom/issues/76#issuecomment-354186674) - very useful! Use `picocom -rX -b 115200` or `picocom --noreset --exit --baud 115200` (same thing) to simply configure the serial port, in place of `stty`, then exit, leaving the serial port open, configured, and connected so you can `cat` or otherwise manually write to or read from it.
-
+1. [How to write automated scripts for `picocom`](https://github.com/npat-efault/picocom/issues/76#issuecomment-354186674) - very useful! Use `picocom -rX -b 115200 /dev/ttyUSB0` or `picocom --noreset --exit --baud 115200 /dev/ttyUSB0` (same thing) to simply configure the serial port, in place of `stty`, then exit, leaving the serial port open, configured, and connected so you can `cat` or otherwise manually write to or read from it.
+1. [Difference between "cat" and "cat <"](https://unix.stackexchange.com/a/258932/114401) - difference between `cat somefile` and `cat < somefile`
