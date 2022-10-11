@@ -4694,6 +4694,7 @@ TODO: need to add this information in here so I don't forget it.
 
 
 == USB, serial, devices, etc.: ==
+[usb serial devices]
 
 Serial terminal tools:
 1. picocom [my favorite]
@@ -4806,12 +4807,45 @@ stty
     ```
 stty 115200
     Change the serial baud rate **of the active terminal** to 115200.
+stty -F </dev/device>
+    Read serial configuration for the device at "/dev/device" instead of from `stdin` (the active terminal device you are typing into).
+    From `man stty`:
+    ```bash
+    -F, --file=DEVICE
+       open and use the specified DEVICE instead of stdin
+    ```
+stty -F /dev/ttyUSB0
+    Print all current terminal line settings **of serial device "/dev/ttyUSB0"**.
+    See: https://superuser.com/a/580088/425838
 stty -F /dev/ttyUSB0 115200
     Change the serial baud rate of serial device "/dev/ttyUSB0" to 115200.
+    See: https://superuser.com/a/1482079/425838
 ---
 NB: to list all possible serial baud rates of a particular serial device, OR to list all possible serial baud rates of ALL serial devices on your system, see these brilliant scripts here!: Is there any way to check which baud rates are supported on a serial device?: 
 https://superuser.com/a/1482079/425838
 ---
+
+---
+Serial devices can be listed in both "/dev" **and** "/sys/class/tty"!
+See "/sys/class/tty" here--search this page for that phrase: https://superuser.com/a/1482079/425838
+---
+
+ls /dev/tty*
+    List all serial devices on your computer!
+    See "/dev/tty" here--search this page for that phrase: https://superuser.com/a/1482079/425838
+    NB: the device files in "/dev" are **files**. Pass them to `stty` to read the currrent terminal settings. 
+    Ex: `stty -F /dev/ttyUSB0` will show its current baud rate and stuff.
+ls /sys/class/tty
+    List all serial devices on your computer! (similar to above)
+    See "/sys/class/tty" here--search this page for that phrase: https://superuser.com/a/1482079/425838
+    NB: the devices in "/sys/class/tty" are sysfs **directories**! Ex: "/sys/class/tty/ttyUSB0" contains a ton of other files, folders, and info! 
+    I don't understand all of these "/sys/class/tty" files and folders, but to read all of these files at once, do this!: 
+    `grep -rn '' /sys/class/tty/ttyUSB0/*`
+grep -rn '' /sys/class/tty/ttyUSB0/*
+    Grep all files herein at once!
+    Read the contents of all readable files in the "/sys/class/tty/ttyUSB0/" sysfs dir at once!
+    I don't really know what all this stuff means, but the above grep command is **super useful** to read all contents at once!
+    Keywords: grep read all files and folders at once; grep all dir contents; grep all file contents; grep all files in a dir; dir grep everything; folder grep all files at once
 
 
 == `head` and `tail`: ==
