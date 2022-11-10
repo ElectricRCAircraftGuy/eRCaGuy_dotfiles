@@ -10,10 +10,14 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     1. [References:](#references)
     1. [Example of files you may have in your `~/.ssh` dir](#example-of-files-you-may-have-in-your-~ssh-dir)
     1. [Public/Private ssh generation and copying to your server's `~/.ssh/authorized_keys` file](#publicprivate-ssh-generation-and-copying-to-your-servers-~sshauthorized_keys-file)
+    1. [How to configure ssh keys to easily push to / pull from GitHub](#how-to-configure-ssh-keys-to-easily-push-to--pull-from-github)
+        1. [References:](#references-1)
+        1. [Summary:](#summary)
+        1. [Details:](#details)
     1. [SSH example aliases](#ssh-example-aliases)
     1. [Auto-starting the the ssh-agent on a remote, ssh-based development machine](#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine)
 1. [2. How to source a custom .bashrc file whenever you ssh into a remote Linux device](#2-how-to-source-a-custom-bashrc-file-whenever-you-ssh-into-a-remote-linux-device)
-    1. [References:](#references-1)
+    1. [References:](#references-2)
     1. [1. When your target Linux device _does_ have the `bash` shell](#1-when-your-target-linux-device-does-have-the-bash-shell)
         1. [Command:](#command)
         1. [\[1/2: USE THIS WHEN YOUR TARGET DEVICE HAS `bash`\] Optional \(but recommended\) Alias:](#12-use-this-when-your-target-device-has-bash-optional-but-recommended-alias)
@@ -22,7 +26,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
         1. [Here are some basic, dumbed-down `~/.profile` and `~/.bashrc` configuration files you can use for your target embedded Linux device if you like:](#here-are-some-basic-dumbed-down-~profile-and-~bashrc-configuration-files-you-can-use-for-your-target-embedded-linux-device-if-you-like)
         1. [\[2/2: USE THIS WHEN YOUR TARGET DEVICE DOES NOT HAVE `bash`, SO YOU MUST USE `ash`\] Now, use the following alias to ssh into the target device and auto-configure your `ash` shell environment at the same time](#22-use-this-when-your-target-device-does-not-have-bash-so-you-must-use-ash-now-use-the-following-alias-to-ssh-into-the-target-device-and-auto-configure-your-ash-shell-environment-at-the-same-time)
 1. [3. Dropbear setup and notes to remotely decrypt a LUKS-encrypted hard drive](#3-dropbear-setup-and-notes-to-remotely-decrypt-a-luks-encrypted-hard-drive)
-    1. [References:](#references-2)
+    1. [References:](#references-3)
     1. [1. Background and learning](#1-background-and-learning)
     1. [2. The actual steps to set up Dropbear](#2-the-actual-steps-to-set-up-dropbear)
     1. [3. Test it: reboot, ssh in to dropbear, decrypt your hard drive, and ssh in like normal](#3-test-it-reboot-ssh-in-to-dropbear-decrypt-your-hard-drive-and-ssh-in-like-normal)
@@ -33,6 +37,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 <a id="1-ssh-key-generation-setup-and-configuration-notes"></a>
 # 1. `ssh` key generation, setup, and configuration notes:
+
 
 <a id="references"></a>
 ## References:
@@ -59,6 +64,7 @@ https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-
 ├── id_rsa_dropbear.pub
 └── known_hosts
 ```
+
 
 <a id="publicprivate-ssh-generation-and-copying-to-your-servers-~sshauthorized_keys-file"></a>
 ## Public/Private ssh generation and copying to your server's `~/.ssh/authorized_keys` file
@@ -128,6 +134,67 @@ scp ~/.ssh/id_ed25519.pub username@remote_host:~/.ssh && \
 # whatever. 
 ```
 
+<a id="how-to-configure-ssh-keys-to-easily-push-to--pull-from-github"></a>
+## How to configure ssh keys to easily push to / pull from GitHub
+
+_If you have any problems with the instructions below, leave a comment or open an issue. I want to make sure they are super easy to follow for anyone, including beginners._
+
+<a id="references-1"></a>
+### References:
+1. The notes above.
+1. My answer here: [Stack Overflow: How to use ssh keys to easily push to / pull from GitHub](https://stackoverflow.com/a/74370934/4561887)
+
+<a id="summary"></a>
+### Summary:
+
+1. Configure your remote to use the ssh version of the GitHub repo address instead of the http version.
+1. Generate a public/private ssh key pair, and add the public key to your GitHub account manually via your web browser.
+
+<a id="details"></a>
+### Details:
+
+1. Configure your remote to use the ssh version of the GitHub repo address instead of the http version. Ex:
+    For this repo of mine: https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world, use this ssh URL: git@github.com:ElectricRCAircraftGuy/eRCaGuy_hello_world.git instead of this HTTPS one: https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world.git:
+    
+    ```bash
+    # View your current remote servers and their URLs
+    git remote -v
+
+    # Set your `origin` remote server to use the ssh URL instead
+    # of the HTTPS one
+    git remote set-url origin https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world.git
+    ```
+1. Generate a public/private ssh key pair, and add the public key to your GitHub account manually via your web browser.
+    See my full notes on ssh stuff here [above]: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home/.ssh
+    
+    ```bash
+    # generate a public/private ssh key pair
+    ssh-keygen -t ed25519 -C "your_email@example.com"
+
+    # Ensure the ssh-agent is running (this starts the `ssh-agent`)
+    eval "$(ssh-agent -s)"
+    
+    # Add your private key to it; update the path to your private key below, as
+    # required, based on what path you interactively selected above when
+    # generating the key
+    ssh-add ~/.ssh/id_ed25519
+    
+    # Verify what keys have been added to the ssh-agent by listing
+    # (`-l`) currently-added keys. 
+    # A. If you see "Could not open a connection to your authentication agent.",
+    # it means the `ssh-agent` has not been started yet, so you must start it
+    # with `eval "$(ssh-agent -s)"`. 
+    # B. If you see "The agent has no identities.", it means the ssh-agent is
+    # running but you haven't added any ssh keys to it, so run `ssh-add
+    # path/to/private_key` to add a key to the agent.
+    ssh-add -l
+    ```
+    
+    Now log into github in a web browser and click on your profile image --> Settings --> SSH and GPG keys (on left) --> New SSH key --> copy and paste the contents of your .pub key file (ex: run `cat ~/.ssh/id_ed25519.pub` on your Ubuntu machine to read the public key--adjust that path as necessary if you used a different file name) into GitHub here --> click "Add SSH key". 
+
+    Now, whenever you type `git push` it automatically works, using your ssh key.
+
+
 <a id="ssh-example-aliases"></a>
 ## SSH example aliases
 
@@ -162,6 +229,7 @@ my_ssh_alias
 ssh root@192.168.0.2 -p 22 -i ~/.ssh/id_rsa
 ```
 
+
 <a id="auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine"></a>
 ## Auto-starting the the ssh-agent on a remote, ssh-based development machine
 
@@ -183,7 +251,7 @@ In short, which method you choose is a trade-off balance between security and co
 
 Simply copy and paste the following code block into your `~/.bash_aliases` (preferred) or `~/.bashrc` file on the computer you'd like it to run on. See also the notes just above the code block below.
 
-Based on: https://unix.stackexchange.com/a/217223/114401
+Based on this answer: [Unix & Linux: How can I run ssh-add automatically, without a password prompt?](https://unix.stackexchange.com/a/217223/114401) and [my answer to that question](https://unix.stackexchange.com/a/686110/114401) too.
 ```bash
 # Auto-start the ssh agent and add necessary keys once per reboot. 
 #
@@ -223,7 +291,7 @@ SEE ALSO this `keychain` program as a possible alternative to my custom solution
 This is very useful, for example, when ssh-ing into an embedded Linux device or a shared device where you all ssh into the same username--ex: `root`, but you do NOT want to share a startup file nor modify it for others. Rather, you want to have your own custom aliases and environment and coloring and things. 
 
 
-<a id="references-1"></a>
+<a id="references-2"></a>
 ## References:
 1. How to use `sshpass -p` and `sshpass -f`: https://stackoverflow.com/questions/50096/how-to-pass-password-to-scp/13955428#13955428
 1. How to use `sshpass -f` _as though it was_ `sshpass -p`, but in a more-secure way, using _process substitution_ (`<()`): https://stackoverflow.com/questions/24454037/pass-a-password-to-ssh-in-pure-bash/24455773#24455773
@@ -343,12 +411,14 @@ alias gs_ssh="sshpass -f ~/pw scp ~/.bashrc_for_remote root@192.168.0.2:/tmp/.ba
 
 _How to use the Dropbear ssh server to remotely decrypt your LUKS-encrypted Linux hard drive after reboot so you can then ssh in._
 
-<a id="references-2"></a>
+
+<a id="references-3"></a>
 ## References:
 1. [Google search for "configure dropbear to decrypt drive"](https://www.google.com/search?q=configure+dropbear+to+decrypt+drive&sxsrf=AOaemvI-i7iWwaLwb-TjbKExYGXM_c5BUQ%3A1639435566248&ei=Ls23YcuxDu3b0PEPpdSs2Ag&ved=0ahUKEwjLgLu07eH0AhXtLTQIHSUqC4sQ4dUDCA4&uact=5&oq=configure+dropbear+to+decrypt+drive&gs_lcp=Cgdnd3Mtd2l6EAMyBQghEKABMgUIIRCgAToHCAAQRxCwAzoGCAAQFhAeOgUIIRCrAjoFCAAQzQI6CAghEBYQHRAeSgQIQRgASgQIRhgAULEIWMI4YP85aAdwAngBgAGPAogBjB2SAQYxLjIzLjGYAQCgAQHIAQjAAQE&sclient=gws-wiz)
 1. \*\*\*\*\*[How to unlock LUKS using Dropbear SSH keys remotely in Linux](https://www.cyberciti.biz/security/how-to-unlock-luks-using-dropbear-ssh-keys-remotely-in-linux/)
 
 Follow the link just above from CyberCiti.biz. Here's the gist of it:
+
 
 <a id="1-background-and-learning"></a>
 ## 1. Background and learning
@@ -366,6 +436,7 @@ lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT
 # and
 sudo cat /etc/crypttab
 ```
+
 
 <a id="2-the-actual-steps-to-set-up-dropbear"></a>
 ## 2. The actual steps to set up Dropbear
@@ -475,6 +546,7 @@ Useful aliases for your `~/.bash_aliases_private` file:
 alias gs_ssh='ssh -X -o "ServerAliveInterval 60" username@192.168.2.19'
 alias gs_ssh_dropbear='ssh root@192.168.2.19 -p 2222 -i ~/.ssh/id_rsa_dropbear'
 ```
+
 
 <a id="3-test-it-reboot-ssh-in-to-dropbear-decrypt-your-hard-drive-and-ssh-in-like-normal"></a>
 ## 3. Test it: reboot, ssh in to dropbear, decrypt your hard drive, and ssh in like normal
