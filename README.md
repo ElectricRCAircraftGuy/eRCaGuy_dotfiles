@@ -21,7 +21,8 @@ Gabriel Staples
 1. [Project: eRCaGuy_dotfiles](#project-ercaguy_dotfiles)
 1. [Description of contents](#description-of-contents)
 1. [How to clone this repo and all git submodules](#how-to-clone-this-repo-and-all-git-submodules)
-    1. [Here are some of the contents contained herein:](#here-are-some-of-the-contents-contained-herein)
+    1. [References:](#references)
+1. [Here are some of the contents contained herein:](#here-are-some-of-the-contents-contained-herein)
 1. [Installation & Usage:](#installation--usage)
 1. [Useful Applications](#useful-applications)
 1. [Useful Scripts](#useful-scripts)
@@ -45,7 +46,11 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 <a id="how-to-clone-this-repo-and-all-git-submodules"></a>
 # How to clone this repo and all git submodules
 
-**THIS SECTION IS A WORK-IN-PROGRESS.**
+
+<a id="references"></a>
+## References:
+1. [my answer] [How to update all git submodules in a repo (two ways to do two _very different_ things!)](https://stackoverflow.com/a/74470585/4561887)
+1. For more on git submodules, see the `= git submodules: =` section of my "git & Linux cmds doc" notes in my [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo here: [eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt).
 
 _This section was originally copied from my eRCaGuy_hello_world repo [here](https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world#how-to-clone-this-repo-and-all-git-submodules)._
 
@@ -59,70 +64,30 @@ git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles.git
 git submodule update --init --recursive
 ```
 
-**To update this repo:**
+**To update this repo:**  
+See especially my answer here: [How to update all git submodules in a repo (two ways to do two _very different_ things!)](https://stackoverflow.com/a/74470585/4561887):
 ```bash
 # 1. Update the outer repo by pulling the latest from upstream
 git pull
 
+# 2. Then, update the subrepos (two ways to do two *very different* things!):
 
-# 2. Then, update the subrepos:
+# 2.A. Pull subrepo changes
 
 # Option 1: as a **user** of the outer repo, pull the latest changes of the
 # sub-repos as previously specified (pointed to as commit hashes) by developers
 # of this outer repo.
-# - This recursively updates all git submodules (using the same cmd as
-#   previously above) to their commit hash pointers as currently committed in
-#   the outer repo.
+# - This recursively updates all git submodules to their commit hash pointers as
+#   currently committed in the outer repo.
 git submodule update --init --recursive
 
 # Option 2. As a **developer** of the outer repo, update all subrepos to force
 # them each to pull the latest changes from their respective upstreams (ex: via
-# `git pull origin main`, or similar, for each sub-repo).
-# See: 
-# 1. How to find the primary branch of a repo [I used this as a starting point
-#    for myself]: https://stackoverflow.com/a/49384283/4561887
-# 1. How to update each subrepo by running a custom command in it via `git
-#    submodule foreach <cmd>`: https://stackoverflow.com/a/45744725/4561887
-# 1. `man git submodule` - then search for "foreach"
-git submodule foreach --recursive \
-    ' \
-    REMOTE="origin" \
-    PRIMARY_BRANCH="$(basename "$(git symbolic-ref --short \
-        "refs/remotes/${REMOTE}/HEAD")")" \
-    git pull "$REMOTE" "$PRIMARY_BRANCH" \
-    '
+# `git pull origin main` or `git pull origin master`, or similar, for each
+# sub-repo). 
+git submodule update --init --recursive --remote
 
-REMOTE="origin" git submodule foreach --recursive \
-    ' \
-    PRIMARY_BRANCH="$(basename "$(git symbolic-ref --short \
-        "refs/remotes/${REMOTE}/HEAD")")" \
-    git pull "$REMOTE" "$PRIMARY_BRANCH" \
-    '
-
-vvvvvvvvvvvvvvvvvvv
-REMOTE="origin" git submodule foreach --recursive \
-    ' \
-        git checkout "$(basename "$(git symbolic-ref --short \
-            "refs/remotes/${REMOTE}/HEAD")")" && \
-        git pull \
-    '
-^^^^^^^^^^^
-
-git submodule foreach --recursive 'REPO_ROOT="$(git rev-parse --show-toplevel)" REMOTE="origin" PRIMARY_BRANCH="$(basename "$(git symbolic-ref --short "${REPO_ROOT}/modules/${sm_path}/refs/remotes/${REMOTE}/HEAD")")" git pull "$REMOTE" "$PRIMARY_BRANCH" '
-
-REPO_ROOT="$(git rev-parse --show-superproject-working-tree)" REMOTE="origin" cat "${REPO_ROOT}/.git/modules/${sm_path}/refs/remotes/${REMOTE}/HEAD"
-
-basename "$(git symbolic-ref --short "refs/remotes/${REMOTE}/HEAD")"
-
-git submodule foreach --recursive 'REMOTE="origin" BRANCH="$(basename "$(git symbolic-ref --short "refs/remotes/${REMOTE}/HEAD")")" echo $sm_path $BRANCH $REMOTE'
-
-
-git submodule foreach --recursive \
-    REMOTE="origin" \
-    echo "$REMOTE"
-
-
-# now add and commit these changes
+# 2.B. now add and commit these subrepo changes
 git add -A
 git commit -m "Update all subrepos to their latest upstream changes"
 ```
@@ -136,11 +101,9 @@ git submodule add URL_to_repo
 git submodule add https://github.com/ElectricRCAircraftGuy/ripgrep_replace.git
 ```
 
-For more on git submodules, see the `= git submodules: =` section of my "git & Linux cmds doc" notes in my [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo here: [eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt).
-
 
 <a id="here-are-some-of-the-contents-contained-herein"></a>
-## Here are some of the contents contained herein:
+# Here are some of the contents contained herein:
 1. [git & Linux cmds, help, tips & tricks - Gabriel.txt](git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt) - a general note-taking document where I jot down Linux commands, examples, notes about how to use `gdb`, `bazel`, various command-line tools, build tools, etc. 
     1. It's kind of a general place where I write down things I learn which I know I will need later and don't want to forget. _Correction: it's actually more correct to say I **know** I will forget them, so I write them down so I can come back and reference them later._
     1. I can't remember what I learned, but I *can* remember where I wrote it down, so I frequently reference this document to remind myself what I learned.
