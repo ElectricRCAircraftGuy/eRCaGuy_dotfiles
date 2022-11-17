@@ -357,6 +357,46 @@ for software development work, for instance."
             terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_10'; bash -ic '$TERMINAL_TAB_CMD_10; exec bash;'"
         fi
 
+        if [[ -n "$TERMINAL_TAB_TITLE_11" ]] || [[ -n "$TERMINAL_TAB_CMD_11" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_11'; bash -ic '$TERMINAL_TAB_CMD_11; exec bash;'"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_12" ]] || [[ -n "$TERMINAL_TAB_CMD_12" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_12'; bash -ic '$TERMINAL_TAB_CMD_12; exec bash;'"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_13" ]] || [[ -n "$TERMINAL_TAB_CMD_13" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_13'; bash -ic '$TERMINAL_TAB_CMD_13; exec bash;'"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_14" ]] || [[ -n "$TERMINAL_TAB_CMD_14" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_14'; bash -ic '$TERMINAL_TAB_CMD_14; exec bash;'"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_15" ]] || [[ -n "$TERMINAL_TAB_CMD_15" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_15'; bash -ic '$TERMINAL_TAB_CMD_15; exec bash;'"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_16" ]] || [[ -n "$TERMINAL_TAB_CMD_16" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_16'; bash -ic '$TERMINAL_TAB_CMD_16; exec bash;'"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_17" ]] || [[ -n "$TERMINAL_TAB_CMD_17" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_17'; bash -ic '$TERMINAL_TAB_CMD_17; exec bash;'"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_18" ]] || [[ -n "$TERMINAL_TAB_CMD_18" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_18'; bash -ic '$TERMINAL_TAB_CMD_18; exec bash;'"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_19" ]] || [[ -n "$TERMINAL_TAB_CMD_19" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_19'; bash -ic '$TERMINAL_TAB_CMD_19; exec bash;'"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_20" ]] || [[ -n "$TERMINAL_TAB_CMD_20" ]]; then
+            terminator --new-tab --command="export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_20'; bash -ic '$TERMINAL_TAB_CMD_20; exec bash;'"
+        fi
+
     elif [ "$TERMINAL" == "gnome-terminal" ]; then
         if [[ -n "$TERMINAL_TAB_TITLE_01" ]] || [[ -n "$TERMINAL_TAB_CMD_01" ]]; then
             gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_01'; $TERMINAL_TAB_CMD_01; exec bash;"
@@ -396,6 +436,46 @@ for software development work, for instance."
 
         if [[ -n "$TERMINAL_TAB_TITLE_10" ]] || [[ -n "$TERMINAL_TAB_CMD_10" ]]; then
             gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_10'; $TERMINAL_TAB_CMD_10; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_11" ]] || [[ -n "$TERMINAL_TAB_CMD_11" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_11'; $TERMINAL_TAB_CMD_11; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_12" ]] || [[ -n "$TERMINAL_TAB_CMD_12" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_12'; $TERMINAL_TAB_CMD_12; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_13" ]] || [[ -n "$TERMINAL_TAB_CMD_13" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_13'; $TERMINAL_TAB_CMD_13; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_14" ]] || [[ -n "$TERMINAL_TAB_CMD_14" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_14'; $TERMINAL_TAB_CMD_14; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_15" ]] || [[ -n "$TERMINAL_TAB_CMD_15" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_15'; $TERMINAL_TAB_CMD_15; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_16" ]] || [[ -n "$TERMINAL_TAB_CMD_16" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_16'; $TERMINAL_TAB_CMD_16; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_17" ]] || [[ -n "$TERMINAL_TAB_CMD_17" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_17'; $TERMINAL_TAB_CMD_17; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_18" ]] || [[ -n "$TERMINAL_TAB_CMD_18" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_18'; $TERMINAL_TAB_CMD_18; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_19" ]] || [[ -n "$TERMINAL_TAB_CMD_19" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_19'; $TERMINAL_TAB_CMD_19; exec bash;"
+        fi
+
+        if [[ -n "$TERMINAL_TAB_TITLE_20" ]] || [[ -n "$TERMINAL_TAB_CMD_20" ]]; then
+            gnome-terminal --tab -- bash -ic "export DEFAULT_TERMINAL_TITLE='$TERMINAL_TAB_TITLE_20'; $TERMINAL_TAB_CMD_20; exec bash;"
         fi
     fi
 } # gs_open_default_tabs
@@ -599,3 +679,12 @@ diff_dir() {
 }
 # Note: I prefix this with my initials to find my custom functions easier
 alias gs_diff_dir="diff_dir"
+
+# Connect to a VPN via `openconnect-sso`. See my answer here:
+# https://superuser.com/a/1753172/425838
+# - NB: use single quotes here so as to NOT do bash variable expansion yet.
+#   Rather, do that expansion at call-time.
+# - The variables in this cmd must be defined inside your
+#   ~/.bash_aliases_private file.
+alias gs_vpn_openconnect-sso='openconnect-sso \
+    --server "${VPN_SERVER_ADDRESS}/${VPN_SAML_GROUP}" --user "${VPN_USER}"'
