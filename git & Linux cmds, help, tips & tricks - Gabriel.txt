@@ -4608,6 +4608,38 @@ pid="$(cat /var/run/syslog-ng.pid)" kill -SIGUSR1 $pid
     In this particular case, it is equivalent to `syslog-ng-ctl reopen`. 
     See my notes here: https://github.com/syslog-ng/syslog-ng/issues/1774#issuecomment-1270517815
 
+killall chrome
+    <=========== WORKS GREAT! ============
+    Kill all Chrome processes (useful whenever Chrome freezes!)
+    [chrome freezes chrome freezing frozen chrome is frozen]
+    See: https://askubuntu.com/a/746948/327339
+pkill -9 -f chrome
+    Kill all Chrome processes. 
+    See: https://askubuntu.com/a/746948/327339
+pkill <process_name>
+    Kill this process. To **list** all processes which match a given name, use `pkill` instead!
+pgrep chrome
+    <===============
+    List all processes which match the name "chrome"! ie: list all running Chrome processes. 
+    See: `man pgrep` and `man pkill` (apparently from the same executable or module/project).
+pgrep <process_name>
+    Search for a running process by name! (perhaps better than `ps aux | grep -i process_name`, especially when you just want the PID (process ID)!)
+    To **kill** all processes which match a given name, use `pkill` instead!
+    
+pgrep -f foxit
+    Find all Foxit PDF reader processes. 
+    NB: `-f` is **required** to match the foxit processes. Without it, they won't be found!
+pkill -f foxit
+    <======= VERY USEFUL SINCE FOXIT FREEZES ALL THE TIME IN MY LINUX UBUNTU 20.04 PC! ========
+    Kill all Foxit PDF reader processes
+    NB: `-f` is **required** to match the foxit processes. Without it, they won't be found!
+sudo pkill --signal SIGINT openconnect
+    cleanly kill openconnect or openconnect-sso
+    See my answer: https://unix.stackexchange.com/a/725171/114401
+sudo pkill -SIGINT openconnect
+    <===============
+    (same thing as above): cleanly kill openconnect or openconnect-sso
+    See my answer: https://unix.stackexchange.com/a/725171/114401
 
 [disk usage; disk free space; disk space usage]
 - See: https://www.ubuntupit.com/best-disk-analyzer-tools-for-linux-system/
@@ -4705,12 +4737,28 @@ Serial terminal tools:
 1. eRCaGuy_PyTerm
     1. My repo: https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm
 
+[FOR MY NOTES ON PICOCOM, SEE: "eRCaGuy_dotfiles/useful_apps/serial_terminals_README.md"]
+
 picocom --help
     Show the version (1st line) and help menu.
 picocom --baud 115200 /dev/ttyUSB0
     Connect to device /dev/ttyUSB0 at 115200 baud
 man picocom
     See the manual pages for `picocom`.
+Ctrl+A, Ctrl+H
+    Show the Help menu while in picocom.
+    See:
+    1. `man picocom` and search for "C-a" in the "COMMANDS" section.
+    1. "eRCaGuy_dotfiles/useful_apps/serial_terminals_README.md"
+Ctrl+A, Ctrl+X
+    Exit picocom.
+    See:
+    1. `man picocom` and search for "C-a" in the "COMMANDS" section.
+    1. "eRCaGuy_dotfiles/useful_apps/serial_terminals_README.md"
+
+stty 115200
+    Change the serial baud rate **of the active terminal** to 115200.
+[SEE MORE `stty` COMMANDS BELOW!]
 
 setserial -g /dev/ttyS* | sort -V
     Display (and sort) serial information for all /dev/ttyS* devices.
@@ -4794,7 +4842,7 @@ stty
     speed 38400 baud; line = 0;
     -brkint -imaxbel iutf8
     ``` 
-    And on a remote embedded Linux system to which you are connected over an actual serial cable, it will show the actual serial baud rate, and might look like this. Notice that the real baud rate in this case is 115200:
+    And on a remote embedded Linux system to which you are connected over an actual serial cable, it will show the actual serial baud rate, and might look like this. Notice that the real baud rate in this case is 115200, and a lot more information about this terminal is printed out, probably because **it's an actual serial port**, _not_ just an _emulated_ serial terminal like most terminals!:
     ```bash
     $ stty
     speed 115200 baud; line = 0;
@@ -4807,6 +4855,10 @@ stty
     ```
 stty 115200
     Change the serial baud rate **of the active terminal** to 115200.
+stty <parameters>
+    See:
+    1. `man stty`
+    2. https://unix.stackexchange.com/a/242814/114401
 stty -F </dev/device>
     Read serial configuration for the device at "/dev/device" instead of from `stdin` (the active terminal device you are typing into).
     From `man stty`:
@@ -4820,6 +4872,10 @@ stty -F /dev/ttyUSB0
 stty -F /dev/ttyUSB0 115200
     Change the serial baud rate of serial device "/dev/ttyUSB0" to 115200.
     See: https://superuser.com/a/1482079/425838
+stty -F /dev/ttyUSB0 <parameters>
+    See:
+    1. `man stty`
+    2. https://unix.stackexchange.com/a/242814/114401
 ---
 NB: to list all possible serial baud rates of a particular serial device, OR to list all possible serial baud rates of ALL serial devices on your system, see these brilliant scripts here!: Is there any way to check which baud rates are supported on a serial device?: 
 https://superuser.com/a/1482079/425838
@@ -5066,16 +5122,20 @@ binwalk -e path/to/file.bin
     1. `man binwalk` and
     1. https://programmingwithstyle.com/posts/howihackedmycar/
 
-[Mount/remount/unmount/umount filesystem or file image]
+[Mount/remount/unmount/umount filesystem or file image; mount remount]
 > If no part of your filesystem is writable by default, then you may need to unmount it and remount it as read-writable (rw) first, as shown below. ... When done, you can mount it back as read-only (ro) as shown here:
 See my answer: https://serverfault.com/a/1105451/357116
 ---
 mount -o remount,rw /
+    <======== REMOUNT AS READ-WRITE ========
     Remount your root dir (/) as read-writable (rw)
-    See my answer: https://serverfault.com/a/1105451/357116
+    - Useful for embedded Linux boards.
+    - See my answer: https://serverfault.com/a/1105451/357116
 mount -o remount,ro /
+    <====== REMOUNT BACK AS READ-ONLY ======
     Remount your root dir (/) as read-only (ro)
-    See my answer: https://serverfault.com/a/1105451/357116
+    - Useful for embedded Linux boards.
+    - See my answer: https://serverfault.com/a/1105451/357116
 
 `compgen` References:
 [Note: "compgen" apparently stands for (auto)-"completion generator"]
@@ -5602,12 +5662,12 @@ sudo apt update && sudo apt install qrencode
     Install it.
 qrencode -m 4 -o /tmp/qr.png "www.google.com" \
 && ((eog /tmp/qr.png &); sleep 1; rm /tmp/qr.png)
-    <======= BEST FROM A URL ========
+    <======= BEST CMD FROM A URL ========
     A 1-line cmd to make, open, and delete a QR code image from a URL.
     See my answer here: https://stackoverflow.com/a/70934014/4561887
 cat "path/to/file.txt" | qrencode -m 4 -o /tmp/qr.png \
 && ((eog /tmp/qr.png &); sleep 1; rm /tmp/qr.png)
-    <======= BEST FROM A FILE ========
+    <======= BEST CMD FROM A FILE ========
     A 1-line cmd to make, open, and delete a QR code image from an entire file.
     See my answer here: https://stackoverflow.com/a/70934014/4561887
 
