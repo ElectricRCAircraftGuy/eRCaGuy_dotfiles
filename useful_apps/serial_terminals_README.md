@@ -231,6 +231,7 @@ if [ ! -p "/tmp/serial_pipe" ]; then
 fi
 
 read_serial_response_and_pipe_it_back() {
+    # see my new answer here: https://unix.stackexchange.com/a/720853/114401
     response_str="$(timeout 0.5 cat /dev/ttyUSB0)"
     printf "%s" "$response_str"
     printf "%s" "$response_str" > /tmp/serial_pipe
@@ -572,3 +573,7 @@ I absolutely could not have solved Scenario 2 nor Scenario 3 above without help 
 1. [SuperUser: What is the fastest and most reliable way to split a 50GB binary file into chunks of 5GB or less, and then reassemble it later?](https://superuser.com/a/160367/425838) - how to `split` large files, then recombine them using `cat`.
 1. [How to write automated scripts for `picocom`](https://github.com/npat-efault/picocom/issues/76#issuecomment-354186674) - very useful! Use `picocom -rX -b 115200 /dev/ttyUSB0` or `picocom --noreset --exit --baud 115200 /dev/ttyUSB0` (same thing) to simply configure the serial port, in place of `stty`, then exit, leaving the serial port open, configured, and connected so you can `cat` or otherwise manually write to or read from it.
 1. [Difference between "cat" and "cat <"](https://unix.stackexchange.com/a/258932/114401) - difference between `cat somefile` and `cat < somefile`
+1. https://linux.die.net/man/1/rz - `man rz`
+1. lrzsz: free x/y/zmodem implementation official page: https://www.ohse.de/uwe/software/lrzsz.html
+1. lrzsz package in Buildroot: https://github.com/buildroot/buildroot/tree/master/package/lrzsz
+
