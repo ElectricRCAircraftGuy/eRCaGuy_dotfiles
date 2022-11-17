@@ -2241,6 +2241,15 @@ git config merge.renameLimit
 git config merge.renameLimit 10000
     Set the value of the `merge.renameLimit` git variable to `10000`. 
     See my comment under this answer, where I do this: https://stackoverflow.com/questions/7830728/warning-on-diff-renamelimit-variable-when-doing-git-push/28064699#28064699.
+git config branch.main.remote
+    <===============
+    Read out the `main` branch's default-tracking `remote` name. Ex: if ".git/config" contains this:
+    ```
+    [branch "main"]
+        remote = origin
+        merge = refs/heads/main
+    ```
+    ...then `git config branch.main.remote` will return `origin`. 
 ---------
 YOU CAN INVENT VARIABLES AS YOU SEE FIT. (I am inventing the `blametool.editor` variable below):
 ---------
@@ -2260,11 +2269,23 @@ git config --global blametool.editor subl
 git config blametool.editor
     Reads 'subl' from the settings you just set above. Since we didn't specify '--global' when reading here, this will read all of the git config files, retaining the variable value found in the narrowest scope (ie: any value found in the '--local' config files takes precedent over '--global', which takes precedent over '--system', etc.).
 
-git branch -a = show ALL branches, even remote-only branches
-git branch -r = show ONLY 'r'emote branches
-git branch -r | grep gabriel.staples = show all of my remote branches (which, by my convention, begin with "gabriel.staples_")
-git branch -d -r origin/mybranch = delete remote branch; see: https://stackoverflow.com/questions/5094293/git-remote-branch-deleted-but-still-it-appears-in-branch-a/5096739#5096739
-git branch -rd origin/mybranch = same as above
+git branch -a
+    show ALL branches, even remote-only branches
+git branch -r
+    show ONLY 'r'emote branches
+git branch -r | grep gabriel.staples
+    show all of my remote branches (which, by my convention, begin with "gabriel.staples_")
+git branch -d -r origin/mybranch
+    delete remote branch; see: https://stackoverflow.com/questions/5094293/git-remote-branch-deleted-but-still-it-appears-in-branch-a/5096739#5096739
+git branch -rd origin/mybranch
+    same as above
+git branch -vv
+    <===============
+    Show all branches, including their locally-stored remote-tracking ("upstream", '-u') branches. Ex: branch "main" might track the locally-stored remote-tracking branch named "origin/main", which tracks the "main" branch on the remote named "origin".  This might be shown like this. Notice the "[origin/main]" part:
+    ```
+    * main                       c99f1f0 [origin/main] README: improve ex. `rg` to `fzf` cmd to add color and line numbers
+    ```
+    See: https://stackoverflow.com/a/23998108/4561887
 
 git checkout <branch_name> -- <paths>
     Check out just the file or files in `<paths>` from branch or commit hash `<branch_name>`.
@@ -3354,6 +3375,23 @@ git submodule update --recursive --init
     <========== USE THIS! ==========
     Update (clone) all submodule changes too. 
     GS: as determined through experimental testing, this also **checks out the appropriate commit hash** for each submodule, in a "detached head" (`HEAD detached at commit_id`) state! You can `cd` into each submodule directory and run `git status` and `git log` to see what I mean!
+
+- How to update all git submodules in a repo (two ways to do two _very different_ things!):
+git submodule update --init --recursive
+    <============================
+    Option 1: as a **user** of the outer repo, pull the latest changes of the
+    sub-repos as previously specified (pointed to as commit hashes) by developers
+    of this outer repo.
+    - This recursively updates all git submodules to their commit hash pointers as
+      currently committed in the outer repo.
+    See my answer: https://stackoverflow.com/a/74470585/4561887
+git submodule update --init --recursive --remote
+    <============================
+    Option 2. As a **developer** of the outer repo, update all subrepos to force
+    them each to pull the latest changes from their respective upstreams (ex: via
+    `git pull origin main` or `git pull origin master`, or similar, for each
+    sub-repo). 
+    See my answer: https://stackoverflow.com/a/74470585/4561887
 
 OTHER, GENERAL NOTES ABOUT GIT SUBMODULE CMDS:
 
