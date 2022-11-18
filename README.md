@@ -51,6 +51,7 @@ This project started out as just a few helpful nuggets I like to put in my `~/.b
 ## References:
 1. [my answer] [How to update all git submodules in a repo (two ways to do two _very different_ things!)](https://stackoverflow.com/a/74470585/4561887)
 1. For more on git submodules, see the `= git submodules: =` section of my "git & Linux cmds doc" notes in my [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo here: [eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt).
+1. Official `git submodule` documentation: https://git-scm.com/book/en/v2/Git-Tools-Submodules
 
 _This section was originally copied from my eRCaGuy_hello_world repo [here](https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world#how-to-clone-this-repo-and-all-git-submodules)._
 
