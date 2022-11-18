@@ -556,6 +556,7 @@ sha256sum # verify it
 
 **Transferring a file over serial from a Linux computer to a Linux computer where the destination computer DOES have `cat`, AND the `sz` and `rz` ZMODEM protocol executables:**
 
+WIP
 
 
 <a id="references"></a>
