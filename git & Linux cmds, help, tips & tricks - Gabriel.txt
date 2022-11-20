@@ -3258,6 +3258,50 @@ See my Q&A: How to use git lfs as a basic user: This covers the question: "What 
 
 Assuming you have a repo with a MASSIVE set of files managed by `git lfs` (ex: 20 GB), you should configure a cronjob [chron job] to run every night at 2am to pull the latest files, as described here: "eRCaGuy_dotfiles/useful_scripts/cronjobs/README.md".
 
+References:
+1. *****+Great article!: [my developer planet: Git LFS: Why and how to use](https://mydeveloperplanet.com/2018/10/31/git-lfs-why-and-how-to-use/)
+1. https://git-lfs.github.com/
+1. My repo and notes: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles#how-to-clone-this-repo-and-all-git-submodules
+1. *****[my Q&A] [How to use `git lfs` as a basic user: What is the difference between `git lfs fetch`, `git lfs fetch --all`, `git lfs pull`, and `git lfs checkout`?](https://stackoverflow.com/a/72610495/4561887)
+1. [my ans] How to shrink your .git folder in your git repo: https://stackoverflow.com/a/68554906/4561887
+1. Google search for "how does git lfs store files more efficiently than git?": https://www.google.com/search?q=how+does+git+lfs+store+files+more+efficiently+than+git%3F&oq=how+does+git+lfs+store+files+more+efficiently+than+git%3F&aqs=chrome.0.69i59.265j0j9&sourceid=chrome&ie=UTF-8
+
+sudo apt update && sudo apt install git-lfs
+    Install `git lfs` in Ubuntu
+    See: https://mydeveloperplanet.com/2018/10/31/git-lfs-why-and-how-to-use/
+git lfs install
+    Install `git lfs` git hooks into your repo, and update your ~/.gitconfig file with "lsf" filter info.
+    See: https://mydeveloperplanet.com/2018/10/31/git-lfs-why-and-how-to-use/
+git lfs track "*.jpg" "*.JPG"
+    Track all *.jpg and *.JPG files using `git lfs`.
+    See: https://mydeveloperplanet.com/2018/10/31/git-lfs-why-and-how-to-use/
+git lfs track "largefiles/*.jpg"
+    Track all *.jpg files inside the "largefiles" dir; ie: all files at path "largefiles/*.jpg".
+    See: https://mydeveloperplanet.com/2018/10/31/git-lfs-why-and-how-to-use/
+git lfs untrack "*.jpg" "*.JPG"
+    _Stop_ tracking these files.
+    See `man git lfs`.
+git lfs ls-files
+    List all files being tracked by `git lfs`.
+git add -A
+    Add all files to the "index", or git staging area, including files now tracked by `git lfs`. 
+git commit
+    Commit all staged files to the git repo. Files tracked by `git lfs` will just have a pointer in the git repo history, and the actual binary content will be stored on a separate server from the git repo, so as to minimize the data the git repo must track and to keep the size of the git repo small.
+    See: https://mydeveloperplanet.com/2018/10/31/git-lfs-why-and-how-to-use/
+git lfs prune
+    Clean up (remove) old git lfs cached files from .git/lfs which are no longer used.
+    See: 
+    1. https://mydeveloperplanet.com/2018/10/31/git-lfs-why-and-how-to-use/
+    1. [my answer] How to shrink your .git folder in your git repo: https://stackoverflow.com/a/68554906/4561887
+git lfs pull
+    Fetch and check out all git lfs files for the git commit or branch you are currently on. 
+    This one command is the equivalent of these 2 commands:
+    ```bash
+    git lfs fetch
+    git lfs checkout
+    ```
+    See: [my Q&A] [How to use `git lfs` as a basic user: What is the difference between `git lfs fetch`, `git lfs fetch --all`, `git lfs pull`, and `git lfs checkout`?](https://stackoverflow.com/a/72610495/4561887)
+
 
 ====================================================================================================
 = git submodules: =
