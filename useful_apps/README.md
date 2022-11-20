@@ -80,7 +80,7 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
             1. --> click the "Text color" color swatch --> click the "+" under the "Custom" section to create a custom color --> type "#FEFFFF" into the box --> press Tab to make it show up --> click the "Select" button.
             1. --> click the "Background color" color swatch --> click the "+" under the "Custom" section to create a custom color --> type "#2D0922" into the box --> press Tab to make it show up --> click the "Select" button.
             1. --> when done with both steps above, click "Close". Done!
-    1. To use the built-in logger in terminator: see my own ans. here: https://stackoverflow.com/questions/34472973/how-to-activate-automatic-logging-in-terminator/62493626#62493626
+    1. To use the _built-in logger in terminator_: see my own ans. here: [How to activate Automatic Logging in Terminator?](https://stackoverflow.com/a/62493626/4561887)
     1. [DO THESE THINGS TOO!]
         1. **Enable the Terminal bell sound:** right-click on the terminator screen --> Preferences --> click the "Profiles" tab at the top --> ensure the "General" sub-tab is chosen --> check the box for "Audible beep" under the "Terminal bell" section in the bottom-right. See my ans here: https://askubuntu.com/questions/1253799/terminator-terminal-wont-play-bell-sound/1253800#1253800.
         1. **Disable the window dimming when the terminator terminal is not in focus:** right-click on the terminator screen --> Preferences --> click the "Global" tab at the top --> in the center-left under the "Appearance" section drag the slider for "Unfocused terminal font brightness" to the far right (from 80% to 100%) --> click "Close".
