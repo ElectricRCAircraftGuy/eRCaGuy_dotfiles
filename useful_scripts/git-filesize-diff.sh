@@ -4,7 +4,7 @@
 
 # Original Author: @patthoyts: https://stackoverflow.com/a/10847242/4561887
 # Modified by: Gabriel Staples
-# Status: WIP
+# Status: works!
 
 # - See which files changed in size, and by how much, from one commit to another in a git
 #   repository.
@@ -20,7 +20,8 @@
 # References:
 # 1. Original Author: @patthoyts: https://stackoverflow.com/a/10847242/4561887
 
-
+# TODO: run `shellcheck` on this script and clean it up a bunch for readability and best coding
+# practices.
 # TODO: fill out the version & author info
 
 # EXIT_SUCCESS=0
@@ -30,11 +31,21 @@
 # AUTHOR="Gabriel Staples"
 
 
-USAGE='[--cached] [<rev-list-options>...]
+USAGE='
+git filesize-diff [options] <tree-ish> <tree-ish>
 
-git filesize-diff <tree-ish> <tree-ish>
+OPTIONS:
+[--cached] [<rev-list-options>...]
 
-Show file size changes between two commits or the index and a commit.'
+Show file size changes between two commits or the index and a commit.
+'
+
+# Overcome the error of "You need to run this command from the toplevel of the working tree."
+# if running this script in a subdir of the repo by first cd'ing to the repo root, then cd'ing
+# back to the starting dir when done.
+starting_dir="$(pwd)"
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
 
 . "$(git --exec-path)/git-sh-setup"
 args=$(git rev-parse --sq "$@")
@@ -42,6 +53,11 @@ args=$(git rev-parse --sq "$@")
 cmd="diff-tree -r"
 [[ $args =~ "--cached" ]] && cmd="diff-index"
 eval "git $cmd $args" | {
+
+  printf -- "Num Bytes changed\n"
+  printf -- "      |\n"
+  printf -- "      v     Filename\n"
+  printf -- "----------  ---------------------------\n"
   total=0
   while read A B C D M P
   do
@@ -55,10 +71,14 @@ eval "git $cmd $args" | {
         ;;
     esac
     total=$(( $total + $bytes ))
-    printf '%d\t%s\n' $bytes "$P"
+    printf '%10d  %s\n' $bytes "$P"
   done
-  echo total $total
+  echo "------------------------------"
+  echo "total change:  $total bytes"
+
 }
+
+cd "$starting_dir"
 
 
 # TODO:
