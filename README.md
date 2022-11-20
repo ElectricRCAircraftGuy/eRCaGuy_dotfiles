@@ -71,6 +71,8 @@ So, **to clone this repo plus all sub-repos (git submodules) and all `git lfs` L
 ```bash
 # Clone this repo
 git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles.git
+# Pull all Git LFS files (large binary files, such as PDFs, tracked with `git lfs`)
+git lfs pull
 # Recursively clone and update all subrepos (git submodules) it may contain
 git submodule update --init --recursive
 ```
