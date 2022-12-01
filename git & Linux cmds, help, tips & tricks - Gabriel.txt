@@ -58,6 +58,21 @@ Words of wisdom:
 1. Don't go 110%!: https://www.tiktok.com/@phong.thieu/video/7131489984686640390?is_from_webapp=v1&item_id=7131489984686640390
 1. Let it burn! 🔥🔥: https://www.tiktok.com/@phong.thieu/video/7138809958451121414?is_copy_url=1&is_from_webapp=v1&item_id=7138809958451121414
     1. If deadlines truly are unreachable, they should burn 🔥. It's the only way leadership ever realizes there's a problem, you know?
+1. *****+ Part of the ebb and flow of life and "work/life balance" or "work/life harmony" is that sometimes you must spend extra time on your family and it will affect your bonus, and sometimes you can spend extra time at work and it will help you get promoted in your current job or find a new job. 
+
+    keywords: gabriel staples elusive work-life balance, no!: it is a work-life **harmony**, with give and take, ebb and flow, sometimes giving more to one role in your life than another, and alternating as necessary so that you can do your best work and be mos-productive in each role in its due time:
+        See also: 
+        1. Work-life harmony, by Nicole Malachowski: https://www.linkedin.com/feed/update/urn:li:ugcPost:6942500854797152256/?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A6942500854797152256%2C6943330228509315072%29
+        2. https://www.linkedin.com/posts/gabriel-staples_inspiration-work-lifebalance-activity-7003243118720425984-g7ko?utm_source=share&utm_medium=member_desktop
+        3. ***** [my LinkedIn post with this very content] https://www.linkedin.com/feed/update/urn:li:ugcPost:7003891808833351680/
+
+    Is there an elusive work-life balance? No!: it is a work-life **harmony**, with give and take, ebb and flow, sometimes giving more to one role in your life than another, and alternating as necessary so that you can do your best work and be most-productive in each role in its due time.
+
+    Ex: let's say you spend 2 months of intense house hunting, followed by a huge family move to move into the new house, get settled there, and fix it up. Perhaps you have maintenance people in the home many days, and that distracts from work and requires your attention. Perhaps you have a difficult closing process and must take an extra 10 days off of work to work with the lender, provide documentation, do home inspections, or coordinate with the builder, etc. As a result of these things, you may have to "partially meet" expectations for that season of your employment, perhaps even losing a portion of or all of your annual bonus. 💸$$💸 Instead of thinking, "I failed! I am not meeting expectations", the thought of which drags you down into despair, think to yourself: "I **SUCCEEDED** and **AM SUCCEEDING**!" "I manged to get my family into a new home while keeping my job, despite all these difficulties. I have **succeeded**!" Then, get back to work. 
+
+    As someone who has traditionally flat-out neglected my family (to their and my severe detriment--and generally with it _still_ not being enough for what my work/employer wants anyway) for fear of not succeeding at work, I have begun to realize that "work-life balance" (or "work-life harmony", as some people call it [see link 1 above]) doesn't mean "trying to meet family expectations *and* work expectations all of the time, no matter what". Rather, it means: "sometimes meeting work expectations, and sometimes meeting family expectations, according to the season of life you are in and the individual circumstances at play." Sometimes, you must spend very little time with your family for 5+ years to get through a grueling school program or to grind through a really hard time in life where you are working one job while building skills for another. And, you do this "work" ultimately *for your family*. In the end, it benefits both, but in the moment, it feels like losing your family or losing your work. And, sometimes you must reduce your work output significantly so you can get your family into the house you've been working for for the last 25 years (or to help out with medical needs, or to do some other really important thing), even though that reduced output may mean your employer removes your bonus and tells you you are failing. If you have done all you can do and kept your job or found another one, you are *not* failing. You are **succeeding**! You have discovered that your work at home or for others is important and is not replaced in importance by your work for your employer. 
+
+    In other words: ***you have found work-life balance!***
 
 
 ====================================================================================================
@@ -3265,6 +3280,8 @@ References:
 1. *****[my Q&A] [How to use `git lfs` as a basic user: What is the difference between `git lfs fetch`, `git lfs fetch --all`, `git lfs pull`, and `git lfs checkout`?](https://stackoverflow.com/a/72610495/4561887)
 1. [my ans] How to shrink your .git folder in your git repo: https://stackoverflow.com/a/68554906/4561887
 1. Google search for "how does git lfs store files more efficiently than git?": https://www.google.com/search?q=how+does+git+lfs+store+files+more+efficiently+than+git%3F&oq=how+does+git+lfs+store+files+more+efficiently+than+git%3F&aqs=chrome.0.69i59.265j0j9&sourceid=chrome&ie=UTF-8
+1. ***** VERY USEFUL VIDEO!: What is Git LFS?: https://www.youtube.com/watch?v=9gaTargV5BY
+    I discovered this video from here: https://stackoverflow.com/a/49173061/4561887
 
 sudo apt update && sudo apt install git-lfs
     Install `git lfs` in Ubuntu
