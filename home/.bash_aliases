@@ -564,6 +564,20 @@ gs_fzf_git_and_linux_cmds_doc() {
 # 1. https://cloud.google.com/sdk/gcloud/reference/auth/login#--no-browser
 # 1. https://cloud.google.com/sdk/gcloud/reference/auth/login#--launch-browser
 # 1. `gcloud auth login --help`
+#
+# To update `gcloud`: https://cloud.google.com/sdk/gcloud/reference/components/update <===
+#
+# Common commands:
+#       gcloud version
+#           check version
+#           See: https://cloud.google.com/sdk/gcloud/reference/components/update
+#       gcloud components update
+#           update gcloud
+#           See: https://cloud.google.com/sdk/gcloud/reference/components/update
+#       gcloud components update --version=1.2.3
+#           update all installed components to a fixed Google Cloud CLI version 1.2.3
+#           See: https://cloud.google.com/sdk/gcloud/reference/components/update
+#
 alias gs_gcloud_get_new_credentials="gcloud auth login --no-launch-browser"
 
 # HashiCorp vault: used inside some build systems by some companies for user authentication,
@@ -579,6 +593,23 @@ alias gs_gcloud_get_new_credentials="gcloud auth login --no-launch-browser"
 # 1. *****+ Okta Auth Method in `vault`: https://www.vaultproject.io/docs/auth/okta
 # 1. Commands: https://www.vaultproject.io/docs/commands
 # 1. *****+ Source code on GitHub!: https://github.com/hashicorp/vault
+# 1. *****+ How to install or upgrade `vault` on Linux Ubuntu:
+#    https://www.cyberithub.com/how-to-install-hashicorp-vault-on-ubuntu-20-04-lts/
+#
+# How to install or upgrade `vault`:
+# - See: https://www.cyberithub.com/how-to-install-hashicorp-vault-on-ubuntu-20-04-lts/
+# ```bash
+# # Check version
+# vault --version
+# # Install
+# curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+# sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+# sudo apt install vault
+# # Re-source your bash startup file
+# . ~/.bashrc
+# # Ensure your version is higher now, indicating a successful install
+# vault --version
+# ```
 #
 # Common commands:
 #       vault --help
