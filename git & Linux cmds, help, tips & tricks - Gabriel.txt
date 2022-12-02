@@ -4280,8 +4280,13 @@ References:
         1. ***** dbus signature types: https://dbus.freedesktop.org/doc/dbus-specification.html#id-1.3.8
     1. https://0pointer.de/blog/projects/the-biggest-myths.html
     1. ***** blog by the author, incl. basic source code examples: http://0pointer.net/blog/the-new-sd-bus-api-of-systemd.html
+1. gdbus
+    1. `gdbus` CLI tool: https://www.freedesktop.org/software/gstreamer-sdk/data/docs/2012.5/gio/gdbus.html
+1. systemd and sdbus
+    1. ***** `busctl` CLI tool: https://www.freedesktop.org/software/systemd/man/busctl.html
 1. zmq
     1. https://zeromq.org/
+
 
 man gdbus
     view the manual pages
@@ -4324,7 +4329,43 @@ gdbus call --help
       -t, --timeout         Timeout in seconds
     ```
 
-TODO: ADD AN EXAMPLE GDBUS CALL command!
+Example usages:
+
+gdbus call --system --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus --method org.freedesktop.DBus.ListNames | tr ',' '\n'
+    ??? todo: add description
+    - Note that piping the output to `tr ',' '\n'` replaces all commas (`,`) with newlines (`\n`) to make the output easier to look at.
+    See: `gdbus call --help`
+    See also: https://www.freedesktop.org/software/gstreamer-sdk/data/docs/2012.5/gio/gdbus.html
+gdbus call -y -d com.whatever.something -o / -m com.whatever.something.MyFunction 1
+    ??? todo: add better description
+    Send a `1` to the `MyFunction` function at service?? com.whatever.something
+    See: `gdbus call --help`
+gdbus call --system --dest com.whatever.something --object-path / --method com.whatever.something.MyFunction 1
+    <======
+    Same as just above.
+    See: `gdbus call --help`
+busctl call com.whatever.something / com.whatever.something MyFunction b 1
+    <============
+    The systemd (`busctl`) version, meaning: exact same thing, as the `gdbus` call just above, assuming that the data being passed to the called method/function is a `b`oolean `1`. 
+    Note: the `busctl` is nicer than `gdbus` because it allows you to specify the data signature (`b` in this case). 
+    See: 
+    1. `busctl --help`
+    1. D-Bus summary of types (ex: `b` is bool): https://dbus.freedesktop.org/doc/dbus-specification.html#id-1.3.8
+    1. https://www.freedesktop.org/software/systemd/man/busctl.html
+busctl call org.freedesktop.systemd1 /org/freedesktop/systemd1 org.freedesktop.systemd1.Manager StartUnit ss "cups.service" "replace"
+    <============
+    An official example from FreeDesktop.org. They describe it as:
+    """
+    The [above] command invokes the "StartUnit" method on the "org.freedesktop.systemd1.Manager" interface of the "/org/freedesktop/systemd1" object of the "org.freedesktop.systemd1" service, and passes it two strings "cups.service" and "replace". As a result of the method call, a single object path parameter is received and shown:
+    """
+        ```
+        # response:
+        o "/org/freedesktop/systemd1/job/42684"
+        ```
+    Note that the `ss` signature specifies that two strings will follow as arguments to the `StartUnit` method. The two strings in this case are "cups.service", and "replace". 
+    See: 
+    1. *****https://www.freedesktop.org/software/systemd/man/busctl.html
+    1. D-Bus summary of types (ex: `b` is bool, `s` is string): https://dbus.freedesktop.org/doc/dbus-specification.html#id-1.3.8
 
 
 ====================================================================================================
