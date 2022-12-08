@@ -76,7 +76,7 @@ subl&                 # Sublime Text editor
 # gnome-system-monitor&  # nah, added to Ubuntu's system startup menu to open this at boot instead
 libreoffice --writer&
 google-chrome&
-$HOME/eclipse/cpp-2019-12/eclipse/eclipse&
+$HOME/eclipse/cpp-2022-09/eclipse/eclipse&
 /usr/bin/slack&
 
 
