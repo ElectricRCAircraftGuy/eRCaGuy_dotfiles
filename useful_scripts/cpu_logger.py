@@ -15,7 +15,7 @@
 # 2. Auto-start the logger at boot by adding the following to your Ubuntu "Startup Applications" GUI program:
 #   New "Startup Program" entry:
 #       Name:       GS cpu_logger.py
-#       Command:    /home/gabriel/GS/dev/eRCaGuy_dotfiles/useful_scripts/cpu_logger.py
+#       Command:    sudo /home/gabriel/GS/dev/eRCaGuy_dotfiles/useful_scripts/cpu_logger.py
 #       Comment:    Start up the CPU logger, with auto-rotating logs, at boot.
 # 3. Also install this executable by following the installation instructions at the top of the file:
 #   "eRCaGuy_dotfiles/useful_scripts/cpu_load.py".
@@ -60,6 +60,7 @@
 ##### https://unix.stackexchange.com/a/295608/114401   <========
 
 import logging
+import os
 import psutil
 import subprocess
 import time
@@ -114,10 +115,22 @@ See my ans: https://unix.stackexchange.com/a/687072/114401
         # q to exit, like normal.
 """
 
+# Raise the priority of this process to have maximum priority (lowest "niceness").
+# See:
+# 1. https://www.ibm.com/docs/en/aix/7.2?topic=processes-changing-priority-running-process-renice-command
+# 1. How can a Linux/Unix Bash script get its own PID? - https://stackoverflow.com/a/2493659/4561887
+# 1. ***** https://docs.python.org/3/library/os.html#os.nice
+# 1. ***** https://stackoverflow.com/a/1023088/4561887
+# Example in bash: `renice --priority -20 --pid $BASHPID`
+niceness = os.nice(0)  # REQUIRES `sudo` (root) privileges to do this!
+print('niceness = {}'.format(niceness))
+niceness = os.nice(-100)
+print('niceness = {}'.format(niceness))  # should be -20
+
 
 logger = logging.getLogger('my_logger')
 logger.setLevel(logging.DEBUG)
-log_file_size_bytes = 1024*1024*25  # 25 MB
+log_file_size_bytes = 1024*1024*25  # 25 MiB
 handler = RotatingFileHandler(str(Path.home()) + '/cpu_log.log', maxBytes=log_file_size_bytes, backupCount=10)
 # logger.addHandler(handler)
 format = "%(asctime)s, %(levelname)s, %(message)s"  # https://stackoverflow.com/a/56369583/4561887
@@ -135,7 +148,20 @@ logger.addHandler(handler)
 #     logger.info('Hello world!')
 
 t_measurement_sec = 4
+loop_counter = 0
 while True:
+    loop_counter += 1
+
+    logger.info('======================== START of loop count {} =============================\n'
+        .format(loop_counter));
+    handler.setFormatter(None) # remove formatter (log header) for the following logged messages
+
+    # ---------------------------------
+    # 1. log the output of `psutil` and `ps`
+    # ---------------------------------
+
+    logger.info("Output from `psutil`:")
+
     cpu_percent_cores = psutil.cpu_percent(interval=t_measurement_sec, percpu=True)
     avg = sum(cpu_percent_cores)/len(cpu_percent_cores)
     cpu_percent_overall = avg
@@ -143,12 +169,16 @@ while True:
     cpu_percent_cores_str = [('%5.2f' % x) + '%' for x in cpu_percent_cores]
     cpu_percent_cores_str = ', '.join(cpu_percent_cores_str)
 
-    logger.info('       ==> Overall: {} <==,        Individual CPUs: {} '.format(
+    # Print Tab-delimited
+    logger.info('===> Overall CPU usage: {} <===\t\tIndividual CPUs:\t{}\n'.format(
         cpu_percent_overall_str,
-        cpu_percent_cores_str))
+        cpu_percent_cores_str,
+    ))
 
     # print('Overall: {}'.format(cpu_percent_overall_str))
     # print('Individual CPUs: {}'.format('  '.join(cpu_percent_cores_str)))
+
+    logger.info("Output from `ps`:")
 
     # Popen: https://stackoverflow.com/a/4760517/4561887
     # See: https://unix.stackexchange.com/a/295608/114401
@@ -178,15 +208,15 @@ while True:
     cpu_processes_top10_list = cpu_processes_list[:10]
     cpu_processes_above_threshold_list = []
     for process in cpu_processes_list:
-        CPU_THRESHOLD_PCT = 15
+        INDIVIDUAL_CPU_THRESHOLD_PCT = 15
         individual_cpu_usage_pct = process[0]
-        if individual_cpu_usage_pct >= CPU_THRESHOLD_PCT:
+        if individual_cpu_usage_pct >= INDIVIDUAL_CPU_THRESHOLD_PCT:
             cpu_processes_above_threshold_list.append(process)
 
     # If overall cpu usage is > Y, log all processes > X, OR the top 10 processes, whichever is
     # the greater number of processes. This ensures that when the overall cpu usage is high, we log
     # *something*, instead of nothing, in the event no single process is > X
-    OVERALL_CPU_THRESHOLD_PCT = 50
+    OVERALL_CPU_THRESHOLD_PCT = 0  # set to 0 to **always** log the top processes!
     cpu_processes_list = cpu_processes_above_threshold_list
     if cpu_percent_overall > OVERALL_CPU_THRESHOLD_PCT:
         if len(cpu_processes_top10_list) > len(cpu_processes_above_threshold_list):
@@ -202,9 +232,42 @@ while True:
         individual_cpu_usage_pct_str = ('%5.2f' % individual_cpu_usage_pct) + "%"
         cmd_str = process[1]
 
-        logger.info('    {}/{}) {}, cmd: {}'.format(num_str, len(cpu_processes_list), individual_cpu_usage_pct_str, cmd_str))
-    handler.setFormatter(formatter)  # restore format for next logs
+        # Print Tab-delimited
+        logger.info('\t{}/{})\t{}\tcmd:\t{}'.format(
+                num_str,
+                len(cpu_processes_list),
+                individual_cpu_usage_pct_str,
+                cmd_str,
+        ))
+    logger.info('') # print a single new-line
 
+    # ---------------------------------
+    # 2. Now also log the output of `top`
+    # - I want something like the equivalent of `top -b -n 1 | head -n 50`
+    # ---------------------------------
+
+    logger.info("Output from `top`:\n")
+
+    cmd = ['top', '-b', '-n', '1']
+    p = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    out, err = p.communicate()
+    lines = out.decode("utf-8").splitlines()
+    NUM_LINES_TO_KEEP = 50
+    lines = lines[:50]
+    # print(lines)
+    for line in lines:
+        logger.info('{}'.format(line))
+    logger.info('') # print a single new-line
+
+    # ---------------------------------
+    # 3. clean up
+    # ---------------------------------
+
+    handler.setFormatter(formatter)  # restore log format for next logs
 
 
 # print("Measuring CPU load for {} seconds...".format(t_measurement_sec))
