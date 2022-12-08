@@ -15,7 +15,9 @@
 # 2. Auto-start the logger at boot by adding the following to your Ubuntu "Startup Applications" GUI program:
 #   New "Startup Program" entry:
 #       Name:       GS cpu_logger.py
-#       Command:    sudo /home/gabriel/GS/dev/eRCaGuy_dotfiles/useful_scripts/cpu_logger.py
+#       # NB: use `chrt` here to have Linux raise the priority and use the soft real-time scheduler!
+#       # See my answer: https://stackoverflow.com/a/71757858/4561887
+#       Command:    sudo chrt -rr 1 /home/gabriel/GS/dev/eRCaGuy_dotfiles/useful_scripts/cpu_logger.py
 #       Comment:    Start up the CPU logger, with auto-rotating logs, at boot.
 # 3. Also install this executable by following the installation instructions at the top of the file:
 #   "eRCaGuy_dotfiles/useful_scripts/cpu_load.py".
@@ -115,23 +117,28 @@ See my ans: https://unix.stackexchange.com/a/687072/114401
         # q to exit, like normal.
 """
 
-# Raise the priority of this process to have maximum priority (lowest "niceness").
-# See:
-# 1. https://www.ibm.com/docs/en/aix/7.2?topic=processes-changing-priority-running-process-renice-command
-# 1. How can a Linux/Unix Bash script get its own PID? - https://stackoverflow.com/a/2493659/4561887
-# 1. ***** https://docs.python.org/3/library/os.html#os.nice
-# 1. ***** https://stackoverflow.com/a/1023088/4561887
-# Example in bash: `renice --priority -20 --pid $BASHPID`
-niceness = os.nice(0)  # REQUIRES `sudo` (root) privileges to do this!
-print('niceness = {}'.format(niceness))
-niceness = os.nice(-100)
-print('niceness = {}'.format(niceness))  # should be -20
+
+# COMMENTED OUT: I'll use `sudo chrt -rr 1 <cmd>` instead when launching this
+# program. See my answer: https://stackoverflow.com/a/71757858/4561887
+#
+# # Raise the priority of this process to have maximum priority (lowest "niceness").
+# # See:
+# # 1. https://www.ibm.com/docs/en/aix/7.2?topic=processes-changing-priority-running-process-renice-command
+# # 1. How can a Linux/Unix Bash script get its own PID? - https://stackoverflow.com/a/2493659/4561887
+# # 1. ***** https://docs.python.org/3/library/os.html#os.nice
+# # 1. ***** https://stackoverflow.com/a/1023088/4561887
+# # Example in bash: `renice --priority -20 --pid $BASHPID`
+# niceness = os.nice(0)  # REQUIRES `sudo` (root) privileges to do this!
+# print('niceness = {}'.format(niceness))
+# niceness = os.nice(-100)
+# print('niceness = {}'.format(niceness))  # should be -20
 
 
 logger = logging.getLogger('my_logger')
 logger.setLevel(logging.DEBUG)
 log_file_size_bytes = 1024*1024*25  # 25 MiB
-handler = RotatingFileHandler(str(Path.home()) + '/cpu_log.log', maxBytes=log_file_size_bytes, backupCount=10)
+log_file_path = str(Path.home()) + '/cpu_log.log'
+handler = RotatingFileHandler(log_file_path, maxBytes=log_file_size_bytes, backupCount=10)
 # logger.addHandler(handler)
 format = "%(asctime)s, %(levelname)s, %(message)s"  # https://stackoverflow.com/a/56369583/4561887
 formatter = logging.Formatter(fmt=format, datefmt='%Y-%m-%d__%H:%M:%S')
@@ -143,6 +150,9 @@ logger.addHandler(handler)
 #     datefmt='%Y-%m-%d__%H:%M:%S',
 # )
 
+# Ensure anyone can read or modify the log file even though it was created by root
+# See: https://stackoverflow.com/a/53474975/4561887
+os.chmod(log_file_path, 0o777)
 
 # for _ in range(10000):
 #     logger.info('Hello world!')
