@@ -153,19 +153,38 @@ logger.addHandler(handler)
 
 # Ensure anyone can read or modify the log file even though it was created by root
 # See: https://stackoverflow.com/a/53474975/4561887
-os.chmod(log_file_path, 0o777)
+PERMISSIONS_EVERYONE_READ_WRITE = 0o666
+os.chmod(log_file_path, PERMISSIONS_EVERYONE_READ_WRITE)
 
 # for _ in range(10000):
 #     logger.info('Hello world!')
 
 t_measurement_sec = 4
 loop_counter = 0
+inode_number_old = os.stat(log_file_path).st_ino
 while True:
+    # ---------------------------------
+    # 0. set up
+    # ---------------------------------
+
     loop_counter += 1
 
     logger.info('======================== START of loop count {} =============================\n'
         .format(loop_counter));
     handler.setFormatter(None) # remove formatter (log header) for the following logged messages
+
+    # reset file permissions on the newly-created log file after each log
+    # rotation; log rotations can be detected by a changed inode number;
+    # see:
+    # 1. https://docs.python.org/3/library/os.html#os.stat_result.st_ino
+    # 1. ***** https://stackoverflow.com/a/44407999/4561887
+    # 1. `ls -i` (or `ls -1i` for single column output), which shows the inode
+    #    number of each file
+    inode_number_new = os.stat(log_file_path).st_ino
+    if inode_number_old != inode_number_new:
+        print("Log file rotation just detected!")
+        inode_number_old = inode_number_new
+        os.chmod(log_file_path, PERMISSIONS_EVERYONE_READ_WRITE)
 
     # ---------------------------------
     # 1. log the output of `psutil` and `ps`
