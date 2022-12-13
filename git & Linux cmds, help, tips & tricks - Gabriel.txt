@@ -84,6 +84,9 @@ Words of wisdom:
 
 1. @Alex Nguyen on "What I wish I knew hopping companies": https://www.linkedin.com/posts/alxngu_alexcancode-career-coding-activity-7005961425647009793-71UI?utm_source=share&utm_medium=member_desktop
 
+1. “Children are not distraction from more important work they are the most important work” -C.S. Lewis
+    From LinkedIn post by @Sanjay Pendharkar: https://www.linkedin.com/feed/update/urn:li:activity:7006792087178260481?utm_source=share&utm_medium=member_desktop
+
 
 ====================================================================================================
 = Quotes: =
@@ -4715,11 +4718,42 @@ ps -eLf
 ps -ejH
     print a process tree = very helpful to see **what process called what process(es)**!
 ps aux | grep "some_name"
+    <==========
     Find only processes named "some_name", or at least with "some_name" in their output line displayed by `ps aux`
 pgrep "some_name"
     Similar to the cmd just above. Find the process ID (PID) of the process named "some_name"! This is easier and cleaner than using `ps aux | grep "some_name"`, as shown above!
     See this YouTube video at this time for where I learned this: https://youtu.be/qgG5Jhi_Els?t=314
     Keywords: pgrep kill; kill pgrep; kill process; process kill; find process; process finder
+
+top
+    List all processes in order of which one is using the most CPU % _first_.
+    Tip: once you find a process you'd like to investigate, such as "Isolated w+", or something, run the `pstree` command below on it, such as 'pstree | less -i, then type "/isolated w"', to see which process it falls under. Ex: perhaps "Isolated w+" is part of Firefox. Running `pstree` and piping to `less` to search for that process will help you identify this.
+top -b -n 1
+    <==========
+    Run `top` once (`-n 1`) in batch (`-b`) mode, rather than interactively. 
+    This is great if you want to pipe the output to a file or to another tool to parse or grep it, for example. I use this in my "eRCaGuy_dotfiles/useful_scripts/cpu_logger.py" script.
+    See: http://help.collab.net/index.jsp?topic=/teamforge178/faq/topcommand.html
+top -b -n 1 | head -n 50
+    <==============
+    Same as above, but only keep the first 50 lines. This is fine because most of the time you only care the most about the first few dozen high-CPU-usage processes anyway.
+top -o %MEM
+    <==========
+    Sort by the % memory (RAM) usage order (`-o %MEM`) instead of by the default % CPU usage (`-o %CPU`) order.
+    See: https://unix.stackexchange.com/a/128957/114401
+
+pstree
+    <==========
+    List the dependency/parent-child tree of all running processes. 
+    See: https://forums.linuxmint.com/viewtopic.php?t=362756
+pstree | grep -i "isolated w"
+    See if the tree contains this word/process named "isolated w" (case 'i'nsensitive).
+pstree | grep -C 99999 -i isolated
+    <==========
+    Same as above, but even better! Show all context ('-C') lines too. 
+pstree | less -i
+    ...then type "/isolated w"
+    <==============
+    Same as above, but even better still! Pipe it to `less` to view and search/scan the output live.
 
 KILL RUNNING PROCESSES:
 (see `man kill` for details)
@@ -5230,6 +5264,17 @@ find | wc -l = count and return the number of 'l'ines returned by find, which co
 == tr: ==
 tr = 'tr'anslate or delete characters
 <your_command> | tr -d ',' = remove all commas from the output of `your_command`; see: https://stackoverflow.com/questions/12668020/removing-characters-from-grep-output/12668078#12668078
+
+echo $PATH
+    View all paths in your system path, in order. These are the directory paths, in this order, in which Linux searches for your executables to run on the command-line. 
+echo $PATH | tr ':' '\n'
+    <==============
+    View all paths in your PATH, in order, on their own unique line! 
+    Note that `tr ':' '\n'` replaces all ':' chars with a newline ('\n') char.
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc && . ~/.bashrc
+    <==============
+    Add the ~/bin dir to your PATH and then re-source it to ensure it has been added. Useful for manually installing things (executables) in Linux! 
+    See the top of my answer: https://stackoverflow.com/a/61997003/4561887
 
 == Basic Process profiling in Linux: ==
 
