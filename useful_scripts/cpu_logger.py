@@ -63,12 +63,10 @@
 
 import logging
 import os
+import pathlib
 import psutil
 import subprocess
 import time
-
-from logging.handlers import RotatingFileHandler
-from pathlib import Path
 
 # ============= this works but lets do it differently ==============
 # MOVE THIS TO MY HELLO_WORLD REPO!
@@ -137,8 +135,8 @@ See my ans: https://unix.stackexchange.com/a/687072/114401
 logger = logging.getLogger('my_logger')
 logger.setLevel(logging.DEBUG)
 log_file_size_bytes = 1024*1024*25  # 25 MiB
-log_file_path = str(Path.home()) + '/cpu_log.log'
-handler = RotatingFileHandler(log_file_path, maxBytes=log_file_size_bytes, backupCount=10)
+log_file_path = str(pathlib.Path.home()) + '/cpu_log.log'
+handler = logging.handlers.RotatingFileHandler(log_file_path, maxBytes=log_file_size_bytes, backupCount=10)
 # logger.addHandler(handler)
 format = "%(asctime)s, %(levelname)s, %(message)s"  # https://stackoverflow.com/a/56369583/4561887
 formatter = logging.Formatter(fmt=format, datefmt='%Y-%m-%d__%H:%M:%S')
