@@ -62,6 +62,9 @@
 ##### https://unix.stackexchange.com/a/295608/114401   <========
 
 import logging
+# This must be imported explicitly, separately.
+# See: https://stackoverflow.com/a/65814814/4561887
+import logging.handlers
 import os
 import pathlib
 import psutil
