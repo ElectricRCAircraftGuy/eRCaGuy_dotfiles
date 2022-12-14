@@ -5154,6 +5154,33 @@ nice
 renice
     See: https://www.tecmint.com/set-linux-process-priority-using-nice-and-renice-commands/
 
+- For `chrt` (Change Real-time) help, see my answer here!: https://stackoverflow.com/a/71757858/4561887
+
+sudo chrt --rr 1 my_prog
+    <============
+    call `my_prog` with SCHED_RR with lowest priority of 1
+    See my answer here: https://stackoverflow.com/a/71757858/4561887
+sudo chrt --rr 99 my_prog
+    call `my_prog` with SCHED_RR with highest priority of 99
+    See my answer here: https://stackoverflow.com/a/71757858/4561887
+sudo chrt --fifo 1 my_prog
+    call `my_prog` with SCHED_FIFO with lowest priority of 1
+    See my answer here: https://stackoverflow.com/a/71757858/4561887
+sudo chrt --fifo 99 my_prog
+    call `my_prog` with SCHED_FIFO with highest priority of 99
+    See my answer here: https://stackoverflow.com/a/71757858/4561887
+chrt -p 12345
+    <============
+    Read what the current real-time scheduler and priority are for process ID (PID) 12345. 
+    Sample calls and their output:
+            $ chrt -p 1431
+            pid 1431's current scheduling policy: SCHED_OTHER
+            pid 1431's current scheduling priority: 0
+
+            $ chrt -p 1433
+            pid 1433's current scheduling policy: SCHED_RR
+            pid 1433's current scheduling priority: 1
+
 == Mosh: ==
 An ssh-replacement program for better connections over wifi, cellular, and long-distance links. It is free software (GNU GPLv3)!
 It can decrease response time by a factor of 30~50 on lossy networks (see Wikipedia article below)! Ex: 16.8 seconds response time --> 0.33 seconds, or 5.9 --> 0.19 sec.
