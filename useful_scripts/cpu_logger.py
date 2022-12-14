@@ -12,14 +12,35 @@
 # 1. Add this alias to your ~/.bash_aliases file. Use it to view the log live at any time.
 #       # Continually watch the live log output from "eRCaGuy_dotfiles/useful_scripts/cpu_logger.py"
 #       alias gs_cpu_logger_watch='less -N --follow-name +F ~/cpu_log.log'
-# 2. Auto-start the logger at boot by adding the following to your Ubuntu "Startup Applications" GUI program:
+#
+# 2.A. [Recommended] Auto-start the program as root, with elevated Round Robin
+#    (rr) soft real-time priority, to ensure the CPU logger keeps logging even
+#    when your CPU is locked up!
+#   - see the gist of it in this answer here: https://askubuntu.com/a/290102/327339
+#
+#           # Open the **root** crontab for editing.
+#           sudo crontab -e
+#           # Add this entry to the bottom (adjust the path as necessary for yourself),
+#           # then save and exit
+#           @reboot chrt -rr 1 "/home/gabriel/GS/dev/eRCaGuy_dotfiles/useful_scripts/cpu_logger.py"
+#
+#           # after exiting, view the current root crontab with this
+#           sudo crontab -l
+#
+#  OR:
+#
+# 2.B. [Doesn't work, actually--can't run as root here!] Auto-start the logger
+# at boot by adding the following to your Ubuntu "Startup
+# Applications" GUI program:
 #   New "Startup Program" entry:
 #       Name:       GS cpu_logger.py
 #       # NB: use `chrt` here to have Linux raise the priority and use the soft real-time scheduler!
 #       # See my answer: https://stackoverflow.com/a/71757858/4561887
 #       Command:    sudo chrt -rr 1 /home/gabriel/GS/dev/eRCaGuy_dotfiles/useful_scripts/cpu_logger.py
 #       Comment:    Start up the CPU logger, with auto-rotating logs, at boot.
-# 3. Also install this executable by following the installation instructions at the top of the file:
+#
+# 3. [Optional, but recommended] Also install this executable by following the
+# installation instructions at the top of the file:
 #   "eRCaGuy_dotfiles/useful_scripts/cpu_load.py".
 #   Run `cpu_load` to see your current CPU usage.
 #   Sample run and output:
@@ -69,6 +90,7 @@ import os
 import pathlib
 import psutil
 import subprocess
+import sys
 import time
 
 # ============= this works but lets do it differently ==============
@@ -135,10 +157,27 @@ See my ans: https://unix.stackexchange.com/a/687072/114401
 # print('niceness = {}'.format(niceness))  # should be -20
 
 
+# Obtain the home dir of the user in whose home directory this script resides
+# - See:
+#   1. https://stackoverflow.com/a/16595356/4561887
+#   1. ***** My answer here now: https://stackoverflow.com/a/74792054/4561887
+# Example output printed below, to help you make sense of this:
+#
+#       __file__         = /home/gabriel/GS/dev/eRCaGuy_dotfiles/useful_scripts/cpu_logger.py
+#       script_path_list = ['', 'home', 'gabriel', 'GS', 'dev', 'eRCaGuy_dotfiles', 'useful_scripts', 'cpu_logger.py']
+#       home_dir         = /home/gabriel
+script_path_list = os.path.normpath(__file__).split(os.sep)
+home_dir = os.path.join("/", script_path_list[1], script_path_list[2])
+# print("__file__         = {}".format(__file__))
+# print("script_path_list = {}".format(script_path_list))
+# print("home_dir         = {}".format(home_dir))
+
 logger = logging.getLogger('my_logger')
 logger.setLevel(logging.DEBUG)
 log_file_size_bytes = 1024*1024*25  # 25 MiB
-log_file_path = str(pathlib.Path.home()) + '/cpu_log.log'
+# home_dir = str(pathlib.Path.home())
+log_file_path = os.path.join(home_dir, 'cpu_log.log')
+print("log_file_path = {}".format(log_file_path))
 handler = logging.handlers.RotatingFileHandler(log_file_path, maxBytes=log_file_size_bytes, backupCount=10)
 # logger.addHandler(handler)
 format = "%(asctime)s, %(levelname)s, %(message)s"  # https://stackoverflow.com/a/56369583/4561887
