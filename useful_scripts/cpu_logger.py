@@ -178,6 +178,7 @@ while True:
     # see:
     # 1. https://docs.python.org/3/library/os.html#os.stat_result.st_ino
     # 1. ***** https://stackoverflow.com/a/44407999/4561887
+    #   1. *****+ [my answer] https://stackoverflow.com/a/74788970/4561887
     # 1. `ls -i` (or `ls -1i` for single column output), which shows the inode
     #    number of each file
     inode_number_new = os.stat(log_file_path).st_ino
