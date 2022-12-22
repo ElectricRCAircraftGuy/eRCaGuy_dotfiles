@@ -16,26 +16,35 @@
 #
 # 1. Ensure ~/bin dir exists:
 #           mkdir -p ~/bin
+#
 # 2. Install `imwheel` and symlink over the "~/.imwheelrc" file, following the instructions in 
 #    "eRCaGuy_dotfiles/home/.imwheelrc".
-# 2. Symlink this script to ~/bin with a name that you like. Ex:
+#
+# 3. Symlink this script to ~/bin with a name that you like. Ex:
 #           cd path/to/here
 #           ln -si "$PWD/touchpad_toggle.sh" ~/bin/gs_touchpad_toggle
-# 3. Adjust the USER INPUTS section below, as required. This will
-#    require running `xinput` once from the command line to ensure that TouchPad/Touchpad is
-#    spelled right, for instance. See and follow the section titled "USER INPUTS--ADJUST THESE!" below for 
-#    details.
-# 4. Create a keyboard shortcut to associate Ctrl + Alt + P with this script via (on Ubuntu 18.04)
-#    Settings --> Devices --> Keyboard --> scroll to very bottom and click the "+" button to add a custom
-#    shortcut, then name it "Touchpad Toggle", give it the command "gs_touchpad_toggle", and associate it
-#    with the Ctrl + Alt + P keyboard shortcut. Test this shortcut now to ensure it works!
-# 5. Add a startup call to toggle touchpad OFF with every boot: press Windows (Super) key --> search for
-#    "Startup Applications", and open it --> click "Add" to create a new entry --> Name it
-#    "disable touchpad (Ctrl + Alt + P)", enter "gs_touchpad_toggle --off" for the "Command", and
-#    "found in ~/bin" for the "Comment." Click "Save", then "Close".
-# 6. Done! Your Touchpad and Touchscreen will automatically become DISABLED at every boot! To toggle it on/off
-#    use the Ctrl + Alt + P shortcut you set up. This is very useful to quickly swap between using an external
-#    mouse vs the built-in touchpad or touchscreen.
+#
+# 4. Adjust the USER INPUTS section below, as required. If you are running the X11 window server,
+# this will require running `xinput` once from the command line to ensure that the strings the
+# program is searching for to identify your touchpad and touchscreen will work. See the 
+# "USER INPUTS SECTION" below and follow any instrutions there. 
+#
+# 5. Create a custom keyboard shortcut to associate Ctrl + Alt + P with this script. In Ubuntu
+# 18.04, for instance, adding custom keyboard shortcuts is found in Settings --> Devices -->
+# Keyboard --> scroll to very bottom and click the "+" button to add a custom shortcut. Name
+# it "Touchpad Toggle", give it the command "gs_touchpad_toggle", and associate it with the Ctrl +
+# Alt + P keyboard shortcut. Test this shortcut now to ensure it works!
+#
+# 6. Edit the Startup Applications GUI tool to add a startup call to toggle the touchpad OFF with
+# every boot: press Windows (Super) key --> search for "Startup Applications", and open it -->
+# click "Add" to create a new entry --> Name it "disable touchpad (Ctrl + Alt + P)",
+# enter "gs_touchpad_toggle --off" for the "Command", and "found in ~/bin" for the "Comment."
+# Click "Save", then "Close".
+#
+# 7. Done! Your Touchpad and Touchscreen will automatically become DISABLED at every boot! To toggle
+# it on/off manually, use the Ctrl + Alt + P shortcut you set up. This is very useful to quickly
+# swap between using an external mouse vs the built-in touchpad or touchscreen.
+
 
 # Author: Gabriel Staples
 # Started: 2 Apr. 2018
@@ -64,9 +73,11 @@
 # 6. I put this script into my eRCaGuy_dotfiles, and continued to improve upon it here:
 #    https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-# ----------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------- USER INPUTS SECTION ----------------------------------------
 # USER INPUTS--ADJUST THESE!: <==========
 
+# For the X11 window server only (not Wayland):
 # `xinput` search strings for these devices
 # - Manually run `xinput` on your PC, look at the output, and adjust these search strings as necessary for your
 #   particular hardware and machine!
@@ -74,11 +85,12 @@
 TOUCHPAD_STR="Touchpad" # other computers need it spelled like this with a lower-case 'p' in Touchpad
 TOUCHSCREEN_STR="Touchscreen"
 
+# For X11 or Wayland:
 # Optionally disable toggling the touchpad or touchscreen, or both, if desired, by uncommenting the
 # following lines to override the above settings.
 # TOUCHPAD_STR="NONE"
 TOUCHSCREEN_STR="NONE"
-# ----------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 HELP_STR=\
 "Usage: touchpad_toggle [positional_params]\n"\
@@ -117,10 +129,10 @@ if [ "$WINDOW_MANAGER" = "x11" ]; then
     # echo "TouchpadId = $TouchpadId; see output from 'xinput'" # Debug print
     # echo "TouchscreenId = $TouchscreenId; see output from 'xinput'" # Debug print
 else
-    TouchpadId="(NA--wayland)"
-    TouchscreenId="(NA--wayland)"
+    TouchpadId="(NA)"
+    TouchscreenId="(NA)"
 fi
-PRINT_TEXT="Touchpad (ID $TouchpadId) &amp; Touchscreen (ID $TouchscreenId) "
+PRINT_TEXT="Touchpad ID $TouchpadId &amp; Touchscreen ID $TouchscreenId "
 
 # Read the current toggle state ("ON" = touch devices on, "OFF" = touch devices off)
 get_current_state() {
@@ -142,6 +154,54 @@ get_current_state() {
     fi
 
     echo "$state"
+}
+
+disable_devices() {
+    if [ "$WINDOW_MANAGER" = "x11" ]; then
+        if [ "$TouchpadId" != "NONE" ]; then
+            echo "Disabling touchpad."
+            xinput --disable "$TouchpadId"
+        fi
+        if [ "$TouchscreenId" != "NONE" ]; then
+            echo "Disabling touchscreen."
+            xinput --disable "$TouchscreenId"
+        fi
+    else 
+        # for wayland
+        # See my answer here: https://askubuntu.com/a/1446479/327339
+        if [ "$TouchpadId" != "NONE" ]; then
+            echo "Disabling touchpad."
+            gsettings set org.gnome.desktop.peripherals.touchpad send-events disabled
+        fi
+        if [ "$TouchscreenId" != "NONE" ]; then
+            echo "Disabling touchscreen."
+            echo "  TODO: LEARN TO DISABLE THE TOUCHSCREEN."
+        fi
+    fi
+}
+
+enable_devices() {
+    if [ "$WINDOW_MANAGER" = "x11" ]; then
+        if [ "$TouchpadId" != "NONE" ]; then
+            echo "Enabling touchpad."
+            xinput --enable "$TouchpadId"
+        fi
+        if [ "$TouchscreenId" != "NONE" ]; then
+            echo "Enabling touchscreen."
+            xinput --enable "$TouchscreenId"
+        fi
+    else
+        # for wayland
+        # See my answer here: https://askubuntu.com/a/1446479/327339
+        if [ "$TouchpadId" != "NONE" ]; then
+            echo "Enabling touchpad."
+            gsettings set org.gnome.desktop.peripherals.touchpad send-events enabled
+        fi
+        if [ "$TouchscreenId" != "NONE" ]; then
+            echo "Enabling touchscreen."
+            echo "  TODO: LEARN TO ENABLE THE TOUCHSCREEN."
+        fi
+    fi
 }
 
 newstate=""
@@ -168,24 +228,22 @@ else
     exit
 fi
 
-if [ "$newstate" = "OFF" ];then
+if [ "$newstate" = "OFF" ]; then
     # Turn touchpad & touchscreen OFF, and turn imwheel ON to improve mouse wheel scroll speed since
     # user must be using an external mouse
     echo "Turning TouchpadId $TouchpadId & TouchscreenId $TouchscreenId OFF."
 
-    # imwheel -b "4 5" # turn on imwheel to help external mouse wheel scroll speed be better
-    # xinput --disable "$TouchpadId"
-    # xinput --disable "$TouchscreenId"
+    imwheel -b "4 5" # turn on imwheel to help external mouse wheel scroll speed be better
+    disable_devices
     zenity --info --text "${PRINT_TEXT} DISABLED" --timeout=2
-elif [ "$newstate" = "ON" ];then
+elif [ "$newstate" = "ON" ]; then
     # Turn touchpad & touchscreen ON, & turn imwheel OFF so it doesn't interfere w/trackpad
     # scrolling, since user must be using the touchpad and/or touchscreen
     echo "Turning TouchpadId $TouchpadId & TouchscreenId $TouchscreenId ON."
 
-    # killall imwheel # turn OFF imwheel to keep imwheel from interfering with proper track pad 
-    #                 # scrolling
-    # xinput --enable "$TouchpadId"
-    # xinput --enable "$TouchscreenId"
+    killall imwheel # turn OFF imwheel to keep imwheel from interfering with proper track pad 
+                    # scrolling
+    enable_devices
     zenity --info --text "${PRINT_TEXT} ENABLED" --timeout=2
 else
     echo "ERROR: Invalid newstate value of \"$newstate\"; must use only \"OFF\" or \"ON\"."
