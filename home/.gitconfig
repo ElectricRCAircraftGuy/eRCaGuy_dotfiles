@@ -1,9 +1,13 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # INSTRUCTIONS:
-# Update name and email below, edit other fields as desired, then copy to ~/.gitconfig
-# Option 1) doesn't exist yet, so copy whole thing over: `cp -i .gitconfig ~`
+# Update name and email below, edit other fields as desired, then copy
+# (preferred in this case) or symlink it to ~/.gitconfig
+# Option 1) if it doesn't exist yet, copy whole thing over: `cp -i .gitconfig ~`
 # Option 2) append contents to existing .gitconfig file: `cat .gitconfig >> ~/.gitconfig`
+# Option 3) symlink it over:
+#       cd path/to/here
+#       ln -si "$PWD/.gitconfig" ~
 
 [user]
     name = # FIRSTNAME LASTNAME
