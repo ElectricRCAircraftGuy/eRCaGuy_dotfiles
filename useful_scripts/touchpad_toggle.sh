@@ -79,15 +79,38 @@
 
 # For the X11 window server only (not Wayland):
 # `xinput` search strings for these devices
-# - Manually run `xinput` on your PC, look at the output, and adjust these search strings as necessary for your
-#   particular hardware and machine!
-# TOUCHPAD_STR="TouchPad" # some computers need it spelled like this with a capital 'P' in TouchPad
-TOUCHPAD_STR="Touchpad" # other computers need it spelled like this with a lower-case 'p' in Touchpad
-TOUCHSCREEN_STR="Touchscreen"
+# - Manually run `xinput` on your PC, look at the output, and adjust these search strings as 
+#   necessary for your particular hardware and machine! Example output of `xinput`:
+#
+#       $ xinput
+#       ⎡ Virtual core pointer                      id=2    [master pointer  (3)]
+#       ⎜   ↳ Virtual core XTEST pointer                id=4    [slave  pointer  (2)]
+#       ⎜   ↳ Logitech MX Vertical                      id=11   [slave  pointer  (2)]
+#       ⎜   ↳ Logitech MX Anywhere 3                    id=12   [slave  pointer  (2)]
+#       ⎜   ↳ SynPS/2 Synaptics TouchPad                id=14   [slave  pointer  (2)]
+#       ⎜   ↳ TPPS/2 Elan TrackPoint                    id=15   [slave  pointer  (2)]
+#       ⎣ Virtual core keyboard                     id=3    [master keyboard (2)]
+#           ↳ Virtual core XTEST keyboard               id=5    [slave  keyboard (3)]
+#           ↳ Power Button                              id=6    [slave  keyboard (3)]
+#           ↳ Video Bus                                 id=7    [slave  keyboard (3)]
+#           ↳ Sleep Button                              id=8    [slave  keyboard (3)]
+#           ↳ Integrated Camera: Integrated C           id=9    [slave  keyboard (3)]
+#           ↳ Integrated Camera: Integrated I           id=10   [slave  keyboard (3)]
+#           ↳ AT Translated Set 2 keyboard              id=13   [slave  keyboard (3)]
+#           ↳ ThinkPad Extra Buttons                    id=16   [slave  keyboard (3)]
+#           ↳ Logitech MX Vertical                      id=17   [slave  keyboard (3)]
+#
+# UPDATE THESE AS NECESSARY to override the default search strings for your touchpads and
+# touchscreens.
+# - NB: some computers need "touchpad" spelled like this with a capital 'P' in "TouchPad", and
+#   others spell it simply as "Touchpad" with a lowercase 'p'. 
+TOUCHPAD_STR="Touchpad|TouchPad"
+TOUCHSCREEN_STR="Touchscreen|TouchScreen"
 
 # For X11 or Wayland:
-# Optionally disable toggling the touchpad or touchscreen, or both, if desired, by uncommenting the
-# following lines to override the above settings.
+# Optionally disable toggling the touchpad or touchscreen, or both, if desired, by uncommenting
+# these corresponding lines:
+#
 # TOUCHPAD_STR="NONE"
 TOUCHSCREEN_STR="NONE"
 # --------------------------------------------------------------------------------------------------
@@ -117,13 +140,15 @@ if [ "$WINDOW_MANAGER" = "x11" ]; then
     if [ "$TOUCHPAD_STR" =  "NONE" ]; then
         TouchpadId="$TOUCHPAD_STR"
     else
-        read TouchpadId <<< $( xinput | sed -nre "/${TOUCHPAD_STR}/s/.*id=([0-9]*).*/\1/p" )
+        # See: https://askubuntu.com/a/874865/327339
+        read TouchpadId <<< "$(xinput | sed -nre "/${TOUCHPAD_STR}/s/.*id=([0-9]*).*/\1/p")"
     fi
 
     if [ "$TOUCHSCREEN_STR" =  "NONE" ]; then
         TouchscreenId="$TOUCHSCREEN_STR"
     else
-        read TouchscreenId <<< $( xinput | sed -nre "/${TOUCHSCREEN_STR}/s/.*id=([0-9]*).*/\1/p" )
+        # See: https://askubuntu.com/a/874865/327339
+        read TouchscreenId <<< "$(xinput | sed -nre "/${TOUCHSCREEN_STR}/s/.*id=([0-9]*).*/\1/p")"
     fi
 
     # echo "TouchpadId = $TouchpadId; see output from 'xinput'" # Debug print
@@ -157,14 +182,19 @@ get_current_state() {
 }
 
 disable_devices() {
+    # Note: it looks like `xinput` no longer does the job for Ubuntu 22.04, even for the X11 Window
+    # server, so do the `gsettings` calls too!
+
     if [ "$WINDOW_MANAGER" = "x11" ]; then
         if [ "$TouchpadId" != "NONE" ]; then
-            echo "Disabling touchpad."
+            echo "Disabling touchpad ID $TouchpadId."
             xinput --disable "$TouchpadId"
+            gsettings set org.gnome.desktop.peripherals.touchpad send-events disabled
         fi
         if [ "$TouchscreenId" != "NONE" ]; then
-            echo "Disabling touchscreen."
+            echo "Disabling touchscreen ID $TouchscreenId."
             xinput --disable "$TouchscreenId"
+            echo "  TODO: learn to disable the touchscreen using GNOME's gsettings."
         fi
     else 
         # for wayland
@@ -175,20 +205,25 @@ disable_devices() {
         fi
         if [ "$TouchscreenId" != "NONE" ]; then
             echo "Disabling touchscreen."
-            echo "  TODO: LEARN TO DISABLE THE TOUCHSCREEN."
+            echo "  TODO: learn to disable the touchscreen using GNOME's gsettings."
         fi
     fi
 }
 
 enable_devices() {
+    # Note: it looks like `xinput` no longer does the job for Ubuntu 22.04, even for the X11 Window
+    # server, so do the `gsettings` calls too!
+
     if [ "$WINDOW_MANAGER" = "x11" ]; then
         if [ "$TouchpadId" != "NONE" ]; then
-            echo "Enabling touchpad."
+            echo "Enabling touchpad ID $TouchpadId."
             xinput --enable "$TouchpadId"
+            gsettings set org.gnome.desktop.peripherals.touchpad send-events enabled
         fi
         if [ "$TouchscreenId" != "NONE" ]; then
-            echo "Enabling touchscreen."
+            echo "Enabling touchscreen ID $TouchscreenId."
             xinput --enable "$TouchscreenId"
+            echo "  TODO: learn to enable the touchscreen using GNOME's gsettings."
         fi
     else
         # for wayland
@@ -199,7 +234,7 @@ enable_devices() {
         fi
         if [ "$TouchscreenId" != "NONE" ]; then
             echo "Enabling touchscreen."
-            echo "  TODO: LEARN TO ENABLE THE TOUCHSCREEN."
+            echo "  TODO: learn to enable the touchscreen using GNOME's gsettings."
         fi
     fi
 }
