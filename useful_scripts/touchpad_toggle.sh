@@ -46,7 +46,12 @@
 #   22 June 2019 - added in the imwheel stuff to not mess up track pad scrolling when
 #                  track pad is in use
 
-# References (in order of progression):
+# New references (in order of importance: most important first):
+# 1. my answer on touchpad toggle and imwheel: https://askubuntu.com/a/991680/327339
+# 1. my answer on enabling/disabling touchpad in Ubuntu 22.04: 
+#    https://askubuntu.com/a/1446479/327339
+
+# Original References (in order of progression):
 # 1. negusp described xinput: https://askubuntu.com/questions/844151/enable-disable-touchpad/844218#844218
 # 2. Almas Dusal does some fancy sed stuff & turns negusp's answer into a script:
 #    https://askubuntu.com/questions/844151/enable-disable-touchpad/874865#874865
@@ -70,9 +75,9 @@ TOUCHPAD_STR="Touchpad" # other computers need it spelled like this with a lower
 TOUCHSCREEN_STR="Touchscreen"
 
 # Optionally disable toggling the touchpad or touchscreen, or both, if desired, by uncommenting the
-# following lines.
+# following lines to override the above settings.
 # TOUCHPAD_STR="NONE"
-# TOUCHSCREEN_STR="NONE"
+TOUCHSCREEN_STR="NONE"
 # ----------------------------------------------------------------------------------------------------------------------
 
 HELP_STR=\
@@ -82,19 +87,50 @@ HELP_STR=\
 "  --on         = turn touchpad & touchscreen ON\n"\
 "  --off        = turn touchpad & touchscreen OFF\n"
 
-# Obtain the xinput IDs for the Touchpad & Touchscreen so we can disable/enable them
-if [ "$TOUCHPAD_STR" =  ] ######
-read TouchpadId <<< $( xinput | sed -nre "/${TOUCHPAD_STR}/s/.*id=([0-9]*).*/\1/p" )
-read TouchscreenId <<< $( xinput | sed -nre "/${TOUCHSCREEN_STR}/s/.*id=([0-9]*).*/\1/p" )
-# echo "TouchpadId = $TouchpadId; see output from 'xinput'" # Debug print
-# echo "TouchscreenId = $TouchscreenId; see output from 'xinput'" # Debug print
+# Determine if we are using Wayland. Ubuntu 22.04 is the first long-term support Ubuntu release to
+# have Wayland in use, rather than x11, by default.
+# See: https://unix.stackexchange.com/a/355476/114401
+USING_WAYLAND="true"
+if [ "$XDG_SESSION_TYPE" = "x11" ]; then
+    echo "Using x11 window manager server."
+    USING_WAYLAND="false"
+elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+    echo "Using wayland window manager server."
+else
+    echo "*Probably* using wayland window manager server."
+fi
 
-PRINT_TEXT="Touchpad (ID $TouchpadId) &amp; Touchscreen (ID $TouchscreenId) "
+# For X11 only, obtain the xinput IDs for the Touchpad & Touchscreen so we can disable/enable them
+if [ "$USING_WAYLAND" = "false" ]; then
+    if [ "$TOUCHPAD_STR" =  "NONE" ]; then
+        TouchpadId="$TOUCHPAD_STR"
+    else
+        read TouchpadId <<< $( xinput | sed -nre "/${TOUCHPAD_STR}/s/.*id=([0-9]*).*/\1/p" )
+    fi
 
-newstate=
+    if [ "$TOUCHSCREEN_STR" =  "NONE" ]; then
+        TouchscreenId="$TOUCHSCREEN_STR"
+    else
+        read TouchscreenId <<< $( xinput | sed -nre "/${TOUCHSCREEN_STR}/s/.*id=([0-9]*).*/\1/p" )
+    fi
+
+    # echo "TouchpadId = $TouchpadId; see output from 'xinput'" # Debug print
+    # echo "TouchscreenId = $TouchscreenId; see output from 'xinput'" # Debug print
+
+    PRINT_TEXT="Touchpad (ID $TouchpadId) &amp; Touchscreen (ID $TouchscreenId) "
+fi
+
+# Read the current toggle state ("ON" = touch devices on, "OFF" = touch devices off)
+get_current_state() {
+    
+    
+    state=$( xinput list-props "$TouchpadId" | grep "Device Enabled" | grep -o "[01]$" )
+}
+
+newstate=""
 if [ "$#" -eq "0" ];  then
     # No positional parameters, so determine the actual current state so we can toggle it
-    state=$( xinput list-props "$TouchpadId" | grep "Device Enabled" | grep -o "[01]$" )
+    state="$(get_current_state)"
     if [ "$state" -eq '1' ];then
         # state is ON, so toggle it to OFF
         newstate="OFF"
