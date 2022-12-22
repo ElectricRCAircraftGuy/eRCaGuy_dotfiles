@@ -719,3 +719,8 @@ alias gs_diff_dir="diff_dir"
 #   ~/.bash_aliases_private file.
 alias gs_vpn_openconnect-sso='openconnect-sso \
     --server "${VPN_SERVER_ADDRESS}/${VPN_SAML_GROUP}" --user "${VPN_USER}"'
+# Custom configuration to solve some problems while using `openconnect-sso` in Ubuntu 22.04.
+# See my comment & instructions: 
+# https://github.com/vlaci/openconnect-sso/issues/81#issuecomment-1363355533
+export QTWEBENGINE_DISABLE_SANDBOX=1
+export OPENSSL_CONF=~/.my_ssl.conf
