@@ -9,7 +9,12 @@
 #       sudo apt update
 #       sudo apt install imwheel
 # 2. Read & follow the instructions at the link below. Edit the two numbers at the top-right of each
-# configuration block below to set the mouse scroll speed. Copy this file to ~/.imwheelrc:
+# configuration block below to set the mouse scroll speed. 
+#	(PREFERRED) Symlink the file into the home dir:
+#		cd path/to/here
+#		ln -si "${PWD}/.imwheelrc" ~
+#	OR, copy this file to ~/.imwheelrc so you can edit it without affecting 
+#   this repo:
 #       cp -i .imwheelrc ~
 
 # Note: to get an idea for what name to use for each application, as specified at the top of each
@@ -33,6 +38,15 @@ Shift_L,   Down, Shift_L|Button5
 # For Firefox Web Browser
 # Follow the instructions described here, editing a value inside the browser
 # itself: https://support.mozilla.org/en-US/questions/1019147
+#
+# Or just control it here too if you want:
+"firefox-bin"
+None,      Up,   Button4, 3
+None,      Down, Button5, 3
+Control_L, Up,   Control_L|Button4
+Control_L, Down, Control_L|Button5
+Shift_L,   Up,   Shift_L|Button4
+Shift_L,   Down, Shift_L|Button5
 
 # For `slack`
 "slack"
