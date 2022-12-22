@@ -90,10 +90,10 @@ HELP_STR=\
 # Determine if we are using Wayland. Ubuntu 22.04 is the first long-term support Ubuntu release to
 # have Wayland in use, rather than x11, by default.
 # See: https://unix.stackexchange.com/a/355476/114401
-USING_WAYLAND="true"
+WINDOW_MANAGER="wayland"
 if [ "$XDG_SESSION_TYPE" = "x11" ]; then
     echo "Using x11 window manager server."
-    USING_WAYLAND="false"
+    WINDOW_MANAGER="x11"
 elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
     echo "Using wayland window manager server."
 else
@@ -101,7 +101,7 @@ else
 fi
 
 # For X11 only, obtain the xinput IDs for the Touchpad & Touchscreen so we can disable/enable them
-if [ "$USING_WAYLAND" = "false" ]; then
+if [ "$WINDOW_MANAGER" = "x11" ]; then
     if [ "$TOUCHPAD_STR" =  "NONE" ]; then
         TouchpadId="$TOUCHPAD_STR"
     else
@@ -116,22 +116,39 @@ if [ "$USING_WAYLAND" = "false" ]; then
 
     # echo "TouchpadId = $TouchpadId; see output from 'xinput'" # Debug print
     # echo "TouchscreenId = $TouchscreenId; see output from 'xinput'" # Debug print
-
-    PRINT_TEXT="Touchpad (ID $TouchpadId) &amp; Touchscreen (ID $TouchscreenId) "
+else
+    TouchpadId="(NA--wayland)"
+    TouchscreenId="(NA--wayland)"
 fi
+PRINT_TEXT="Touchpad (ID $TouchpadId) &amp; Touchscreen (ID $TouchscreenId) "
 
 # Read the current toggle state ("ON" = touch devices on, "OFF" = touch devices off)
 get_current_state() {
-    
-    
-    state=$( xinput list-props "$TouchpadId" | grep "Device Enabled" | grep -o "[01]$" )
+    state="OFF"
+
+    if [ "$WINDOW_MANAGER" = "x11" ]; then
+        state="$(xinput list-props "$TouchpadId" | grep "Device Enabled" | grep -o "[01]$")"
+        if [ "$state" -eq "1" ]; then
+            state="ON"
+        fi 
+    else
+        # for wayland
+        # See my answer here: https://askubuntu.com/a/1446479/327339
+        #       gsettings get org.gnome.desktop.peripherals.touchpad send-events
+        state="$(gsettings get org.gnome.desktop.peripherals.touchpad send-events)"
+        if [ "$state" = "'enabled'" ]; then
+            state="ON"
+        fi 
+    fi
+
+    echo "$state"
 }
 
 newstate=""
 if [ "$#" -eq "0" ];  then
     # No positional parameters, so determine the actual current state so we can toggle it
     state="$(get_current_state)"
-    if [ "$state" -eq '1' ];then
+    if [ "$state" = 'ON' ];then
         # state is ON, so toggle it to OFF
         newstate="OFF"
     else
@@ -152,20 +169,23 @@ else
 fi
 
 if [ "$newstate" = "OFF" ];then
-    # Turn touchpad & touchscreen OFF, and turn imwheel ON to improve mouse wheel scroll speed since user must be using
-    # an external mouse
+    # Turn touchpad & touchscreen OFF, and turn imwheel ON to improve mouse wheel scroll speed since
+    # user must be using an external mouse
     echo "Turning TouchpadId $TouchpadId & TouchscreenId $TouchscreenId OFF."
-    imwheel -b "4 5" # turn on imwheel to help external mouse wheel scroll speed be better
-    xinput --disable "$TouchpadId"
-    xinput --disable "$TouchscreenId"
+
+    # imwheel -b "4 5" # turn on imwheel to help external mouse wheel scroll speed be better
+    # xinput --disable "$TouchpadId"
+    # xinput --disable "$TouchscreenId"
     zenity --info --text "${PRINT_TEXT} DISABLED" --timeout=2
 elif [ "$newstate" = "ON" ];then
-    # Turn touchpad & touchscreen ON, & turn imwheel OFF so it doesn't interfere w/trackpad scrolling, since user must
-    # be using the touchpad and/or touchscreen
+    # Turn touchpad & touchscreen ON, & turn imwheel OFF so it doesn't interfere w/trackpad
+    # scrolling, since user must be using the touchpad and/or touchscreen
     echo "Turning TouchpadId $TouchpadId & TouchscreenId $TouchscreenId ON."
-    killall imwheel # turn OFF imwheel to keep imwheel from interfering with proper track pad scrolling
-    xinput --enable "$TouchpadId"
-    xinput --enable "$TouchscreenId"
+
+    # killall imwheel # turn OFF imwheel to keep imwheel from interfering with proper track pad 
+    #                 # scrolling
+    # xinput --enable "$TouchpadId"
+    # xinput --enable "$TouchscreenId"
     zenity --info --text "${PRINT_TEXT} ENABLED" --timeout=2
 else
     echo "ERROR: Invalid newstate value of \"$newstate\"; must use only \"OFF\" or \"ON\"."
