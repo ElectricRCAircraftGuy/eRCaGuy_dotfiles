@@ -40,7 +40,7 @@ Shift_L,   Down, Shift_L|Button5
 # itself: https://support.mozilla.org/en-US/questions/1019147
 #
 # Or just control it here too if you want:
-"firefox-bin"
+"firefox"
 None,      Up,   Button4, 3
 None,      Down, Button5, 3
 Control_L, Up,   Control_L|Button4
