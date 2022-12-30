@@ -19,9 +19,13 @@ Gabriel Staples
 <!-- MarkdownTOC -->
 
 1. [Project: eRCaGuy_dotfiles](#project-ercaguy_dotfiles)
+1. [Status:](#status)
 1. [Description of contents](#description-of-contents)
-1. [How to clone this repo and all git submodules](#how-to-clone-this-repo-and-all-git-submodules)
-    1. [References:](#references)
+1. [_Git submodules and Git LFS:_ how to clone this repo and all git submodules and git lfs files](#git-submodules-and-git-lfs-how-to-clone-this-repo-and-all-git-submodules-and-git-lfs-files)
+        1. [References:](#references)
+        1. [To clone this repo plus all sub-repos \(git submodules\) and all `git lfs` Large File Storage files...](#to-clone-this-repo-plus-all-sub-repos-git-submodules-and-all-git-lfs-large-file-storage-files)
+        1. [To update this repo:](#to-update-this-repo)
+        1. [To add a repo as a submodule inside another repo:](#to-add-a-repo-as-a-submodule-inside-another-repo)
 1. [Here are some of the contents contained herein:](#here-are-some-of-the-contents-contained-herein)
 1. [Installation & Usage:](#installation--usage)
 1. [Useful Applications](#useful-applications)
@@ -38,36 +42,79 @@ Gabriel Staples
 https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 
+<a id="status"></a>
+# Status:
+Done and works. I use this daily on all of my Linux computers, including for my family and young kids.
+
+
 <a id="description-of-contents"></a>
 # Description of contents
 This project started out as just a few helpful nuggets I like to put in my `~/.bashrc` file, for example, as well as some scripts and other configuration files, but I decided to make it a place I put all sorts of reference scripts, files, shortcuts, Linux tips & tricks, Eclipse documentation, etc, I've built up over the years. 
 
 
-<a id="how-to-clone-this-repo-and-all-git-submodules"></a>
-# How to clone this repo and all git submodules
+<a id="how-to-clone-whole-repo"></a>
+<a id="git-submodules-and-git-lfs-how-to-clone-this-repo-and-all-git-submodules-and-git-lfs-files"></a>
+# _Git submodules and Git LFS:_ how to clone this repo and all git submodules and git lfs files 
+**(including tracked binary files, such as PDFs)**
 
+This repo contains [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules), which simply means that this is a git repo which contains other git repos. It also uses [`git lfs` (Large File Storage)](https://git-lfs.com/) to more-efficiently store certain binary files, such as PDFs. 
 
 <a id="references"></a>
-## References:
-1. [my answer] [How to update all git submodules in a repo (two ways to do two _very different_ things!)](https://stackoverflow.com/a/74470585/4561887)
-1. For more on git submodules, see the `= git submodules: =` section of my "git & Linux cmds doc" notes in my [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo here: [eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt).
-1. Official `git submodule` documentation: https://git-scm.com/book/en/v2/Git-Tools-Submodules
-1. _The `git submodule` notes below were originally copied from my eRCaGuy_hello_world repo [here](https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world#how-to-clone-this-repo-and-all-git-submodules)._
+### References:
+1. `git submodule`s
+    1. [my answer] [How to update all git submodules in a repo (two ways to do two _very different_ things!)](https://stackoverflow.com/a/74470585/4561887)
+    1. For more on git submodules, see the `= git submodules: =` section of my "git & Linux cmds doc" notes in my [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo here: [eRCaGuy_dotfiles/git & Linux cmds, help, tips & tricks - Gabriel.txt](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt).
+    1. Official `git submodule` documentation: https://git-scm.com/book/en/v2/Git-Tools-Submodules
+    1. _Note: the start of the `git submodule` notes below were originally copied from my eRCaGuy_hello_world repo [here](https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world#how-to-clone-this-repo-and-all-git-submodules)._
 1. `git lfs`
-    1. https://git-lfs.github.com/ - how to begin tracking files, such as PDF files, with `git lfs`:
+    1. \*\*\*\*\* https://git-lfs.github.com/ (new link: https://git-lfs.com/) - how to begin tracking files, such as PDF files, with `git lfs`:
         ```bash
+        git lfs status
+        # list all `git lfs`-tracked files
+        git lfs ls-files
+        # see if `git lfs` is installed, and which file types it is tracking
+        cat .gitattributes  
+
         git lfs install
         git lfs track "*.pdf"
         git lfs track "*.PDF"
         git add .gitattributes
-        git add -A  
+        git add *.pdf   # add all *.pdf files
+        git add *.PDF   # add all *.PDF files
+        git add -A      # (optional) add ALL (`-A`) files
+
+        # Check LFS status; useful after `git add`--see here:
+        # https://stackoverflow.com/a/54452098/4561887
+        # - Look for `-> LFS:` markers to indicate a file will be getting backed up via Git LFS
+        #   rather than via regular Git. Ex: 
+        #
+        #           # this file will be backed up by Git LFS
+        #           linux/systemd-by-example-book_GS_edit.pdf (Git: 0ef9976 -> LFS: 0ef9976)
+        #           # but this file will be backed up by regular Git
+        #           linux/systemd-by-example-book_GS_edit.pdf (Git: 0ef9976 -> File: 774ea46)
+        #
+        git lfs status
+
+        # list all `git lfs`-tracked files--ie: files which will be or are backed up by Git LFS
+        git lfs ls-files  
+        
+        # See if `git lfs` is installed, and which file types it is tracking
+        # - Sample output if `git lfs` is tracking all *.pdf and *.PDF files:
+        #
+        #       *.pdf filter=lfs diff=lfs merge=lfs -text
+        #       *.PDF filter=lfs diff=lfs merge=lfs -text
+        #
+        cat .gitattributes  
+
         git commit -m "Begin tracking PDF files with 'git lfs'"
         ```
     1. My `git lfs` notes: [How to use `git lfs` as a basic user: this covers the question: "What is the difference between `git lfs fetch`, `git lfs fetch --all`, `git lfs pull`, and `git lfs checkout`?"](https://stackoverflow.com/a/72610495/4561887)
+    1. [How can I tell if a file will be uploaded to `git lfs` correctly?](https://stackoverflow.com/a/54452098/4561887)
 
-This repo contains [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules), which simply means that this is a git repo which contains other git repos. It also uses `git lfs` (Large File Storage) to more-efficiently store certain binary files, such as PDFs. 
+<a id="to-clone-this-repo-plus-all-sub-repos-git-submodules-and-all-git-lfs-large-file-storage-files"></a>
+### To clone this repo plus all sub-repos (git submodules) and all `git lfs` Large File Storage files...
 
-So, **to clone this repo plus all sub-repos (git submodules) and all `git lfs` Large File Storage files**, you must do the following:
+...you must do the following:
 ```bash
 # Clone this repo
 git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles.git
@@ -77,7 +124,9 @@ git lfs pull
 git submodule update --init --recursive
 ```
 
-**To update this repo:**  
+<a id="to-update-this-repo"></a>
+### To update this repo:
+
 See especially my answer here: [How to update all git submodules in a repo (two ways to do two _very different_ things!)](https://stackoverflow.com/a/74470585/4561887):
 ```bash
 # 1. Update the outer repo by pulling the latest from upstream
@@ -92,14 +141,14 @@ git lfs pull
 
 # 2.A. Pull subrepo changes
 
-# Option 1: as a **user** of the outer repo, pull the latest changes of the
+# Option 1: AS A **USER** OF THE OUTER REPO, pull the latest changes of the
 # sub-repos as previously specified (pointed to as commit hashes) by developers
 # of this outer repo.
 # - This recursively updates all git submodules to their commit hash pointers as
 #   currently committed in the outer repo.
 git submodule update --init --recursive
 
-# Option 2. As a **developer** of the outer repo, update all subrepos to force
+# Option 2. AS A **DEVELOPER** OF THE OUTER REPO, update all subrepos to force
 # them each to pull the latest changes from their respective upstreams (ex: via
 # `git pull origin main` or `git pull origin master`, or similar, for each
 # sub-repo). 
@@ -110,13 +159,17 @@ git add -A
 git commit -m "Update all subrepos to their latest upstream changes"
 ```
 
-Note: if you ever need **to add a repo as a submodule inside another repo:**
+<a id="to-add-a-repo-as-a-submodule-inside-another-repo"></a>
+### To add a repo as a submodule inside another repo:
+
 ```bash
 # General format
 git submodule add URL_to_repo
 
-# Ex:
+# Examples:
 git submodule add https://github.com/ElectricRCAircraftGuy/ripgrep_replace.git
+git submodule add https://gitlab.com/ElectricRCAircraftGuy/systemd-by-example.git
+# etc.
 ```
 
 
