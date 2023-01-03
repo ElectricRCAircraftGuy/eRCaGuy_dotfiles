@@ -17,6 +17,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 # See also
 
 1. [serial_terminals_README.md](serial_terminals_README.md)
+1. [../useful_startup_programs.md](../useful_startup_programs.md)
 
 
 <a id="useful-applications"></a>

@@ -1,5 +1,11 @@
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+
+## See also
+
+1. [../useful_startup_programs.md](../useful_startup_programs.md)
+
+
 ## Notes
 
 These files in this `home` directory all go in your Linux Ubuntu home directory: `~`, AKA: `$HOME`, AKA: `/home/my_username`.
@@ -19,6 +25,7 @@ Or, use `cat` to just _view_ its contents:
 
 ## Eclipse User Dictionary Setup
 See [.eclipse-user-dictionary--README.md](.eclipse-user-dictionary--README.md).
+
 
 ## Terminal Setup: Installation & Usage Instructions for `.profile`, `.bashrc`, `.bash_aliases`, and `.bash_aliases_private`
 

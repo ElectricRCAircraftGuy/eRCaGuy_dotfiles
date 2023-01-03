@@ -11,6 +11,7 @@ Gabriel Staples
 
 ## Also very useful:
 1. My [eRCaGuy_hello_world](https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world) repo.
+1. [useful_startup_programs.md](useful_startup_programs.md)
 
 
 # Table of Contents
