@@ -1,1 +1,1 @@
-../Desktop_launchers/desktop_file_uninstall.sh
+../home/Desktop_launchers/desktop_file_uninstall.sh
