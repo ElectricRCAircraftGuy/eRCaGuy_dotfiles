@@ -1,17 +1,20 @@
 {
-    "extensions":
-    [
-        ".imwheelrc",
-        "desktop",
-        ".sync_git_repo",
-        ".sync_git_repo_private",
-        ".bazelrc",
-        "nemo_action",
-        "conf",
-        ".bash_aliases_private",
-        "in",
-        "profile",
-        ".git_branch_prefixes",
-        "OWNERS",
-        ".git_aliases",
-    ],
+	"extensions":
+	[
+		".imwheelrc",
+		"desktop",
+		".sync_git_repo",
+		".sync_git_repo_private",
+		".bazelrc",
+		"nemo_action",
+		"conf",
+		".bash_aliases_private",
+		"in",
+		"profile",
+		".git_branch_prefixes",
+		"OWNERS",
+		".git_aliases",
+		".config",
+		"syslog",
+	],
+}

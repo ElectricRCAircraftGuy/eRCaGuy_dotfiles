@@ -7,6 +7,8 @@
 		"bzl",
 		"msg",
 		"bmr",
-		"saved"
-	]
+		"saved",
+		"build",
+		"inc",
+	],
 }

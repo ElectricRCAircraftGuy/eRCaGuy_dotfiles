@@ -113,6 +113,10 @@
         "typedef",
         "underflows",
         "www",
+        "translational",
+        "deserializing",
+        "deserialize",
+        "variadic",
     ],
     // Custom words to ignore and NOT spell-check:
     "ignored_words":
@@ -132,4 +136,6 @@
     "scroll_speed": 1.0, // Default is 1.0.
 
     "color_scheme": "Monokai.sublime-color-scheme",
+
+    // "folder_exclude_patterns": ["//temp/dir1"],
 }
