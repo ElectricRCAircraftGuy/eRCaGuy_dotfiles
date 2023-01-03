@@ -17,6 +17,8 @@
 #           mkdir -p ~/bin
 #           ln -s "${PWD}/desktop_file_install.sh" ~/bin/desktop_file_install
 #           ln -s "${PWD}/desktop_file_uninstall.sh" ~/bin/desktop_file_uninstall
+#           ln -s "${PWD}/desktop_file_install.sh" ~/bin/gs_desktop_file_install      # replace `gs` with your initials
+#           ln -s "${PWD}/desktop_file_uninstall.sh" ~/bin/gs_desktop_file_uninstall  # replace `gs` with your initials
 #   - NB: this requires that your user's "~/bin" dir ($HOME/bin) be in your PATH variable! If it is not, 
 #     and you are running Ubuntu or similar, simply copy this project's .profile file to your home dir and 
 #     reboot. Your $HOME/bin directory will now be at the start of your PATH variable!

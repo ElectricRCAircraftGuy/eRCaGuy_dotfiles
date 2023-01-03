@@ -36,7 +36,7 @@
 #
 # 3. Add a symlink to the corresponding desktop file to your Desktop so you can run this script
 # by double-clicking on the icon on your Desktop:
-#       cd /path/to/eRCaGuy_dotfiles/Desktop_launchers
+#       cd /path/to/eRCaGuy_dotfiles/home/Desktop_launchers
 #       ln -si "${PWD}/open_programming_tools.desktop" ~/Desktop
 #
 # 4. If you just created the "~/bin" dir for the first time ever in the first step above, close all
