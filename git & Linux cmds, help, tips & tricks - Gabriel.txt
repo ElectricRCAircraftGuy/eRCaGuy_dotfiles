@@ -4566,6 +4566,8 @@ time zones / timezones:
 timedatectl status
     <=========
     List your current time and timezone
+timedatectl
+    Same as just above.
 timedatectl list-timezones
     List all possible timezones
 sudo timedatectl set-timezone America/New_York
