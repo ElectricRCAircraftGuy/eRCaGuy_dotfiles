@@ -4559,6 +4559,33 @@ date +"%Y%m%d-%H%Mhrs_%Ssec"
     A good date format for use as a folder name when running automatic backup scripts. Ex. output:
             20220331-1908hrs_42sec
 
+---
+time zones / timezones:
+- initially learned from ChatGPT; manually tested myself
+---
+timedatectl status
+    <=========
+    List your current time and timezone
+timedatectl list-timezones
+    List all possible timezones
+sudo timedatectl set-timezone America/New_York
+    Set your timezone to America/New_York (Eastern Time)
+sudo timedatectl set-timezone America/Phoenix
+    <=========
+    Set your timezone to America/Phoenix (MST always--no Daylight Savings Time)
+sudo timedatectl set-timezone America/Los_Angeles
+    Set your timezone to America/Los_Angeles (Pacific Time)
+find /usr/share/zoneinfo
+    A very crude way to list all possible timezones, since they are stored as files inside the /usr/share/zoneinfo dir.
+ls /usr/share/zoneinfo/*
+    Another very crude way to do the above (list all possible timezones)
+sudo ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
+    Create a symlink pointing to the "/usr/share/zoneinfo/America/New_York" file at "/etc/localtime". 
+    This is a way to manually set the timezone to America/New_York, since the binary file either copied to or symlinked to the /etc/localtime file is what sets the timezone. 
+    Same as `sudo timedatectl set-timezone America/New_York`.
+sudo cp /usr/share/zoneinfo/America/New_York /etc/localtime
+    Same as just above, except copy the binary timezone file rather than symlinking it.
+
 
 == diff: ==
 [plain diff; NOT git diff; regular diff; diff only; only diff; diff alone; alone diff]
