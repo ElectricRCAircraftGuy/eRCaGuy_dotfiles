@@ -19,6 +19,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 Click here to jump straight down to the instructions on [How to Install and Set Up Eclipse](#how-to-install-and-set-up-eclipse).
 
+**[Eclipse setup instructions on a new Linux (or other OS) computer](https://docs.google.com/document/d/1LbuxOsDHfpMksGdpX5X-7l7o_TIIVFPkH2eD23cXUmA/edit?usp=sharing):**
 1. [Eclipse install instructions on Google Drive][install-eclipse-google-drive] [recommended--always the most up-to-date]
 1. [Eclipse install instructions PDF in this repo][install-eclipse-pdf] [manually generated periodically from the online source above]
 
