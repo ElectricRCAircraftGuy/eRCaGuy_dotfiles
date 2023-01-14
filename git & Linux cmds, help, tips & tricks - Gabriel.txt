@@ -4457,6 +4457,32 @@ du -h | tail -n 1 | awk '{print $1}'
         100G
     See here for `awk` usage help which enabled me to retain only the 1st column above: https://stackoverflow.com/questions/7315587/bash-shortest-way-to-get-n-th-column-of-output/43284174#43284174
 
+---
+[keywords: find and sort files greater than a certain size; find and sort files by name]
+Main references: 
+1. My answer: [Unix & Linux: All about finding, filtering, and sorting with `find`, based on file size](https://unix.stackexchange.com/a/731663/114401) - see the example near the end, titled **"(Figure out which file extensions to add to `git lfs` next)"**.
+- NB: in the examples below, instead of using `find` with `-printf '%s\t%p\n'` to output size information, you could use `du` instead. I haven't gone down that path to get the right options and formatting I'd want, however, like I have done with `find`, so the `find` commands are good enough for now. 
+---
+find . -type f -size +100k -printf '%s\t%p\n' | awk '{printf("%13.6f kiB ", $1/(1024)); for (i=2; i<NF; i++) printf("%s ", $i); printf("%s\n", $NF)}' | sort -rn -k 1
+    <==== SORT BY SIZE ======
+    List all files > 100 kiB (`+100k`), and sorted in reverse order (largest first) by their size (`sort -rn -k 1`). 
+    Source: ChatGPT helped me figure a lot of this out, especially getting me started on the `awk` stuff!
+    See also my answer: https://unix.stackexchange.com/a/731663/114401
+find . -type f -size +100k -printf '%s\t%p\n' | awk '{printf("%13.6f kiB ", $1/(1024)); for (i=2; i<NF; i++) printf("%s ", $i); printf("%s\n", $NF)}' | sort -k 3 --ignore-case
+    <==== SORT BY NAME ======
+    List all files > 100 kiB (`+100k`), and sorted alphabetically by the 3rd column (`-k 3`), which is the name, ignoring case in order to sort case-insensitive (`sort -k 3 --ignore-case`).
+    Limitation: as it is currently written, this is only sorting by the first portion of the name up until the first space within the name, if there is one. 
+    Source: ChatGPT helped me figure a lot of this out, especially getting me started on the `awk` stuff!
+    See also my answer: https://unix.stackexchange.com/a/731663/114401
+find . -type f -size +100k -printf '%s\t%p\n' | awk '{printf("%13.6f kiB ", $1/(1024)); printf("\""); for (i=2; i<NF; i++) printf("%s ", $i); printf("%s\"\n", $NF)}' | sort -k 3 --ignore-case
+    Same as just above, except putting double quotes around the entire path, which may be helpful if there are spaces in the path and you need to use the output in a script?
+    Limitation: as it is currently written, this is only sorting by the first portion of the name up until the first space within the name, if there is one. 
+    See also my answer: https://unix.stackexchange.com/a/731663/114401
+find . -type f -size +100k -printf '%s\t%p\n' | awk '{printf("%13.6f kiB ", $1/(1024)); for (i=2; i<NF; i++) printf("%s ", $i); printf("%s\n", $NF)}' | sort -rn -k 1 | grep -v '.*\.pdf$'
+    <==== SORT BY SIZE, showing only NON-PDF files ======
+    Same as the "SORT BY NAME" one a couple examples above, except then pipe to `grep -v '.*\.pdf$'` to exclude all files ending in .pdf, so that I can figure out which *NON*-PDF files are > 100 kiB in size!
+    See also my answer: https://unix.stackexchange.com/a/731663/114401
+
 chown
     Change the owner of files and directories. 
 
