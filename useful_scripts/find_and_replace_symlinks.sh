@@ -16,6 +16,8 @@
 # script is handy, therefore, to quickly find all absolute symlinks and replace them with relative
 # ones.
 
+# STATUS: wip
+
 # INSTALLATION INSTRUCTIONS:
 # 1. Create a symlink in ~/bin to this script so you can run it from anywhere.
 #           cd /path/to/here
@@ -288,6 +290,20 @@ print_and_run_cmd() {
 main() {
     echo_debug "Running 'main'."
     check_if_arguments_are_valid
+
+    symlinks_str="$(find "$DIR" -type l)"
+    # Convert string to array; see my answer: https://stackoverflow.com/a/71575442/4561887
+    IFS=$'\n' read -r -d '' -a symlinks_array <<< "$symlinks_str"
+
+    # for symlink in "${symlinks_array[@]}"; do
+    #     # echo "$symlink"
+    #     ls -alF "$symlink"
+    # done
+
+    # same effect as above, but *much* faster since it calls `ls` only once,
+    # instead of many times in a row!
+    ls -alF "${symlinks_array[@]}"
+
 } # main
 
 # Set the global variable `run` to "true" if the script is being **executed** (not sourced) and
