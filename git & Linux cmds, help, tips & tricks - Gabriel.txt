@@ -4499,6 +4499,10 @@ readlink path/to/symlink
     <======= VERY USEFUL FOR SCRIPTING =======
     Read the target path that the symlink points to. No output if the path passed to it is not to a symlink. 
     Related utility: `realpath`. 
+realpath some_file_or_symlink
+    <======= VERY USEFUL! ========
+    Obtain the full, resolved path (absolute path) of some_file_or_symlink. If it is a symlink, this walks the path all the way down to the actual path. 
+    Search this doc for other usages of this too.
 
 
 ====================================================================================================
@@ -4642,8 +4646,8 @@ set +x
 https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself/60157372#60157372]
 
 realpath some_file_or_symlink
-    Obtain the full, resolved path (absolute path) of some_file_or_symlink. If it is a symlink, this walks the path all the way down to the actual path. 
     <========= VERY USEFUL! vvv^^^ ========
+    Obtain the full, resolved path (absolute path) of some_file_or_symlink. If it is a symlink, this walks the path all the way down to the actual path. 
 dirname $(realpath some_file_or_symlink)
     Obtain the full **directory** path of the path above.
 basename $(realpath some_file_or_symlink)
