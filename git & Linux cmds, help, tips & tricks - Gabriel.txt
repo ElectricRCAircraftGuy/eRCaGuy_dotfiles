@@ -4382,6 +4382,126 @@ busctl call org.freedesktop.systemd1 /org/freedesktop/systemd1 org.freedesktop.s
 
 
 ====================================================================================================
+= Symlink Utilities: =
+====================================================================================================
+[keywords: fixing broken symlinks; fix broken symlinks]
+
+References:
+1. Google search for "bash script to fix broken symlinks":
+   https://www.google.com/search?q=bash+script+to+fix+broken+symlinks&oq=bash+script+to+fix+broken+symlinks&aqs=chrome..69i57.5764j0j9&sourceid=chrome&ie=UTF-8
+1. https://www.makeuseof.com/basic-commands-linux/
+1. https://techbit.ca/2021/01/fixing-broken-symlinks-with-find-and-replace/
+1. Repair broken symlinks to new location - https://unix.stackexchange.com/q/578671/114401
+1. *****How can I "relink" a lot of broken symlinks? - https://unix.stackexchange.com/a/18365/114401
+
+
+- - -
+NB: use `-v` for verbose output, to show the new symlinks and where they point. VERY USEFUL FOR DEBUGGING!
+- - -
+ln -sv target_path symlink_path
+    Make a symlink at "symlink_path" which links to (points to) "target_path". 
+ln -svi target_path symlink_path
+    Interactively do the above: in case the "symlink_path" already exists, it will prompt you to ask if you'd like to overwrite it.
+ln -svf target_path symlink_path
+    CAUTION: force-create the symlink, overwriting "symlink_path" with this new symlink even if it already exists. 
+ln -svr target_path symlink_path
+    <=========
+    Make a **relative** symlink (forcing it to be relative even if you use an absolute "target_path") at "symlink_path" which links to (points to) "target_path".
+ln -svri target_path symlink_path
+    <======== BEST WAY TO CREATE A NEW SYMLINK! ========
+    Same as above, but do it interactively to ask if you'd like to overwrite.
+ln -svrf target_path symlink_path
+    CAUTION: same as above, but force-overwrite "symlink_path" without prompting you if it already exists. 
+- - -
+Putting it all together, from below: if creating your own utility to manipulate symlinks, use `find . -type l` to find all symlinks, or `find . -xtype l` to find all *broken* symlinks. Use `readlink path/to/symlink` to read the path a symlink points to. Use `sed` to search and replace within that if desired. And use `ln -srf target_path symlink_path` if scripting the automatic replacement of an absolute symlink with a relative symlink (where, of course, "target_path" could be read via `readlink`). 
+- - -
+TARGET_PATH="$(readlink symlink_path)"; rm symlink_path; ln -svrf "$TARGET_PATH" symlink_path
+    Convert the symlink at "symlink_path" from an absolute to a relative symlink!
+    When done, confirm it worked with `ll symlink_path`.
+SYMLINK_PATH="path/to/symlink"; TARGET_PATH="$(readlink "$SYMLINK_PATH")"; rm "$SYMLINK_PATH"; ln -svrf "$TARGET_PATH" "$SYMLINK_PATH"
+    <=========== VERY USEFUL! ============
+    Cleaner way to do the above: convert an existing, non-broken, symlink at "symlink_path" from an absolute to a relative symlink!
+    When done, confirm it worked with `ll "$SYMLINK_PATH"`.
+    - Note: the above is akin to `symlinks -rsvc` (SEE BELOW; CAUTION: modifies disk), except more granular, since `symlinks` changes ALL symlinks, recursively, whereas the one-liner above can be made to just change just **one** single symlink at once!
+    - [keywords: convert absolute to relative symlink; convert absolute symlink to relative symlink; convert an absolute symlink to a relative symlink; symlinks absolute to relative; symlink absolute to relative; absolute to relative symlink; symlink absolute relative symlink; symlink relative absolute symlink]
+
+unlink path/to/symlink
+    Delete the symlink; same as `rm path/to/symlink`.
+    See also: What is the difference between 'rm' and 'unlink'? - https://unix.stackexchange.com/q/151951/114401
+rm path/to/symlink
+    Pretty much the same as above, except more obvious to the world what it's really doing.
+    See also: What is the difference between 'rm' and 'unlink'? - https://unix.stackexchange.com/q/151951/114401
+
+sudo add-apt-repository universe && sudo apt update && sudo apt install symlinks
+    Install the `symlinks` utility in Ubuntu. 
+    See: https://www.makeuseof.com/how-to-find-and-fix-broken-symlinks-in-linux/
+man symlinks
+    <=========
+    See the manual pages for this really useful utility!
+symlinks -h
+    See the short help menu for this really useful utility.
+symlinks .
+    Show all **non**-relative symlinks in the current directory only, **not** recursing down into sub-dirs. 
+symlinks -v .
+    Show all symlinks, including relative symlinks (via `-v` for verbose) in the current directory only, **not** recursing down into sub-dirs. 
+symlinks -rv .
+    Show all symlinks, including relative symlinks (via `-v` for verbose) in the current directory, recursing down into sub-dirs too! (via `-r`). 
+symlinks -rsv .
+    <========================
+    Show all symlinks, including relative ones (`-v`), recursively (`-r`), and finding "lengthy" links too (`-s`; see `man symlinks`).
+symlinks -rsv . | grep '^dangling'
+    <==============
+    Find only "dangling", or broken, symlinks. 
+    [find all broken symlinks; find all dangling symlinks]
+symlinks -rsvt . 
+    <==============
+    Same as `symlinks -rsv`, but also `t`est which symlinks would be converted from absolute to relative, or otherwise fixed if they are "lengthy" or "messy". It is a "dry run" of running with `-c`, but without actually making any changes. 
+symlinks -rsvt . | grep '^changed'
+    <==============
+    See just which links would be "changed" if you ran with `-c`. 
+symlinks -rsvc .
+    <==============
+    CAUTION!: THIS ACTUALLY CHANGES SYMLINKS ON YOUR SYSTEM! 
+    Convert all "absolute" symlinks to "relative", and reduce/clean up any "messy" or "lengthy" symlinks as well. 
+    Note: this can NOT fix broken or "dangling" symlinks. That requires manual intervention from a human.
+
+ll
+    Alias for `ls -alF`: show all files, including symlinks and where they point.
+ls -alF
+    Same as above. 
+ll -R
+    Also recurse into all subdirs. 
+ll -R | grep -- '->'
+    A bit of a cheesy way to just show symlinks, recursively.
+    A better way would be `find . -type l` or `symlinks -rsv .`
+ll path/to/symlink
+    <==========
+    See where the symlink points. 
+    NB: use `readlink path/to/symlink` to **only** get the path where the symlink points!
+ls -alF path/to/symlink
+    Same as above, in case the `ll` alias doesn't exist on your system.
+alias ll='ls -alF'
+    Create the `ll` alias for your system, in case it doesn't exist. 
+    Place this in your `~/.bashrc` file to make this alias "permanent"/persistent across reboots. 
+
+find . -type l
+    Find all symlinks. 
+symlinks -rsv .
+    Find all symlinks. See above for more details. 
+find . -xtype l
+    <==========
+    Find all **broken** ("dangling") symlinks only (like `symlinks -rsv .`, but less verbose/detailed in the output since `find` does *not* show where the symlink points).
+    [find all broken symlinks; find all dangling symlinks]
+symlinks -rsv .
+    Find all symlinks, including **broken** ("dangling") symlinks.
+
+readlink path/to/symlink
+    <======= VERY USEFUL FOR SCRIPTING =======
+    Read the target path that the symlink points to. No output if the path passed to it is not to a symlink. 
+    Related utility: `realpath`. 
+
+
+====================================================================================================
 = Linux (General): =
 ====================================================================================================
 [general linux cmds; general linux commands; linux general, linux =, linux: =]
