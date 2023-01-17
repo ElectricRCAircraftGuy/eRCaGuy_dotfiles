@@ -64,13 +64,14 @@
 
 starting_dir="$(pwd)"
 
-echo -e "\n\n======================== SETTING UP NEW VIRTUAL MACHINE ===========================\n"
+# Note: write this to both stdout *and* stderr; see: https://stackoverflow.com/a/6852984/4561887
+echo -e "\n\n======================== SETTING UP NEW VIRTUAL MACHINE ===========================\n" | tee /dev/stderr
 
-echo "Time     is $(date)."
-echo "Setting timezone."
+echo "Time     is $(date)." | tee /dev/stderr
+echo "Setting timezone." | tee /dev/stderr
 # sudo timedatectl set-timezone America/Los_Angeles
 sudo timedatectl set-timezone America/Phoenix
-echo "Time is now $(date)."
+echo "Time is now $(date)." | tee /dev/stderr
 
 echo "Installing various apt packages."
 sudo apt update
