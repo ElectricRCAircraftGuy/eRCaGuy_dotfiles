@@ -3,7 +3,7 @@
 # This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
 # Author: Gabriel Staples
-# 2023 (ideated 2019)
+# 2023 (ideated 2019; started ~16 Jan. 2023 or so; finished 18 Jan. 2023)
 
 # DESCRIPTION:
 #
@@ -16,7 +16,7 @@
 # script is handy, therefore, to quickly find all absolute symlinks and replace them with relative
 # ones.
 
-# STATUS: wip
+# STATUS: done and works!
 
 # INSTALLATION INSTRUCTIONS:
 # 1. Create a symlink in ~/bin to this script so you can run it from anywhere.
@@ -59,17 +59,20 @@ See '$SCRIPT_NAME -h' for more info.
 HELP_STR="\
 $VERSION_SHORT_STR
 
-Find all broken symlinks in directory 'dir', then extract the target paths they point to, search
-those paths for 'find_regex', and replace those findings with 'replacement_string'. Finally,
-recreate the symlinks as relative symlinks with those replacements to the target paths in place.
-
-If the 'find_regex' and 'replacement_string' are not provided, it will simply find and print out the
-broken symlinks as they currently are.
-
-All runs are dry-runs unless you use '--force'.
-
 USAGE
     $SCRIPT_NAME [options] <dir> [<find_regex> <replacement_string>]
+
+DESCRIPTION
+
+    Find all broken symlinks in directory 'dir', then extract the target paths they point to, search
+    those paths for 'find_regex', and replace those findings with 'replacement_string'. Finally,
+    recreate the symlinks as relative symlinks with those replacements to the target paths in
+    place.
+
+    If the 'find_regex' and 'replacement_string' are not provided, it will simply find and print out
+    the broken symlinks as they currently are.
+
+    All runs are dry-runs unless you use '--force'.
 
 OPTIONS
     -h, -?, --help
@@ -100,8 +103,8 @@ EXAMPLE USAGES:
 
 NOTES:
 
-1. To just find and replace absolute symlinks with relative symlinks, use the 'symlinks' tool
-instead:
+1. To **automatically** find and replace absolute symlinks with relative symlinks, use
+the 'symlinks' tool instead:
 
     sudo add-apt-repository universe && sudo apt update && sudo apt install symlinks
         Install the 'symlinks' utility in Ubuntu.
@@ -123,8 +126,12 @@ https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%
     symlinks -rsv . | grep '^dangling'
     find . -xtype l
 
-3. To manually replace any absolute symlink with a relative symlink do the following. This is also
-the best 'ln' command in my opinion when creating a brand new symlink:
+3. To find all symlinks and see which are relative and which are absolute, run:
+
+    symlinks -rsv .
+
+3. To **manually** replace any absolute symlink with a relative symlink, do the following. This is
+also the best 'ln' command in my opinion when creating a brand new symlink:
 
     rm symlink_path  # required first if the symlink you're about to replace is to a directory
     ln -svri target_path symlink_path
@@ -158,7 +165,8 @@ printf_debug() {
 }
 
 print_help() {
-    echo "$HELP_STR" | less -RFX
+    # echo "$HELP_STR" | less -RFX
+    echo "$HELP_STR"
 }
 
 print_version() {
@@ -338,6 +346,10 @@ main() {
 
     broken_symlinks_count="${#broken_symlinks_array[@]}"
     echo -e "$broken_symlinks_count broken symlinks found!\n"
+
+    if [ "$broken_symlinks_count" -eq 0 ]; then
+        return $RETURN_CODE_SUCCESS
+    fi
 
     if [ "$FORCE_ON" = "false" ]; then
         echo "------------------------------------------------------------------------"
