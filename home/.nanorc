@@ -1,0 +1,29 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# Startup configuration/settings file for the Nano text editor.
+# - Official ~/.nanorc documentation:
+#   1. Latest: https://www.nano-editor.org/dist/latest/nanorc.5.html
+#   2. v2.9: https://www.nano-editor.org/dist/v2.9/nanorc.5.html
+
+
+# Show line numbers on the left-hand side.
+# See:
+# https://askubuntu.com/questions/73444/how-to-show-line-numbering-in-nano-when-opening-a-file#comment1647766_957620
+set linenumbers
+
+# Continually show line and column numbers at the bottom
+# (normally activated by Ctrl + C)
+# See: https://askubuntu.com/a/73465/327339
+set constantshow
+
+# Enable mouse control: click to move cursor
+# See:
+# 1. https://askubuntu.com/a/1033710/327339
+# 2. Official .nanorc documentation: https://www.nano-editor.org/dist/latest/nanorc.5.html
+set mouse
+
+# "Display a "scrollbar" on the righthand side of the edit window. It shows the
+#  position of the viewport in the buffer and how much of the buffer is covered
+#  by the viewport."
+# NOT available in v2.9 or earlier
+# set indicator
