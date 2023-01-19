@@ -889,7 +889,7 @@ ls "$(bazel info output_base)/external"
         target_dir="$(bazel info output_base)/external"
 
         echo "Creating symlink to dir \"$target_dir\" inside \"$SCRIPT_DIRECTORY\"."
-        ln -sf "$target_dir" "$SCRIPT_DIRECTORY"
+        ln -svnrf "$target_dir" "$SCRIPT_DIRECTORY"
         ```
     You should then add this symlink dir to your Eclipse (or other IDE) project, as a virtual folder or otherwise, and as required, to bring them in to be indexed so you can search, navigate, and browse any external source code libraries as needed.
     INSTALLATION:
@@ -4384,7 +4384,7 @@ busctl call org.freedesktop.systemd1 /org/freedesktop/systemd1 org.freedesktop.s
 ====================================================================================================
 = Symlink Utilities: =
 ====================================================================================================
-[keywords: fixing broken symlinks; fix broken symlinks; = symlinks: =]
+[keywords: fixing broken symlinks; fix broken symlinks; = symlinks: =; = symlink: =]
 
 References:
 1. Google search for "bash script to fix broken symlinks":
@@ -4393,35 +4393,39 @@ References:
 1. https://techbit.ca/2021/01/fixing-broken-symlinks-with-find-and-replace/
 1. Repair broken symlinks to new location - https://unix.stackexchange.com/q/578671/114401
 1. *****How can I "relink" a lot of broken symlinks? - https://unix.stackexchange.com/a/18365/114401
+    1. *****+ [my answer, presenting my `fix_broken_symlinks` tool] https://unix.stackexchange.com/a/732315/114401
 
 
 - - -
-NB: use `-v` for verbose output, to show the new symlinks and where they point. VERY USEFUL FOR DEBUGGING!
+NB: 
+1. Use `-v` for verbose output, to show the new symlinks and where they point. VERY USEFUL FOR DEBUGGING!
+1. Also, when fixing up symlinks to **directories**, you *must* either `rm` the symlink first, _or_ use the `-n` option to (from `man ln`): "treat LINK_NAME as a normal file if it is a symbolic link to a directory", in order to edit or replace the actual symlink to the dir rather than creating a _new_ symlink _inside_ that dir! So, use `-n` too! See my comments and our discussion here: https://unix.stackexchange.com/questions/18360/how-can-i-relink-a-lot-of-broken-symlinks/732315#comment1389743_18365
 - - -
-ln -sv target_path symlink_path
+ln -svn target_path symlink_path
     Make a symlink at "symlink_path" which links to (points to) "target_path". 
-ln -svi target_path symlink_path
+ln -svni target_path symlink_path
     Interactively do the above: in case the "symlink_path" already exists, it will prompt you to ask if you'd like to overwrite it.
-ln -svf target_path symlink_path
+ln -svnf target_path symlink_path
     CAUTION: force-create the symlink, overwriting "symlink_path" with this new symlink even if it already exists. 
-ln -svr target_path symlink_path
+ln -svnr target_path symlink_path
     <=========
     Make a **relative** symlink (forcing it to be relative even if you use an absolute "target_path") at "symlink_path" which links to (points to) "target_path".
-ln -svri target_path symlink_path
+ln -svnri target_path symlink_path
     <======== BEST WAY TO CREATE A NEW SYMLINK! ========
     Same as above, but do it interactively to ask if you'd like to overwrite.
-ln -svrf target_path symlink_path
+    NB: **All** of these options are important, and what I want. See 'man ln' for what each does. See also my notes about some of them, above.
+ln -svnrf target_path symlink_path
     CAUTION: same as above, but force-overwrite "symlink_path" without prompting you if it already exists.
     Good for scripting.
 - - -
-Putting it all together, from below: if creating your own utility to manipulate symlinks, use `find . -type l` to find all symlinks, or `find . -xtype l` to find all *broken* symlinks. Use `readlink path/to/symlink` to read the path a symlink points to. Use `sed` to search and replace within that if desired. And use `ln -srf target_path symlink_path` if scripting the automatic replacement of an absolute symlink with a relative symlink (where, of course, "target_path" could be read via `readlink`). 
+Putting it all together, from below: if creating your own utility to manipulate symlinks, use `find . -type l` to find all symlinks, or `find . -xtype l` to find all *broken* symlinks. Use `readlink path/to/symlink` to read the path a symlink points to. Use `sed` to search and replace within that if desired. And use `ln -svnrf target_path symlink_path` if scripting the automatic replacement of an absolute symlink with a relative symlink (where, of course, "target_path" could be read via `readlink`). 
 - - -
-TARGET_PATH="$(readlink symlink_path)"; rm symlink_path; ln -svrf "$TARGET_PATH" symlink_path
+TARGET_PATH="$(readlink symlink_path)"; ln -svnrf "$TARGET_PATH" symlink_path
     Convert the symlink at "symlink_path" from an absolute to a relative symlink!
     When done, confirm it worked with `ll symlink_path`.
-SYMLINK_PATH="path/to/symlink"; TARGET_PATH="$(readlink "$SYMLINK_PATH")"; rm "$SYMLINK_PATH"; ln -svrf "$TARGET_PATH" "$SYMLINK_PATH"
+SYMLINK_PATH="path/to/symlink"; TARGET_PATH="$(readlink "$SYMLINK_PATH")"; ln -svnrf "$TARGET_PATH" "$SYMLINK_PATH"
     <=========== VERY USEFUL! ============
-    Cleaner way to do the above: convert an existing, non-broken, symlink at "symlink_path" from an absolute to a relative symlink!
+    Slightly cleaner way to do the above: convert an existing, non-broken, symlink at "symlink_path" from an absolute to a relative symlink!
     When done, confirm it worked with `ll "$SYMLINK_PATH"`.
     - Note: the above is akin to `symlinks -rsvc` (SEE BELOW; CAUTION: modifies disk), except more granular, since `symlinks` changes ALL symlinks, recursively, whereas the one-liner above can be made to just change just **one** single symlink at once!
     - [keywords: convert absolute to relative symlink; convert absolute symlink to relative symlink; convert an absolute symlink to a relative symlink; symlinks absolute to relative; symlink absolute to relative; absolute to relative symlink; symlink absolute relative symlink; symlink relative absolute symlink]
@@ -4470,6 +4474,22 @@ symlinks -rsvc .
     CAUTION!: THIS ACTUALLY CHANGES SYMLINKS ON YOUR SYSTEM! 
     Convert all "absolute" symlinks to "relative", and reduce/clean up any "messy" or "lengthy" symlinks as well. 
     Note: this can NOT fix broken or "dangling" symlinks. That requires manual intervention from a human.
+
+fix_broken_symlinks path/to/dir
+    find all broken symlinks in this dir
+    See: 
+    1. My answer: https://unix.stackexchange.com/a/732315/114401
+    1. My source code for this tool: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/fix_broken_symlinks.sh
+fix_broken_symlinks path/to/dir find_regex replacement_str
+    dry-run fix all broken symlinks in this dir
+    See: 
+    1. My answer: https://unix.stackexchange.com/a/732315/114401
+    1. My source code for this tool: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/fix_broken_symlinks.sh
+fix_broken_symlinks path/to/dir find_regex replacement_str -f
+    actually fix all broken symlinks in this dir (passing `-f` to force it)
+    See: 
+    1. My answer: https://unix.stackexchange.com/a/732315/114401
+    1. My source code for this tool: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/fix_broken_symlinks.sh
 
 ll
     Alias for `ls -alF`: show all files, including symlinks and where they point.
@@ -4822,7 +4842,7 @@ find /usr/share/zoneinfo
     A very crude way to list all possible timezones, since they are stored as files inside the /usr/share/zoneinfo dir.
 ls /usr/share/zoneinfo/*
     Another very crude way to do the above (list all possible timezones)
-sudo ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
+sudo ln -svnrf /usr/share/zoneinfo/America/New_York /etc/localtime
     Create a symlink pointing to the "/usr/share/zoneinfo/America/New_York" file at "/etc/localtime". 
     This is a way to manually set the timezone to America/New_York, since the binary file either copied to or symlinked to the /etc/localtime file is what sets the timezone. 
     Same as `sudo timedatectl set-timezone America/New_York`.
