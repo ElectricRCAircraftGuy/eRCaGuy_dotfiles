@@ -4384,7 +4384,7 @@ busctl call org.freedesktop.systemd1 /org/freedesktop/systemd1 org.freedesktop.s
 ====================================================================================================
 = Symlink Utilities: =
 ====================================================================================================
-[keywords: fixing broken symlinks; fix broken symlinks]
+[keywords: fixing broken symlinks; fix broken symlinks; = symlinks: =]
 
 References:
 1. Google search for "bash script to fix broken symlinks":
@@ -4411,7 +4411,8 @@ ln -svri target_path symlink_path
     <======== BEST WAY TO CREATE A NEW SYMLINK! ========
     Same as above, but do it interactively to ask if you'd like to overwrite.
 ln -svrf target_path symlink_path
-    CAUTION: same as above, but force-overwrite "symlink_path" without prompting you if it already exists. 
+    CAUTION: same as above, but force-overwrite "symlink_path" without prompting you if it already exists.
+    Good for scripting.
 - - -
 Putting it all together, from below: if creating your own utility to manipulate symlinks, use `find . -type l` to find all symlinks, or `find . -xtype l` to find all *broken* symlinks. Use `readlink path/to/symlink` to read the path a symlink points to. Use `sed` to search and replace within that if desired. And use `ln -srf target_path symlink_path` if scripting the automatic replacement of an absolute symlink with a relative symlink (where, of course, "target_path" could be read via `readlink`). 
 - - -
@@ -4450,8 +4451,13 @@ symlinks -rsv .
     <========================
     Show all symlinks, including relative ones (`-v`), recursively (`-r`), and finding "lengthy" links too (`-s`; see `man symlinks`).
 symlinks -rsv . | grep '^dangling'
-    <==============
+    <====== FIND BROKEN SYMLINKS ========
     Find only "dangling", or broken, symlinks. 
+    Note: `find . -xtype l` can also do this. Prove it like this and you will see the same number of broken symlinks:
+    ```bash
+    symlinks -rsv . | grep '^dangling' | wc -l
+    find . -xtype l | wc -l
+    ```
     [find all broken symlinks; find all dangling symlinks]
 symlinks -rsvt . 
     <==============
