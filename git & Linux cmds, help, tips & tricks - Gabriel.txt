@@ -4506,6 +4506,86 @@ realpath some_file_or_symlink
 
 
 ====================================================================================================
+= Docker: =
+====================================================================================================
+
+Docker is some kind of light-weight virtual machine/containerization environment. 
+
+From ChatGPT on 17 Jan. 2023:
+
+Me:
+What is docker?
+
+ChatGPT:
+Docker is a platform that allows developers to easily deploy, run, and manage applications in a containerized environment. Containers are a lightweight form of virtualization that enable applications to be packaged with their dependencies and run consistently across different environments. Docker provides a command-line interface and API for interacting with containers, as well as a centralized hub for sharing and discovering container images. This makes it easier for developers to build, test, and deploy applications quickly and consistently.
+
+References:
+1. `man docker`
+1. [NEED TO GO THROUGH THIS TUTORIAL!] ***** Official getting started documentation: https://docs.docker.com/get-started/
+    What is a container?
+
+    > Simply put, a container is a sandboxed process on your machine that is isolated from all other processes on the host machine.
+
+    > To summarize, a container:
+    > 
+    > - is a runnable instance of an image. You can create, start, stop, move, or delete a container using the DockerAPI or CLI.
+    > - can be run on local machines, virtual machines or deployed to the cloud.
+    > - is portable (can be run on any OS).
+    > - is isolated from other containers and runs its own software, binaries, and configurations.
+
+
+    > What is a container image?
+    > 
+    > When running a container, it uses an isolated filesystem. This custom filesystem is provided by a container image. Since the image contains the container’s filesystem, it must contain everything needed to run an application - all dependencies, configurations, scripts, binaries, etc. The image also contains other configuration for the container, such as environment variables, a default command to run, and other metadata.
+
+    Note: Docker is more than just `chroot`.
+1. 
+
+
+docker container ls
+    List running docker containers. 
+    Sample run and output--notice the container name as the end!: `my-container-name`
+    ```bash
+    $ docker container ls
+    CONTAINER ID   IMAGE                                                           COMMAND                  CREATED      STATUS      PORTS     NAMES
+    0183871ab108   whatever.com/something/whatever/my-container-name:latest        "fixuid -q watch -n …"   6 days ago   Up 6 days             my-container-name
+    ```
+    See: 
+    1. `docker container --help`
+    1. `docker container ls --help`
+    1. `man docker container`
+docker ps
+    Same exact thing as `docker container ls`. 
+    See `docker --help`
+docker container --help
+    See help menu.
+man docker container
+    See manual pages.
+docker exec --help
+    See help menu.
+docker exec -it <container_name_or_id> /bin/bash
+    Open a shell in the given docker container. The docker container's name can be found in the far right-hand column of the output from `docker container ls` or `docker ps` (see above).
+    From `docker exec --help`: `-i` is `--interactive`, to "keep STDIN open even if not attached", and `-t` is `--tty`, to "allocate a pseudo-TTY", making it an interactive terminal you can type in. Running `/bin/bash` gives you access to the docker container's bash shell environment for live interaction! 
+    See: 
+    1. `docker exec --help`
+    1. https://docs.docker.com/engine/reference/commandline/exec/
+docker exec -it my-container-name /bin/bash
+    <=========
+    Open the docker container named "my-container-name" in interactive mode in a bash shell terminal.
+    See just above for details. 
+    Find the name in the far **right** column of the output of `docker container ls` or `docker ps`. 
+docker exec -it 0183871ab108 /bin/bash
+    <=========
+    Exact same thing as above, except using the container's ID instead of its name.
+    Find the Container ID in the far **left** column of the output of `docker container ls` or `docker ps`. 
+exit
+    Leave the docker container shell--just like exiting any shell or terminal.
+dexec [--help]
+    Some sort of tool to run stuff in a docker container or something. 
+    See: https://github.com/docker-exec/dexec
+
+
+====================================================================================================
 = Linux (General): =
 ====================================================================================================
 [general linux cmds; general linux commands; linux general, linux =, linux: =]
