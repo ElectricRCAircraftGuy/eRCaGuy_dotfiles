@@ -22,13 +22,13 @@
 # 1. Create a symlink in ~/bin to this script so you can run it from anywhere.
 #           cd /path/to/here
 #           mkdir -p ~/bin
-#           ln -si "${PWD}/find_and_replace_symlinks.sh" ~/bin/find_and_replace_symlinks     # required
-#           ln -si "${PWD}/find_and_replace_symlinks.sh" ~/bin/gs_find_and_replace_symlinks  # optional; replace "gs" with your initials
+#           ln -si "${PWD}/fix_broken_symlinks.sh" ~/bin/fix_broken_symlinks     # required
+#           ln -si "${PWD}/fix_broken_symlinks.sh" ~/bin/gs_fix_broken_symlinks  # optional; replace "gs" with your initials
 #           . ~/.profile  # re-source your bash profile to ensure ~/bin gets added to your PATH
 # 2. Run it
-#           find_and_replace_symlinks [path/to/starting/dir]
+#           fix_broken_symlinks --help
 #           # or
-#           gs_find_and_replace_symlinks [path/to/starting/dir]
+#           gs_fix_broken_symlinks --help
 
 # REFERENCES:
 # 1. ChatGPT - I got a start on this by asking ChatGPT: "How can I write a linux script in bash to
@@ -59,10 +59,17 @@ See '$SCRIPT_NAME -h' for more info.
 HELP_STR="\
 $VERSION_SHORT_STR
 
-Find all absolute symlinks in a given directory and replace them with relative ones.
+Find all broken symlinks in directory 'dir', then extract the target paths they point to, search
+those paths for 'find_regex', and replace those findings with 'replacement_string'. Finally,
+recreate the symlinks as relative symlinks with those replacements to the target paths in place.
+
+If the 'find_regex' and 'replacement_string' are not provided, it will simply find and print out the
+broken symlinks as they currently are.
+
+All runs are dry-runs unless you use '--force'.
 
 USAGE
-    $SCRIPT_NAME [starting_dir]
+    $SCRIPT_NAME [options] <dir> [<find_regex> <replacement_string>]
 
 OPTIONS
     -h, -?, --help
@@ -76,7 +83,7 @@ OPTIONS
     -f, --force
         Actually do the symlink replacements. With*out* this option, all runs are dry runs.
 
-EXAMPLE USAGES:
+EXAMPLE USAGES: //////////
 
     $SCRIPT_NAME -h
         Print help menu.
@@ -91,6 +98,22 @@ EXAMPLE USAGES:
         Dry-run replace symlinks in ~/some_dir.
     $SCRIPT_NAME --force ~/some_dir
         Actually do the symlink replacements in this dir.
+
+Note: to just find and replace absolute symlinks with relative symlinks, use the 'symlinks' tool
+instead:
+
+    sudo add-apt-repository universe && sudo apt update && sudo apt install symlinks
+        Install the 'symlinks' utility in Ubuntu.
+        See: https://www.makeuseof.com/how-to-find-and-fix-broken-symlinks-in-linux/
+    symlinks -rsvt . | grep '^changed'
+        <==============
+        See just which links would be "changed" if you ran with '-c'.
+    symlinks -rsvc .
+        <==============
+        CAUTION!: THIS ACTUALLY CHANGES SYMLINKS ON YOUR SYSTEM!
+        Convert all "absolute" symlinks to "relative", and reduce/clean up any "messy" or "lengthy"
+        symlinks as well. Note: this can NOT fix broken or "dangling" symlinks. That requires
+        manual intervention from a human.
 
 This program is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 by Gabriel Staples.
@@ -228,6 +251,8 @@ parse_args() {
     done
 
     DIR="${POSITIONAL_ARGS_ARRAY[0]}"
+    FIND_REGEX="${POSITIONAL_ARGS_ARRAY[1]}"
+    REPLACEMENT_STR="${POSITIONAL_ARGS_ARRAY[2]}"
 
     # Do debug prints of all argument stats
 
@@ -242,15 +267,16 @@ parse_args() {
     echo_debug "POSITIONAL_ARGS_ARRAY contains:"
     print_array_debug POSITIONAL_ARGS_ARRAY
     echo_debug ""
-    echo_debug "POSITIONAL_ARG1 = '$POSITIONAL_ARG1'"
-    echo_debug "POSITIONAL_ARG2 = '$POSITIONAL_ARG2'"
+    echo_debug "DIR = '$DIR'"
+    echo_debug "FIND_REGEX = '$FIND_REGEX'"
+    echo_debug "REPLACEMENT_STR = '$REPLACEMENT_STR'"
     echo_debug ""
 } # parse_args
 
 # Check arguments and print errors and exit if any critical ones are invalid
 check_if_arguments_are_valid() {
-    if [ $positional_args_array_len -eq 0 ]; then
-        echo_error "No path was specified. See help menu ('-h') for usage."
+    if [ $positional_args_array_len -lt 1 ]; then
+        echo_error "Not enough arguments. See help menu ('-h') for usage."
         exit $RETURN_CODE_ERROR
     fi
 
@@ -291,18 +317,55 @@ main() {
     echo_debug "Running 'main'."
     check_if_arguments_are_valid
 
-    symlinks_str="$(find "$DIR" -type l)"
+    broken_symlinks_str="$(find "$DIR" -xtype l)"
     # Convert string to array; see my answer: https://stackoverflow.com/a/71575442/4561887
-    IFS=$'\n' read -r -d '' -a symlinks_array <<< "$symlinks_str"
+    IFS=$'\n' read -r -d '' -a broken_symlinks_array <<< "$broken_symlinks_str"
 
-    # for symlink in "${symlinks_array[@]}"; do
-    #     # echo "$symlink"
-    #     ls -alF "$symlink"
-    # done
+    broken_symlinks_count="${#broken_symlinks_array[@]}"
+    echo -e "$broken_symlinks_count broken symlinks found!\n"
 
-    # same effect as above, but *much* faster since it calls `ls` only once,
-    # instead of many times in a row!
-    ls -alF "${symlinks_array[@]}"
+    if [ "$FORCE_ON" = "false" ]; then
+        echo "****************************************************"
+        echo "Dry run--no replacements made."
+        echo "****************************************************"
+    else
+        echo "****************************************************"
+        echo "'--force' is on! Writing new **relative** symlinks!"
+        echo "****************************************************"
+    fi
+    echo ""
+
+    i=0
+    for symlink_path in "${broken_symlinks_array[@]}"; do
+        ((i++))
+        echo "$i/$broken_symlinks_count:"
+
+        old_target_path="$(readlink "$symlink_path")"
+        echo "OLD: '$symlink_path' -> '$old_target_path'"
+
+        if [ "$positional_args_array_len" -eq 3 ]; then
+            # we have the FIND_REGEX and REPLACEMENT_STR args too, so do the replacement!
+            new_target_path="$(sed "s|$FIND_REGEX|$REPLACEMENT_STR|")"
+            echo "NEW: '$symlink_path' -> '$new_target_path'"
+        fi
+
+        if [ "$FORCE_ON" = "true" ]; then
+            ln -svrf "$new_target_path" "$symlink_path"
+        fi
+
+        echo ""
+    done
+
+    if [ "$FORCE_ON" = "false" ]; then
+        echo "****************************************************"
+        echo "Dry run--no replacements made."
+        echo "****************************************************"
+    else
+        echo "****************************************************"
+        echo "'--force' is on! New **relative** symlinks written!"
+        echo "****************************************************"
+    fi
+    echo ""
 
 } # main
 
