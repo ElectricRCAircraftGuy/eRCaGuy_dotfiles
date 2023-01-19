@@ -83,23 +83,24 @@ OPTIONS
     -f, --force
         Actually do the symlink replacements. With*out* this option, all runs are dry runs.
 
-EXAMPLE USAGES: //////////
+EXAMPLE USAGES:
 
     $SCRIPT_NAME -h
         Print help menu.
     $SCRIPT_NAME --help
         Print help menu.
     $SCRIPT_NAME .
-        Do a dry-run test of replacing all absolute symlinks in the current path ('.') with relative
-        symlinks.
-    $SCRIPT_NAME -f .
-        Actually do the symlink replacements in the current dir.
-    $SCRIPT_NAME ~/some_dir
-        Dry-run replace symlinks in ~/some_dir.
-    $SCRIPT_NAME --force ~/some_dir
-        Actually do the symlink replacements in this dir.
+        Recursively find all broken symlinks in the current directory (.).
+    $SCRIPT_NAME . '/home/gabriel/some/dir' 'home/john/some/dir'
+        (Dry run) fix all broken symlinks in the current dir (.) by replacing their target paths
+        with John's home dir instead of Gabriel's.
+    $SCRIPT_NAME . '/home/gabriel/some/dir' 'home/john/some/dir' -f
+        (Real run) fix all broken symlinks in the current dir (.) by replacing their target paths
+        with John's home dir instead of Gabriel's. **Relative** symlinks will be created in the end.
 
-Note: to just find and replace absolute symlinks with relative symlinks, use the 'symlinks' tool
+NOTES:
+
+1. To just find and replace absolute symlinks with relative symlinks, use the 'symlinks' tool
 instead:
 
     sudo add-apt-repository universe && sudo apt update && sudo apt install symlinks
@@ -114,6 +115,20 @@ instead:
         Convert all "absolute" symlinks to "relative", and reduce/clean up any "messy" or "lengthy"
         symlinks as well. Note: this can NOT fix broken or "dangling" symlinks. That requires
         manual intervention from a human.
+
+2. Other ways to find broken symlinks include the following. Search my document here for these
+and other commands and notes:
+https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%20Linux%20cmds%2C%20help%2C%20tips%20%26%20tricks%20-%20Gabriel.txt
+
+    symlinks -rsv . | grep '^dangling'
+    find . -xtype l
+
+3. To manually replace any absolute symlink with a relative symlink do the following. This is also
+the best 'ln' command in my opinion when creating a brand new symlink:
+
+    rm symlink_path  # required first if the symlink you're about to replace is to a directory
+    ln -svri target_path symlink_path
+
 
 This program is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 by Gabriel Staples.
@@ -350,8 +365,23 @@ main() {
         fi
 
         if [ "$FORCE_ON" = "true" ]; then
+            # To ensure the relative symlink is written correctly in case it is to a directory, you
+            # must first remove the old link! See my comment here:
+            # https://unix.stackexchange.com/questions/18360/how-can-i-relink-a-lot-of-broken-symlinks/18365?noredirect=1#comment1389639_18365
+            #
+            #   Here's the case where it's still broken--or at least doesn't do what I'd expect.
+            #   Tested in `ln --version` `ln (GNU coreutils) 8.32`. 1) Create an *absolute* symlink
+            #   to a *directory:* `ln -sf ~/some_dir some_dir`. `ls -alF some_dir` shows it points
+            #   to an absolute path. 2) Now try to replace it with a relative symlink: `ln -srf
+            #   ~/some_dir some_dir`. That doesn't work as I'd expect! It creates a symlink to
+            #   itself *inside* `some_dir` instead of replacing the `some_dir` symlink with a
+            #   relative one. You have to `rm` the symlink first, *or* do `ln -srf ~/some_dir .`
+            #   instead.
+            rm "$symlink_path"
+
             output="$(ln -svrf "$new_target_path" "$symlink_path")"
-            printf "                     %s" "$output"
+            # Final result of 'ln'
+            printf "             FINAL : %s\n" "$output"
         fi
     done
 
@@ -364,6 +394,9 @@ main() {
         echo "************************************************************************"
         echo "'--force' is on! New **relative** symlinks written!"
         echo "************************************************************************"
+        echo ""
+        echo "Run '$SCRIPT_NAME \"$DIR\"' one more time to check if any symlinks are"
+        echo "still broken."
     fi
     echo ""
 
