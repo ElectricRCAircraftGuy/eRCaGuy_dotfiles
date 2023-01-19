@@ -4618,6 +4618,11 @@ terminator = *****a terminal program to EASILY allow 4 terminals (2x2) or even 1
 
 == ==
 
+bash -x some command
+    <====== VERY USEFUL FOR DEBUGGING BASH SCRIPTS! =======
+    From `man bash`: "-x  Print commands and their arguments as they are executed."
+    Also works with `sh`. Ex: `sh -x some command`. 
+
 ls -d -1 ../some-random-name-*
     Find and list (`ls`) all directories (`-d`) in one single new-line-delimited column (`-1`) which are one directory up (`../`) and named `some-random-name-*`, where the asterisk (`*`) is a bash shell "glob" character. 
     This is REALLY USEFUL to integrate into a meson.build file, for instance, when working with Buildroot or some other build system and you need to do a wildcard search or match to find a certain directory, file, files, headers, etc. of interest to bring in to the build system or include somehow!
