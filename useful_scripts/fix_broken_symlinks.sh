@@ -325,45 +325,45 @@ main() {
     echo -e "$broken_symlinks_count broken symlinks found!\n"
 
     if [ "$FORCE_ON" = "false" ]; then
-        echo "****************************************************"
-        echo "Dry run--no replacements made."
-        echo "****************************************************"
+        echo "------------------------------------------------------------------------"
+        echo "This is a dry run of what *would* happen. No replacements actually made."
+        echo "------------------------------------------------------------------------"
     else
-        echo "****************************************************"
+        echo "************************************************************************"
         echo "'--force' is on! Writing new **relative** symlinks!"
-        echo "****************************************************"
+        echo "************************************************************************"
     fi
     echo ""
 
     i=0
     for symlink_path in "${broken_symlinks_array[@]}"; do
         ((i++))
-        echo "$i/$broken_symlinks_count:"
+        printf "%5s/%-6s " "$i" "${broken_symlinks_count}:"
 
         old_target_path="$(readlink "$symlink_path")"
-        echo "OLD: '$symlink_path' -> '$old_target_path'"
+        echo "BROKEN: '$symlink_path' -> '$old_target_path'"
 
         if [ "$positional_args_array_len" -eq 3 ]; then
             # we have the FIND_REGEX and REPLACEMENT_STR args too, so do the replacement!
-            new_target_path="$(sed "s|$FIND_REGEX|$REPLACEMENT_STR|")"
-            echo "NEW: '$symlink_path' -> '$new_target_path'"
+            new_target_path="$(echo "$old_target_path" | sed "s|$FIND_REGEX|$REPLACEMENT_STR|")"
+            echo   "             FIXED : '$symlink_path' -> '$new_target_path'"
         fi
 
         if [ "$FORCE_ON" = "true" ]; then
-            ln -svrf "$new_target_path" "$symlink_path"
+            output="$(ln -svrf "$new_target_path" "$symlink_path")"
+            printf "                     %s" "$output"
         fi
-
-        echo ""
     done
 
+    echo ""
     if [ "$FORCE_ON" = "false" ]; then
-        echo "****************************************************"
-        echo "Dry run--no replacements made."
-        echo "****************************************************"
+        echo "------------------------------------------------------------------------"
+        echo "This is a dry run of what *would* happen. No replacements actually made."
+        echo "------------------------------------------------------------------------"
     else
-        echo "****************************************************"
+        echo "************************************************************************"
         echo "'--force' is on! New **relative** symlinks written!"
-        echo "****************************************************"
+        echo "************************************************************************"
     fi
     echo ""
 
