@@ -35,6 +35,8 @@
 # replace all absolute symlinks in a directory with relative ones?"
 # 1. General bash program template I wrote:
 # https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/argument_parsing__3_advanced__gen_prog_template.sh
+# 1. ***** See my answer with this script used in it, here:
+#    https://unix.stackexchange.com/a/732315/114401
 
 # TODO list:
 # 1. [ ]
@@ -133,8 +135,8 @@ https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%
 3. To **manually** replace any absolute symlink with a relative symlink, do the following. This is
 also the best 'ln' command in my opinion when creating a brand new symlink:
 
-    rm symlink_path  # required first if the symlink you're about to replace is to a directory
-    ln -svri target_path symlink_path
+    # NB: **All** of these options are important, and what I want. See 'man ln' for what each does.
+    ln -svnri target_path symlink_path
 
 
 This program is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
@@ -377,21 +379,14 @@ main() {
         fi
 
         if [ "$FORCE_ON" = "true" ]; then
-            # To ensure the relative symlink is written correctly in case it is to a directory, you
-            # must first remove the old link! See my comment here:
+            # NB:
+            # 1. **All** of these options are important, and what I want. See 'man ln' for what each
+            # does.
+            # 2. To ensure the relative symlink is written correctly in case it is to a directory,
+            # you must use `-n` as well! See the discussion beginning with my comment here:
             # https://unix.stackexchange.com/questions/18360/how-can-i-relink-a-lot-of-broken-symlinks/18365?noredirect=1#comment1389639_18365
-            #
-            #   Here's the case where it's still broken--or at least doesn't do what I'd expect.
-            #   Tested in `ln --version` `ln (GNU coreutils) 8.32`. 1) Create an *absolute* symlink
-            #   to a *directory:* `ln -sf ~/some_dir some_dir`. `ls -alF some_dir` shows it points
-            #   to an absolute path. 2) Now try to replace it with a relative symlink: `ln -srf
-            #   ~/some_dir some_dir`. That doesn't work as I'd expect! It creates a symlink to
-            #   itself *inside* `some_dir` instead of replacing the `some_dir` symlink with a
-            #   relative one. You have to `rm` the symlink first, *or* do `ln -srf ~/some_dir .`
-            #   instead.
-            rm "$symlink_path"
-
-            output="$(ln -svrf "$new_target_path" "$symlink_path")"
+            # See also its meaning in `man ln`.
+            output="$(ln -svnrf "$new_target_path" "$symlink_path")"
             # Final result of 'ln'
             printf "             FINAL : %s\n" "$output"
         fi
