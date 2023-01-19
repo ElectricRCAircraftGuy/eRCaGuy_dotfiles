@@ -111,6 +111,17 @@ This repo contains [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Sub
         ```
     1. My `git lfs` notes: [How to use `git lfs` as a basic user: this covers the question: "What is the difference between `git lfs fetch`, `git lfs fetch --all`, `git lfs pull`, and `git lfs checkout`?"](https://stackoverflow.com/a/72610495/4561887)
     1. [How can I tell if a file will be uploaded to `git lfs` correctly?](https://stackoverflow.com/a/54452098/4561887)
+    1. See the parts [of my answer here](https://unix.stackexchange.com/a/731663/114401) titled, "(Figure out which file extensions to add to git lfs next)" and "Quick reference: list extensions of all files > 10 kiB in size (`-size +10k`)".  
+        Example of the latter:
+        ```bash
+        find . -not \( -path "./.git" -type d -prune \) \
+            -type f -size +10k -printf '%s\t%p\n' \
+            | awk '{printf("%13.6f kiB ", $1/(1024)); \
+            for (i=2; i<NF; i++) printf("%s ", $i); printf("%s\n", $NF)}' \
+            | sort -rn \
+            | awk '{print($NF)}' \
+            | sed 's/.*\///' | grep -oE "(^[^.]*$|\.[^0-9]*[\.]?[^0-9]*$)" | sort -u
+        ```
 
 <a id="to-clone-this-repo-plus-all-sub-repos-git-submodules-and-all-git-lfs-large-file-storage-files"></a>
 ### To clone this repo plus all sub-repos (git submodules) and all `git lfs` Large File Storage files...
