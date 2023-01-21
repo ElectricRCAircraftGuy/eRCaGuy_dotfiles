@@ -52,7 +52,20 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
 1. `gsmartcontrol` - for checking the disk health of HDDs (Hard Disk Drives) and SSDs (Solid-State Drives).
 1. eclipse - see my PDF in the [eclipse folder here](eclipse) for full setup instructions
 1. Arduino
-1. Sublime Text 3
+1. Sublime Text 3 - a powerful GUI text and code editor
+1. `micro` - a poweful mouse-supported CLI text and code editor
+    1. https://micro-editor.github.io/
+    1. https://github.com/zyedidia/micro#installation
+    1. My installation process:
+        ```bash
+        mkdir -p ~/bin 
+        # download the `micro` executable and move it to ~/bin
+        curl https://getmic.ro | bash
+        mv micro ~/bin
+        # re-source shell configuration to add ~/bin to your PATH variable if in Ubuntu and
+        # using the default ~/.profile file
+        . ~/.profile
+        ```
 1. LibreOffice
 1. `terminator` terminal - allows easy splitting and tiling of multiple terminals in one single window! A good *local terminal* alternative to gnome-terminal + tmux.
     
@@ -119,4 +132,3 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
     1. `minicom`
     1. Arduino Serial Monitor and Serial Plotter
     1. [eRCaGuy_PyTerm](https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm)
-
