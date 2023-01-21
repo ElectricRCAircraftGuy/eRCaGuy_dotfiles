@@ -39,7 +39,8 @@
 #    https://unix.stackexchange.com/a/732315/114401
 
 # TODO list:
-# 1. [ ]
+# 1. [x] highlight "FINAL" links in bold blue if they are different from their "FIXED" links.
+#    Nah...just highlight the whole "FINAL" line blue instead!
 
 
 RETURN_CODE_SUCCESS=0
@@ -65,14 +66,18 @@ v0.1.0; 2023.01.18
 
 # ANSI color codes
 # See:
+# 1. ***** https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 # 1. "eRCaGuy_dotfiles/useful_scripts/ripgrep_replace/rgr.sh"
 # 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/git-diffn.sh#L126-L138
 # 1. https://github.com/GNOME/glib/blob/main/gio/gdbus-tool.c#L43-L50
 COLOR_GRN="\033[1;32m" # green bold
+COLOR_BLU="\033[1;94m" # bright blue bold
+# COLOR_BLU="\033[1;34m" # blue bold
 # COLOR_MGN="\033[1;35m" # magenta bold
 COLOR_OFF="\033[m"
 COLOR_DISABLED=""
 
+STARTING_DIR="$(pwd)"
 SCRIPT_NAME="$(basename "$0")"
 VERSION_SHORT_STR="'$SCRIPT_NAME' version $VERSION"
 VERSION_LONG_STR="\
@@ -310,6 +315,7 @@ parse_args() {
 
                 # disable the color codes
                 COLOR_GRN="$COLOR_DISABLED"
+                COLOR_BLU="$COLOR_DISABLED"
                 COLOR_OFF="$COLOR_DISABLED"
 
                 shift # past argument
@@ -467,9 +473,59 @@ main() {
                     else
                         ln_args="svnf"
                     fi
-                    output="$(ln "-$ln_args" "$new_target_path" "$symlink_path")"
+
+                    # First, cd into the dir in which the symlink we are about to change is located,
+                    # in order to avoid breaking relative symlinks!
+                    #
+                    # EXPLANATION:
+                    #
+                    # This is a bit nuanced, but basically, if you are in a directory at
+                    # path "~/dir1", and you run `ln -svnrf ../dir2/some_file.pdf
+                    # dir3/some_file.pdf`, then what you *want* is to create a symlink
+                    # at "~/dir1/dir3/some_file.pdf" which points to relative
+                    # path "../dir2/some_file.pdf" at absolute path "~/dir1/dir2/some_file.pdf",
+                    # since you expect the relative path to be relative to the symlink's path.
+                    #
+                    # But, what you get instead is that the `ln` tool makes it relative to **the dir
+                    # you are in when you _run_ the cmd!**--NOT the dir relative to the symlink
+                    # path.
+                    #
+                    # In other words:
+                    # When you run: `ln -svnrf ../dir2/some_file.pdf dir3/some_file.pdf`
+                    # YOU GET:  ~/dir1/dir3/some_file.pdf -> ../../dir2/some_file.pdf [BROKEN LINK!]
+                    # YOU WANT: ~/dir1/dir3/some_file.pdf -> ../dir2/some_file.pdf    [GOOD LINK!]
+                    #
+                    # SOLUTIONS:
+                    # 1) remove `-r` and use the absolute style cmd instead:
+                    #       ln -svnf ../dir2/some_file.pdf dir3/some_file.pdf
+                    # or 2) cd into the lower dir first then run the command with `-r`:
+                    #       cd dir3
+                    #       ln -svnrf ../dir2/some_file.pdf some_file.pdf
+                    #
+                    # In both cases above, YOU NOW GET WHAT YOU WANT!:
+                    #           ~/dir1/dir3/some_file.pdf -> ../dir2/some_file.pdf    [GOOD LINK!]
+                    #
+                    # Solution 2 is preferable, in my opinion, because it will properly convert
+                    # absolute links into relative links at the same time, withOUT breaking the
+                    # relative link. So, let's do that! Cd into the lower dir, run the cmd with
+                    # `-r` and with the proper symlink path fixed (ie: using its filename only),
+                    # then `cd` back up again.
+
+                    symlink_path_dir="$(dirname "$symlink_path")"
+                    symlink_path_file="$(basename "$symlink_path")"
+
+                    cd "$symlink_path_dir"
+                    output="$(ln "-$ln_args" "$new_target_path" "$symlink_path_file")"
+                    cd "$STARTING_DIR"
+                    echo_debug "output = $output"
+
+                    fixed_link_target="$(readlink "$symlink_path")"
+                    fixed_link_summary="'$symlink_path' -> '${COLOR_BLU}${fixed_link_target}${COLOR_OFF}'"
+
                     # Final result of 'ln'
-                    printf "             FINAL : %s\n" "$output"
+                    printf "             %b    : %b\n"\
+                        "${COLOR_BLU}FINAL${COLOR_OFF}" \
+                        "$fixed_link_summary"
                 fi
             fi
         fi
