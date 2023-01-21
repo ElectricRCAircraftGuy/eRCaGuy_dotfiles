@@ -59,6 +59,8 @@ v0.2.0; 2023.01.20
         - '--no_color' option
         - '--no_relative' option
         - 'FIXED' vs 'UNCHANGED' indicators when fixing links
+    Fixed:
+        - various bug fixes
 
 v0.1.0; 2023.01.18
     Initial version
@@ -203,8 +205,8 @@ printf_debug() {
 }
 
 print_help() {
-    # echo "$HELP_STR" | less -RFX
-    echo "$HELP_STR"
+    echo "$HELP_STR" | less -RFX
+    # echo "$HELP_STR"
 }
 
 print_version() {
@@ -253,7 +255,7 @@ parse_args() {
     # https://stackoverflow.com/a/14203146/4561887
 
     if [ $# -eq 0 ]; then
-        echo "No arguments supplied"
+        echo "No arguments supplied. Perhaps you mean to call '$SCRIPT_NAME .'?"
         print_help
         exit $RETURN_CODE_ERROR
     fi
