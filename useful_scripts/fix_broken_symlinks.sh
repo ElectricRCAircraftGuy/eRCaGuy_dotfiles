@@ -45,10 +45,31 @@
 RETURN_CODE_SUCCESS=0
 RETURN_CODE_ERROR=1
 
-VERSION="0.1.0"
+VERSION="0.2.0"
 AUTHOR="Gabriel Staples"
 
 DEBUG_PRINTS_ON="true"  # "true" or "false"; can also be passed in as an option: `-d` or `--debug`
+
+CHANGELOG="\
+v0.2.0; 2023.01.20
+    Added:
+        - changelog, and '--changelog' option
+        - color output
+        - '--no_color' option
+        - 'FIXED' vs 'UNCHANGED' indicators when fixing links
+v0.1.0; 2023.01.18
+    Initial version
+"
+
+# ANSI color codes
+# See:
+# 1. "eRCaGuy_dotfiles/useful_scripts/ripgrep_replace/rgr.sh"
+# 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/git-diffn.sh#L126-L138
+# 1. https://github.com/GNOME/glib/blob/main/gio/gdbus-tool.c#L43-L50
+COLOR_GRN="\033[1;32m" # green bold
+# COLOR_MGN="\033[1;35m" # magenta bold
+COLOR_OFF="\033[m"
+COLOR_DISABLED=""
 
 SCRIPT_NAME="$(basename "$0")"
 VERSION_SHORT_STR="'$SCRIPT_NAME' version $VERSION"
@@ -78,15 +99,20 @@ DESCRIPTION
 
 OPTIONS
     -h, -?, --help
-        Print help menu
+        Print help menu.
     -v, --version
         Print version information.
+    --changelog
+        Print the changelog.
     --run_tests
         Run unit tests.
     -d, --debug
         Turn on debug prints.
     -f, --force
         Actually do the symlink replacements. With*out* this option, all runs are dry runs.
+    --no_color
+        Turn color output off (may be helpful when scripting). Otherwise, color output is by default
+        on.
 
 EXAMPLE USAGES:
 
@@ -175,6 +201,10 @@ print_version() {
     echo "$VERSION_LONG_STR"
 }
 
+print_changelog() {
+    echo "$CHANGELOG"
+}
+
 # Unit Tests
 # Cmd: `<this_script_name> --run_tests`
 run_tests() {
@@ -222,6 +252,7 @@ parse_args() {
 
     DEBUG_PRINTS_ON="false"
     FORCE_ON="false"  # set to true to actually do the replacements, false for a dry run
+    COLOR_ON="true"
 
     ALL_ARGS_ARRAY=("$@")  # See: https://stackoverflow.com/a/70572787/4561887
     POSITIONAL_ARGS_ARRAY=()
@@ -244,6 +275,11 @@ parse_args() {
                 print_version
                 exit $RETURN_CODE_SUCCESS
                 ;;
+            # Changelog
+            "--changelog")
+                print_changelog
+                exit $RETURN_CODE_SUCCESS
+                ;;
             # Unit tests
             "--run_tests")
                 run_tests
@@ -259,6 +295,17 @@ parse_args() {
             "-f"|"--force")
                 echo_debug "force passed in"
                 FORCE_ON="true"
+                shift # past argument
+                ;;
+            # No color output
+            "--no_color")
+                echo_debug "no color"
+                COLOR_ON="false"
+
+                # disable the color codes
+                COLOR_GRN="$COLOR_DISABLED"
+                COLOR_OFF="$COLOR_DISABLED"
+
                 shift # past argument
                 ;;
             # All positional args (ie: unmatched in the switch cases above)
@@ -292,9 +339,14 @@ parse_args() {
     echo_debug "POSITIONAL_ARGS_ARRAY contains:"
     print_array_debug POSITIONAL_ARGS_ARRAY
     echo_debug ""
-    echo_debug "DIR = '$DIR'"
-    echo_debug "FIND_REGEX = '$FIND_REGEX'"
-    echo_debug "REPLACEMENT_STR = '$REPLACEMENT_STR'"
+    echo_debug "Positional args:"
+    echo_debug "  DIR = '$DIR'"
+    echo_debug "  FIND_REGEX = '$FIND_REGEX'"
+    echo_debug "  REPLACEMENT_STR = '$REPLACEMENT_STR'"
+    echo_debug "Optional args:"
+    echo_debug "  DEBUG_PRINTS_ON = '$DEBUG_PRINTS_ON'"
+    echo_debug "  FORCE_ON = '$FORCE_ON'"
+    echo_debug "  COLOR_ON = '$COLOR_ON'"
     echo_debug ""
 } # parse_args
 
@@ -370,12 +422,21 @@ main() {
         printf "%5s/%-6s " "$i" "${broken_symlinks_count}:"
 
         old_target_path="$(readlink "$symlink_path")"
-        echo "BROKEN: '$symlink_path' -> '$old_target_path'"
+        echo "BROKEN   : '$symlink_path' -> '$old_target_path'"
 
         if [ "$positional_args_array_len" -eq 3 ]; then
             # we have the FIND_REGEX and REPLACEMENT_STR args too, so do the replacement!
             new_target_path="$(echo "$old_target_path" | sed "s|$FIND_REGEX|$REPLACEMENT_STR|")"
-            echo   "             FIXED : '$symlink_path' -> '$new_target_path'"
+
+            if [ "$new_target_path" = "$old_target_path" ]; then
+                PREFIX_LABEL="             UNCHANGED: "
+            else
+                PREFIX_LABEL="             ${COLOR_GRN}FIXED${COLOR_OFF}    : "
+                # also color/highlight the fixed target path
+                new_target_path="${COLOR_GRN}${new_target_path}${COLOR_OFF}"
+            fi
+
+            echo -e "${PREFIX_LABEL}'$symlink_path' -> '$new_target_path'"
         fi
 
         if [ "$FORCE_ON" = "true" ]; then
