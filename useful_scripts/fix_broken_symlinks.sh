@@ -56,7 +56,9 @@ v0.2.0; 2023.01.20
         - changelog, and '--changelog' option
         - color output
         - '--no_color' option
+        - '--no_relative' option
         - 'FIXED' vs 'UNCHANGED' indicators when fixing links
+
 v0.1.0; 2023.01.18
     Initial version
 "
@@ -89,8 +91,8 @@ DESCRIPTION
 
     Find all broken symlinks in directory 'dir', then extract the target paths they point to, search
     those paths for 'find_regex', and replace those findings with 'replacement_string'. Finally,
-    recreate the symlinks as relative symlinks with those replacements to the target paths in
-    place.
+    recreate the symlinks as relative symlinks (see also: '--no_relative') with those
+    replacements to the target paths in place.
 
     If the 'find_regex' and 'replacement_string' are not provided, it will simply find and print out
     the broken symlinks as they currently are.
@@ -113,6 +115,9 @@ OPTIONS
     --no_color
         Turn color output off (may be helpful when scripting). Otherwise, color output is by default
         on.
+    --no_relative
+        Disable creating relative symlinks. Normally, the program creates only **relative** symlinks
+        when repairing links. This disables that, leaving absolute symlinks as absolute if you wish.
 
 EXAMPLE USAGES:
 
@@ -253,6 +258,7 @@ parse_args() {
     DEBUG_PRINTS_ON="false"
     FORCE_ON="false"  # set to true to actually do the replacements, false for a dry run
     COLOR_ON="true"
+    RELATIVE_ON="true"
 
     ALL_ARGS_ARRAY=("$@")  # See: https://stackoverflow.com/a/70572787/4561887
     POSITIONAL_ARGS_ARRAY=()
@@ -306,6 +312,12 @@ parse_args() {
                 COLOR_GRN="$COLOR_DISABLED"
                 COLOR_OFF="$COLOR_DISABLED"
 
+                shift # past argument
+                ;;
+            # No relative (don't forcefully create relative symlinks)
+            "--no_relative")
+                echo_debug "no relative"
+                RELATIVE_ON="false"
                 shift # past argument
                 ;;
             # All positional args (ie: unmatched in the switch cases above)
@@ -411,7 +423,7 @@ main() {
         echo "------------------------------------------------------------------------"
     else
         echo "************************************************************************"
-        echo "'--force' is on! Writing new **relative** symlinks!"
+        echo "'--force' is on! Writing new symlinks!"
         echo "************************************************************************"
     fi
     echo ""
@@ -430,26 +442,36 @@ main() {
 
             if [ "$new_target_path" = "$old_target_path" ]; then
                 PREFIX_LABEL="             UNCHANGED: "
+                echo -e "${PREFIX_LABEL}'$symlink_path' ->"\
+                        "'$new_target_path'"
             else
+                # The link actually changed, so add highlighting when you print it, and
+                # recreate the link.
+
                 PREFIX_LABEL="             ${COLOR_GRN}FIXED${COLOR_OFF}    : "
                 # also color/highlight the fixed target path
-                new_target_path="${COLOR_GRN}${new_target_path}${COLOR_OFF}"
+                echo -e "${PREFIX_LABEL}'$symlink_path' ->"\
+                        "'${COLOR_GRN}${new_target_path}${COLOR_OFF}'"
+
+                if [ "$FORCE_ON" = "true" ]; then
+                    # NB:
+                    # 1. **All** of these options are important, and what I want. See 'man ln' for
+                    # what each does.
+                    # 2. To ensure the relative symlink is written correctly in case it is to a
+                    # directory, you must use `-n` as well! See the discussion beginning with my
+                    # comment here:
+                    # https://unix.stackexchange.com/questions/18360/how-can-i-relink-a-lot-of-broken-symlinks/18365?noredirect=1#comment1389639_18365
+                    # See also its meaning in `man ln`.
+                    if [ "$RELATIVE_ON" = "true" ]; then
+                        ln_args="svnrf"
+                    else
+                        ln_args="svnf"
+                    fi
+                    output="$(ln "-$ln_args" "$new_target_path" "$symlink_path")"
+                    # Final result of 'ln'
+                    printf "             FINAL : %s\n" "$output"
+                fi
             fi
-
-            echo -e "${PREFIX_LABEL}'$symlink_path' -> '$new_target_path'"
-        fi
-
-        if [ "$FORCE_ON" = "true" ]; then
-            # NB:
-            # 1. **All** of these options are important, and what I want. See 'man ln' for what each
-            # does.
-            # 2. To ensure the relative symlink is written correctly in case it is to a directory,
-            # you must use `-n` as well! See the discussion beginning with my comment here:
-            # https://unix.stackexchange.com/questions/18360/how-can-i-relink-a-lot-of-broken-symlinks/18365?noredirect=1#comment1389639_18365
-            # See also its meaning in `man ln`.
-            output="$(ln -svnrf "$new_target_path" "$symlink_path")"
-            # Final result of 'ln'
-            printf "             FINAL : %s\n" "$output"
         fi
     done
 
@@ -460,7 +482,7 @@ main() {
         echo "------------------------------------------------------------------------"
     else
         echo "************************************************************************"
-        echo "'--force' is on! New **relative** symlinks written!"
+        echo "'--force' is on! New symlinks written!"
         echo "************************************************************************"
         echo ""
         echo "Run '$SCRIPT_NAME \"$DIR\"' one more time to check if any symlinks are"
