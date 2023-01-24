@@ -175,6 +175,10 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 #   exit picocom. 
 picocom --baud 115200 /dev/ttyUSB0
 
+# Change the serial baud rate **of the active terminal** to 115200.
+# - see more `stty` cmds in my "git & Linux cmds" doc
+stty 115200
+
 # View the help menu and the version; the version is listed on the first line
 picocom --help
 
@@ -518,37 +522,7 @@ I'll cover how to do the latter:
 
 **How to send a file over serial as encoded text using common Linux tools:**
 
-1. On your local machine, install [picocom](https://github.com/npat-efault/picocom). Follow my instructions above. In short:
-    ```bash
-    # cd to wherever you'd like to download the program
-    cd ~/GS/dev
-    git clone https://github.com/npat-efault/picocom.git
-    cd picocom
-    make  
-
-    # create the ~/bin dir if it doesn't already exist
-    mkdir -p ~/bin
-    # add a symlink to the executable
-    ln -si "$PWD/picocom" ~/bin
-    # add a symlink to the man page so you can do `man picocom`
-    sudo ln -si "$PWD/picocom.1" /usr/local/share/man/man1
-
-    # re-source your ~/.profile file; don't know what "source" means?
-    # Read my answer here: https://stackoverflow.com/a/62626515/4561887
-    . ~/.profile
-
-    # `picocom` will now be in your PATH since Linux Ubuntu's default
-    # ~/.profile file adds it to the path like this:
-    #
-    #       # set PATH so it includes user's private bin if it exists
-    #       if [ -d "$HOME/bin" ] ; then
-    #           PATH="$HOME/bin:$PATH"
-    #       fi
-
-    # Try running `picocom --help`. If it doesn't work and show the version you
-    # just installed at the top of the help menu, log out and log back in to
-    # finish adding ~/bin to your PATH, and then try `picocom --help` again.
-    ```
+1. On your local machine, install [picocom](https://github.com/npat-efault/picocom). Follow my instructions above.
 1. 
 
 WIP
@@ -559,8 +533,11 @@ split
 # encode
 base64
 
-# connect on picocom
-cat > file  # on destination
+# connect to remote board on picocom
+picocom --baud 115200 /dev/ttyUSB0
+cat > file  # (run this on destination computer)
+
+# (run next 2 cmds on source computer)
 pv # the file over to see a progress bar; OR:
 cat file > /dev/ttyUSB0  # from sender
 
