@@ -85,7 +85,9 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     ```
 1. Download, build, & install
     ```bash
+    # --------------------------------------------------------------------------
     # 1. Download and build the program
+    # --------------------------------------------------------------------------
 
     # cd to wherever you'd like to download the program
     cd ~/GS/dev
@@ -102,19 +104,24 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     # View the help menu and the version; the version is listed on the first
     # line
     ./picocom --help
+    # See just the version line from the help menu
+    picocom -h | head -n 1
+
+    # For more-detailed usage, see the "General Usage" section I wrote below.
+    
     # View the "man" (manual) pages manually like this:
     man ./picocom.1
-    # For more-detailed usage, see the "Usage" section below.
+    # See just the version line from the man pages
+    man picocom | tail -n 1
 
+    # --------------------------------------------------------------------------
     # 2. Install the program by adding symlinks to it to your PATH variable
+    # --------------------------------------------------------------------------
 
     # create the ~/bin dir if it doesn't already exist
     mkdir -p ~/bin
     # add a symlink to the executable
     ln -si "$PWD/picocom" ~/bin
-    # add a symlink to the man page so you can do `man picocom`
-    # See: https://askubuntu.com/a/244810/327339
-    sudo ln -si "$PWD/picocom.1" /usr/local/share/man/man1
 
     # re-source your ~/.profile file; don't know what "source" means?
     # Read my answer here: https://stackoverflow.com/a/62626515/4561887
@@ -127,6 +134,29 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     #       if [ -d "$HOME/bin" ] ; then
     #           PATH="$HOME/bin:$PATH"
     #       fi
+
+    # --------------------------------------------------------------------------
+    # 3. Install the man (manual) pages for the program
+    # [keywords: how to install man pages; installing man pages installation]
+    # --------------------------------------------------------------------------
+
+    # add a symlink to the man page so you can do `man picocom`
+    # See: https://askubuntu.com/a/244810/327339
+    sudo mkdir -p /usr/local/share/man/man1
+    sudo ln -si "$PWD/picocom.1" /usr/local/share/man/man1/
+
+    # Update `man`'s internal database
+    sudo mandb
+
+    # Verify the new manpage, with the new `picocom` version at the very bottom,
+    # is now properly installed and working!
+    man picocom
+
+    # The version numbers here should now match:
+    # 1. See just the version line from the help menu
+    picocom -h | head -n 1
+    # 2. See just the version line from the man pages
+    man picocom | tail -n 1
     ```
 
 

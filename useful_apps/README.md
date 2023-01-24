@@ -129,6 +129,7 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
         1. \*\*\*\*\* [serial_terminals_README.md](serial_terminals_README.md)
         1. [../git & Linux cmds, help, tips & tricks - Gabriel.txt](<../git & Linux cmds, help, tips & tricks - Gabriel.txt>) - and search the file for "serial", "Serial terminal tools", "USB, serial, devices, etc.".
     1. [`picocom`](https://github.com/npat-efault/picocom) [my favorite!]
+        1. My installation instructions: [serial_terminals_README.md#picocom](serial_terminals_README.md#picocom)
     1. `minicom`
     1. Arduino Serial Monitor and Serial Plotter
     1. [eRCaGuy_PyTerm](https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm)
