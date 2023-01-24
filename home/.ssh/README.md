@@ -4,7 +4,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 # Table of Contents
 <details>
 <summary><b>(click to expand)</b></summary>
-<!-- MarkdownTOC -->
+<!-- MarkdownTOC autoanchor="true" autolink="true" style="ordered" -->
 
 1. [1. `ssh` key generation, setup, and configuration notes:](#1-ssh-key-generation-setup-and-configuration-notes)
     1. [References:](#references)
@@ -18,13 +18,14 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     1. [Auto-starting the the ssh-agent on a remote, ssh-based development machine](#auto-starting-the-the-ssh-agent-on-a-remote-ssh-based-development-machine)
 1. [2. How to source a custom .bashrc file whenever you ssh into a remote Linux device](#2-how-to-source-a-custom-bashrc-file-whenever-you-ssh-into-a-remote-linux-device)
     1. [References:](#references-2)
-    1. [1. When your target Linux device _does_ have the `bash` shell](#1-when-your-target-linux-device-does-have-the-bash-shell)
+    1. [2.1. When your target Linux device _does_ have the `bash` shell](#21-when-your-target-linux-device-does-have-the-bash-shell)
         1. [Command:](#command)
-        1. [\[1/2: USE THIS WHEN YOUR TARGET DEVICE HAS `bash`\] Optional \(but recommended\) Alias:](#12-use-this-when-your-target-device-has-bash-optional-but-recommended-alias)
-        1. [Apply Ubuntu's settings for ALL users who log into the `root` username on the target device](#apply-ubuntus-settings-for-all-users-who-log-into-the-root-username-on-the-target-device)
-    1. [2. When your target Linux device does NOT have the `bash` shell, and you must use the `busybox` `ash` \(preferred\) or `sh` shell instead](#2-when-your-target-linux-device-does-not-have-the-bash-shell-and-you-must-use-the-busybox-ash-preferred-or-sh-shell-instead)
+        1. [Alias \[1/2: USE THIS WHEN YOUR TARGET DEVICE HAS `bash`\]:](#alias-12-use-this-when-your-target-device-has-bash)
+        1. [Alternatively, here is how to apply Ubuntu's settings for ALL users who log into the `root` username on the target device](#alternatively-here-is-how-to-apply-ubuntus-settings-for-all-users-who-log-into-the-root-username-on-the-target-device)
+    1. [2.2. When your target Linux device does NOT have the `bash` shell, and you must use the `busybox` `ash` \(preferred\) or `sh` shell instead](#22-when-your-target-linux-device-does-not-have-the-bash-shell-and-you-must-use-the-busybox-ash-preferred-or-sh-shell-instead)
         1. [Here are some basic, dumbed-down `~/.profile` and `~/.bashrc` configuration files you can use for your target embedded Linux device if you like:](#here-are-some-basic-dumbed-down-~profile-and-~bashrc-configuration-files-you-can-use-for-your-target-embedded-linux-device-if-you-like)
-        1. [\[2/2: USE THIS WHEN YOUR TARGET DEVICE DOES NOT HAVE `bash`, SO YOU MUST USE `ash`\] Now, use the following alias to ssh into the target device and auto-configure your `ash` shell environment at the same time](#22-use-this-when-your-target-device-does-not-have-bash-so-you-must-use-ash-now-use-the-following-alias-to-ssh-into-the-target-device-and-auto-configure-your-ash-shell-environment-at-the-same-time)
+        1. [Command:](#command-1)
+        1. [Alias \[2/2: USE THIS WHEN YOUR TARGET DEVICE DOES _NOT_ HAVE `bash`, SO YOU _MUST_ USE `ash`\]:](#alias-22-use-this-when-your-target-device-does-not-have-bash-so-you-must-use-ash)
 1. [3. Dropbear setup and notes to remotely decrypt a LUKS-encrypted hard drive](#3-dropbear-setup-and-notes-to-remotely-decrypt-a-luks-encrypted-hard-drive)
     1. [References:](#references-3)
     1. [1. Background and learning](#1-background-and-learning)
@@ -301,8 +302,8 @@ This is very useful, for example, when ssh-ing into an embedded Linux device or 
 1. Read about how `ash` uses this `ENV` environment variable in the `ash` documentation here: https://linux.die.net/man/1/ash
 
 
-<a id="1-when-your-target-linux-device-does-have-the-bash-shell"></a>
-## 1. When your target Linux device _does_ have the `bash` shell
+<a id="21-when-your-target-linux-device-does-have-the-bash-shell"></a>
+## 2.1. When your target Linux device _does_ have the `bash` shell
 
 <a id="command"></a>
 ### Command:
@@ -320,11 +321,11 @@ echo "my_password" > ~/pw
 #   terminal, so that it won't just run the given command and close. Rather, it stays open and
 #   remains ready for interaction from you, the user.
 sshpass -f ~/pw scp /etc/skel/.bashrc root@192.168.0.2:/tmp \
-&& sshpass -f ~/pw ssh -t root@192.168.0.2 'bash --rcfile /tmp/.bashrc'
+&& sshpass -f ~/pw ssh -t -o 'ServerAliveInterval 60' root@192.168.0.2 'bash --rcfile /tmp/.bashrc'
 ```
 
-<a id="12-use-this-when-your-target-device-has-bash-optional-but-recommended-alias"></a>
-### [1/2: USE THIS WHEN YOUR TARGET DEVICE HAS `bash`] Optional (but recommended) Alias:
+<a id="alias-12-use-this-when-your-target-device-has-bash"></a>
+### Alias [1/2: USE THIS WHEN YOUR TARGET DEVICE HAS `bash`]:
 Now, you can optionally make the above ssh command an alias like this. Notice that I've also added the `-o 'ServerAliveInterval 60'` option to help keep the connection open (similar to [what I recommend in my answer here](https://askubuntu.com/a/942820/327339)).
 ```bash
 # Manually add something like this to your ~/.bash_aliases (recommended) or ~/.bashrc file on the PC
@@ -335,10 +336,13 @@ alias gs_ssh="sshpass -f ~/pw scp /etc/skel/.bashrc root@192.168.0.2:/tmp \
 # Re-source your ~/.bashrc file when done adding the alias above for the first time. Note that if on
 # Ubuntu this also automatically re-sources your ~/.bash_aliases file if you have one!
 . ~/.bashrc
+
+# Use the alias created above to connect to the board
+gs_ssh
 ```
 
-<a id="apply-ubuntus-settings-for-all-users-who-log-into-the-root-username-on-the-target-device"></a>
-### Apply Ubuntu's settings for ALL users who log into the `root` username on the target device
+<a id="alternatively-here-is-how-to-apply-ubuntus-settings-for-all-users-who-log-into-the-root-username-on-the-target-device"></a>
+### Alternatively, here is how to apply Ubuntu's settings for ALL users who log into the `root` username on the target device
 
 If your target filesystem's home directory is NOT read-only, you can affect the environment for ALL users like this:
 
@@ -354,13 +358,13 @@ ssh -t root@192.168.0.2 'bash --login'
 ```
 
 
-<a id="2-when-your-target-linux-device-does-not-have-the-bash-shell-and-you-must-use-the-busybox-ash-preferred-or-sh-shell-instead"></a>
-## 2. When your target Linux device does NOT have the `bash` shell, and you must use the `busybox` `ash` (preferred) or `sh` shell instead
+<a id="22-when-your-target-linux-device-does-not-have-the-bash-shell-and-you-must-use-the-busybox-ash-preferred-or-sh-shell-instead"></a>
+## 2.2. When your target Linux device does NOT have the `bash` shell, and you must use the `busybox` `ash` (preferred) or `sh` shell instead
 
 <a id="here-are-some-basic-dumbed-down-~profile-and-~bashrc-configuration-files-you-can-use-for-your-target-embedded-linux-device-if-you-like"></a>
 ### Here are some basic, dumbed-down `~/.profile` and `~/.bashrc` configuration files you can use for your target embedded Linux device if you like:
 
-`~/.profile_for_remote`:  
+**`~/.profile_for_remote`:**  
 ```bash
 # Source the .bashrc file
 if [ -f ~/.bashrc ]; then
@@ -368,7 +372,7 @@ if [ -f ~/.bashrc ]; then
 fi
 ```
 
-`~/.bashrc_for_remote`:  
+**`~/.bashrc_for_remote`:**  
 ```bash
 # Set Prompt String 1 (PS1) variable to show colors, present working dir (pwd), and to set the
 # terminal title to the current folder (all but setting the terminal title is borrowed from Ubuntu)
@@ -389,10 +393,21 @@ alias la='ls -A'
 alias l='ls -CF'
 ```
 
-<a id="22-use-this-when-your-target-device-does-not-have-bash-so-you-must-use-ash-now-use-the-following-alias-to-ssh-into-the-target-device-and-auto-configure-your-ash-shell-environment-at-the-same-time"></a>
-### [2/2: USE THIS WHEN YOUR TARGET DEVICE DOES NOT HAVE `bash`, SO YOU MUST USE `ash`] Now, use the following alias to ssh into the target device and auto-configure your `ash` shell environment at the same time
+<a id="command-1"></a>
+### Command:
+```bash
+# ssh into an embedded Linux device, loading your custom config (.bashrc) file into BusyBox's
+# `ash` terminal, if `bash` is not available 
+sshpass -f ~/pw scp ~/.bashrc_for_remote root@192.168.0.2:/tmp/.bashrc \
+&& sshpass -f ~/pw ssh -t -o 'ServerAliveInterval 60' root@192.168.0.2 'export ENV=/tmp/.bashrc; ash'
+```
 
-See [this answer to my question here](https://unix.stackexchange.com/a/677149/114401), as well as my comment underneath it. Notice that the key part of the alias below for use with the target `ash` shell is the `'export ENV=/tmp/.bashrc; ash'` command part at the end. Read about how `ash` uses this `ENV` environment variable in the `ash` documentation here: https://linux.die.net/man/1/ash.
+<a id="alias-22-use-this-when-your-target-device-does-not-have-bash-so-you-must-use-ash"></a>
+### Alias [2/2: USE THIS WHEN YOUR TARGET DEVICE DOES _NOT_ HAVE `bash`, SO YOU _MUST_ USE `ash`]:
+
+Now, use the following alias to ssh into the target device and auto-configure your `ash` shell environment at the same time.
+
+See [this answer to my question here](https://unix.stackexchange.com/a/677149/114401), as well as my comment underneath it. Notice that the key part of the alias below for use with the target `ash` shell is the `'export ENV=/tmp/.bashrc; ash'` command part at the end. Read about how `ash` uses this `ENV` environment variable in the `ash` man pages documentation online here: https://linux.die.net/man/1/ash.
 
 ```bash
 # ensure ~/pw contains your password, assuming you want to do this instead of using ssh keys
@@ -403,6 +418,13 @@ echo 'my_ssh_password' > ~/pw
 # Add this alias to your ~/.bash_aliases file on the machine you will be ssh-ing FROM
 alias gs_ssh="sshpass -f ~/pw scp ~/.bashrc_for_remote root@192.168.0.2:/tmp/.bashrc \
 && sshpass -f ~/pw ssh -t -o 'ServerAliveInterval 60' root@192.168.0.2 'export ENV=/tmp/.bashrc; ash'"
+
+# Re-source your ~/.bashrc file when done adding the alias above for the first time. Note that if on
+# Ubuntu this also automatically re-sources your ~/.bash_aliases file if you have one!
+. ~/.bashrc
+
+# Use the alias created above to connect to the board
+gs_ssh
 ```
 
 
