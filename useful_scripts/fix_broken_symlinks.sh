@@ -414,7 +414,7 @@ main() {
     echo_debug "Running 'main'."
     check_if_arguments_are_valid
 
-    broken_symlinks_str="$(find "$DIR" -xtype l)"
+    broken_symlinks_str="$(find "$DIR" -xtype l | sort)"
     # Convert string to array; see my answer: https://stackoverflow.com/a/71575442/4561887
     IFS=$'\n' read -r -d '' -a broken_symlinks_array <<< "$broken_symlinks_str"
 
