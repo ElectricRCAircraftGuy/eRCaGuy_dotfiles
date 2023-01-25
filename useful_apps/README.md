@@ -67,10 +67,12 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
         . ~/.profile
         ```
 1. LibreOffice
-1. `terminator` terminal - allows easy splitting and tiling of multiple terminals in one single window! A good *local terminal* alternative to gnome-terminal + tmux.
-    
+1. `terminator` terminal - allows easy splitting and tiling of multiple terminals in one single window! A good *local terminal* alternative to `gnome-terminal` + `tmux` for splitting windows. You can right-click in the terminal and split the window horizontally or vertically.
+    1. https://gnome-terminator.org/
+    1. Install
+        ```bash
         sudo apt install terminator
-
+        ```
     1. Add the "Open in Terminator" right-click menu option to the Nemo GUI file manager! See the `nemo` section above.
     1. To change your default terminal application now between `gnome-terminal` and `terminator`, see: 
         1. https://askubuntu.com/questions/1096329/how-to-change-my-default-terminal-to-gnome-terminal-rather-than-terminator/1096331#1096331
