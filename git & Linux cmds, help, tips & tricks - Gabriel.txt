@@ -4452,7 +4452,7 @@ symlinks -v .
 symlinks -rv .
     Show all symlinks, including relative symlinks (via `-v` for verbose) in the current directory, recursing down into sub-dirs too! (via `-r`). 
 symlinks -rsv .
-    <========================
+    <=========== BEST CMD TO VIEW ALL SYMLINKS & THEIR STATUS ============
     Show all symlinks, including relative ones (`-v`), recursively (`-r`), and finding "lengthy" links too (`-s`; see `man symlinks`).
 symlinks -rsv . | grep '^dangling'
     <====== FIND BROKEN SYMLINKS ========
