@@ -64,3 +64,19 @@ Where is a list of all of the `filetype` options? I have no idea. [I asked here]
 set filetype shell      # for bash, sh, etc.
 set filetype markdown   
 ```
+
+#### Other
+
+```bash
+# bind a shortcut key
+# See: 
+# 1. https://github.com/zyedidia/micro/blob/master/runtime/help/commands.md
+# 1. https://github.com/zyedidia/micro/blob/master/runtime/help/keybindings.md
+# 1. https://github.com/zyedidia/micro/blob/master/runtime/help/defaultkeys.md
+bind <key> <action>
+
+# Make moving lines up and down the same as in Sublime Text
+# (normally it is Alt + Up/Down in micro)
+bind CtrlShiftUp MoveLinesUp
+bind CtrlShiftDown MoveLinesDown
+```

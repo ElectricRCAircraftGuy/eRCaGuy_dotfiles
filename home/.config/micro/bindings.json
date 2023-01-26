@@ -1,4 +1,6 @@
 {
     "Alt-/": "lua:comment.comment",
+    "CtrlShiftDown": "MoveLinesDown",
+    "CtrlShiftUp": "MoveLinesUp",
     "CtrlUnderscore": "lua:comment.comment"
 }
