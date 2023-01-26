@@ -32,7 +32,7 @@ mv ~/.config/micro/settings.json ~/.config/micro/settings.json.bak
 
 # Now, get my settings from this repo
 
-cd path/to/here
+cd path/to/eRCaGuy_dotfiles/home/.config/micro
 
 # Method 1 (what I frequently use): symlink over the files so I can easily 
 # update this repo changes I make to them later.
