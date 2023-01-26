@@ -1,0 +1,30 @@
+[global_config]
+  inactive_color_offset = 1.0
+  enabled_plugins = Logger, LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler
+[keybindings]
+  # Free up the Alt + Arrow keys for use in the Micro text editor
+  go_up = ""
+  go_down = ""
+  go_left = ""
+  go_right = ""
+  # Free up the Shift + Ctrl + Arrow keys for use in the Micro text editor
+  resize_up = ""
+  resize_down = ""
+  resize_left = ""
+  resize_right = ""
+[profiles]
+  [[default]]
+    audible_bell = True
+    background_color = "#2d0922"
+    cursor_color = "#aaaaaa"
+    foreground_color = "#feffff"
+    scrollback_infinite = True
+[layouts]
+  [[default]]
+    [[[window0]]]
+      type = Window
+      parent = ""
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+[plugins]

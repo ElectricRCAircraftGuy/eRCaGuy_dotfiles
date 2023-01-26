@@ -75,6 +75,36 @@ Control_L, Down, Control_L|Button5
 Shift_L,   Up,   Shift_L|Button4
 Shift_L,   Down, Shift_L|Button5
 
+# For the `gnome-terminal` default shell/terminal that comes with Ubuntu
+"gnome-terminal"
+None,      Up,   Button4, 2
+None,      Down, Button5, 2
+Control_L, Up,   Control_L|Button4
+Control_L, Down, Control_L|Button5
+Shift_L,   Up,   Shift_L|Button4
+Shift_L,   Down, Shift_L|Button5
+
+# For the `terminator` terminal, which is the terminal I use most
+"terminator"
+None,      Up,   Button4, 2
+None,      Down, Button5, 2
+Control_L, Up,   Control_L|Button4
+Control_L, Down, Control_L|Button5
+Shift_L,   Up,   Shift_L|Button4
+Shift_L,   Down, Shift_L|Button5
+
+# NB: for the `micro` CLI-mouse-enabled text editor, don't use imwheel. Instead,
+# set the scroll speed inside micro directly with Ctrl + E, then the cmd: `set
+# scrollspeed 5`. That adds a `"scrollspeed": 5,` entry to
+# `~/.config/micro/settings.json`.
+#
+# See:
+# 1. My answer/notes:
+#    https://github.com/zyedidia/micro/issues/2134#issuecomment-1404047315
+#
+# That scroll speed of 5, in conjunction with a terminator scroll speed of 2,
+# above, for instance, results in a total scroll speed in `micro` of 5 x 2 = 10.
+
 # For Foxit Reader PDF viewer/editor
 "FoxitReader"
 None,      Up,   Button4, 3

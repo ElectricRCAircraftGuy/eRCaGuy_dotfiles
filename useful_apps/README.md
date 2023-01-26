@@ -54,6 +54,7 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
 1. Arduino
 1. Sublime Text 3 - a powerful GUI text and code editor
 1. `micro` - a poweful mouse-supported CLI text and code editor
+    1. For configuring its settings, see here: [eRCaGuy_dotfiles/home/.config/micro/README.md](../home/.config/micro/README.md)
     1. https://micro-editor.github.io/
     1. https://github.com/zyedidia/micro#installation
     1. My installation process:
@@ -68,6 +69,10 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
         ```
 1. LibreOffice
 1. `terminator` terminal - allows easy splitting and tiling of multiple terminals in one single window! A good *local terminal* alternative to `gnome-terminal` + `tmux` for splitting windows. You can right-click in the terminal and split the window horizontally or vertically.
+    1. *Config settings to change:* 
+        1. See my notes here: [eRCaGuy_dotfiles/home/.config/terminator/README.md](../home/.config/terminator/README.md)
+            1. See especially my comments here and below it: [GitHub: micro: Fixed: how to disable interfering shortcut keys in `terminator`](https://github.com/zyedidia/micro/issues/2688#issuecomment-1404008312)
+        1. Get my config settings direcly from here: [eRCaGuy_dotfiles/home/.config/terminator/config](../home/.config/terminator/config)
     1. https://gnome-terminator.org/
     1. Install
         ```bash
@@ -135,3 +140,9 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
     1. `minicom`
     1. Arduino Serial Monitor and Serial Plotter
     1. [eRCaGuy_PyTerm](https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm)
+1. Potential file syncrhonization tools to try out:
+    1. See my notes: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/issues/24#issuecomment-1401223948
+    1. https://github.com/syncthing/syncthing - very highly-rated
+    1. https://github.com/lsyncd/lsyncd
+    1. My answer, mentioning my `git`-based sync script: https://stackoverflow.com/a/61109889/4561887
+

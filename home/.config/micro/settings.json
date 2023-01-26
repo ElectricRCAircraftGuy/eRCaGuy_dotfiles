@@ -1,0 +1,12 @@
+{
+    "*.md": {
+        "softwrap": true
+    },
+    "colorcolumn": 80,
+    "colorscheme": "monokai",
+    "savecursor": true,
+    "scrollbar": true,
+    "scrollspeed": 5,
+    "softwrap": false,
+    "wordwrap": true
+}

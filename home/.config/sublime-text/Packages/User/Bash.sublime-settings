@@ -16,5 +16,6 @@
 		".git_aliases",
 		".config",
 		"syslog",
+		"config",
 	],
 }
