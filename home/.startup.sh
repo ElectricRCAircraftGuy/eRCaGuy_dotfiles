@@ -64,8 +64,15 @@
 
 starting_dir="$(pwd)"
 
+# See my answer: https://stackoverflow.com/a/60157372/4561887
+FULL_PATH_TO_SCRIPT="$(realpath "${BASH_SOURCE[-1]}")"
+SCRIPT_DIRECTORY="$(dirname "$FULL_PATH_TO_SCRIPT")"
+SCRIPT_FILENAME="$(basename "$FULL_PATH_TO_SCRIPT")"
+
 # Note: write this to both stdout *and* stderr; see: https://stackoverflow.com/a/6852984/4561887
-echo -e "\n\n======================== SETTING UP NEW VIRTUAL MACHINE ===========================\n" | tee /dev/stderr
+echo -e "\n\n======================== SETTING UP NEW VIRTUAL MACHINE ===========================" | tee /dev/stderr
+echo -e "======================== RUNNING ~/.startup.sh ====================================\n" | tee /dev/stderr
+echo -e "Script path = '$FULL_PATH_TO_SCRIPT'" | tee /dev/stderr
 
 echo "Time     is $(date)." | tee /dev/stderr
 echo "Setting timezone." | tee /dev/stderr
@@ -94,5 +101,8 @@ mkdir -p ~/Downloads/Install_Files
 cd ~/Downloads/Install_Files
 curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
 sudo dpkg -i ripgrep_13.0.0_amd64.deb
-cd "${starting_dir}"
 
+echo "Time is now $(date)." | tee /dev/stderr
+echo -e "\n\n======================== ~/.startup.sh FINISHED ===================================\n" | tee /dev/stderr
+
+cd "${starting_dir}"
