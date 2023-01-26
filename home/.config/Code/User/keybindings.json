@@ -1,6 +1,6 @@
-// This file should be placed into the "~/.config/Code/User" dir.
+// This file, or a symlink to it, should be placed into the "~/.config/Code/User" dir.
 
-// Place your key bindings in this file to override the defaultsauto[]
+// Place your key bindings in this file to override the defaults
 [
     {
         "key": "alt+left",

@@ -1,4 +1,4 @@
-// This file should be placed into "~/.config/Code/User/settings.json".
+// This file, or a symlink to it, should be placed into "~/.config/Code/User/settings.json".
 // Official Documentation: https://code.visualstudio.com/docs/getstarted/settings
 
 {

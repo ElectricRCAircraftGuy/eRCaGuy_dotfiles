@@ -1,8 +1,8 @@
 This is for the [Microsoft Visual Studio Code (MS VSCode)](https://code.visualstudio.com/) text editor/IDE. 
 
-The `.vscode` dir should be placed at the root of your workspace (ie: the folder you intend to open up via **File --> Open Folder**).
+The `.vscode` dir should be placed at the root of your workspace (ie: the folder you intend to open up via **File --> Open Folder**). You also have a user-level `~/.vscode` dir.
 
-The `settings.json` file should be copy-pasted into this path: `~/.config/Code/User/settings.json`.
+The `settings.json` and `keybindings.json` files should be copy-pasted into this dir: `~/.config/Code/User/`.
 
 
 ## Common VSCode Extensions/Plugins I like to install
@@ -13,7 +13,9 @@ References:
 1. https://tattoocoder.com/recommending-vscode-extensions-within-your-open-source-projects/
 
 
-## Common VSCode shortcuts I like
+## Common VSCode shortcuts I like 
+
+Many of these are very similar to Sublime Text.
 
 1. Ctrl + K, O
     1. Open up the current file into a new window (ex: so you can drag it into a new monitor).
