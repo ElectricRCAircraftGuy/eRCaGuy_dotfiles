@@ -15,7 +15,8 @@
 # alias sublf_custom='sublf -not \( -path "./build*" -prune \)'
 
 # INSTALLATION INSTRUCTIONS:
-# 1. Install RipGrep: https://github.com/BurntSushi/ripgrep#installation
+# 1. Install `fzf` fuzzy finder: https://github.com/junegunn/fzf#installation
+#    The "Using git" instructions there, for instance, work great.
 # 2. Create a symlink in ~/bin to this script so you can run it from anywhere.
 #       cd /path/to/here
 #       mkdir -p ~/bin
