@@ -71,7 +71,9 @@ set filetype markdown
 # bind a shortcut key
 # See: 
 # 1. https://github.com/zyedidia/micro/blob/master/runtime/help/commands.md
-# 1. https://github.com/zyedidia/micro/blob/master/runtime/help/keybindings.md
+# 1. ***** https://github.com/zyedidia/micro/blob/master/runtime/help/keybindings.md
+#   1. *****+ List of all "bindable actions" and "bindable keys": 
+#      https://github.com/zyedidia/micro/blob/master/runtime/help/keybindings.md#bindable-actions-and-bindable-keys
 # 1. https://github.com/zyedidia/micro/blob/master/runtime/help/defaultkeys.md
 bind <key> <action>
 
