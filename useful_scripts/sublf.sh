@@ -19,15 +19,11 @@
 # 2. Create a symlink in ~/bin to this script so you can run it from anywhere.
 #       cd /path/to/here
 #       mkdir -p ~/bin
-#       ln -si "${PWD}/rg_replace.sh" ~/bin/rgr            # required
-#       ln -si "${PWD}/rg_replace.sh" ~/bin/rg_replace     # required
-#       ln -si "${PWD}/rg_replace.sh" ~/bin/gs_rgr         # optional; replace "gs" with your initials
-#       ln -si "${PWD}/rg_replace.sh" ~/bin/gs_rg_replace  # optional; replace "gs" with your initials
+#       ln -si "${PWD}/sublf.sh" ~/bin/sublf     # required
+#       ln -si "${PWD}/sublf.sh" ~/bin/gs_sublf  # optional; replace "gs" with your initials
 # 3. Now you can use this command directly anywhere you like in any of these ways:
-#   1. `rgr`
-#   2. `rg_replace`
-#   1. `gs_rgr`
-#   3. `gs_rg_replace`
+#   1. `sublf`
+#   2. `gs_sublf`
 
 # This opens the fzf fuzzy finder tool (see: https://github.com/junegunn/fzf#usage), then allows
 # you to multiselect (`-m`) files with the TAB key. Press ENTER when done to open them all in
