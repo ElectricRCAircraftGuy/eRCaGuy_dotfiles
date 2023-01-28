@@ -140,9 +140,15 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
     1. `minicom`
     1. Arduino Serial Monitor and Serial Plotter
     1. [eRCaGuy_PyTerm](https://github.com/ElectricRCAircraftGuy/eRCaGuy_PyTerm)
+
 1. Potential file syncrhonization tools to try out:
     1. See my notes: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/issues/24#issuecomment-1401223948
     1. https://github.com/syncthing/syncthing - very highly-rated
     1. https://github.com/lsyncd/lsyncd
     1. My answer, mentioning my `git`-based sync script: https://stackoverflow.com/a/61109889/4561887
 
+1. Potential terminal emulators to use:
+    1. alacritty - a new terminal emulator which supports the OSC 52 terminal clipboard needed to make `micro`'s copy/paste features work easily over ssh. 
+        1. https://github.com/alacritty/alacritty
+        1. https://github.com/alacritty/alacritty/blob/master/INSTALL.md
+        1. Why one might consider using the alacritty terminal in the first place (it supports copy/paste operations in the `micro` editor over ssh): [see my comment here--see also the discussion just above my comment]: https://github.com/zyedidia/micro/issues/538#issuecomment-1406713447

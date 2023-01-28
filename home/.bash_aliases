@@ -724,3 +724,15 @@ alias gs_vpn_openconnect-sso='openconnect-sso \
 # https://github.com/vlaci/openconnect-sso/issues/81#issuecomment-1363355533
 export QTWEBENGINE_DISABLE_SANDBOX=1
 export OPENSSL_CONF=~/.my_ssl.conf
+
+# For the alacritty terminal--to enable autocompletions in bash.
+# See:
+# 1. Where we install the bash completions for alacritty:
+#    https://github.com/alacritty/alacritty/blob/master/INSTALL.md#bash
+# 1. Why one might consider using the alacritty terminal in the first place (it supports copy/paste
+#    operations in the `micro` editor over ssh):
+#    [see my comment here--see also the discussion just above my comment]
+#    https://github.com/zyedidia/micro/issues/538#issuecomment-1406713447
+if [ -f ~/.bash_completion/alacritty ]; then
+    . ~/.bash_completion/alacritty
+fi
