@@ -3780,6 +3780,62 @@ objdump -h /bin/ls
 
 
 ====================================================================================================
+= Cellular & Networking: =
+====================================================================================================
+- incl. VPN
+
+Tools to be aware of:
+1. ConnMan - network manager
+    1. `sudo apt install connman`
+    1. https://wiki.archlinux.org/title/ConnMan
+    1. https://wiki.gentoo.org/wiki/Connman
+1. `connmanctl` - cli interface to connman
+    1. https://manpages.debian.org/testing/connman/connmanctl.1.en.html
+    1. https://manpages.ubuntu.com/manpages/xenial/man1/connmanctl.1.html
+1. oFono and `ofonod` - GSM cellular dbus-centric tool developed by Intel & Nokia
+    1. https://en.wikipedia.org/wiki/OFono
+    1. https://manpages.ubuntu.com/manpages/bionic/man8/ofonod.8.html
+    1. https://www.linux.org/threads/what-do-ofono-and-connman-do.39201/
+    1. Linux kernel official source code repo: https://git.kernel.org/pub/scm/network/ofono/ofono.git/about/
+1. wpa_supplicant - wifi management
+    1. https://wiki.archlinux.org/title/wpa_supplicant
+1. BlueZ - the "official Linux Bluetooth protocol stack" (http://www.bluez.org/)
+    1. http://www.bluez.org/
+    1. Official source code: https://github.com/bluez/bluez
+1. strongSwan - IPsec (IP security) embedded Linux VPN
+    1. `sudo apt install strongswan`
+    1. Official website: https://www.strongswan.org/
+    1. https://en.wikipedia.org/wiki/StrongSwan
+    1. Official source code: https://github.com/strongswan/strongswan
+1. `swanctl` - cli interface to the strongSwan VPN solution tool
+    1. `sudo apt install strongswan-swanctl`
+    1. `cat /etc/swanctl/swanctl.conf` - view the config file for the strongSwan VPN
+    1. Official source code & introductory documentation: https://github.com/strongswan/strongswan
+1. `ipsec` strongSwan cli tool
+    1. `sudo apt install strongswan` - this installs the `ipsec` cli tool too
+    1. https://wiki.strongswan.org/projects/strongswan/wiki/ipseccommand
+1. `traceroute` cli tool
+    1. `sudo apt install traceroute`
+
+connmanctl services
+    "Shows a list of all available services. This includes the nearby wifi networks, the wired ethernet connections, bluetooth devices, etc."
+    See: https://manpages.debian.org/testing/connman/connmanctl.1.en.html
+man swanctl
+swanctl -h
+sudo ipsec status
+    See: 
+    1. `man ipsec`
+    1. `ipsec --help`
+ip route
+sudo apt install traceroute
+traceroute
+traceroute google.com
+traceroute 192.168.0.1
+cat /etc/swanctl/swanctl.conf
+    View the config file for the strongSwan VPN.
+
+
+====================================================================================================
 = IP & Networking: =
 ====================================================================================================
 Also: Ethernet UDP and TCP command-line commands and tx/rx.
