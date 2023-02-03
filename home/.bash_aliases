@@ -547,7 +547,7 @@ alias gs_cpu_logger_watch='less -N --follow-name +F ~/cpu_log.log'
 # alias gs_fzf_git_and_linux_cmds_doc="grep -n '' \
 #     '$ERCAGUY_DOTFILES_ROOT_DIR/git & Linux cmds, help, tips & tricks - Gabriel.txt' \
 #     | fzf -m --reverse"
-# Make this a function instead, which accepts additional arguments!
+# Make this a function instead, which accepts additional arguments I can pass to `fzf`!
 gs_fzf_git_and_linux_cmds_doc() {
     grep -n '' \
     "$ERCAGUY_DOTFILES_ROOT_DIR/git & Linux cmds, help, tips & tricks - Gabriel.txt" \
