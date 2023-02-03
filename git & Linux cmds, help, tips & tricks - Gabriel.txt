@@ -4612,6 +4612,60 @@ dexec [--help]
 
 
 ====================================================================================================
+= Partitions and File Systems: =
+====================================================================================================
+[keywords: = partitions: =; = file systems: =]
+
+References:
+1. Shrinking encrypted partitions: [my answer] How to install & use `blivet-gui` on an Ubuntu live USB so we can use `blivet-gui`, Gnome Disks, and GParted (all 3 are required together) to shrink an encrypted LUKS partition: https://unix.stackexchange.com/a/728750/114401
+1. Expanding encrypted partitions: [my answer] How to clone your hard drive (SSD or HDD) and expand your LUKS-encrypted partition to fill the new full disk space: https://unix.stackexchange.com/a/674828/114401
+1. [my article] https://www.electricrcaircraftguy.com/2018/01/how-to-clone-your-hard-drive.html
+1. Ask Ubuntu: How do I find out what filesystem my partitions are using?: https://askubuntu.com/q/309047/327339
+1. ***** [my Q&A] How do I find out which partitions my filesystems (and mount points) are on, and how full the partitions are?: https://unix.stackexchange.com/a/733887/114401
+
+
+gparted
+    Open the GUI parted partition editor
+blivet-gui
+    Open this GUI
+gnome-disks
+    Open this GUI
+
+parted -l
+    List partitions
+
+df -h
+    <=====
+    List disk usage and filesystem mount points (but not partitions :()
+    See my Q&A: https://unix.stackexchange.com/a/733887/114401
+sudo fdisk -l
+    <=====
+    List all partitions and their sizes, but *not* their filesystem mount points/paths.
+    See my Q&A: https://unix.stackexchange.com/a/733887/114401
+sudo fdisk -l /dev/mmcblk0p3
+    List the info. for just this one partition at `/dev/mmcblk0p3`.
+cat /etc/fstab
+    See your filesystem (fs) table (tab), which is the config file to define how and where to mount all of your filesystems and partitions.
+lsblk  
+    <== VERY USEFUL ===
+    See which partition your filesystems are on, and how big they are.
+    See my Q&A: https://unix.stackexchange.com/a/733887/114401
+mountpoint -n /  
+    <=====
+    (Works on BusyBox only) See the **name** of the partition which contains the root mountpoint (`/`). 
+    See my Q&A: https://unix.stackexchange.com/a/733887/114401
+---
+Note that the %usage of a given partition can be calculated by: (filesystem usage as shown by `df -h` + 
+other partition usage as shown by `lsblk`) / (total partition size as shown by `lsblk`).
+See my Q&A: https://unix.stackexchange.com/a/733887/114401
+---
+blkid
+    See more "block device attributes". 
+    See `man blkid`. 
+    See my Q&A: https://unix.stackexchange.com/a/733887/114401
+
+
+====================================================================================================
 = Linux (General): =
 ====================================================================================================
 [general linux cmds; general linux commands; linux general, linux =, linux: =]
