@@ -152,3 +152,21 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
         1. https://github.com/alacritty/alacritty
         1. https://github.com/alacritty/alacritty/blob/master/INSTALL.md
         1. Why one might consider using the alacritty terminal in the first place (it supports copy/paste operations in the `micro` editor over ssh): [see my comment here--see also the discussion just above my comment]: https://github.com/zyedidia/micro/issues/538#issuecomment-1406713447
+
+1. Potential mouse-enabled CLI file managers to use:
+    1. [Google search for "linux mouse enabled cli file manager"](https://www.google.com/search?q=linux+mouse+enabled+cli+file+manager&oq=linux+mouse+enabled+cli+file+manager&aqs=chrome..69i57.8975j0j7&sourceid=chrome&ie=UTF-8)
+        1. \*\*\*\*\* https://www.tecmint.com/linux-terminal-file-managers/
+    1. `mc` - GNU Midnight Commander - seems really good!
+        ```bash
+        sudo apt install mc  
+        mc
+        ```
+        - Open the program with `mc`.  
+        - Once in the program, press **Ctrl+o** to toggle back and forth between the main terminal and Midnight Commander, or press **F10** to exit.
+        - show a compact type view by going to Left/Right --> Listing mode... --> "Brief file list"
+    1. `ranger`
+        ```bash
+        sudo apt install ranger
+        ranger
+        ```
+        - Ctrl+C, then Q, to quit.
