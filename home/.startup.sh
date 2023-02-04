@@ -69,6 +69,46 @@ FULL_PATH_TO_SCRIPT="$(realpath "${BASH_SOURCE[-1]}")"
 SCRIPT_DIRECTORY="$(dirname "$FULL_PATH_TO_SCRIPT")"
 SCRIPT_FILENAME="$(basename "$FULL_PATH_TO_SCRIPT")"
 
+# Copied from my code here:
+# https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/sound_bell_lib.sh
+#
+# Description:
+# Play the bell sound "ding" to alert the user of something.
+#
+# Usage:
+#       sound_bell [number_of_times [second_delay_between_sounds]]
+# Examples
+#       sound_bell          # sound bell once
+#       sound_bell 1        # sound bell once
+#       sound bell 2        # sound bell 2x with default delay between each
+#       sound bell 2 .2     # sound bell 2x with delay of 0.2 sec between each
+#       sound bell 3 .5     # sound bell 3x with delay of 0.5 sec between each
+sound_bell() {
+    # set default values
+    num_times="1"
+    delay_sec="0.12"
+
+    # set to user-defined values if the user passes them in as args
+    if [ -n "$1" ]; then
+        num_times="$1"
+    fi
+    if [ -n "$2" ]; then
+        delay_sec="$2"
+    fi
+
+    # sound the bell
+    for (( i=0; i<"$num_times"; i++ )); do
+        printf "%b" "\a"  # bell sound
+
+        # Only sleep the delay time **between** bell sounds, and NOT after the last one
+        # - for how to do arithmetic expansion (math in Bash), see my answer here:
+        #   https://stackoverflow.com/a/71567705/4561887
+        if [ "$i" -lt "$((num_times-1))" ]; then
+            sleep "$delay_sec"
+        fi
+    done
+}
+
 # Note: write this to both stdout *and* stderr; see: https://stackoverflow.com/a/6852984/4561887
 echo -e "\n\n======================== SETTING UP NEW VIRTUAL MACHINE ===========================" | tee /dev/stderr
 echo -e "======================== RUNNING ~/.startup.sh ====================================\n" | tee /dev/stderr
@@ -104,5 +144,6 @@ sudo dpkg -i ripgrep_13.0.0_amd64.deb
 
 echo "Time is now $(date)." | tee /dev/stderr
 echo -e "\n\n======================== ~/.startup.sh FINISHED ===================================\n" | tee /dev/stderr
+sound_bell 3 .2
 
 cd "${starting_dir}"

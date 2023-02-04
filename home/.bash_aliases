@@ -108,9 +108,50 @@ alias gs_sshfs="sshfs -o reconnect,ServerAliveInterval=15,ServerAliveCountMax=3 
 username@server_hostname:/path/on/server/to/mount ~/mnt/my_server"
 alias gs_sshfs_umount="sudo umount ~/mnt/my_server"
 
+# Copied from my code here:
+# https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/sound_bell_lib.sh
+#
+# Description:
+# Play the bell sound "ding" to alert the user of something.
+#
+# Usage:
+#       sound_bell [number_of_times [second_delay_between_sounds]]
+# Examples
+#       sound_bell          # sound bell once
+#       sound_bell 1        # sound bell once
+#       sound bell 2        # sound bell 2x with default delay between each
+#       sound bell 2 .2     # sound bell 2x with delay of 0.2 sec between each
+#       sound bell 3 .5     # sound bell 3x with delay of 0.5 sec between each
+sound_bell() {
+    # set default values
+    num_times="1"
+    delay_sec="0.12"
+
+    # set to user-defined values if the user passes them in as args
+    if [ -n "$1" ]; then
+        num_times="$1"
+    fi
+    if [ -n "$2" ]; then
+        delay_sec="$2"
+    fi
+
+    # sound the bell
+    for (( i=0; i<"$num_times"; i++ )); do
+        printf "%b" "\a"  # bell sound
+
+        # Only sleep the delay time **between** bell sounds, and NOT after the last one
+        # - for how to do arithmetic expansion (math in Bash), see my answer here:
+        #   https://stackoverflow.com/a/71567705/4561887
+        if [ "$i" -lt "$((num_times-1))" ]; then
+            sleep "$delay_sec"
+        fi
+    done
+}
+
 # Play sound; very useful to add to the end of a long cmd you want to be notified of when it completes!
 # Ex: `long_cmd; gs_sound_bell` will play a bell sound when `long_cmd` completes!
-alias gs_sound_bell="echo -e \"\a\""
+# alias gs_sound_bell="echo -e \"\a\""
+alias gs_sound_bell="sound_bell"
 
 # Even better, have a pop-up notification too!
 # Ex: `long_cmd; gs_alert` will play the sound above *and* pop up a notification when complete!
@@ -118,7 +159,7 @@ alias gs_sound_bell="echo -e \"\a\""
 #   https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/1213564#1213564
 # For other popup window options, see my other answer here:
 #   https://superuser.com/questions/31917/is-there-a-way-to-show-notification-from-bash-script-in-ubuntu/1310142#1310142
-alias gs_alert="gs_sound_bell; alert \"task complete\""
+alias gs_alert="gs_sound_bell 2; alert \"task complete\""
 
 # More sounds:
 # From: https://askubuntu.com/questions/277215/how-to-make-a-sound-once-a-process-is-complete/604116#604116
