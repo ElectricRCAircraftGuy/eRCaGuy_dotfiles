@@ -21,7 +21,12 @@
     #       meld opendiff kdiff3 tkdiff xxdiff kompare gvimdiff diffuse diffmerge ecmerge p4merge araxis bc codecompare emerge vimdiff
     tool = meld
 [core]
+    # Make the Sublime Text editor your git commit editor
     editor = subl --project ~/.git_editor.sublime-project --wait
+
+    # Or for the `micro` editor (https://github.com/zyedidia/micro)
+    # - See: https://askubuntu.com/a/1388854/327339
+    # editor = micro
 [alias]
     # Source for this `git lg` "better git log" alias: https://coderwall.com/p/euwpig/a-better-git-log
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
