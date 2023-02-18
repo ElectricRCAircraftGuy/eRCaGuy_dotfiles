@@ -28,6 +28,10 @@ ERCAGUY_DOTFILES_ROOT_DIR="$(dirname "$SCRIPT_DIRECTORY")"
 # This assumes that this repo is inside of my main "dev" development folder
 DEV_ROOT_DIR="$ERCAGUY_DOTFILES_ROOT_DIR/.."
 
+# ==================================================================================================
+# 1. GENERAL (PUBLICLY SHARED) Bash Setup, Variables, Aliases, & Functions
+# ==================================================================================================
+
 # cd into my/your main "dev" development directory where I store my repos and do my engineering and
 # code development. This path for me is usually: "$HOME/GS/dev", which generally expands to
 # "/home/gabriel/GS/dev". However, for you it may be different, so this trick will cd into the dir
@@ -41,17 +45,48 @@ alias gs_cd_to_dev="cd \"$DEV_ROOT_DIR\""
 # echo "SCRIPT_FILENAME = $SCRIPT_FILENAME"  # debugging
 # echo "ERCAGUY_DOTFILES_ROOT_DIR = $ERCAGUY_DOTFILES_ROOT_DIR"  # debugging
 
-# ==================================================================================================
-# 1. GENERAL (PUBLICLY SHARED) Bash Setup, Variables, Aliases, & Functions
-# ==================================================================================================
+# ANSI color codes, formatting, or highlighting
+# See:
+# 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/ansi_color_codes.sh
+# 2. "ANSI escape code" on Wikipedia:
+#   1. https://en.wikipedia.org/wiki/ANSI_escape_code#3-bit_and_4-bit
+#   2. https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
+ANSI_START="\e["    # start of an ANSI formatting sequence
+#
+# --------- ANSI formatting codes start ----------
+#         - these codes go **between** `ANSI_START` and `ANSI_END`
+#
+# inverted colors; see code 7 here: https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_
+# (Select_Graphic_Rendition)_parameters
+ANSI_INV=";7"
+#
+# --------- ANSI formatting codes end ------------
+#
+ANSI_END="m"        # end of an ANSI formatting sequence
+# turn OFF ANSI formatting here; ie: disable all formatting by specifying `ANSI_START` and
+# `ANSI_END` withOUT any formatting codes in between!
+ANSI_OFF="${ANSI_START}${ANSI_END}"
 
-# Edit Prompt String 1 (PS1) variable to show 1) the shell level and 2) the currently-checked-out
-# git branch whenever you are inside any directory containing a local git repository.
-# See: [my ans] https://stackoverflow.com/questions/4511407/how-do-i-know-if-im-running-a-nested-shell/57665918#57665918
-gs_git_show_branch() {
-    GIT_BRANCH="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
-    if [ -n "$GIT_BRANCH" ]; then
-        echo "$GIT_BRANCH"
+# Get the git branch and hash.
+# - Edit Prompt String 1 (PS1) variable to show 1) the shell level and 2) the currently-checked-out
+#   git branch whenever you are inside any directory containing a local git repository.
+# - See: [my ans]
+#   https://stackoverflow.com/questions/4511407/how-do-i-know-if-im-running-a-nested-shell/57665918#57665918
+gs_git_show_branch_and_hash() {
+    # format on
+    F="${ANSI_START}${ANSI_INV}${ANSI_END}"
+    # format off
+    f="${ANSI_OFF}"
+
+    git_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
+
+    # See: https://stackoverflow.com/a/5694416/4561887
+    git_short_hash="$(git rev-parse --short HEAD 2>/dev/null)"
+
+    if [ -n "$git_branch" ] || [ -n "$git_short_hash" ]; then
+        # branch_info="Branch: ${F}${git_branch}${f}  Hash: ${F}${git_short_hash}${f}"
+        branch_info="${F}${git_branch}${f} ${F}${git_short_hash}${f}"
+        echo -e "$branch_info"  # NB: DON'T FORGET THE `-e` here to escape the color codes!
     fi
 }
 #
@@ -59,7 +94,7 @@ gs_git_show_branch() {
 # - shows shell level, git branch (if in a dir with one), and `hostname present_dir $ ` only,
 #   rather than username too
 # - has no color
-# PS1="\e[7m\$(gs_git_show_branch)\e[m\n\h \w $ "
+# PS1="\e[7m\$(gs_git_show_branch_and_hash)\e[m\n\h \w $ "
 # PS1='\$SHLVL'":$SHLVL $PS1"
 #
 # NEW:
@@ -68,8 +103,11 @@ gs_git_show_branch() {
 #   default-Ubuntu-18-installation prompt!
 # - has color, like a default Ubuntu 18 installation does too!
 #
-PS1="\e[7m\$(gs_git_show_branch)\e[m\n$PS1" # comment out to NOT show git branch!
-PS1='\$SHLVL'":$SHLVL $PS1"                 # comment out to NOT show shell level!
+# Comment this line out to NOT show the git branch! NB: don't forget the `\` to escape the `$`!
+PS1="\$(gs_git_show_branch_and_hash)\n$PS1"
+# Comment this line out to NOT show shell level!
+# PS1='\$SHLVL'":$SHLVL  $PS1"  # double space between items
+PS1='\$SHLVL'":$SHLVL $PS1"  # single space between items
 
 # Import this ".git_aliases" file, if it exists.
 if [ -f "$SCRIPT_DIRECTORY/.git_aliases" ]; then
