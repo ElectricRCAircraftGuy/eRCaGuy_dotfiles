@@ -35,3 +35,8 @@ Many of these are very similar to Sublime Text.
 1. Ctrl + G
     1. Go to line
 
+
+## Troubleshooting
+
+1. [Still investigating] If `cpptools` sucks up all of your RAM (ex: 32 GB+ of your 64 GB), consider uninstalling the `c/c++` `cpptools` or whatever, and installing `clangd` instead, whatever that is. Someone recommended this to me.
+
