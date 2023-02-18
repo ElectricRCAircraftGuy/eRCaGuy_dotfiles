@@ -4762,6 +4762,11 @@ terminator = *****a terminal program to EASILY allow 4 terminals (2x2) or even 1
 
 == ==
 
+env
+    Display the current "environment", including all shell environment variables and what they are currently set to!
+    Note: this is the same executable called for running script when you do a hashbang of `#!/usr/bin/env bash` at the top of your bash sript!
+    See: https://www.ibm.com/docs/en/aix/7.2?topic=e-env-command
+
 bash -x some command
     <====== VERY USEFUL FOR DEBUGGING BASH SCRIPTS! =======
     From `man bash`: "-x  Print commands and their arguments as they are executed."
