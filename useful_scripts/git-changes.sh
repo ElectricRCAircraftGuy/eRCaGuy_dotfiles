@@ -143,4 +143,5 @@ done < <(git diff --name-only -z "$merge_base" $BACKUP_BRANCH)
 # they cannot be options, because the `--` with nothing after it signifies the end of all optional
 # args.
 git difftool $ARGS_3_AND_LATER $BACKUP_BRANCH -- $files_changed_escaped
-echo "Done. 'git difftool' was just run. If there were no changes, nothing would have showed up."
+echo "Done. 'git difftool' was just run. If there were no changes, nothing would have shown up"
+echo "nor popped up just now."
