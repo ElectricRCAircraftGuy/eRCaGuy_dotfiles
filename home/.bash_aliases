@@ -53,14 +53,14 @@ alias gs_cd_to_dev="cd \"$DEV_ROOT_DIR\""
 #   2. https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
 ANSI_START="\e["    # start of an ANSI formatting sequence
 #
-# --------- ANSI formatting codes start ----------
+# --------- ANSI numeric codes start ----------
 #         - these codes go **between** `ANSI_START` and `ANSI_END`
 #
 # inverted colors; see code 7 here: https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_
 # (Select_Graphic_Rendition)_parameters
 ANSI_INV=";7"
 #
-# --------- ANSI formatting codes end ------------
+# --------- ANSI numeric codes end ------------
 #
 ANSI_END="m"        # end of an ANSI formatting sequence
 # turn OFF ANSI formatting here; ie: disable all formatting by specifying `ANSI_START` and
