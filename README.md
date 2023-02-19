@@ -130,6 +130,8 @@ This repo contains [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Sub
 ```bash
 # Clone this repo
 git clone https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles.git
+# cd into the freshly-cloned repo
+cd eRCaGuy_dotfiles
 # Pull all Git LFS files (large binary files, such as PDFs, tracked with `git lfs`)
 git lfs pull
 # Recursively clone and update all subrepos (git submodules) it may contain
@@ -177,6 +179,8 @@ git commit -m "Update all subrepos to their latest upstream changes"
 ```bash
 # General format
 git submodule add URL_to_repo
+# or
+git submodule add URL_to_repo path/to/where/you/want/to/put/it
 
 # Examples:
 git submodule add https://github.com/ElectricRCAircraftGuy/ripgrep_replace.git
