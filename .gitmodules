@@ -1,3 +1,6 @@
 [submodule "useful_scripts/ripgrep_replace"]
 	path = useful_scripts/ripgrep_replace
 	url = https://github.com/ElectricRCAircraftGuy/ripgrep_replace.git
+[submodule "useful_scripts/eRCaGuy_backup"]
+	path = useful_scripts/eRCaGuy_backup
+	url = https://github.com/ElectricRCAircraftGuy/eRCaGuy_backup.git
