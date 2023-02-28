@@ -10,6 +10,8 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 1. [Sublime Text Settings:](#sublime-text-settings)
 1. [Packages to install](#packages-to-install)
 1. [Packages I'm still evaluating and maybe you should install](#packages-im-still-evaluating-and-maybe-you-should-install)
+1. [Research](#research)
+    1. [Remote editing: edit a remote file in a local instance of Sublime Text](#remote-editing-edit-a-remote-file-in-a-local-instance-of-sublime-text)
 
 <!-- /MarkdownTOC -->
 </details>
@@ -71,3 +73,27 @@ These are the Sublime Text 3 packages I currently have installed and like to hav
     1. https://github.com/frou/st3-gitblame
     1. Issue/feature request I've opened up here: https://github.com/frou/st3-gitblame/issues/59
     1. **Conclusion:** naaah, you don't need this. I have decided _not_ to use this package. I recommend you just use my [`git blametool` command](../useful_scripts/git-blametool.sh) instead, which opens up the output of `git blame` in your favorite text editor (ex: Sublime Text by default).
+
+
+<a id="research"></a>
+# Research
+
+
+<a id="remote-editing-edit-a-remote-file-in-a-local-instance-of-sublime-text"></a>
+## Remote editing: edit a remote file in a local instance of Sublime Text
+
+I did this but didn't have time to refine the process, experiment, and document it. Here are some links to get me started next time I need to do this again:
+1. [Google search for "sublime text over ssh"](https://www.google.com/search?q=sublime+text+over+ssh&oq=sublime+text+over+ssh&aqs=chrome..69i57j69i60j69i65.190j0j9&sourceid=chrome&ie=UTF-8)
+1. https://stackoverflow.com/questions/15958056/how-to-use-sublime-over-ssh
+    1. https://stackoverflow.com/a/18107549/4561887
+    1. https://stackoverflow.com/a/18538531/4561887 - most useful; it aliases `rmate` as `subl` so you can use it like `subl`, but on a remote machine
+1. https://codexns.io/products/sftp_for_sublime/workflows - look into this
+
+1. https://github.com/henrikpersson/rsub
+1. https://github.com/textmate/rmate
+1. https://github.com/aurora/rmate
+    1. https://github.com/aurora/rmate/blob/master/rmate
+1. https://acarril.github.io/posts/ssh-sripts-st3
+1. [Google search for "rmate"](https://www.google.com/search?q=rmate&oq=rmate+&aqs=chrome.0.69i59l2j69i65l3.2593j0j9&sourceid=chrome&ie=UTF-8)
+
+Unrelated note: need to do my sync script too!: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/issues/24#issuecomment-1401223948: 2-way sync over git; sync the files shown by `git status` when on a dirty branch.
