@@ -18,5 +18,8 @@
 		"profile",
 		"syslog",
 		"txt",
+		"crypttab",
+		"fstab",
+		"grub",
 	],
 }
