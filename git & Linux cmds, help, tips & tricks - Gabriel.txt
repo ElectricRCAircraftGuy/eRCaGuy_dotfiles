@@ -4730,7 +4730,7 @@ other partition usage as shown by `lsblk`) / (total partition size as shown by `
 See my Q&A: https://unix.stackexchange.com/a/733887/114401
 ---
 blkid
-    See more "block device attributes". 
+    See more "block device attributes", including the UUID of each partition!
     See `man blkid`. 
     See my Q&A: https://unix.stackexchange.com/a/733887/114401
 
