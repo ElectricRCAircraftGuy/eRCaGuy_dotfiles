@@ -92,6 +92,11 @@ Words of wisdom:
 = Quotes: =
 ====================================================================================================
 
+"Working hard for something we don't care about is called stress. Working hard for something we love is called passion."
+    - Simon Sinek, on Linkedin
+      https://www.linkedin.com/in/simonsinek/
+      https://www.goodreads.com/quotes/7697100-working-hard-for-something-we-don-t-care-about-is-called
+
 "Don't apply for a specific job. Find a company you want to work for and get in any way you can." 
     - Max Landesman
     Slide 5 of 9 shared by Austin Belcak here: https://www.linkedin.com/posts/abelcak_7-best-pieces-of-career-advice-ugcPost-7027298563168591872-82La?utm_source=share&utm_medium=member_desktop
@@ -6463,7 +6468,7 @@ pdftk input.pdf cat 10-12 output output.pdf
     [keywords: extract pgs from pdf, extract pages from pdf, split pdf]
 
 == Compress PDFs: ==
-[pdf compression]
+[pdf compression; compress pdfs]
 
 For Ghostscript (`gs`) commands, or `ps2pdf` commands (part of Ghostscript), see:
 1. `gs`:        https://askubuntu.com/questions/113544/how-can-i-reduce-the-file-size-of-a-scanned-pdf-file/256449#256449
@@ -6473,14 +6478,18 @@ For Ghostscript (`gs`) commands, or `ps2pdf` commands (part of Ghostscript), see
 [3 Main levels of compression:]
 [Use Ghostscript (`gs`) to compress input.pdf into output.pdf.]
 [You may also add `-dQUIET` to suppress all output to stdout. See: https://www.ghostscript.com/doc/current/Use.htm]
+
 gs -sDEVICE=pdfwrite -dPDFSETTINGS=/printer -dNOPAUSE -dBATCH -sOutputFile=output.pdf input.pdf
+    <==== BEST FOR PDFS W/HIGH-RES. IMAGES, SUCH AS MY RESUMES ====
     1: LOW compression: **300 dpi** (large file size)
+    See my answer: https://askubuntu.com/a/1303196/327339
 gs -sDEVICE=pdfwrite -dPDFSETTINGS=/ebook -dNOPAUSE -dBATCH -sOutputFile=output.pdf input.pdf
     2: MEDIUM compression (recommended): **150 dpi** (medium file size)
     <========= BEST ^^^ ========
-    See: [my answer]https://askubuntu.com/questions/113544/how-can-i-reduce-the-file-size-of-a-scanned-pdf-file/1303196#1303196
+    See my answer: https://askubuntu.com/a/1303196/327339
 gs -sDEVICE=pdfwrite -dPDFSETTINGS=/screen -dNOPAUSE -dBATCH -sOutputFile=output.pdf input.pdf
     3: HIGH compression: **72 dpi** (small file size)
+    See my answer: https://askubuntu.com/a/1303196/327339
 
 [You can also use `ps2pdf`, which is a wrapper around `gs`, and produces very similar, but not exactly identical, results:]
 ps2pdf -dPDFSETTINGS=/printer input.pdf output.pdf
