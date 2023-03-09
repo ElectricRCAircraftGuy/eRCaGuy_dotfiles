@@ -28,8 +28,8 @@
 
 # For `google-chrome` Web Browser
 "-chrome"
-None,      Up,   Button4, 3
-None,      Down, Button5, 3
+None,      Up,   Button4, 4
+None,      Down, Button5, 4
 Control_L, Up,   Control_L|Button4
 Control_L, Down, Control_L|Button5
 Shift_L,   Up,   Shift_L|Button4
@@ -50,6 +50,16 @@ Shift_L,   Down, Shift_L|Button5
 
 # For `slack`
 "slack"
+None,      Up,   Button4, 4
+None,      Down, Button5, 4
+Control_L, Up,   Control_L|Button4
+Control_L, Down, Control_L|Button5
+Shift_L,   Up,   Shift_L|Button4
+Shift_L,   Down, Shift_L|Button5
+
+# Discord, a competitor to Slack; popular with the Ardupilot developers &
+# community, for instance.
+"discord"
 None,      Up,   Button4, 4
 None,      Down, Button5, 4
 Control_L, Up,   Control_L|Button4
@@ -116,8 +126,8 @@ Shift_L,   Down, Shift_L|Button5
 
 # For Foxit Reader PDF viewer/editor
 "FoxitReader"
-None,      Up,   Button4, 3
-None,      Down, Button5, 3
+None,      Up,   Button4, 4
+None,      Down, Button5, 4
 Control_L, Up,   Control_L|Button4
 Control_L, Down, Control_L|Button5
 Shift_L,   Up,   Shift_L|Button4
