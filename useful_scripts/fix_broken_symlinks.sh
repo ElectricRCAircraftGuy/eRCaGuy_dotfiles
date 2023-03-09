@@ -517,6 +517,7 @@ main() {
                     symlink_path_file="$(basename "$symlink_path")"
 
                     cd "$symlink_path_dir"
+                    # actually fix/recreate the symlink here!
                     output="$(ln "-$ln_args" "$new_target_path" "$symlink_path_file")"
                     cd "$STARTING_DIR"
                     echo_debug "output = $output"
