@@ -158,3 +158,13 @@ fi
 # and ".bash_aliases_private" files. I recommend you edit the ".bash_aliases_private" file instead.
 # See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions, here:
 # https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home
+
+# GS: Automatically added by the `fzf` installer, which was run with these installation commands
+# from here: https://github.com/junegunn/fzf#using-git
+#
+#       git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+#       ~/.fzf/install
+#
+# For more info. on the `fzf` fuzzy-finder, see the official repo here:
+# https://github.com/junegunn/fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
