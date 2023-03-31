@@ -4899,8 +4899,10 @@ basename $(realpath some_file_or_symlink)
     Obtain the base **filename** of the path above.
 
 lscpu
-    List information about your CPU and cores, whether your CPU is 32 or 64-bit, how many CPUs you have, how many threads per core you have, etc. 
+    List information about your CPU and cores, whether your CPU is 32 or 64-bit, how many CPUs you have, how many threads per core you have, your system's **endianness**, which processor (Pentium i3, i5, i7, i9, etc.), CPU processor speed, etc. 
     From `man lscpu`: "display information about the CPU architecture"
+lscpu | grep "Byte Order"
+    View your system's byte order or endianness! Ex: "Big Endian" [most-significant byte first] or "Little Endian" [least-significant byte first].
 
 uname
     Print system information
@@ -6245,11 +6247,38 @@ convert in.png -resize 1920x1920 out.jpg
 convert in.png -resize 1920x1080 out.jpg
     same as above, but make the max dimension on the x axis 1920 pixels and on the y axis 1080 pixels, like a standard, modern-day HD monitor or laptop!
 
+== Image to monochrome (1-bit), for faxing: ==
+
+Online Fax services:
+1. https://faxzero.com/ - free for low-usage; or 1-time paid with Paypal for bigger or more faxes
+1. https://www.fax.plus/ - low monthly fee
+1. https://www.faxprices.com/ - tool to compare online fax services and prices; recommended by faxzero here: https://faxzero.com/faq.php
+
+convert in.jpg -monochrome out1.jpg
+    <===========
+    <==== best overall (mild dithering, large file, to produce gray-scale effect) ======
+    Produce a monochrome (1-bit) image for faxing.
+    See: https://superuser.com/a/893488/425838
+convert in.jpg -remap pattern:gray50 out2.jpg
+    <==== highest quality (heavy dithering, huge file, to produce high-resolution gray-scale effect) ======
+    Produce a monochrome (1-bit) image for faxing.
+    See: https://superuser.com/a/893488/425838
+convert in.jpg -threshold 50% out3.jpg
+    <===========
+    <==== cleanest and highest-contrast (NO DITHERING!, small file, uses threshold instead, no gray-scale effect; may lose data) ======
+    Produce a monochrome (1-bit) image for faxing.
+    See: https://superuser.com/a/405688/425838
+
 == Image compression: ==
 [picture compression, img compression]
 
 REFERENCES:
 1. https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF
+
+convert -units PixelsPerInch in.jpg -resample 75 out3.jpg
+    <========== COMPRESS/RESIZE/LOWER DPI OF IMAGE =========
+    Resample the image to change the DPI to only 75 dots per inch. 
+    See my answer here: https://superuser.com/a/1774209/425838
 
 jpegoptim --size=500k dir_of_imgs/*.jpg
     compress a whole dir of images!
@@ -6463,7 +6492,7 @@ pdf2searchablepdf -h
 
 pdftk input.pdf cat 10-12 output output.pdf
     Extract pgs 10 to 12, inclusive, from input.pdf and save them into output.pdf. Works great!
-    - See: https://askubuntu.com/questions/221962/how-can-i-extract-a-page-range-a-part-of-a-pdf/672001#672001
+    - See: https://askubuntu.com/a/282455/327339
     - Install (tested in Ubuntu 20.04): `sudo apt install pdftk-java`.
     [keywords: extract pgs from pdf, extract pages from pdf, split pdf]
 
