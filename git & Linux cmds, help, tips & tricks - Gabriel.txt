@@ -5740,6 +5740,7 @@ ls /proc/*/task = list the threads in all multi-threaded processes!
 qpdf --decrypt in.pdf out.pdf
     "decrypt"/unlock (cannot truly decrypt/unlock if it requires a password, but works perfectly for "soft locked" documents which do not!) in.pdf, saving its unlocked/"decrypted" form as out.pdf so that you can now edit it with Foxit Reader or whatever! Nice! Now I can create bookmarks, highlight, underline, take notes, and then save these markups!
     - Once I do this, I like to rename "out.pdf" to "some useful name [`qpdf --decrypt`ed]" so I can remember right in the name itself how I did this!
+    [pdf decrypt pdf --decrypt pdf unlock pdf remove pw from pdf remove password from pdf]
 
 [keywords: file password encryption, document password encryption; encrypt decrypt; encryption decryption; document encryption; encrypt document; encrypt file; document encryption; file encryption; pgp]
 gpg -c myfile.txt
