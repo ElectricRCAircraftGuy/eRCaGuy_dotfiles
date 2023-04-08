@@ -6210,6 +6210,60 @@ tar .......... [TODO]
     1. *****+ [better article for this **one** `tar` example is all!, since it shows hot to use the `tar --use-compress-program='some_program'` option!] 
        https://www.baeldung.com/linux/xz-compression
 
+------------
+GNU `tar`: compression and decompression algorithm. 
+[decompress .tar.gz decompress .tar.xz decompress tar decompress xz decompress gz files]
+------------
+See:
+    1. *****+ https://askubuntu.com/a/107976/327339 - How do I uncompress a tarball that uses .xz?
+    1. ***** `man tar`
+    1. ***** GNU tar user manual: https://www.gnu.org/software/tar/manual/tar.html
+    1. https://www.cyberciti.biz/faq/how-to-extract-tar-xz-files-in-linux-and-unzip-all-files/
+A few common options of interest, from `man tar`:
+       -x, --extract, --get
+              Extract files from an archive.  Arguments are optional.  When given, they specify names of the archive members to be extracted.
+       -c, --create
+              Create a new archive.  Arguments supply the names of the files to be archived.  Directories are archived recursively, unless the --no-recursion option is given.
+       -f, --file=ARCHIVE
+           [GS: Specify the file or archive]
+       -J, --xz
+              Filter the archive through xz(1).
+       -v, --verbose
+              Verbosely list files processed.
+       -z, --gzip, --gunzip, --ungzip
+              Filter the archive through gzip(1).
+       -t, --list
+              List the contents of an archive.  Arguments are optional.  When given, they specify the names of the members to list.
+
+
+tar -xf path/to/file.tar.xz  
+    <============ MOST COMMON USAGE =============
+    Extract (`-x`) this file (`-f path/to/file`). Works with any file compression type (ex: .tar, .tar.gz, .tar.xz, etc.) since GNU tar automatically tries to identify the compression type!
+    See: https://askubuntu.com/a/107976/327339
+tar -xf archive.tar
+tar -xf archive.tar.gz
+tar -xf archive.tar.xz  
+    (x3) same as above.
+
+tar -tf path/to/file.tar.xz
+    <===== LIST CONTENTS ======
+    List (`-t`, `--list`) all file contents of this archive file!
+    See: 
+    1. `man tar`
+    1. https://www.cyberciti.biz/faq/how-to-extract-tar-xz-files-in-linux-and-unzip-all-files/
+
+tar -xf file.tar.xz file1 file2 file3
+    <===== EXTRACT SPECIFIED FILES ======
+    Extract only file1, file2, and file3 from archive file file.tar.xz! See `man tar`:
+    ```
+    tar -x [-f ARCHIVE] [OPTIONS] [MEMBER...]
+    ```
+    Note: run `tar -tf path/to/file.tar.xz` first to list all files and directories inside this archive!
+tar -xf git-filter-repo-2.38.0.tar.xz git-filter-repo-2.38.0/git-filter-repo
+    <===== EXTRACT SPECIFIED FILES ======
+    [Example of the command above] Extract only file "git-filter-repo-2.38.0/git-filter-repo" from the "git-filter-repo-2.38.0.tar.xz" xz-compressed archive file!
+    See just above.
+
 
 ====================================================================================================
 = Images and videos, incl. image and video compression and conversion: =
