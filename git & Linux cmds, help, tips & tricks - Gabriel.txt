@@ -6212,13 +6212,17 @@ tar .......... [TODO]
 
 ------------
 GNU `tar`: compression and decompression algorithm. 
-[decompress .tar.gz decompress .tar.xz decompress tar decompress xz decompress gz files]
+[decompress .tar.gz decompress .tar.xz decompress tar decompress xz decompress gz files tar xz tar -xz tar gz tar -gz, xz compression xz decompression]
 ------------
 See:
     1. *****+ https://askubuntu.com/a/107976/327339 - How do I uncompress a tarball that uses .xz?
     1. ***** `man tar`
     1. ***** GNU tar user manual: https://www.gnu.org/software/tar/manual/tar.html
     1. https://www.cyberciti.biz/faq/how-to-extract-tar-xz-files-in-linux-and-unzip-all-files/
+    1. Extract contents to an alternate target directory via `-C`: 
+        1. Google search for "tar extract single file to new location": https://www.google.com/search?q=tar+extract+single+file+to+new+location&oq=tar+extract+single+file+to+new+location&aqs=chrome.0.69i59.208j0j9&sourceid=chrome&ie=UTF-8
+        1. https://www.tecmint.com/extract-tar-files-to-specific-or-different-directory-in-linux/
+    1. https://unix.stackexchange.com/questions/61461/how-to-extract-specific-files-from-tar-gz
 A few common options of interest, from `man tar`:
        -x, --extract, --get
               Extract files from an archive.  Arguments are optional.  When given, they specify names of the archive members to be extracted.
@@ -6234,7 +6238,15 @@ A few common options of interest, from `man tar`:
               Filter the archive through gzip(1).
        -t, --list
               List the contents of an archive.  Arguments are optional.  When given, they specify the names of the members to list.
+       -C, --directory=DIR
+              Change to DIR before performing any operations.  This option is order-sensitive, i.e. it affects all options that follow.
+              [GS: use this option to save to a new directory. See: https://stackoverflow.com/a/9249779/4561887]
 
+sudo apt install xz-utils
+    Install the xz compression utilities used by `tar`.
+    See: 
+    1. https://askubuntu.com/a/107976/327339
+    1. https://www.cyberciti.biz/faq/how-to-extract-tar-xz-files-in-linux-and-unzip-all-files/
 
 tar -xf path/to/file.tar.xz  
     <============ MOST COMMON USAGE =============
