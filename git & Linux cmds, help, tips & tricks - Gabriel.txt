@@ -5744,10 +5744,12 @@ qpdf --decrypt in.pdf out.pdf
 
 [keywords: file password encryption, document password encryption; encrypt decrypt; encryption decryption; document encryption; encrypt document; encrypt file; document encryption; file encryption; pgp]
 gpg -c myfile.txt
+    <===========
     encrypt myfile.txt with a passphrase (symmetric 'c'ipher); a GUI window will pop up, asking you for a password to encrypt the file; enter a password, then it will ask you again; once you enter the password again it will encrypt the file and create a new file called myfile.txt.gpg. You will need to manually delete the old file.
 gpg myfile.txt.gpg
     decrypt myfile.txt.gpg back into myfile.txt; it will ask you for the password which was originally used to encrypt it!
     - See here for details and where I learned this! https://www.lifewire.com/encrypt-decrypt-password-protect-files-linux-4582604
+    [gpg extract gpg decrypt]
 
 timeout [options] <duration> <command>
     "Start COMMAND, and kill it if still running after DURATION." 
@@ -6248,8 +6250,16 @@ sudo apt install xz-utils
     1. https://askubuntu.com/a/107976/327339
     1. https://www.cyberciti.biz/faq/how-to-extract-tar-xz-files-in-linux-and-unzip-all-files/
 
+time tar --xz -cf myarchive.tar.xz path/to/my/dir
+    <====== COMPRESS =======
+    <================ MOST COMMON ARCHIVE/COMPRESSION USAGE =================
+    Use the 'xz' compression algorithm to compress all contents of directory "path/to/my/dir" into archive "myarchive.tar.xz"!
+    See:
+    1. `man tar`
+    1. https://stackoverflow.com/a/18855909/4561887
 tar -xf path/to/file.tar.xz  
-    <============ MOST COMMON USAGE =============
+    <====== EXTRACT ========
+    <============ MOST COMMON EXTRACTION/DECOMPRESSION USAGE =============
     Extract (`-x`) this file (`-f path/to/file`). Works with any file compression type (ex: .tar, .tar.gz, .tar.xz, etc.) since GNU tar automatically tries to identify the compression type!
     See: https://askubuntu.com/a/107976/327339
 tar -xf archive.tar
