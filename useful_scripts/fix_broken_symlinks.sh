@@ -46,12 +46,41 @@
 RETURN_CODE_SUCCESS=0
 RETURN_CODE_ERROR=1
 
-VERSION="0.2.0"
+VERSION="0.3.0"
 AUTHOR="Gabriel Staples"
 
 DEBUG_PRINTS_ON="true"  # "true" or "false"; can also be passed in as an option: `-d` or `--debug`
 
+# ANSI color codes
+# See:
+# 1. ***** https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+# 1. "eRCaGuy_dotfiles/useful_scripts/ripgrep_replace/rgr.sh"
+# 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/git-diffn.sh#L126-L138
+# 1. https://github.com/GNOME/glib/blob/main/gio/gdbus-tool.c#L43-L50
+# 1. *****+ https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/ansi_text_format_lib.sh
+COLOR_GRN="\033[1;32m" # green bold
+COLOR_BLU="\033[1;94m" # bright blue bold
+# COLOR_BLU="\033[1;34m" # blue bold
+# COLOR_MGN="\033[1;35m" # magenta bold
+COLOR_OFF="\033[m"
+COLOR_DISABLED=""
+
+STARTING_DIR="$(pwd)"
+SCRIPT_NAME="$(basename "$0")"
+VERSION_SHORT_STR="'$SCRIPT_NAME' version $VERSION"
+
+VERSION_LONG_STR="\
+$VERSION_SHORT_STR
+Author = $AUTHOR
+See '$SCRIPT_NAME -h' for more info.
+"
+
 CHANGELOG="\
+v0.3.0; 2023.04.22
+    Changed
+        - changed default behavior of running '$SCRIPT_NAME' to run '$SCRIPT_NAME .' (ie: analyze
+          the current dir) instead of showing the help menu.
+
 v0.2.0; 2023.01.20
     Added:
         - changelog, and '--changelog' option
@@ -64,28 +93,6 @@ v0.2.0; 2023.01.20
 
 v0.1.0; 2023.01.18
     Initial version
-"
-
-# ANSI color codes
-# See:
-# 1. ***** https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
-# 1. "eRCaGuy_dotfiles/useful_scripts/ripgrep_replace/rgr.sh"
-# 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/git-diffn.sh#L126-L138
-# 1. https://github.com/GNOME/glib/blob/main/gio/gdbus-tool.c#L43-L50
-COLOR_GRN="\033[1;32m" # green bold
-COLOR_BLU="\033[1;94m" # bright blue bold
-# COLOR_BLU="\033[1;34m" # blue bold
-# COLOR_MGN="\033[1;35m" # magenta bold
-COLOR_OFF="\033[m"
-COLOR_DISABLED=""
-
-STARTING_DIR="$(pwd)"
-SCRIPT_NAME="$(basename "$0")"
-VERSION_SHORT_STR="'$SCRIPT_NAME' version $VERSION"
-VERSION_LONG_STR="\
-$VERSION_SHORT_STR
-Author = $AUTHOR
-See '$SCRIPT_NAME -h' for more info.
 "
 
 HELP_STR="\
@@ -134,6 +141,8 @@ EXAMPLE USAGES:
         Print help menu.
     $SCRIPT_NAME .
         Recursively find all broken symlinks in the current directory (.).
+    $SCRIPT_NAME
+        Same as above.
     $SCRIPT_NAME . '/home/gabriel/some/dir' 'home/john/some/dir'
         (Dry run) fix all broken symlinks in the current dir (.) by replacing their target paths
         with John's home dir instead of Gabriel's.
@@ -255,9 +264,12 @@ parse_args() {
     # https://stackoverflow.com/a/14203146/4561887
 
     if [ $# -eq 0 ]; then
-        echo "No arguments supplied. Perhaps you mean to call '$SCRIPT_NAME .'?"
-        print_help
-        exit $RETURN_CODE_ERROR
+        echo "No arguments supplied. Run '$SCRIPT_NAME -h' for the help menu."
+        echo "Running '$SCRIPT_NAME .' now."
+        echo ""
+        # set the first positional arg to accomplish this.
+        # See my answer: https://stackoverflow.com/a/76081159/4561887
+        set -- "."
     fi
 
     # All possible input arguments we expect to see.
@@ -575,8 +587,5 @@ run_check
 if [ "$run" == "true" ]; then
     parse_args "$@"
     time main
-    # Explicitly exit after `main` to prevent any code from running afterwards
-    # in case someone modifies this script and adds more code below.
-    # See: https://unix.stackexchange.com/a/449508/114401
     exit $RETURN_CODE_SUCCESS
 fi
