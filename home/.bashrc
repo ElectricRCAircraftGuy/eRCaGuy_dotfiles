@@ -187,7 +187,20 @@ if [ -d "$HOME/PythonLibs" ] ; then
     # See: https://stackoverflow.com/a/3402176/4561887
     export PYTHONPATH="$PYTHONPATH:$HOME/PythonLibs"
 
-    # Note: you might consider just symlinking all of your custom Python libraries and things into
+    # Notes:
+    #
+    # 1. You might consider just symlinking all of your custom Python libraries and things into
     # your home dir at the path just above so you don't have to append a bunch of paths to the
     # `PYTHONPATH` above!
+    #
+    # 2. The above line in bash is equivalent to the following in Python. See:
+    #   1. https://stackoverflow.com/a/3402196/4561887
+    #   1. https://stackoverflow.com/a/4028943/4561887
+    #
+    #   ```python
+    #   import sys
+    #   import pathlib
+    #   HOME = str(pathlib.Path.home())
+    #   sys.path.append(f"{HOME}/PythonLibs")
+    #   ```
 fi
