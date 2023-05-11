@@ -173,3 +173,21 @@ fi
 # https://www.rust-lang.org/tools/install
 # via `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 . "$HOME/.cargo/env"
+
+# GS: update the Python path to include the **root** dir of any custom modules you have written or
+# downloaded! This way you can import those modules using the names starting in the root of those
+# paths. See:
+# 1. ***** https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPATH
+# 1. ***** https://docs.python.org/3/library/sys.html#sys.path
+# 1. Permanently add a directory to PYTHONPATH?
+#   1. https://stackoverflow.com/a/3402176/4561887
+#   1. https://stackoverflow.com/a/3402196/4561887
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/PythonLibs" ] ; then
+    # See: https://stackoverflow.com/a/3402176/4561887
+    export PYTHONPATH="$PYTHONPATH:$HOME/PythonLibs"
+
+    # Note: you might consider just symlinking all of your custom Python libraries and things into
+    # your home dir at the path just above so you don't have to append a bunch of paths to the
+    # `PYTHONPATH` above!
+fi
