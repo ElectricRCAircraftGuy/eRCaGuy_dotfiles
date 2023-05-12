@@ -183,10 +183,10 @@ fi
 #   1. https://stackoverflow.com/a/3402176/4561887
 #   1. https://stackoverflow.com/a/3402196/4561887
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/PythonLibs" ] ; then
+if [ -d "$HOME/GS/dev/eRCaGuy_hello_world/python/libraries" ] ; then
     # See: https://stackoverflow.com/a/3402176/4561887
     # prepend our new path to the front of the `PYTHONPATH`, so that it takes priority
-    export PYTHONPATH="$HOME/PythonLibs:$PYTHONPATH"
+    export PYTHONPATH="$HOME/GS/dev/eRCaGuy_hello_world/python/libraries:$PYTHONPATH"
 
     # Notes:
     #
