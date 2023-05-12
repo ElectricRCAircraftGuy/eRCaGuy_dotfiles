@@ -185,7 +185,8 @@ fi
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/PythonLibs" ] ; then
     # See: https://stackoverflow.com/a/3402176/4561887
-    export PYTHONPATH="$PYTHONPATH:$HOME/PythonLibs"
+    # prepend our new path to the front of the `PYTHONPATH`, so that it takes priority
+    export PYTHONPATH="$HOME/PythonLibs:$PYTHONPATH"
 
     # Notes:
     #
@@ -201,6 +202,7 @@ if [ -d "$HOME/PythonLibs" ] ; then
     #   import sys
     #   import pathlib
     #   HOME = str(pathlib.Path.home())
-    #   sys.path.append(f"{HOME}/PythonLibs")
+    #   # prepend our new path to the front of the `PYTHONPATH`, so that it takes priority
+    #   sys.path.insert(0, f"{HOME}/PythonLibs")
     #   ```
 fi
