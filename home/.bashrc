@@ -206,3 +206,15 @@ if [ -d "$HOME/GS/dev/eRCaGuy_hello_world/python/libraries" ] ; then
     #   sys.path.insert(0, f"{HOME}/PythonLibs")
     #   ```
 fi
+
+# Added by eRCaGuy_hello_world for importing Python libraries:
+# https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world
+if [ -d "$HOME/libs_python/libraries" ] ; then
+    export PYTHONPATH="$HOME/libs_python/libraries:$PYTHONPATH"
+fi
+
+# Added by eRCaGuy_hello_world for importing Bash libraries:
+# https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world
+if [ -d "$HOME/libs_bash/libraries" ] ; then
+    export BASHLIBS="$HOME/libs_bash/libraries"
+fi
