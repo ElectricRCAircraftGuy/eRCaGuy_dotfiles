@@ -5765,13 +5765,21 @@ time timeout 0.5s sleep 5
     <=======
     Same as above, except also prove that it was killed after almost exactly 0.5 sec.
 
+binwalk
 [keywords: extract compressed zip .tar.gz file too]
+- See also: search this document for "tar -xf".
+- useful for reverse engineering, hacking, and penetration testing, as well as just extracting zip files and other compressed images whose format you may not easily recognize!
+- "Binwalk is a tool for searching a given binary image for embedded files and executable code. Specifically, it is designed for identifying files and code embedded inside of firmware images." (https://www.kali.org/tools/binwalk/)
+---
+sudo apt install binwalk
+    Install it.
 binwalk path/to/file.bin
     Search binary file "file.bin" for "binay images" of "embedded files and executable code." ie: Show what files can be extracted from within this binary file.
     See:
     1. `man binwalk` and
     1. https://programmingwithstyle.com/posts/howihackedmycar/
 binwalk -e path/to/file.bin
+    <========== VERY USEFUL! ==========
     Same as above, but actually extract (`-e`, or `--extract`) files from within binary file "file.bin"! This automatically creates an appropriately-named folder it places all extracted contents into!
     See:
     1. `man binwalk` and
@@ -6193,6 +6201,7 @@ References:
 1. *** Proves xz is best: https://www.privex.io/articles/which-compression-algorithm-tool
 1. **** How to use xz: https://www.baeldung.com/linux/xz-compression
 1. ***** great `xz` compress and decompress examples in Linux!: https://www.rootusers.com/13-simple-xz-examples/
+1. See also `binwalk`! Search this document for that tool! <======
 
 TODO: ADD A Q&A ON HOW TO DO THIS TO UNIX & LINUX STACK EXCHANGE!---NOPE! ON PERSONAL WEBSITE INSTEAD!
 
@@ -6266,6 +6275,8 @@ tar -xf path/to/file.tar.xz
     <============ MOST COMMON EXTRACTION/DECOMPRESSION USAGE =============
     Extract (`-x`) this file (`-f path/to/file`). Works with any file compression type (ex: .tar, .tar.gz, .tar.xz, etc.) since GNU tar automatically tries to identify the compression type!
     See: https://askubuntu.com/a/107976/327339
+    See also:
+        - `binwalk`--search this document for that! <========
 tar -xf archive.tar
 tar -xf archive.tar.gz
 tar -xf archive.tar.xz  
