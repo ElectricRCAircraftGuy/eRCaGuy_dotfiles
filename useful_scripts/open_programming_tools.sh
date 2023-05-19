@@ -77,6 +77,7 @@ subl&                 # Sublime Text editor
 libreoffice --writer&
 google-chrome&
 $HOME/eclipse/cpp-2022-12/eclipse/eclipse&
+code # Microsoft Visual Studio Code (MS VSCode)--no `&` needed!
 /usr/bin/slack&
 
 
