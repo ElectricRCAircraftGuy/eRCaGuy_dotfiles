@@ -32,7 +32,7 @@ Get my Sublime Text settings files here: [eRCaGuy_dotfiles/home/.config/sublime-
 
 To install the main `Preferences.sublime-settings` file, as well as all other syntax-specific/file-extension-specific `*.sublime-settings` preference files _which override that main preferences file for their respective file types_, simply copy them all to the Sublime Text 3 `/home/$USER/.config/sublime-text-3/Packages/User/` directory! On newer versions of Sublime Text, the directory is `/home/$USER/.config/sublime-text/Packages/User/` instead.
 
-Run this command to install all settings files:
+Run this command to **install all Sublime Text settings files:**
 ```bash
 # Copy all Sublime Text settings files from this repo to your Sublime Text
 # user settings folder
