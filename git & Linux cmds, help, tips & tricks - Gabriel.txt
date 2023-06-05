@@ -4903,10 +4903,16 @@ basename $(realpath some_file_or_symlink)
     Obtain the base **filename** of the path above.
 
 lscpu
+    <===========
     List information about your CPU and cores, whether your CPU is 32 or 64-bit, how many CPUs you have, how many threads per core you have, your system's **endianness**, which processor (Pentium i3, i5, i7, i9, etc.), CPU processor speed, etc. 
     From `man lscpu`: "display information about the CPU architecture"
+    [how many cores you have: see the "CPU(s):" line near the top! Or, just run `nproc`! (see below); number of threads; how many threads you have; hyperthreads]
 lscpu | grep "Byte Order"
     View your system's byte order or endianness! Ex: "Big Endian" [most-significant byte first] or "Little Endian" [least-significant byte first].
+nproc
+    <===========
+    See the number of cores/hyperthreads you have! Ex: on a 16-core laptop, you'll see `16`. 
+    I first learned about this tool from the `ydotool` build instructions here: https://github.com/ReimuNotMoe/ydotool#build
 
 uname
     Print system information
