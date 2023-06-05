@@ -155,3 +155,5 @@ TERMINAL_TAB_CMD_14="cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get rea
 VPN_SERVER_ADDRESS="myvpn.whatever.com"   # example server address to connect to
 VPN_SAML_GROUP="whatever-saml-whatever"   # example SAML group name
 VPN_USER="my.username@something.com"      # example username
+
+alias gs_cd_to_dev_w="cd \"$HOME/GS-w/dev-w\""
