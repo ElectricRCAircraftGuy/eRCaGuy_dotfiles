@@ -27,6 +27,7 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
 
 1. `nemo` file manager - MUCH better than the default `nautilus` file manager which comes with Ubuntu!
     1. See my answer here: https://askubuntu.com/questions/1066752/how-to-set-nemo-as-the-default-file-manager-in-ubuntu-18-04/1173861#1173861
+    <a id="nemo-right-click"></a>
     1. Adding actions to nemo's right-click menu. See here:
         1. ["open_in_terminator.nemo_action" custom Nemo right-click menu action](../nemo/open_in_terminator.nemo_action)
         1. https://unix.stackexchange.com/questions/336368/how-to-configure-nemos-right-click-open-in-terminal-to-launch-gnome-terminal/582462#582462
