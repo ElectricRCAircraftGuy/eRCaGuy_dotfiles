@@ -31,6 +31,8 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
         1. ["open_in_terminator.nemo_action" custom Nemo right-click menu action](../nemo/open_in_terminator.nemo_action)
         1. https://unix.stackexchange.com/questions/336368/how-to-configure-nemos-right-click-open-in-terminal-to-launch-gnome-terminal/582462#582462
         1. https://github.com/linuxmint/nemo/blob/master/files/usr/share/nemo/actions/sample.nemo_action
+        1. Also: open the Nemo "Files" program --> Edit --> Preferences --> "Context Menus" tab in the left-hand pane --> check the box for "Make Link". This adds an entry to the right-click menu for "Make Link", which makes a symlink to the selected file or folder. 
+
 1. `thunar` file manager and its accompanying "Bulk Rename" application
     1. `sudo apt install thunar`
     1. Very useful for its "Bulk Rename" application alone!
