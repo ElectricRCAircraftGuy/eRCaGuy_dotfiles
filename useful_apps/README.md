@@ -28,11 +28,16 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
 1. `nemo` file manager - MUCH better than the default `nautilus` file manager which comes with Ubuntu!
     1. See my answer here: https://askubuntu.com/questions/1066752/how-to-set-nemo-as-the-default-file-manager-in-ubuntu-18-04/1173861#1173861
     <a id="nemo-right-click"></a>
-    1. Adding actions to nemo's right-click menu. See here:
-        1. ["open_in_terminator.nemo_action" custom Nemo right-click menu action](../nemo/open_in_terminator.nemo_action)
-        1. https://unix.stackexchange.com/questions/336368/how-to-configure-nemos-right-click-open-in-terminal-to-launch-gnome-terminal/582462#582462
-        1. https://github.com/linuxmint/nemo/blob/master/files/usr/share/nemo/actions/sample.nemo_action
-        1. Also: open the Nemo "Files" program --> Edit --> Preferences --> "Context Menus" tab in the left-hand pane --> check the box for "Make Link". This adds an entry to the right-click menu for "Make Link", which makes a symlink to the selected file or folder. 
+    1. Add actions to nemo's right-click menu.
+        1. Example custom `sample.nemo_action` config file:
+            1.  https://github.com/linuxmint/nemo/blob/master/files/usr/share/nemo/actions/sample.nemo_action
+        1. Add "open_in_terminator.nemo_action" custom Nemo right-click menu action. See:
+            1. [../nemo/open_in_terminator.nemo_action](../nemo/open_in_terminator.nemo_action) - follow the instructions in the top of this file.
+            1. I first learned how to do this here: [Unix & Linux: How to configure Nemo's right-click "Open in Terminal" to launch "gnome-terminal"](https://unix.stackexchange.com/a/582462/114401)
+        1. Also: open the Nemo/"Files" program --> Edit --> Preferences --> "Context Menus" tab in the left-hand pane:
+            [![](https://i.stack.imgur.com/exwdC.png)](https://i.stack.imgur.com/exwdC.png)
+            1. Check the box for:
+                1. [x] "Make Link". This adds an entry to the right-click menu for "Make Link", which makes a symlink to the selected file or folder. 
 
 1. `thunar` file manager and its accompanying "Bulk Rename" application
     1. `sudo apt install thunar`
