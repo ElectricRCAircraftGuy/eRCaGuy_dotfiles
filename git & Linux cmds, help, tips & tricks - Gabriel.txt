@@ -3300,6 +3300,26 @@ git log --author="Gabriel Staples" --pretty=tformat: --numstat | gawk '{ add += 
     Count lines added, removed, and net total (added - removed) for author "Gabriel Staples" in the current repo and branch.
     See: https://stackoverflow.com/a/7010890/4561887
 
+How to rename a branch both locally and remotely!
+[renaming remote branches; how to rename remote branch]
+See: 
+1. https://stackoverflow.com/a/45561865/4561887
+1. [my answer] https://stackoverflow.com/a/70302053/4561887
+GS: my own instructions: ex: rename `master` --> `main` both locally *and* on the remote named `origin`:
+```bash
+git log master                  # make note of its latest commit hash
+git branch -vv                  # view upstreams
+git branch -m master main       # rename locally
+git push -u origin main:main    # push the new branch name to the remote
+
+git push origin :master         # delete the old remote `master` name
+git fetch 
+git branch -vv                  # view upstreams to make sure they are right for `main` 
+                                # (the upstream should be `origin/main`)
+git branch -r                   # view all remote branches (`origin/master` should not exist)
+git log main                    # sanity check: ensure it's the same commit hash as `master` before
+```
+
 
 ====================================================================================================
 = cron jobs: =
