@@ -17,7 +17,7 @@ Gabriel Staples
 # Table of Contents
 <details>
 <summary><b>(click to expand)</b></summary>
-<!-- MarkdownTOC -->
+<!-- MarkdownTOC autolink="true" autoanchor="true" style="ordered" -->
 
 1. [Project: eRCaGuy_dotfiles](#project-ercaguy_dotfiles)
 1. [Status:](#status)
