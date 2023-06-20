@@ -300,7 +300,7 @@ main() {
     if [ "$ret_code" -eq "$RETURN_CODE_SUCCESS" ]; then
         echo "Opening temporary file."
         $editor "$FILE_OUT_FULL_PATH"
-        sleep 0.5  # give the file time to open
+        sleep 0.75  # give the file time to open
     fi
 
     if [ "$auto_delete_tempfile_when_done" == "true" ]; then
