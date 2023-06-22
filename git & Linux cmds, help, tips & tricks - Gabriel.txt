@@ -104,6 +104,14 @@ Words of wisdom:
 = Quotes: =
 ====================================================================================================
 
+"Yes is yes. Maybe is yes. And a no is just a delayed yes."
+    <=== a perspective I need to have more in life, to keep me calm and help me carry on.
+    - Friend of Elon Musk, at 36:10 in "Elon Musk: The Real Life Iron Man", a video documentary on Tubi. 
+      GS notes: [How to have an optimistic perspective to drive you to keep trying in business even when it seems impossible]
+
+"Entrepreneurs have a phenomenal bounce back factor. They *expect* to fail sometimes."
+    Another quote from a different person (who seemed reputable in my view), at 36:46 in "Elon Musk: The Real Life Iron Man", a video documentary on Tubi. 
+
 "Working hard for something we don't care about is called stress. Working hard for something we love is called passion."
     - Simon Sinek, on Linkedin
       https://www.linkedin.com/in/simonsinek/
@@ -3180,8 +3188,21 @@ See also: https://github.com/bahmutov/git-branches
     git config branch.master.description
 And: https://glebbahmutov.com/blog/git-branches-with-descriptions/#disqus_thread
 
-git clean -fd = WARNING WARNING WARNING THIS IS *DESTRUCTIVE*!!! REMOVE ALL UNTRACKED FILES AND DIRECTORIES; see: https://stackoverflow.com/questions/61212/how-to-remove-local-untracked-files-from-the-current-git-working-tree/64966#64966
+git clean -fd
+    WARNING WARNING WARNING THIS IS *DESTRUCTIVE*!!! REMOVE ALL UNTRACKED FILES AND DIRECTORIES; see: https://stackoverflow.com/questions/61212/how-to-remove-local-untracked-files-from-the-current-git-working-tree/64966#64966
 
+git clean -Xdn
+    <==========
+    See which files and folders exist in a repo but are ignored by .gitignore files. 
+    - ie: do a **dry run** of removing all files and directories in .gitignore files in the repo. Using `-X` causes this to NOT remove untracked files, but rather, only **explicitly ignored** files.
+    - See here for *some* detail, but not this exact command: https://makandracards.com/makandra/17529-git-how-to-remove-ignored-files-from-your-repository-s-directory
+    - NB: this would only remove `.gitignore`d files if they are NOT already tracked! If they are already tracked, you must **manually** remove them first with `rm path/to/file && git add path/to/file && git commit`. 
+git clean -Xdf
+    <========
+    Delete all files and folders which are ignored by .gitignore files.
+    - ie: Same as above, but force it to actually run!
+    - NB: this would only remove `.gitignore`d files if they are NOT already tracked! If they are already tracked, you must **manually** remove them first with `rm path/to/file && git add path/to/file && git commit`.
+    
 == to delete a branch: ==
 
 There are actually **3 different branches to delete!**. Read more here: https://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-locally-and-remotely/23961231#23961231
@@ -5048,6 +5069,9 @@ diff --color=always file1.txt file2.txt
 diff -u --color=always file1.txt file2.txt
     <============== BEST ANSWER! [identical output to `git diff`] ===============
     JUST LIKE `git diff`! SHOW COLOR, WITH UNIFIED LINE-BY-LINE CONTEXT, JUST LIKE git diff! 
+diff -y --color=always file1.txt file2.txt
+    Same as above, except use a prettier side-b'y'-side view instead.
+    <================== EVEN PRETTIER SIDE-BY-SIDE VIEW WITH '-y' ===================
 diff -u --color=always left_file.txt right_file.txt
     same as above, except with me accentuating the position of the "left" and "right" files in the command <=============
 git diff --no-index -- file.a file.b
@@ -5127,8 +5151,65 @@ hexdump -c my_file
         0000020   m   a   n   g   o   |   8  \r                                
         0000028
 
-xxd
+xxd file_in.bin file_out.hex
+    <=======
+    Convert binary to ASCII hex. 
+    A hexdump tool. ie: binary (or ASCII, if the binary is ASCII chars) to ASCII hex chars. 
+    ==> `xxd` does binary to ASCII hex, and `xxd -r` does the reverse: ASCII hex to binary. <===
     Some sort of hexdump-like tool similar to `hexdump`. From `man xxd`: "xxd - make a hexdump or do the reverse."
+xxd -r file_in.hex file_out.bin
+    <=======
+    Do the 'r'everse: convert ASCII hex to binary.
+
+objcopy --input-target=ihex --output-target=binary my_firmware.hex my_firmware.bin
+    Convert an Intex hex firmware file to binary.
+    See: https://stackoverflow.com/a/37226481/4561887
+
+echo "54657374696e67203120322033" | xxd -r -p
+    Convert this ASCII hex string to binary, which happens to be printable ASCII chars. 
+    Run and output:
+        ```bash
+        $ echo "54657374696e67203120322033" | xxd -r -p
+        Testing 1 2 3
+        ```
+    Note: 
+    - `-r` means 'r'everse, as in: convert ASCII hex to binary, not binary to ASCII hex. 
+    - '-p' means 'p'lain output, or "continuous hexdump style". This makes it print properly by not separating bytes, I think.
+    - You can NOT combine `-r -p` into `-rp`. That fails to parse and doesn't work! The program has a lousy argument parser.
+    See: https://stackoverflow.com/a/30084257/4561887
+echo "Testing 1 2 3" | xxd -p
+    Convert this binary (these ASCII chars) to ASCII hex. 
+    Example run and output:
+        ```bash
+        $ echo "Testing 1 2 3" | xxd -p
+        54657374696e672031203220330a
+        ```
+    Note that the hex `0a` at the end is decimal 10, or the `\n` newline char. That newline char is added by `echo` automatically. 
+    See also: 
+    1. https://stackoverflow.com/a/30084257/4561887
+    1. And the example just above.
+printf "%s" "54657374696e67203120322033" | xxd -r -p
+    <==============
+    Convert this ASCII hex string to binary (regular ASCII). 
+    - Note: "ASCII hex string" means data like in an Intel ".hex" microcontroller firmware hex file. But, if you were truly trying to convert an entire Intel .hex file to binary, use the proper tool instead: 
+        `objcopy --input-target=ihex --output-target=binary my_firmware.hex my_firmware.bin`. 
+    - Better than the example above, since it doesn't add a stray newline char (hex 0A, or `\n`) at the end, like `echo` does. 
+    - See my comments below this answer here: https://stackoverflow.com/a/30084257/4561887
+    - Example run and output:
+        ```bash
+        $ printf "%s" "54657374696e67203120322033" | xxd -r -p
+        Testing 1 2 3
+        ```
+printf "%s" "Testing 1 2 3" | xxd -p
+    <==============
+    Convert this binary (ASCII string) to ASCII hex. 
+    Better than the example above, since it doesn't add a stray newline char (hex 0A, or `\n`) at the end, like `echo` does. 
+    See my comments below this answer here: https://stackoverflow.com/a/30084257/4561887
+    Example run and output:
+        ```bash
+        $ printf "%s" "Testing 1 2 3" | xxd -p
+        54657374696e67203120322033
+        ```
 xxd -ia file > file.c
     Create a C file which can be included in a C program to encode binary data into a C program! From `man xxd`:
     >     -i | -include
@@ -5165,6 +5246,47 @@ xxd -ia file > file.c
     extern unsigned int file_len;
     ```
 
+vbindiff file1.bin file2.bin
+    <============ VERY ADVANCED BINARY COMPARISON TOOL! ==============
+    Compare two binary files in an ncurses-like interactive GUI-like environment way. 
+    See the bottom of this article here: https://www.howtogeek.com/817201/compare-binary-files-linux/
+    [meld for binary files meld for .bin files meld diff cmp browse through binary files]
+    See my answer here: https://superuser.com/a/1790518/425838
+vbindiff file1.bin
+    Browse through a single binary file!
+    See: https://www.howtogeek.com/817201/compare-binary-files-linux/ - he said "And in fact, using VBinDiff with a single binary file is an easy and convenient way to browse through binary files, which is a nice bonus."
+vbindiff --help
+    Show help menu.
+man vbindiff
+    Show the man pages (manual pages).
+[See also: Super User: How do I compare binary files in Linux?: https://superuser.com/q/125376/425838]
+
+meld <(xxd file1.bin) <(xxd file2.bin)
+    <========== THIS IS AMAZING! =========
+    Compare two **binary** files side-by-side. 
+    The `xxd` command is to convert binary to ASCII hex with ASCII next to it!
+    I got the idea from this absolutely ingenious answer here!: https://superuser.com/a/968863/425838
+    I may be the first to combine that technique with `meld`. 
+    To compare two **Intel hex** files side-by-side, you must first convert them to binary, as shown below. `objcopy` can NOT write to stdout, as this question and answer learned: https://stackoverflow.com/q/24433784/4561887. 
+    See my answer here: https://superuser.com/a/1790518/425838
+objcopy --input-target=ihex --output-target=binary my_firmware1.hex 1.bin \
+ && objcopy --input-target=ihex --output-target=binary my_firmware2.hex 2.bin \
+ && meld <(xxd 1.bin) <(xxd 2.bin)
+    <========== THIS IS AMAZING! =========
+    (Same as above, except converting Intel hex files to binary first!)
+    Compare two **Intel hex** firmware files side-by-side. See also the notes in the prior example just above. 
+    The `xxd` command is to convert binary to ASCII hex with ASCII next to it!
+    I got the idea from this absolutely ingenious answer here!: https://superuser.com/a/968863/425838
+    I may be the first to combine that technique with `meld`. 
+    For alternate compilers, you'll have to call your compiler directly. Ex: for the Microchip MPLAB X XC32 compiler toolchain, it would look like this instead:
+    See my answer here: https://superuser.com/a/1790518/425838
+xc32-objcopy --input-target=ihex --output-target=binary my_firmware1.hex 1.bin \
+ && xc32-objcopy --input-target=ihex --output-target=binary my_firmware2.hex 2.bin \
+ && meld <(xxd 1.bin) <(xxd 2.bin)
+    <========== THIS IS AMAZING! =========
+    Same as above, except for the Microchip MPLAB X XC32 compiler toolchain. See my notes just above.
+    See my answer here: https://superuser.com/a/1790518/425838
+
 
 gnome-system-monitor = CPU/RAM/network usage monitor GUI
 top = basic CLI competitor to gnome-system-monitor
@@ -5184,6 +5306,14 @@ ps -ejH
 ps aux | grep "some_name"
     <==========
     Find only processes named "some_name", or at least with "some_name" in their output line displayed by `ps aux`
+ps auxf
+    <===== EVEN BETTER! =====
+    Even better, also graphically show the process parent/child hierarchy and relationships to see which process spawned which process!
+    See: https://unix.stackexchange.com/a/453654/114401 - where I first learned about the `-f` in `ps auxf`.
+ps auxf | grep "some_name"
+    <========== BEST! ==========
+    Find processes with `some_name` in them, while also graphically viewing their process parent-child relationships/hierarchy.
+    See: https://unix.stackexchange.com/a/453654/114401 - where I first learned about the `-f` in `ps auxf`.
 pgrep "some_name"
     Similar to the cmd just above. Find the process ID (PID) of the process named "some_name"! This is easier and cleaner than using `ps aux | grep "some_name"`, as shown above!
     See this YouTube video at this time for where I learned this: https://youtu.be/qgG5Jhi_Els?t=314
@@ -5800,7 +5930,7 @@ time timeout 0.5s sleep 5
     Same as above, except also prove that it was killed after almost exactly 0.5 sec.
 
 binwalk
-[keywords: extract compressed zip .tar.gz file too]
+[keywords: extract compressed zip .tar.gz file too; extract unzip binary; extract binary]
 - See also: search this document for "tar -xf".
 - useful for reverse engineering, hacking, and penetration testing, as well as just extracting zip files and other compressed images whose format you may not easily recognize!
 - "Binwalk is a tool for searching a given binary image for embedded files and executable code. Specifically, it is designed for identifying files and code embedded inside of firmware images." (https://www.kali.org/tools/binwalk/)
@@ -5818,6 +5948,13 @@ binwalk -e path/to/file.bin
     See:
     1. `man binwalk` and
     1. https://programmingwithstyle.com/posts/howihackedmycar/
+binwalk --dd='.*' path/to/file.bin
+    <========== VERY USEFUL! ==========
+    Ex: `binwalk --dd='.*' music.mp3`
+    Extract contents from non-compressed binary files, such as a Windows executable (.exe) file, a .mp3 music file, etc. 
+    See: https://stackoverflow.com/a/36635022/4561887
+    TODO: study what the `--dd='.*'` part above means!
+    NB: use this cmd in conjunction with the Gnome "Archive Manager" GUI (`file-roller`) to extract contents and .data, .rdata. .reloc, .text, etc. sections from a Windows .exe files, as well as resources like bitmaps (images), icons, version numbers, etc.! <========== VERY USEFUL! Extract contents from a Windows .exe file ==========
 
 [Mount/remount/unmount/umount filesystem or file image; mount remount]
 > If no part of your filesystem is writable by default, then you may need to unmount it and remount it as read-writable (rw) first, as shown below. ... When done, you can mount it back as read-only (ro) as shown here:
