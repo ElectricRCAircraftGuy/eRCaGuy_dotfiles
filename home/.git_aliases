@@ -42,8 +42,22 @@ gs_git_list_files_changed() {
 #
 # Syntax: `gs_git_branch_hash_bak [dir]` = back up to a backup file in directory "dir" if a dir is
 # passed in.
+##############
+#
+# Example usage:
+#
+#       # back up to `$GIT_BRANCH_HASH_BAK_DEFAULT_DIR`
+#       gs_git_branch_hash_bak
+#
+#       # back up to "../some/dir"
+#       gs_git_branch_hash_bak "../some/dir"
+#
+#       # back up to "../some/dir", with the user phrase "about_to_delete_branches!" at the end
+#       # of the filename
+#       gs_git_branch_hash_bak "../some/dir" about to delete branches!
+#
 GIT_BRANCH_HASH_BAK_DEFAULT_DIR="./git_branch_hash_backups"
-gs_git_branch_hash_bak () {
+gs_git_branch_hash_bak() {
     CMD="gs_git_branch_hash_bak"
     GIT_BRANCH_HASH_BAK_DIR="$GIT_BRANCH_HASH_BAK_DEFAULT_DIR"
     EXIT_SUCCESS=0
@@ -51,7 +65,7 @@ gs_git_branch_hash_bak () {
 
     # Help menu
     if [ "$1" == "-h" ] || [ "$1" == "-?" ]; then
-        echo "This is a bash function in \"~/.bash_aliases\" which backs up git branch"
+        echo "This is a bash function in \".git_aliases\" which backs up git branch"
         echo "names & short hashes to your local \"${GIT_BRANCH_HASH_BAK_DEFAULT_DIR}\" (or other"
         echo "specified) dir."
         echo ""
@@ -63,29 +77,64 @@ gs_git_branch_hash_bak () {
     if [ -n "$1" ]; then
         # If an arg is passed in, then use it instead of the default directory!
         GIT_BRANCH_HASH_BAK_DIR="$1"
+        shift # past argument (`$1`)
     fi
 
+    # accept all additional arguments as words in a phrase to append to the end of the file name!
+    user_added_phrase=""
+    i=0
+    num_words="${#@}"
+    for word in "$@"; do
+        user_added_phrase+="$word"
+
+        # add underscores between words
+        if [ "$i" -lt "$((num_words-1))" ]; then
+            user_added_phrase+="_"
+        fi
+
+        ((i++))
+    done
+    echo "user_added_phrase = $user_added_phrase" # debugging
+
     DATE=`date +%Y%m%d-%H%Mhrs-%Ssec`
-    BRANCH="$(gs_git_show_branch)"
-    DIR=$(pwd)
-    REPO=$(basename "$DIR") # repository name
+    BRANCH="$(gs_git_show_branch_and_hash_no_formatting)"
+    REPO_ROOT="$(git rev-parse --show-toplevel)"
+    REPO=$(basename "$REPO_ROOT") # repository name
     # Replace any spaces in the repository name with underscores
     # See: https://stackoverflow.com/questions/19661267/replace-spaces-with-underscores-via-bash/19661428#19661428
     REPO="${REPO// /_}"
-    FILE="${GIT_BRANCH_HASH_BAK_DIR}/${REPO}_git_branch_bak--${DATE}.txt"
+    FILE="${GIT_BRANCH_HASH_BAK_DIR}/${REPO}__git_branch_bak--${DATE}__${user_added_phrase}.txt"
 
     echo "Backing up 'git branch -vv' info to \"$FILE\"."
-    echo -e "date = \"$DATE\"" > $FILE
-    echo -e "repo (folder) name = \"$REPO\"" >> $FILE
-    echo -e "pwd = \"$DIR\"" >> $FILE
-    echo -e "current branch name = \"$BRANCH\"" >> $FILE
+    echo -e "date                             = \"$DATE\"" > $FILE
+    echo -e "repo (folder) name               = \"$REPO\"" >> $FILE
+    echo -e "repo root                        = \"$REPO_ROOT\"" >> $FILE
+    echo -e "pwd                              = \"$(pwd)\"" >> $FILE
+    echo -e "current branch name & short hash = \"$BRANCH\"" >> $FILE
     echo -e "\n=== \`git branch -vv\` ===\n" >> $FILE
     git branch -vv >> $FILE
     echo "Done!"
 }
-# Alias to do the git hash backups in a directory one higher so you don't have to add this backup
-# dir to this git project's .gitignore file
-alias gs_git_branch_hash_bak_up1="gs_git_branch_hash_bak \"../git_branch_hash_backups\""
+#
+# Alias function to do the git hash backups in a directory one higher so you don't have to add this
+# backup dir to this git project's .gitignore file.
+# This function accepts a user-added phrase as well, to append to the end of the filename!
+#
+# Example usage:
+#
+#       # back up to "REPO_ROOT/../$GIT_BRANCH_HASH_BAK_DEFAULT_DIR"
+#       gs_git_branch_hash_bak_up1  <======
+#
+#       # back up to "REPO_ROOT/../$GIT_BRANCH_HASH_BAK_DEFAULT_DIR", with the user
+#       # phrase "about_to_delete_branches!" at the end of the filename  <========
+#       gs_git_branch_hash_bak_up1 about to delete branches!
+#
+gs_git_branch_hash_bak_up1() {
+    REPO_ROOT="$(git rev-parse --show-toplevel)"
+    BACKUP_DIR="$REPO_ROOT/../$GIT_BRANCH_HASH_BAK_DEFAULT_DIR"
+    mkdir -p "$BACKUP_DIR"
+    gs_git_branch_hash_bak "$BACKUP_DIR" "$@"
+}
 
 # Get just the date stamp of the last commit. You can optionally pass in a branch name or commit
 # hash.

@@ -89,6 +89,15 @@ gs_git_show_branch_and_hash() {
         echo -e "$branch_info"  # NB: DON'T FORGET THE `-e` here to escape the color codes!
     fi
 }
+gs_git_show_branch_and_hash_no_formatting() {
+    git_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
+    git_short_hash="$(git rev-parse --short HEAD 2>/dev/null)"
+
+    if [ -n "$git_branch" ] || [ -n "$git_short_hash" ]; then
+        branch_info="${git_branch} ${git_short_hash}"
+        echo "$branch_info"
+    fi
+}
 #
 # OLD:
 # - shows shell level, git branch (if in a dir with one), and `hostname present_dir $ ` only,
