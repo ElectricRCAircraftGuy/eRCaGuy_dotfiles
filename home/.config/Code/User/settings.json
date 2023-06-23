@@ -5,7 +5,6 @@
     // "security.workspace.trust.untrustedFiles": "open",
     "markdown.extension.toc.orderedList": true,
     // "terminal.integrated.tabs.location": "left",
-    // "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}${separator}${appName}",
 
     "files.watcherExclude": {
         "output/**": true
@@ -52,18 +51,22 @@
     "editor.tokenColorCustomizations": {
         "[Monokai]": {
             "textMateRules": [
-                {
-                    "scope": [
-                        // For Python multi-line docstrings / block comments!
-                        "string.quoted.docstring.multi.python",
-                    ],
-                    "settings": {
-                        // "fontStyle": "italic",
+                // {
+                //     "name": "Docstrings (including Python docstrings)",
+                //     "scope": [
+                //         // For Python multi-line docstrings / block comments!
+                //         // "string.quoted.docstring.multi.python",
+                //         "string.quoted.docstring",
+                //     ],
+                //     "settings": {
+                //         // "fontStyle": "italic",
 
-                        // match regular Python comment color
-                        "foreground": "#88846F"
-                    }
-                },
+                //         // Ex: to color docstrings like strings in Monokai
+                //         "foreground": "#E6DB74",
+                //         // Ex: to color docstrings like comments in Monokai
+                //         // "foreground": "#88846F",
+                //     }
+                // },
                 {
                     "name": "Doxygen variable names",
                     // This works! YOU **MUST** put the wider scope FIRST, and then the narrower
@@ -103,18 +106,23 @@
     "explorer.autoReveal": true,
     "terminal.integrated.fontSize": 12,
 
-    // GS: show the full path to the file in the Window title, rather than just the filename.
+    // GS: show the full path to the file in the Window title (ie: the title at the very top of the
+    // VSCode window), rather than just the filename.
     // See: https://medium.com/riow/vscode-show-full-path-in-title-bar-b0cb731b330
+    // To get to the settings: Ctrl + , --> search for "Window: Title".
     // This is the default setting:
     // "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}${appName}",
+    // This is a previous setting I may have used in the past, I think:
+    // "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}${separator}${appName}",
     "window.title": "${dirty}${activeEditorLong}${separator}${rootName}${separator}${profileName}${separator}${appName}",
+
     "rewrap.wholeComment": false,
     "git.openRepositoryInParentFolders": "always",
     "editor.inlineSuggest.enabled": true,
     "github.copilot.advanced": {},
-    "window.zoomLevel": 1,
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"
     },
     "python.formatting.provider": "none",
+    "window.zoomLevel": 1,
 }
