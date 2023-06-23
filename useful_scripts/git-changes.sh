@@ -70,7 +70,7 @@ git-changes.sh
   rebase!
 - I recommend you also have a 'git difftool' configured. I use 'meld'. It is amazing. To install it,
   see my instrucitons here:
-  https://stackoverflow.com/questions/14821358/git-mergetool-with-meld-on-windows/48979939#48979939
+  https://stackoverflow.com/a/48979939/4561887
 - Here is the whole process:
         # 1. ensure you have the latest upstream changes from the branch you would like to rebase
         #    your feature branch **onto**. Let's assume that is 'master':
