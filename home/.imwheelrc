@@ -5,6 +5,12 @@
 # multiplier by the numerical integer value at the end of the first two rows of each block.
 
 # INSTRUCTIONS:
+#
+# NB: `imwheel` only works fully in the X11 Window manager! In the Wayland window manager, it only
+# works in a very small set of programs which use XWayland (whatever that is), such as Chrome! To
+# get full functionality, you will need to switch back to the X11 window manager, as I explain
+# here: https://askubuntu.com/a/1470563/327339.
+#
 # 1. Install imwheel:
 #       sudo apt update
 #       sudo apt install imwheel
@@ -21,15 +27,36 @@
 # configuration block below, open the application of interest to get its process(es) running, then
 # search for its name among all running processes like this:
 #       ps aux | grep 'application_name'
+#
+# The above `ps` method may only work **sometimes!**. Even better: look at the .desktop shortcut
+# file for a given application, to see what the name of the executable is. Ex:
+# `cat /usr/share/applications/microsoft-edge.desktop | grep 'Exec'` will reveal the name of the
+# executable for the Microsoft Edge browser! As shown below, you can see that its executable name
+# is `microsoft-edge-stable`, located at path `/usr/bin/microsoft-edge-stable`:
+#
+#       $ cat /usr/share/applications/microsoft-edge.desktop | grep 'Exec'
+#       Exec=/usr/bin/microsoft-edge-stable %U
+#       Exec=/usr/bin/microsoft-edge-stable
+#       Exec=/usr/bin/microsoft-edge-stable --inprivate
 
-# Further instructions & help: see my answer here!:
-# https://askubuntu.com/questions/254367/permanently-fix-chrome-scroll-speed/991680#991680
+# Further instructions & help: see:
+# 1. ***** my answer here!: https://askubuntu.com/a/991680/327339
+# 1. My answer: https://askubuntu.com/a/1470563/327339
 
 
 # For `google-chrome` Web Browser
 "-chrome"
-None,      Up,   Button4, 4
-None,      Down, Button5, 4
+None,      Up,   Button4, 3
+None,      Down, Button5, 3
+Control_L, Up,   Control_L|Button4
+Control_L, Down, Control_L|Button5
+Shift_L,   Up,   Shift_L|Button4
+Shift_L,   Down, Shift_L|Button5
+
+# For Microsoft Edge Web Browser
+"microsoft-edge"
+None,      Up,   Button4, 3
+None,      Down, Button5, 3
 Control_L, Up,   Control_L|Button4
 Control_L, Down, Control_L|Button5
 Shift_L,   Up,   Shift_L|Button4
@@ -77,6 +104,7 @@ Shift_L,   Up,   Shift_L|Button4
 Shift_L,   Down, Shift_L|Button5
 
 # For Sublime Text
+# "*sublime_text*"
 "sublime_text"
 None,      Up,   Button4, 3
 None,      Down, Button5, 3
