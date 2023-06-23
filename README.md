@@ -54,16 +54,17 @@ Done and works. I use this daily on all of my Linux computers, including for my 
 
 1. I feel so smart...and wow, this is easy! --> you probably aren't. 
 1. I feel so dumb, and wow, this is hard! --> you're getting there.
-1. I feel like I know so much, but it turns out it's really complicated, and there's ~~so much~~ infinite more that I _don't_ know than what I do! --> you probably are smart.
+1. I feel like I know so much, but it turns out it's really complicated, and there's ~~so much~~ infinite more that I _don't_ know than what I do! --> you are becoming an expert.
 
 I think it takes 8 to 15 years to get out of the slump at the bottom and start heading upwards on the right:
 
+Artist's depiction of the [Dunning-Kruger effect](https://en.wikipedia.org/wiki/Dunning%e2%80%93Kruger_effect):
 <a href="https://user-images.githubusercontent.com/6842199/248150378-fb71c67b-5833-4b7e-be75-8d1817f0e5d8.png">
     <p align="left" width="100%">
         <img width="50%" src="https://user-images.githubusercontent.com/6842199/248150378-fb71c67b-5833-4b7e-be75-8d1817f0e5d8.png">
     </p>
 </a>
-<sub>Source: I first saw this exact image (not the concept, but this exact image) on [@user3666197's Stack Overflow profile here](https://stackoverflow.com/users/3666197/user3666197).</sub>
+<sub>Source: I first saw this exact image (not the concept, but this particular image) on <a href="https://stackoverflow.com/users/3666197/user3666197">@user3666197's Stack Overflow profile here</a>. I don't know where they got it from.</sub>
 
 
 <a id="description-of-contents"></a>
