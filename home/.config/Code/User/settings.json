@@ -2,23 +2,68 @@
 // Official Documentation: https://code.visualstudio.com/docs/getstarted/settings
 
 {
-    "security.workspace.trust.untrustedFiles": "open",
+    // "security.workspace.trust.untrustedFiles": "open",
     "markdown.extension.toc.orderedList": true,
-    "terminal.integrated.tabs.location": "left",
-    "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}${separator}${appName}",
-    "workbench.colorTheme": "Monokai ST3",
-    "workbench.colorCustomizations": {
-        "[Monokai ST3]": {
-            // "sideBar.background": "#347890"
-        }
+    // "terminal.integrated.tabs.location": "left",
+    // "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}${separator}${appName}",
+
+    "files.watcherExclude": {
+        "output/**": true
     },
-    // GS: see my tutorial here!:
-    // https://github.com/volosovich/Monokai-ST3-theme-for-vscode/issues/14
+    "remote.SSH.configFile": "/home/gabriel/.ssh/config",
+    "remote.SSH.connectTimeout": 300,
+    "remote.SSH.lockfilesInTmp": true,
+    "remote.SSH.logLevel": "trace",
+    "remote.SSH.remotePlatform": {
+        "my_company_name": "linux",
+    },
+    "cmake.configureOnOpen": true,
+    "C_Cpp.files.exclude": {
+        "output/**": true,
+        "**/.vscode": true,
+        "**/.vs": true
+    },
+    "files.insertFinalNewline": true,
+    "editor.mouseWheelScrollSensitivity": 1,
+    "editor.tabSize": 4,
+    "files.trimTrailingWhitespace": true,
+    "editor.wordWrap": "on",
+    "editor.formatOnPaste": true,
+    "editor.snippetSuggestions": "top",
+    "editor.fontSize": 12,
+    "editor.rulers": [
+        // 80,
+        100,
+        120,
+    ],
+    // My favorite color theme is
+    // "workbench.colorTheme": "Monokai",
+    "workbench.colorTheme": "Monokai",
+
+    // Override editor syntax colors and font style from the currently selected color theme.
+    // GS: see:
+    // 1. *****++ my new answer: How to colorize Python docstrings to your liking; ex: like strings
+    //    - https://stackoverflow.com/a/76440715/4561887
+    // 1. *****+ my answer here: How to subdue Python block comment strings in VSCode in order to
+    //    look like Sublime Text's Monokai - https://stackoverflow.com/a/76224318/4561887
+    // 1. This answer by @RND here: https://stackoverflow.com/a/68008322/4561887
+    // 1. my tutorial here:
+    //    https://github.com/volosovich/Monokai-ST3-theme-for-vscode/issues/14
     "editor.tokenColorCustomizations": {
-        "[Monokai ST3]": {
-            // "comments": "#347890",
-            // "variables": "#FF0000",
+        "[Monokai]": {
             "textMateRules": [
+                {
+                    "scope": [
+                        // For Python multi-line docstrings / block comments!
+                        "string.quoted.docstring.multi.python",
+                    ],
+                    "settings": {
+                        // "fontStyle": "italic",
+
+                        // match regular Python comment color
+                        "foreground": "#88846F"
+                    }
+                },
                 {
                     "name": "Doxygen variable names",
                     // This works! YOU **MUST** put the wider scope FIRST, and then the narrower
@@ -44,14 +89,32 @@
                         "foreground": "#7C8E9C",
                     }
                 },
+
             ]
         }
     },
-    "editor.rulers":
-	[
-		// 80,
-		100,
-		120
-    ],
-    "window.zoomLevel": 0,
+
+    // Controls whether the Explorer should automatically reveal and select files when opening them.
+    //  - true: Files will be revealed and selected.
+    //  - false: Files will not be revealed and selected.
+    //  - focusNoScroll: Files will not be scrolled into view, but will still be focused.
+    // GS note: default is `true`
+    // See my answer here: https://stackoverflow.com/a/76205209/4561887
+    "explorer.autoReveal": true,
+    "terminal.integrated.fontSize": 12,
+
+    // GS: show the full path to the file in the Window title, rather than just the filename.
+    // See: https://medium.com/riow/vscode-show-full-path-in-title-bar-b0cb731b330
+    // This is the default setting:
+    // "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}${appName}",
+    "window.title": "${dirty}${activeEditorLong}${separator}${rootName}${separator}${profileName}${separator}${appName}",
+    "rewrap.wholeComment": false,
+    "git.openRepositoryInParentFolders": "always",
+    "editor.inlineSuggest.enabled": true,
+    "github.copilot.advanced": {},
+    "window.zoomLevel": 1,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none",
 }
