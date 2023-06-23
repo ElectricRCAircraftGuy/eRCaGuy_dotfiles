@@ -16,6 +16,7 @@
 //    - Note that once you copy these settings to their proper place, Sublime will automatically remove all
 //        comments and empty space to condense the settings into a single JSON block. This is expected behavior.
 {
+    // Default font size is 10
     "font_size": 10,
 
     "ignored_packages":
