@@ -21,6 +21,7 @@ Gabriel Staples
 
 1. [Project: eRCaGuy_dotfiles](#project-ercaguy_dotfiles)
 1. [Status:](#status)
+1. [Hey! I feel so smart! / Help! I feel dumb!](#hey-i-feel-so-smart--help-i-feel-dumb)
 1. [Description of contents](#description-of-contents)
 1. [_Git submodules and Git LFS:_ how to clone this repo and all git submodules and git lfs files](#git-submodules-and-git-lfs-how-to-clone-this-repo-and-all-git-submodules-and-git-lfs-files)
         1. [References:](#references)
@@ -46,6 +47,23 @@ https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 <a id="status"></a>
 # Status:
 Done and works. I use this daily on all of my Linux computers, including for my family and young kids.
+
+
+<a id="hey-i-feel-so-smart--help-i-feel-dumb"></a>
+# Hey! I feel so smart! / Help! I feel dumb!
+
+1. I feel so smart...and wow, this is easy! --> you probably aren't. 
+1. I feel so dumb, and wow, this is hard! --> you're getting there.
+1. I feel like I know so much, but it turns out it's really complicated, and there's ~~so much~~ infinite more that I _don't_ know than what I do! --> you probably are smart.
+
+I think it takes 8 to 15 years to get out of the slump at the bottom and start heading upwards on the right:
+
+<a href="https://user-images.githubusercontent.com/6842199/248150378-fb71c67b-5833-4b7e-be75-8d1817f0e5d8.png">
+    <p align="left" width="100%">
+        <img width="50%" src="https://user-images.githubusercontent.com/6842199/248150378-fb71c67b-5833-4b7e-be75-8d1817f0e5d8.png">
+    </p>
+</a>
+<sub>Source: I first saw this exact image (not the concept, but this exact image) on [@user3666197's Stack Overflow profile here](https://stackoverflow.com/users/3666197/user3666197).</sub>
 
 
 <a id="description-of-contents"></a>
