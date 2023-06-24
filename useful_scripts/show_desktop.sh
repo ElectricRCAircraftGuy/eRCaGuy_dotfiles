@@ -10,6 +10,10 @@
 
 # INSTALLATION INSTRUCTIONS:
 #
+# Option 1: follow my online instructions: https://askubuntu.com/a/1474575/327339
+#
+# Option 2:
+#
 # 1. Install dependencies:
 #
 #       sudo apt update
