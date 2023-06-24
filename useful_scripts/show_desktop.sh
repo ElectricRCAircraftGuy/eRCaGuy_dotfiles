@@ -36,6 +36,9 @@
 # 1. and my answer here too: https://askubuntu.com/a/1109490/327339
 # 1. show_desktop_with_wmctrl.sh -
 #    https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/show_desktop_with_wmctrl.sh
+# 1. Note: if `wmctrl` ever quits working in a new desktop environment in the future, try using
+# `ydotool` instead! See my "bash/show_desktop_with_ydotool.sh" example program mentioned in the
+# top of my answer here: https://askubuntu.com/a/1109490/327339
 
 # Toggle showing the desktop vs windows
 toggle_windows() {
