@@ -130,9 +130,9 @@ if [ "$XDG_SESSION_TYPE" = "x11" ]; then
     echo "Using x11 window manager server."
     WINDOW_MANAGER="x11"
 elif [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-    echo "Using wayland window manager server."
+    echo "Using Wayland window manager server."
 else
-    echo "*Probably* using wayland window manager server."
+    echo "*Probably* using Wayland window manager server."
 fi
 
 # For X11 only, obtain the xinput IDs for the Touchpad & Touchscreen so we can disable/enable them
@@ -157,7 +157,13 @@ else
     TouchpadId="(NA)"
     TouchscreenId="(NA)"
 fi
-PRINT_TEXT="Touchpad ID $TouchpadId &amp; Touchscreen ID $TouchscreenId "
+
+PRINT_TEXT="Touchpad ID $TouchpadId &amp; Touchscreen ID $TouchscreenId"
+if [ "$WINDOW_MANAGER" = "x11" ]; then
+    PRINT_TEXT="${PRINT_TEXT} (in X11)"
+else
+    PRINT_TEXT="${PRINT_TEXT} (in Wayland)"
+fi
 
 # Read the current toggle state ("ON" = touch devices on, "OFF" = touch devices off)
 get_current_state() {
