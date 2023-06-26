@@ -3192,13 +3192,13 @@ git clean -fd
     WARNING WARNING WARNING THIS IS *DESTRUCTIVE*!!! REMOVE ALL UNTRACKED FILES AND DIRECTORIES; see: https://stackoverflow.com/questions/61212/how-to-remove-local-untracked-files-from-the-current-git-working-tree/64966#64966
 
 git clean -Xdn
-    <==========
+    <========== CLEAN FILES ignored by .gitignore files (dry run) ==========
     See which files and folders exist in a repo but are ignored by .gitignore files. 
     - ie: do a **dry run** of removing all files and directories in .gitignore files in the repo. Using `-X` causes this to NOT remove untracked files, but rather, only **explicitly ignored** files.
     - See here for *some* detail, but not this exact command: https://makandracards.com/makandra/17529-git-how-to-remove-ignored-files-from-your-repository-s-directory
     - NB: this would only remove `.gitignore`d files if they are NOT already tracked! If they are already tracked, you must **manually** remove them first with `rm path/to/file && git add path/to/file && git commit`. 
 git clean -Xdf
-    <========
+    <========== CLEAN FILES ignored by .gitignore files ==========
     Delete all files and folders which are ignored by .gitignore files.
     - ie: Same as above, but force it to actually run!
     - NB: this would only remove `.gitignore`d files if they are NOT already tracked! If they are already tracked, you must **manually** remove them first with `rm path/to/file && git add path/to/file && git commit`.
