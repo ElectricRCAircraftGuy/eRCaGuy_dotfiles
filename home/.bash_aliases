@@ -123,6 +123,11 @@ if [ -f "$SCRIPT_DIRECTORY/.git_aliases" ]; then
     . "$SCRIPT_DIRECTORY/.git_aliases"
 fi
 
+# Import this ".bash_useful_functions" utilities file, if it exists.
+if [ -f "$SCRIPT_DIRECTORY/.bash_useful_functions" ]; then
+    . "$SCRIPT_DIRECTORY/.bash_useful_functions"
+fi
+
 # Find a file built by Bazel and therefor sitting in the "build/bin" dir.
 alias gs_find_bazel_build_file='find -L build/bin | grep'
 # note: the below could also be done with `gs_find_bazel_build_file -i somefilename`

@@ -1,0 +1,88 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# Utilities and useful Bash functions:
+#
+# Put anything in here that you don't think needs to be in its own stand-alone file/program
+# inside "eRCaGuy_dotfiles/useful_scripts", and which might fit better here than inside:
+#
+# 1. eRCaGuy_dotfiles/home/.profile
+# 1. eRCaGuy_dotfiles/home/.bashrc
+# 1. eRCaGuy_dotfiles/home/.bash_aliases
+# 1. eRCaGuy_dotfiles/home/.bash_aliases_private
+# 1. eRCaGuy_dotfiles/home/.git_aliases
+#
+# In other words, I'm thinking that small, general-purpose **utilities** and functions and things
+# can go here. If the complexity becomes too much, consider moving them to their own file
+# inside "eRCaGuy_dotfiles/useful_scripts" instead.
+
+
+# ==================================================================================================
+# Hex file utilities
+# ==================================================================================================
+
+# Function to convert .hex firmware files to .bin
+# - Could be very useful for binary and hex file comparisons, too. See my answer here:
+#   https://superuser.com/a/1790518/425838
+#
+# Example usage:
+#
+#       # this produces "path/to/myfile.bin" from "path/to/myfile.hex"
+#       hex2bin path/to/myfile.hex
+#
+#       # you can pass multiple paths at once too
+#       hex2bin path/to/myfile1.hex path/to/myfile2.hex path/to/myfile3.hex
+#
+hex2bin() {
+    # treat all input args as file paths
+    for filepath_hex in "$@"; do
+        # See: https://stackoverflow.com/a/965072/4561887
+        filepath_hex_no_extension="${filepath_hex%.*}"
+        filepath_bin="${filepath_hex_no_extension}.bin"
+        # debugging
+        # echo "filepath_hex_no_extension = $filepath_hex_no_extension"
+        # echo "filepath_bin = $filepath_bin"
+        echo "Converting \"$filepath_hex\" to \"$filepath_bin\"."
+
+        xc32-objcopy --input-target=ihex --output-target=binary \
+            "$filepath_hex" "$filepath_bin"
+    done
+}
+
+# (Optional) add an alias prefixed with your initials so you can find all your
+# custom aliases and functions easily by typing your initials followed by an
+# underscore and hitting Tab Tab.
+alias gs_hex2bin="hex2bin"
+
+# Function to convert .hex firmware files to .bin and then to a
+# human-compare-friendly .xxd.hex, so you can easily compare two files with
+# `diff` or `meld`.
+# - See my answer here: https://superuser.com/a/1790518/425838
+#
+# Example usage:
+#
+#       # this produces both "path/to/myfile.bin" and "path/to/myfile.xxd.hex"
+#       # from "path/to/myfile.hex"
+#       hex2xxdhex path/to/myfile.hex
+#
+#       # you can pass multiple paths at once too
+#       hex2xxdhex path/to/myfile1.hex path/to/myfile2.hex
+#       # then compare the two output ".xxd.hex" files with `meld`
+#       meld path/to/myfile1.xxd.hex path/to/myfile2.xxd.hex
+#
+hex2xxdhex() {
+    # treat all input args as file paths
+    for filepath_hex in "$@"; do
+        # See: https://stackoverflow.com/a/965072/4561887
+        filepath_hex_no_extension="${filepath_hex%.*}"
+        filepath_bin="${filepath_hex_no_extension}.bin"
+        filepath_xxdhex="${filepath_hex_no_extension}.xxd.hex"
+        echo "Converting \"$filepath_hex\" to \"$filepath_bin\" and to"\
+            "\"$filepath_xxdhex\"."
+
+        xc32-objcopy --input-target=ihex --output-target=binary \
+            "$filepath_hex" "$filepath_bin"
+        xxd "$filepath_bin" "$filepath_xxdhex"
+    done
+}
+alias gs_hex2xxdhex="hex2xxdhex"
+
