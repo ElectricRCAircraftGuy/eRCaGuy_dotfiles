@@ -8,6 +8,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 1. [1. `ssh` key generation, setup, and configuration notes:](#1-ssh-key-generation-setup-and-configuration-notes)
     1. [References:](#references)
+    1. [See also:](#see-also)
     1. [Example of files you may have in your `~/.ssh` dir](#example-of-files-you-may-have-in-your-~ssh-dir)
     1. [Public/Private ssh generation and copying to your server's `~/.ssh/authorized_keys` file](#publicprivate-ssh-generation-and-copying-to-your-servers-~sshauthorized_keys-file)
     1. [How to configure ssh keys to easily push to / pull from GitHub](#how-to-configure-ssh-keys-to-easily-push-to--pull-from-github)
@@ -47,6 +48,11 @@ https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-
 1. [EXCELLENT!] Great, generic ssh key-generation steps and instructions, as well as how to add your public key to GitHub so you can access your repos remotely from the git command-line: 
 https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 1. How to run commands over ssh: https://www.cyberciti.biz/faq/unix-linux-execute-command-using-ssh/
+
+
+<a id="see-also"></a>
+## See also:
+1. My answer: [Stack Overflow: How to get `ssh-agent` to load your private ssh keys and require their passwords only once per boot in Windows](https://stackoverflow.com/a/76568760/4561887)
 
 
 <a id="example-of-files-you-may-have-in-your-~ssh-dir"></a>
@@ -96,6 +102,10 @@ eval "$(ssh-agent -s)"
 # Add your private key to it; update the path to your private key below, as required, based on what
 # path you interactively selected above when generating the key
 ssh-add ~/.ssh/id_ed25519
+
+# Note: for Windows, see my answer here, instead: [Stack Overflow: How to get ssh-agent to load your
+# private ssh keys and require their passwords only once per boot in Windows]
+# (https://stackoverflow.com/a/76568760/4561887)
 
 # Verify what keys have been added to the ssh-agent by listing (`-l`) currently-added keys. 
 # A. If you see "Could not open a connection to your authentication agent.", it means the
