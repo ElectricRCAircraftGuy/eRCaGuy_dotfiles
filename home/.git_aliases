@@ -103,7 +103,12 @@ gs_git_branch_hash_bak() {
     # Replace any spaces in the repository name with underscores
     # See: https://stackoverflow.com/questions/19661267/replace-spaces-with-underscores-via-bash/19661428#19661428
     REPO="${REPO// /_}"
-    FILE="${GIT_BRANCH_HASH_BAK_DIR}/${REPO}__git_branch_bak--${DATE}__${user_added_phrase}.txt"
+
+    if [ "$user_added_phrase" = "" ]; then
+        FILE="${GIT_BRANCH_HASH_BAK_DIR}/${REPO}__git_branch_bak--${DATE}.txt"
+    else
+        FILE="${GIT_BRANCH_HASH_BAK_DIR}/${REPO}__git_branch_bak--${DATE}__${user_added_phrase}.txt"
+    fi
 
     echo "Backing up 'git branch -vv' info to \"$FILE\"."
     echo -e "date                             = \"$DATE\"" > $FILE
