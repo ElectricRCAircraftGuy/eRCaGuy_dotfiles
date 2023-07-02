@@ -5160,10 +5160,23 @@ xxd file_in.bin file_out.hex
 xxd -r file_in.hex file_out.bin
     <=======
     Do the 'r'everse: convert ASCII hex to binary.
+hex2xxdhex path/to/myfile1.hex path/to/myfile2.hex && meld path/to/myfile1.xxd.hex path/to/myfile2.xxd.hex
+    <======== BEST BINARY FIRMWARE COMPARE COMMAND =======
+    My custom function to convert .hex firmware files to .bin and then to a human-compare-friendly .xxd.hex, so you can easily compare two files with `diff` or `meld`. 
+    See:
+    1. My answer here: https://stackoverflow.com/a/76584597/4561887
+    1. eRCaGuy_dotfiles/home/.bash_useful_functions
 
 objcopy --input-target=ihex --output-target=binary my_firmware.hex my_firmware.bin
     Convert an Intex hex firmware file to binary.
     See: https://stackoverflow.com/a/37226481/4561887
+hex2bin path/to/myfile1.hex path/to/myfile2.hex path/to/myfile3.hex
+    <========
+    My custom function to convert .hex firmware files to .bin. 
+    This command converts all 3 of this .hex files to .bin files in the same dir as the corresponding .hex files.
+    See:
+    1. My answer here: https://stackoverflow.com/a/76584597/4561887
+    1. eRCaGuy_dotfiles/home/.bash_useful_functions
 
 echo "54657374696e67203120322033" | xxd -r -p
     Convert this ASCII hex string to binary, which happens to be printable ASCII chars. 
