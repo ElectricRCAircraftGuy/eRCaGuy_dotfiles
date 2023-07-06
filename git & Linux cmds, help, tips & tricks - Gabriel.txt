@@ -5259,6 +5259,13 @@ xxd -ia file > file.c
     extern unsigned int file_len;
     ```
 
+dos2unix -n in.win.hex out.unix.hex
+    Convert DOS/Windows `\r\n` line endings in `in.win.hex` to `\n` Linux/Unix line endings in `out.unix.hex`. 
+    Note: this runs inside Git Bash in Git for Windows, too!
+unix2dos -n in.unix.hex out.win.hex
+    Convert `\n` Linux/Unix line endings in `in.unix.hex` to `\r\n` DOS/Windows line endings in `out.win.hex`. 
+    Note: this runs inside Git Bash in Git for Windows, too!
+
 vbindiff file1.bin file2.bin
     <============ VERY ADVANCED BINARY COMPARISON TOOL! ==============
     Compare two binary files in an ncurses-like interactive GUI-like environment way. 
