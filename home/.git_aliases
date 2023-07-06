@@ -116,6 +116,7 @@ gs_git_branch_hash_bak() {
     echo -e "repo root                        = \"$REPO_ROOT\"" >> $FILE
     echo -e "pwd                              = \"$(pwd)\"" >> $FILE
     echo -e "current branch name & short hash = \"$BRANCH\"" >> $FILE
+    echo -e "user-added phrase / notes        = \"$user_added_phrase\"" >> $FILE
     echo -e "\n=== \`git branch -vv\` ===\n" >> $FILE
     git branch -vv >> $FILE
     echo "Done!"
