@@ -91,19 +91,33 @@ fi
 # Choose your terminal application. Only ONE of these should be uncommented! I prefer `terminator`
 # (install it with `sudo apt install terminator`), but the default terminal application that Ubuntu
 # comes with is `gnome-terminal`.
-# - For my full terminator installation instructions, see here:
+# - For my full `terminator` installation instructions, see here:
+#   https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_apps#terminator
 terminator&
 # gnome-terminal&
 
 # 2) Open up all other programs you want:
 
-nemo "$HOME/GS/dev"&  # Nemo file manager; start in this folder
-subl&                 # Sublime Text editor
-# gnome-system-monitor&  # nah, added to Ubuntu's system startup menu to open this at boot instead
+# Nemo file manager; start in this folder
+# - See my full `nemo` installation instructions here: https://askubuntu.com/a/1446372/327339
+nemo "$HOME/GS-w/dev-w"&
+# nemo "$HOME/GS-p/dev-p"&
+# nemo "$HOME/GS/dev"&
+
+subl&                     # Sublime Text editor
+# gnome-system-monitor&   # nah, added to Ubuntu's system startup menu to open this at boot instead
 libreoffice --writer&
 google-chrome&
-$HOME/eclipse/cpp-2022-12/eclipse/eclipse&
+$HOME/eclipse/embedcpp-2023-03/eclipse/eclipse&
+# $HOME/eclipse/cpp-2022-12/eclipse/eclipse&
 code # Microsoft Visual Studio Code (MS VSCode)--no `&` needed!
 /usr/bin/slack&
 
-
+# Microsoft tools for Linux
+#
+# Microsoft Teams (PWA)
+# - from: "~/.local/share/applications/msedge-cifhbcnohmdccbgoicgdjpfamggdegmo-Default.desktop"
+/opt/microsoft/msedge/microsoft-edge --profile-directory=Default --app-id=cifhbcnohmdccbgoicgdjpfamggdegmo "--app-url=https://teams.microsoft.com/?clientType=pwa"
+# Outlook (PWA)
+# - from: "~/.local/share/applications/msedge-pkooggnaalmfkidjmlhoelhdllpphaga-Default.desktop"
+/opt/microsoft/msedge/microsoft-edge --profile-directory=Default --app-id=pkooggnaalmfkidjmlhoelhdllpphaga --app-url=https://outlook.office365.com/mail/ --app-launch-url-for-shortcuts-menu-item=https://outlook.office365.com/calendar
