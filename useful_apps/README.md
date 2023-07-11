@@ -76,6 +76,7 @@ In addition to my [useful_scripts](../useful_scripts), such as [`touchpad_toggle
         . ~/.profile
         ```
 1. LibreOffice
+<a id="terminator"></a>
 1. `terminator` terminal - allows easy splitting and tiling of multiple terminals in one single window! A good *local terminal* alternative to `gnome-terminal` + `tmux` for splitting windows. You can right-click in the terminal and split the window horizontally or vertically.
     1. *Config settings to change:* 
         1. See my notes here: [eRCaGuy_dotfiles/home/.config/terminator/README.md](../home/.config/terminator/README.md)

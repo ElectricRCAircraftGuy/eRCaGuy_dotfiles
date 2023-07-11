@@ -60,6 +60,7 @@
 # https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
 
 # Uncomment the line for your desired terminal.
+# - NB: this variable is sourced by and used by my custom `~/.bash_aliases` file.
 TERMINAL="terminator"  # my preference since you can right-click and go to
                        # "Split Horizontally" or "Split Vertically"
 # TERMINAL="gnome-terminal"  # the default that comes with Ubuntu 18.04, 20.04, etc.

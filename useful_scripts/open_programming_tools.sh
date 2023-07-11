@@ -24,7 +24,14 @@
 # edit.
 #       cd /path/to/here
 #       mkdir -p ~/bin
+#
+#       # Option 1 (recommended for most users): **copy** my file so you can customize it
 #       cp -i open_programming_tools.sh ~/bin/gs_open_programming_tools
+#
+#       # OR Option 2 (only do this if this is really what you want; NOT
+#       # recommended for most users): make a **symlink** to my file so you
+#       # always have *exactly* what I have
+#       ln -si "$PWD/open_programming_tools.sh" ~/bin/gs_open_programming_tools
 #
 # 2. **In the copy in ~/bin**, edit the list of programs to open below. Ensure each program you want
 # opened is called, and in the order you want. TO VIEW DESKTOP LAUNCHERS TO SEE WHAT THE COMMANDS
@@ -40,7 +47,10 @@
 #       ln -si "${PWD}/open_programming_tools.desktop" ~/Desktop
 #
 # 4. If you just created the "~/bin" dir for the first time ever in the first step above, close all
-# terminal windows and re-open them (or log out of Ubuntu and then log back in).
+# terminal windows and re-open them, OR log out of Ubuntu and then log back in, OR run this in all
+# open terminals:
+#
+#       . ~/.profile
 #
 # 5. Now run the script. There are two ways:
 #   1. Double-click on the "Open Programming Tools" icon on your desktop! OR:
@@ -48,14 +58,29 @@
 #
 # DONE!
 
-# **Use ampersands (&) after each command below to allow them to all open up in parallel to speed up
-# the opening process!**
-
-# 1) Open up a terminal with multiple tabs. For this to work, this assumes you've already installed
-# the necessary `~/.bash_aliases`, and `~/.bash_aliases_private` files from this directory. Set
-# all your tabs to open in `~/.bash_aliases_private`??? <==========
-# See this readme for details:
-# https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home#1-installation
+# NOTES:
+#
+# 1. **Use ampersands (&) after each command below to allow them to all open up in parallel to speed
+# up the opening process!**
+#
+# 1. The following usage of the "~/temp/.open_default_tabs" inter-process communication (IPC) file
+# below, in conjunction with calling `terminator&` or `gnome-terminal&` after that, to open the
+# terminal, is what automagically opens up the terminal with your desired and customized tabs! For
+# this to work, you must have already installed the necessary `~/.bash_aliases`, and
+# `~/.bash_aliases_private` files from here:
+#
+#   1. "eRCaGuy_dotfiles/home/.bash_aliases" - this file is what opens all custom terminal tabs,
+#   setting their custom titles and running custom commands in each tab.
+#
+#   1. "eRCaGuy_dotfiles/home/.bash_aliases_private" - this file is where **YOU CONFIGURE** all
+#   custom tab titles and tab commands.
+#
+#   You, as the user, are expected to configure all customization of the terminal tab titles and tab
+#   commands in the "~/.bash_aliases_private" file which you must install by reading the
+#   instructions in the top of the ".bash_aliases_private" file mentioned just above.
+#
+#   See also the instructions in this "eRCaGuy_dotfiles/home/README.md" for more details:
+#   https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home#1-installation
 
 # inter-process communication is done here via the existence of the below temporary file!
 mkdir -p ~/temp
@@ -66,6 +91,7 @@ fi
 # Choose your terminal application. Only ONE of these should be uncommented! I prefer `terminator`
 # (install it with `sudo apt install terminator`), but the default terminal application that Ubuntu
 # comes with is `gnome-terminal`.
+# - For my full terminator installation instructions, see here:
 terminator&
 # gnome-terminal&
 
