@@ -82,6 +82,10 @@
 #   See also the instructions in this "eRCaGuy_dotfiles/home/README.md" for more details:
 #   https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/home#1-installation
 
+# -------------------------------------------------------
+# 1. Open up your terminal with all custom tabs you want:
+# -------------------------------------------------------
+
 # inter-process communication is done here via the existence of the below temporary file!
 mkdir -p ~/temp
 if [ ! -f ~/temp/.open_default_tabs ]; then  # for meaning of `-f`, see `man test`
@@ -96,21 +100,38 @@ fi
 terminator&
 # gnome-terminal&
 
-# 2) Open up all other programs you want:
+# -------------------------------------------------------
+# 2. Now open up all other programs you want:
+# -------------------------------------------------------
 
+# File managers
+#
 # Nemo file manager; start in this folder
 # - See my full `nemo` installation instructions here: https://askubuntu.com/a/1446372/327339
 nemo "$HOME/GS-w/dev-w"&
 # nemo "$HOME/GS-p/dev-p"&
 # nemo "$HOME/GS/dev"&
 
-subl&                     # Sublime Text editor
+# Misc., including word processors or other apps
+#
 # gnome-system-monitor&   # nah, added to Ubuntu's system startup menu to open this at boot instead
 libreoffice --writer&
+
+# Web browsers
+#
 google-chrome&
+# Microsoft Edge browser; see: "/usr/share/applications/microsoft-edge.desktop"
+microsoft-edge-stable&
+
+# Text editors and coding IDEs
+#
 $HOME/eclipse/embedcpp-2023-03/eclipse/eclipse&
 # $HOME/eclipse/cpp-2022-12/eclipse/eclipse&
+subl&                     # Sublime Text editor
 code # Microsoft Visual Studio Code (MS VSCode)--no `&` needed!
+
+# Messengers and chat programs
+#
 /usr/bin/slack&
 
 # Microsoft tools for Linux
