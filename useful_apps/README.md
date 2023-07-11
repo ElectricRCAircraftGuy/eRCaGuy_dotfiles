@@ -191,45 +191,78 @@ See in particular:
 
 <a id="terminator"></a>
 1. `terminator` terminal - allows easy splitting and tiling of multiple terminals in one single window! A good *local terminal* alternative to `gnome-terminal` + `tmux` for splitting windows. You can right-click in the terminal and split the window horizontally or vertically.
-    1. Quick summary: how to install and configure `terminator` to have the settings that I like: 
+    1. *Quick summary:* how to install and configure `terminator` to have the settings that I like: 
 
-    1. *Config settings to change:* 
-        1. See my notes here: [eRCaGuy_dotfiles/home/.config/terminator/README.md](../home/.config/terminator/README.md)
-            1. See especially my comments here and below it: [GitHub: micro: Fixed: how to disable interfering shortcut keys in `terminator`](https://github.com/zyedidia/micro/issues/2688#issuecomment-1404008312)
-        1. Get my config settings direcly from here: [eRCaGuy_dotfiles/home/.config/terminator/config](../home/.config/terminator/config)
-    1. https://gnome-terminator.org/
-    1. Install
         ```bash
+        # install it
+        
+        sudo apt update
         sudo apt install terminator
+        
+        # copy over my configuration settings
+        
+        cd path/to/eRCaGuy_dotfiles
+        cp -i ~/.config/terminator/config ~/.config/terminator/config.bak
+
+        # Option 1 (what you should do / recommended for most users): **copy** my settings so you
+        # can keep and modify your own, unique copy of settings
+        cp -i /home/.config/terminator/config ~/.config/terminator/config
+        # OR Option 2 (what I usually do / for advanced git users who understand what this
+        # means): **symlink** to my settings, so you can easily synchronize your changes with mine
+        # by pulling and merging my changes into yours periodically
+        ln -si "$PWD/home/.config/terminator/config" ~/.config/terminator/config
+
+        # Add the "Open in Terminator" right-click menu option to the Nemo GUI file manager! 
+        # See also:
+        # - the `nemo` section above.
+        # - the top of the "eRCaGuy_dotfiles/nemo/open_in_terminator.nemo_action" file. 
+        # - this answer I helped edit and write here: https://unix.stackexchange.com/a/582462/114401
+        ln -si "$PWD/nemo/open_in_terminator.nemo_action" ~/.local/share/nemo/actions
+
+        # set Ctrl + Alt + T to open `terminator`
+        gsettings set org.gnome.desktop.default-applications.terminal exec terminator
         ```
-    1. Add the "Open in Terminator" right-click menu option to the Nemo GUI file manager! See the `nemo` section above.
-    1. To change your default terminal application now between `gnome-terminal` and `terminator`, see: 
-        1. https://askubuntu.com/questions/1096329/how-to-change-my-default-terminal-to-gnome-terminal-rather-than-terminator/1096331#1096331
-        1. https://unix.stackexchange.com/questions/336368/how-to-configure-nemos-right-click-open-in-terminal-to-launch-gnome-terminal/336587#336587
-    1. [DO this] Now set Ctrl + Alt + T to open terminator:
 
+    1. *Details:*
+
+        This is the gist of how I changed my `terminator` settings to produce the `~/.config/terminator/config` file above. These are my misc. and scrambled notes and instructions. For fast, easy, robust, tutorial-like instructions to follow instead, see my "Quick summary" just above!
+
+        1. *Config settings to change:* 
+            1. See my notes here: [eRCaGuy_dotfiles/home/.config/terminator/README.md](../home/.config/terminator/README.md)
+                1. See especially my comments here and below it: [GitHub: micro: Fixed: how to disable interfering shortcut keys in `terminator`](https://github.com/zyedidia/micro/issues/2688#issuecomment-1404008312)
+            1. Get my config settings direcly from here: [eRCaGuy_dotfiles/home/.config/terminator/config](../home/.config/terminator/config)
+        1. https://gnome-terminator.org/
+        1. To change your default terminal application now between `gnome-terminal` and `terminator`, see: 
+            1. https://askubuntu.com/questions/1096329/how-to-change-my-default-terminal-to-gnome-terminal-rather-than-terminator/1096331#1096331
+            1. https://unix.stackexchange.com/questions/336368/how-to-configure-nemos-right-click-open-in-terminal-to-launch-gnome-terminal/336587#336587
+        1. [DO this] Now set <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd> to open terminator:
+            ```bash
+            # set Ctrl + Alt + T to open `terminator`
             gsettings set org.gnome.desktop.default-applications.terminal exec terminator
-
-    1. [Do NOT do: optional--actually, do NOT do this! Instead, add the additional right-click menu to Nemo to "Open in Terminator"--see `nemo` section above!] To make the right-click option in Nemo for "Open in Terminal" open terminator instead of gnome-terminal:
-
-            # Don't do this: set terminator as the default right-click terminal option in nemo
+            # OR, set Ctrl + Alt + T to open `gnome-terminal` again
+            gsettings set org.gnome.desktop.default-applications.terminal exec gnome-terminal
+            ```
+        1. [Do NOT do: optional--actually, do NOT do this! Instead, add the additional right-click menu to Nemo to "Open in Terminator"--see `nemo` section above!] To make the right-click option in Nemo for "Open in Terminal" open terminator instead of gnome-terminal:
+            ```bash
+            # [Don't do this, actually] set terminator as the default right-click terminal option in nemo
             gsettings set org.cinnamon.desktop.default-applications.terminal exec terminator
-            # Do this instead: keep gnome-terminal as the default right-click option in nemo
+            # [Do this instead]: keep gnome-terminal as the default right-click option in nemo
             gsettings set org.cinnamon.desktop.default-applications.terminal exec gnome-terminal
+            ```
+        1. [Do NOT do: no need to do this] Some answers talk about doing this too, but it's also NOT necessary: `sudo update-alternatives --config x-terminal-emulator` - then choose the desired option from the CLI menu. Instead, do the Ctrl + Alt + T setting above, and add terminator to the right-click menu in nemo following the directions in the nemo setion above.
+        1. [DO this] COLORS: the default colors in terminator are kind of ugly. Make the background and font colors the same as gnome-terminal instead. Using `gpick`, I determined the gnome-terminal colors are as follows:
+            1. text:        `#FEFFFF` (rgb(254, 255, 255): almost white--ever-so-slightly cyan)
+            1. background:  `#2D0922` (rgb(45, 9, 34): dark purplish/magenta-ish-grey)
+            1. SET THESE COLORS IN TERMINATOR: Right-click --> Preferences --> "Profiles" tab --> "Colors" sub-tab --> choose "Custom" from the "Built-in schemes" drop-down menu --> 
+                1. --> click the "Text color" color swatch --> click the "+" under the "Custom" section to create a custom color --> type `#FEFFFF` into the box --> press Tab to make it show up --> click the "Select" button.
+                1. --> click the "Background color" color swatch --> click the "+" under the "Custom" section to create a custom color --> type `#2D0922` into the box --> press Tab to make it show up --> click the "Select" button.
+                1. --> when done with both steps above, click "Close". Done!
+        1. To use the _built-in logger in terminator_: see my own ans. here: [How to activate Automatic Logging in Terminator?](https://stackoverflow.com/a/62493626/4561887)
+        1. [DO THESE THINGS TOO!]
+            1. **Enable the Terminal bell sound:** right-click on the terminator screen --> Preferences --> click the "Profiles" tab at the top --> ensure the "General" sub-tab is chosen --> check the box for "Audible beep" under the "Terminal bell" section in the bottom-right. See my ans here: https://askubuntu.com/a/1253800/327339.
+            1. **Disable the window dimming when the terminator terminal is not in focus:** right-click on the terminator screen --> Preferences --> click the "Global" tab at the top --> in the center-left under the "Appearance" section drag the slider for "Unfocused terminal font brightness" to the far right (from 80% to 100%) --> click "Close".
+            1. **Increase scrolling/number of scroll-back lines:** right click on screen --> Preferences --> "Profiles" tab at the top --> "Scrolling" sub-tab --> either increase the lines from 500 to like 50000 or 500000, or check the box for "Infinite Scrollback" [my preferred choice]. Source: https://askubuntu.com/a/618469/327339.
 
-    1. [Do NOT do: no need to do this] Some answers talk about doing this too, but it's also NOT necessary: `sudo update-alternatives --config x-terminal-emulator` - then choose the desired option from the CLI menu. Instead, do the Ctrl + Alt + T setting above, and add terminator to the right-click menu in nemo following the directions in the nemo setion above.
-    1. [DO this] COLORS: the default colors in terminator are kind of ugly. Make the background and font colors the same as gnome-terminal instead. Using `gpick`, I determined the gnome-terminal colors are as follows:
-        1. text:        #FEFFFF (rgb(254, 255, 255): almost white--ever-so-slightly cyan)
-        1. background:  #2D0922 (rgb(45, 9, 34): dark purplish/magenta-ish-grey)
-        1. SET THESE COLORS IN TERMINATOR: Right-click --> Preferences --> "Profiles" tab --> "Colors" sub-tab --> choose "Custom" from the "Built-in schemes" drop-down menu --> 
-            1. --> click the "Text color" color swatch --> click the "+" under the "Custom" section to create a custom color --> type "#FEFFFF" into the box --> press Tab to make it show up --> click the "Select" button.
-            1. --> click the "Background color" color swatch --> click the "+" under the "Custom" section to create a custom color --> type "#2D0922" into the box --> press Tab to make it show up --> click the "Select" button.
-            1. --> when done with both steps above, click "Close". Done!
-    1. To use the _built-in logger in terminator_: see my own ans. here: [How to activate Automatic Logging in Terminator?](https://stackoverflow.com/a/62493626/4561887)
-    1. [DO THESE THINGS TOO!]
-        1. **Enable the Terminal bell sound:** right-click on the terminator screen --> Preferences --> click the "Profiles" tab at the top --> ensure the "General" sub-tab is chosen --> check the box for "Audible beep" under the "Terminal bell" section in the bottom-right. See my ans here: https://askubuntu.com/questions/1253799/terminator-terminal-wont-play-bell-sound/1253800#1253800.
-        1. **Disable the window dimming when the terminator terminal is not in focus:** right-click on the terminator screen --> Preferences --> click the "Global" tab at the top --> in the center-left under the "Appearance" section drag the slider for "Unfocused terminal font brightness" to the far right (from 80% to 100%) --> click "Close".
-        1. **Increase scrolling/number of scroll-back lines:** right click on screen --> Preferences --> "Profiles" tab at the top --> "Scrolling" sub-tab --> either increase the lines from 500 to like 50000 or 500000, or check the box for "Infinite Scrollback" [my preferred choice]. Source: https://askubuntu.com/questions/618464/unlimited-scroll-in-terminator/618469#618469.
 1. `tmux` remote terminal tool - keeps remote sessions alive even after disconnecting or closing the local terminal window
 
 
