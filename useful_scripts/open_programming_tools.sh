@@ -129,6 +129,9 @@ $HOME/eclipse/embedcpp-2023-03/eclipse/eclipse&
 # $HOME/eclipse/cpp-2022-12/eclipse/eclipse&
 subl&                     # Sublime Text editor
 code # Microsoft Visual Studio Code (MS VSCode)--no `&` needed!
+# Microchip MPLAB X IDE
+# - from: "/usr/share/applications/mplab_ide-v6.10.desktop"
+/opt/microchip/mplabx/v6.10/mplab_platform/bin/mplab_ide&
 
 # Messengers and chat programs
 #
