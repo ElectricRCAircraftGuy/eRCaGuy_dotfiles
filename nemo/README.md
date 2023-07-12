@@ -19,3 +19,7 @@
     ```
 1. Find many example `*.nemo_action` files or scripts (including in Python) in your local directory here, _after_ installing Nemo: [/usr/share/nemo/actions](/usr/share/nemo/actions).
     1. [sample.nemo_action](sample.nemo_action) was copied from there: `/usr/share/nemo/actions/sample.nemo_action`.
+    1. See all of these online on Nemo's official GitHub repo too!:
+        1. https://github.com/linuxmint/nemo/tree/master/files/usr/share/nemo/actions
+        1. https://github.com/linuxmint/nemo/blob/master/files/usr/share/nemo/actions/sample.nemo_action
+1. See the answer I helped edit/write too: [How to configure Nemo's right-click "Open in Terminal" to launch "gnome-terminal"](https://unix.stackexchange.com/a/582462/114401)
