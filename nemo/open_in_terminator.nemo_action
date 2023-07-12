@@ -50,4 +50,14 @@ Selection=any
 Extensions=dir;
 # Don't forget `EscapeSpaces=true` or else the "Open in Terminator" action won't work on any folder
 # which has spaces, single quotes ('), or double quotes ("), within its path.
+#
+# - This is required for backwards-compatibility only. See the old official documentation on it
+#   here:
+#   https://github.com/linuxmint/nemo/blob/5cea882d0fe20effdba2054c49af827ab8e1af01/files/usr/share/nemo/actions/sample.nemo_action#L99-L106
+# - The new official documentation states that it does nothing. See here:
+#   https://github.com/linuxmint/nemo/blob/master/files/usr/share/nemo/actions/sample.nemo_action#L99-L106
+# - But, the version of Nemo which can easily be installed in Ubuntu 22.04 (see my answer here:
+#   https://askubuntu.com/a/1446372/327339) is old, apparently, so you **must** use
+#   `EscapeSpaces=true` for that version at least. So, just leave this here for all versions of
+#   Nemo, for backwards compatibility.
 EscapeSpaces=true
