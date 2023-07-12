@@ -35,16 +35,19 @@
 # Usage:
 # Right-Click on any folder name or inside any folder in nemo --> "Open in Terminator"
 
-# See "/usr/share/nemo/actions/sample.nemo_action" for descriptions of all the options below!
+# See this example file here for descriptions of all the options below!:
+# 1. Local file: "/usr/share/nemo/actions/sample.nemo_action"
+# 2. Online in Nemo's/Linux Mint's official GitHub repository:
+#    https://github.com/linuxmint/nemo/blob/master/files/usr/share/nemo/actions/sample.nemo_action
 
 [Nemo Action]
 
 Name=Open in Terminator
 Comment=Open the 'terminator' terminal in the selected folder
-# Don't forget the double quotes ("") around the "%F" or else the "Open in Terminator" action won't
-# work from within any folder which has spaces in its path.
 Exec=terminator --working-directory=%F
 Icon-Name=terminator
 Selection=any
 Extensions=dir;
+# Don't forget `EscapeSpaces=true` or else the "Open in Terminator" action won't work on any folder
+# which has spaces, single quotes ('), or double quotes ("), within its path.
 EscapeSpaces=true
