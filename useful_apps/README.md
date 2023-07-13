@@ -179,6 +179,54 @@ See in particular:
     1. GitHub's official repo size documentation: https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github
     1. [my ans] https://stackoverflow.com/questions/38768454/repository-size-limits-for-github-com/70427664#70427664
 
+==== THIS SECTION IS INCOMPLETE--START ====
+
+1. BFG Repo-Cleaner (`bfg`) - "Removes large or troublesome blobs like `git-filter-branch` does, but faster. And written in Scala [which compiles down to Java bytecode]
+    1. https://rtyley.github.io/bfg-repo-cleaner/
+    1. https://docs.github.com/en/repositories/working-with-files/managing-large-files/removing-files-from-git-large-file-storage
+        1. https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository
+            1. How to use `bfg` to clean files out of your repo: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository#using-the-bfg
+
+    1. Installation instructions: 
+
+        1. What first helped me: https://github.com/rtyley/bfg-repo-cleaner/issues/255#issuecomment-880598254
+        1. My own instructions with the content below: https://github.com/rtyley/bfg-repo-cleaner/issues/255#issuecomment-1500485865
+
+        In short:
+
+        _Tested on Ubuntu 20.04._
+
+        Go here: https://rtyley.github.io/bfg-repo-cleaner/ --> right-click on the "Download" button on the right --> "Copy Link Address" --> paste and use that address below. Ex: https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar
+
+        ```bash
+        # download it
+        wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar
+        # mark it as executable
+        chmod +x bfg-1.14.0.jar
+
+        # copy or symlink it to ~/bin
+
+        mkdir -p ~/bin
+
+        cp -i bfg-1.14.0.jar ~/bin/bfg          # copy
+        ln -si "$PWD/bfg-1.14.0.jar" ~/bin/bfg  # symlink [my preference]
+
+        # add ~/bin to your path by re-sourcing your `~/.profile` file.
+        # This works on Ubuntu if you are using the default ~/.profile file, which can also be found
+        # in /etc/skel/.profile, by the way.
+        . ~/.profile
+
+        # Now run it
+        bfg             # help menu
+        bfg --version   # version
+        ```
+
+    1. Usage: remove files from being tracked by `git lfs`:
+
+                If using `bfg` to remove `git lfs`-tracked files from your repo, you can list all files tracked by `git lfs` with `git lfs ls-files`. Then, manually [TODO]
+
+==== THIS SECTION IS INCOMPLETE--END ====
+
 
 <a id="word-processors-or-business-programs"></a>
 ## Word processors or business programs
