@@ -56,7 +56,7 @@ gs_git_list_files_changed() {
 #       # of the filename
 #       gs_git_branch_hash_bak "../some/dir" about to delete branches!
 #
-GIT_BRANCH_HASH_BAK_DEFAULT_DIR="./git_branch_hash_backups"
+GIT_BRANCH_HASH_BAK_DEFAULT_DIR="git_branch_hash_backups"
 gs_git_branch_hash_bak() {
     CMD="gs_git_branch_hash_bak"
     GIT_BRANCH_HASH_BAK_DIR="$GIT_BRANCH_HASH_BAK_DEFAULT_DIR"
@@ -96,6 +96,8 @@ gs_git_branch_hash_bak() {
     done
     echo "user_added_phrase = $user_added_phrase" # debugging
 
+    mkdir -p "$GIT_BRANCH_HASH_BAK_DIR"
+
     DATE=`date +%Y%m%d-%H%Mhrs-%Ssec`
     BRANCH="$(gs_git_show_branch_and_hash_no_formatting)"
     REPO_ROOT="$(git rev-parse --show-toplevel)"
@@ -122,9 +124,13 @@ gs_git_branch_hash_bak() {
     echo "Done!"
 }
 #
-# Alias function to do the git hash backups in a directory one higher so you don't have to add this
-# backup dir to this git project's .gitignore file.
-# This function accepts a user-added phrase as well, to append to the end of the filename!
+# Alias function to do the git hash backups in a directory **1 level higher than the root of the
+# base repo** so that it won't back up the branch information *within the repo*, which would
+# necessitate that you add this backup dir to this git project's .gitignore file.
+# - In the event of nested repos (ie: you are in a subrepo), this function will find the root of
+#   the **parent** (outer) repo, and then go 1 level up from that, meaning it has found **1 level
+#   up** from the base, or most-outer, repo.
+# - This function accepts a user-added phrase as well, to append to the end of the filename!
 #
 # Example usage:
 #
@@ -136,9 +142,21 @@ gs_git_branch_hash_bak() {
 #       gs_git_branch_hash_bak_up1 about to delete branches!
 #
 gs_git_branch_hash_bak_up1() {
-    REPO_ROOT="$(git rev-parse --show-toplevel)"
-    BACKUP_DIR="$REPO_ROOT/../$GIT_BRANCH_HASH_BAK_DEFAULT_DIR"
-    mkdir -p "$BACKUP_DIR"
+    local RETURN_CODE_SUCCESS=0
+    local RETURN_CODE_ERROR=1
+
+    # 1st, try to grab the outer repo root path, if this project is a subrepo. This obtains an empty
+    # string if this is NOT a subrepo.
+    BASE_REPO_ROOT="$(git rev-parse --show-superproject-working-tree)" || return $RETURN_CODE_ERROR
+    if [ -z "$BASE_REPO_ROOT" ]; then
+        # If not in a subrepo, then try to grab the root of the regular repo.
+        BASE_REPO_ROOT="$(git rev-parse --show-toplevel)" || return $RETURN_CODE_ERROR
+        echo "You are NOT in a subrepo. BASE_REPO_ROOT=$BASE_REPO_ROOT"  # debugging
+    else
+        echo "You ARE in a subrepo. BASE_REPO_ROOT=$BASE_REPO_ROOT"  # debugging
+    fi
+
+    BACKUP_DIR="$BASE_REPO_ROOT/../$GIT_BRANCH_HASH_BAK_DEFAULT_DIR"
     gs_git_branch_hash_bak "$BACKUP_DIR" "$@"
 }
 
