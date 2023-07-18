@@ -27,6 +27,17 @@
     # Or for the `micro` editor (https://github.com/zyedidia/micro)
     # - See: https://askubuntu.com/a/1388854/327339
     # editor = micro
+
+    # Control line endings (carriage return (\r) + line feed (\n) [CRLF]
+    # [Windows] vs. line feed (\n) [LF] only [Linux & MacOS]).
+    # - See: https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
+    # Option 1: for Windows: set it to `autocrlf = true`. "This converts LF
+    # endings into CRLF when you check out code."
+    # autocrlf = true  # FOR WINDOWS
+    # Option 2: for Linux or MacOS: set it to `autocrlf = input`. This
+    # will "tell Git to convert CRLF to LF on commit but not the other way
+    # around [on checkout]"
+    autocrlf = input  # FOR LINUX OR MACOS
 [alias]
     # Source for this `git lg` "better git log" alias: https://coderwall.com/p/euwpig/a-better-git-log
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
