@@ -6468,6 +6468,16 @@ tar -xf path/to/file.tar.xz
     See: https://askubuntu.com/a/107976/327339
     See also:
         - `binwalk`--search this document for that! <========
+tar -xf path/to/file.tar.xz --directory my_custom_output_dir
+    <====== EXTRACT ========
+    Same as above, but force the extraction of all files in the archive into directory "my_custom_output_dir".
+    NB: watch the output directory grow, as a sort of "progress bar" or indicator, with:
+    ```bash
+    # In a **separate** terminal, watch the extraction progress by watching the output folder grow with:
+    watch -n 1 'du -sh my_custom_output_dir'
+    ```
+tar -xf path/to/file.tar.xz -C my_custom_output_dir
+    Same as above (`-C` means `--directory`).
 tar -xf archive.tar
 tar -xf archive.tar.gz
 tar -xf archive.tar.xz  
