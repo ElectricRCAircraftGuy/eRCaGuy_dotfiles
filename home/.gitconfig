@@ -38,6 +38,20 @@
     # will "tell Git to convert CRLF to LF on commit but not the other way
     # around [on checkout]"
     autocrlf = input  # FOR LINUX OR MACOS
+    #
+    # GS: MY MAIN CRLF SUMMARY NOTES:
+    # 1. `autocrlf = false` is the default. See: https://stackoverflow.com/a/48230871/4561887. This
+    # means that *no* line ending changes are made: neither on commit nor checkout (good for Linux
+    # when NOT sharing a repo between Windows and Linux).
+    # 1. `autocrlf = true` converts to LF on commit, and to CRLF on check out (good for Windows).
+    # 1. `autocrlf = input` converts to LF on commit, but does nothing on checkout (good for Linux
+    # when sharing a repo between Windows and Linux, or whenever some Windows files may have been
+    # manually copied to the Linux computer).
+    # - To **manually** remove CRLF on Windows files which were copied to Linux, see my detailed
+    #   answer here: [How to recursively run `dos2unix` (or any other command) on your desired
+    #   directory or path using multiple processes]
+    #   (https://unix.stackexchange.com/a/751912/114401)
+    #   - (this also teaches how to use `xargs`)
 [alias]
     # Source for this `git lg` "better git log" alias: https://coderwall.com/p/euwpig/a-better-git-log
     lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
