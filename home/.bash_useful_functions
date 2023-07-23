@@ -66,8 +66,8 @@ alias gs_hex2bin="hex2bin"
 #
 #       # you can pass multiple paths at once too
 #       hex2xxdhex path/to/myfile1.hex path/to/myfile2.hex
-#       # then compare the two output ".xxd.hex" files with `meld`
-#       meld path/to/myfile1.xxd.hex path/to/myfile2.xxd.hex
+#       # then compare the two output ".xxd.hex" or ".xxd_short.hex" files with `meld`
+#       meld path/to/myfile1.xxd_short.hex path/to/myfile2.xxd_short.hex
 #
 hex2xxdhex() {
     # treat all input args as file paths
@@ -76,12 +76,25 @@ hex2xxdhex() {
         filepath_hex_no_extension="${filepath_hex%.*}"
         filepath_bin="${filepath_hex_no_extension}.bin"
         filepath_xxdhex="${filepath_hex_no_extension}.xxd.hex"
-        echo "Converting \"$filepath_hex\" to \"$filepath_bin\" and to"\
-            "\"$filepath_xxdhex\"."
+        filepath_xxdhex_short="${filepath_hex_no_extension}.xxd_short.hex"
+        echo "Converting \"$filepath_hex\" to:"
+        echo "  \"$filepath_bin\"           - the binary firmware image"
+        echo "  \"$filepath_xxdhex\"       - the hex image with a binary/ASCII text panel to"\
+             "the right"
+        echo "  \"$filepath_xxdhex_short\" - same as just above, except removing all rows"\
+             "containing only zeros."
+        echo ""
+        echo "Note that the '.xxd_short.hex' files are usually the best files to compare with"
+        echo "'meld', since the '.xxd.hex' file might be too large (as large as 200 MB, for"
+        echo "example), when the '.hex' file is only 3.5 MB, and the '.xxd_short.hex' file"
+        echo "is 5 MB. Meld can compare 5 MB ok, but not 200 MB!"
 
-        xc32-objcopy --input-target=ihex --output-target=binary \
-            "$filepath_hex" "$filepath_bin"
+        xc32-objcopy --input-target=ihex --output-target=binary "$filepath_hex" "$filepath_bin"
+
         xxd "$filepath_bin" "$filepath_xxdhex"
+
+        grep -v '0000 0000 0000 0000 0000 0000 0000 0000' "$filepath_xxdhex" \
+            > "$filepath_xxdhex_short"
     done
 }
 alias gs_hex2xxdhex="hex2xxdhex"
