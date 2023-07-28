@@ -6461,6 +6461,15 @@ time tar --xz -cf myarchive.tar.xz path/to/my/dir
     See:
     1. `man tar`
     1. https://stackoverflow.com/a/18855909/4561887
+time tar --gzip -cf myarchive.tar.gz path/to/my/dir
+    <============ about 12x faster than .xz format (when compressing, per my testing) while taking up only ~10% more space! =============
+    Same as above, but create a .tar.gz "gzip"-compressed file instead!
+    See: https://linuxize.com/post/how-to-create-tar-gz-file/
+    Same as:
+    ```
+    time tar -cfz myarchive.tar.gz path/to/my/dir
+    ```
+    ...since `-z` is equal to `--gzip`.
 tar -xf path/to/file.tar.xz  
     <====== EXTRACT ========
     <============ MOST COMMON EXTRACTION/DECOMPRESSION USAGE =============
