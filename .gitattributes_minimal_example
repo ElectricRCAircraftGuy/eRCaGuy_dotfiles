@@ -1,0 +1,16 @@
+# Copied from this project: eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+#
+# See:
+# 1. Official documentation on .gitattributes: https://www.git-scm.com/docs/gitattributes
+#   1. `text` section: https://www.git-scm.com/docs/gitattributes#_text
+#   1. `eol` section: https://www.git-scm.com/docs/gitattributes#_eol
+# 1. Official documentation on `core.autocrlf`:
+#    https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
+# 1. GitHub documentation:
+#    https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
+# 1. SEE ALSO MY NOTES ON `core.autocrlf` and `core.eol`
+#    HERE!: "eRCaGuy_dotfiles/home/.gitconfig"
+
+# In all files (`*`), automatically detect text vs binary files (`text=auto`), and use LF as your
+# end-of-line setting for all text files (`eol=lf`)
+* text=auto eol=lf

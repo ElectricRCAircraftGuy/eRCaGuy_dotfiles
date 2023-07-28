@@ -1,24 +1,104 @@
-*.gif filter=lfs diff=lfs merge=lfs -text
-*.GIF filter=lfs diff=lfs merge=lfs -text
-*.gz filter=lfs diff=lfs merge=lfs -text
-*.GZ filter=lfs diff=lfs merge=lfs -text
-*.jpeg filter=lfs diff=lfs merge=lfs -text
-*.JPEG filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
-*.JPG filter=lfs diff=lfs merge=lfs -text
-*.odg filter=lfs diff=lfs merge=lfs -text
-*.ODG filter=lfs diff=lfs merge=lfs -text
-*.odp filter=lfs diff=lfs merge=lfs -text
-*.ODP filter=lfs diff=lfs merge=lfs -text
-*.ODS filter=lfs diff=lfs merge=lfs -text
-*.ods filter=lfs diff=lfs merge=lfs -text
-*.odt filter=lfs diff=lfs merge=lfs -text
-*.ODT filter=lfs diff=lfs merge=lfs -text
-*.pdf filter=lfs diff=lfs merge=lfs -text
-*.PDF filter=lfs diff=lfs merge=lfs -text
-*.png filter=lfs diff=lfs merge=lfs -text
-*.PNG filter=lfs diff=lfs merge=lfs -text
-*.tgz filter=lfs diff=lfs merge=lfs -text
-*.TGZ filter=lfs diff=lfs merge=lfs -text
-*.zip filter=lfs diff=lfs merge=lfs -text
-*.ZIP filter=lfs diff=lfs merge=lfs -text
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# INSTRUCTIONS:
+# Edit as desired, then copy this file to any git repository you desire.
+# Ex: `cp -i .gitattributes /path/to/my/git/repo/`
+
+# Most repos **do** need a .gitignore file, but do **not** need a .gitattributes file.
+# A .gitattributes file is used for these things that I'm aware of:
+#
+# 1. Configuring text file line endings: whether to use Windows CRLF or Linux LF line endings.
+#   1. Windows-style: CRLF = Carriage Return, Line Feed = `\r\n`
+#   1. Unix-style: LF = Line Feed = `\n`
+#
+# 2. Configuring Git LFS, which is generally a horrible thing that you should never use, except in
+# rare cases where the alternative is even worse. See my answer here:
+# https://stackoverflow.com/a/76567696/4561887
+
+# ==================================================================================================
+# Section 1: standardizing line endings
+# - If doing the settings below, your total .gitattributes file for a repo might just look like
+#   this: see ".gitattributes_minimal_example"
+# ==================================================================================================
+#
+# REFERENCES:
+# 1. Official documentation on .gitattributes: https://www.git-scm.com/docs/gitattributes
+#   1. `text` section: https://www.git-scm.com/docs/gitattributes#_text
+#   1. `eol` section: https://www.git-scm.com/docs/gitattributes#_eol
+# 1. Official documentation on `core.autocrlf`:
+#    https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
+# 1. GitHub documentation:
+#    https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
+# 1. SEE ALSO MY NOTES ON `core.autocrlf` and `core.eol`
+#    HERE!: "eRCaGuy_dotfiles/home/.gitconfig"
+#
+# Notes:
+# - To forcefully re-normalize line endings, see here:
+#   my answer: https://unix.stackexchange.com/a/751912/114401
+# - You can also try `git add . --renormalize`. See: https://stackoverflow.com/a/68603241/4561887
+# ----
+# - `text=auto` automatically identifies binary from text files.
+# - `eol=lf` tells git to automatically set end-of-line settings to Line-Feed (`\n`) when committing
+#   and when copying from the index to the working directory.
+#
+# See: https://www.git-scm.com/docs/gitattributes:
+# """
+# Set to string value "auto"
+#
+# When text is set to "auto", Git decides by itself whether the file is text or binary. If it is
+# text and the file was not already in Git with CRLF endings, line endings are converted on checkin
+# and checkout as described above. Otherwise, no conversion is done on checkin or checkout.
+# """
+
+# If you are doing cross-platform work between Windows and Linux, since modern text editors respect
+# and can handle either type of line endings: CRLF *or* LF, I prefer to just standardize on both
+# OSs to use Unix-like LF line endings. Do that like this:
+#
+# 1. Run these commands one time ever in your system in Git Bash on Windows, or in a terminal on
+# Linux:
+#
+#       ```bash
+#       # set global git config to convert to LF on commit and do nothing on checkout
+#       git config --global core.autocrlf input
+#
+#       # set global git config to ensure the file stays as LF in the working directory (just like
+#       # in the index) when the file is checked out.
+#       git config --global core.eol lf
+#       ```
+#
+# 2. Set this in your .gitattributes file too (which overrides the global settings above for this
+# repo only), to try to help in case some people on your team forget to run the above commands:
+* text=auto eol=lf
+
+
+# ==================================================================================================
+# Section 2: configure which files to track with Git LFS
+# - I've commented all of this out because I hate Git LFS. See my answer here:
+#   https://stackoverflow.com/a/76567696/4561887. But, this is still useful to learn how to
+#   configure it.
+# ==================================================================================================
+
+# *.gif filter=lfs diff=lfs merge=lfs -text
+# *.GIF filter=lfs diff=lfs merge=lfs -text
+# *.gz filter=lfs diff=lfs merge=lfs -text
+# *.GZ filter=lfs diff=lfs merge=lfs -text
+# *.jpeg filter=lfs diff=lfs merge=lfs -text
+# *.JPEG filter=lfs diff=lfs merge=lfs -text
+# *.jpg filter=lfs diff=lfs merge=lfs -text
+# *.JPG filter=lfs diff=lfs merge=lfs -text
+# *.odg filter=lfs diff=lfs merge=lfs -text
+# *.ODG filter=lfs diff=lfs merge=lfs -text
+# *.odp filter=lfs diff=lfs merge=lfs -text
+# *.ODP filter=lfs diff=lfs merge=lfs -text
+# *.ODS filter=lfs diff=lfs merge=lfs -text
+# *.ods filter=lfs diff=lfs merge=lfs -text
+# *.odt filter=lfs diff=lfs merge=lfs -text
+# *.ODT filter=lfs diff=lfs merge=lfs -text
+# *.pdf filter=lfs diff=lfs merge=lfs -text
+# *.PDF filter=lfs diff=lfs merge=lfs -text
+# *.png filter=lfs diff=lfs merge=lfs -text
+# *.PNG filter=lfs diff=lfs merge=lfs -text
+# *.tgz filter=lfs diff=lfs merge=lfs -text
+# *.TGZ filter=lfs diff=lfs merge=lfs -text
+# *.zip filter=lfs diff=lfs merge=lfs -text
+# *.ZIP filter=lfs diff=lfs merge=lfs -text
