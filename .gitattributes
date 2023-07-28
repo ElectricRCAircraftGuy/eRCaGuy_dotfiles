@@ -68,6 +68,9 @@
 #
 # 2. Set this in your .gitattributes file too (which overrides the global settings above for this
 # repo only), to try to help in case some people on your team forget to run the above commands:
+#
+# In all files (`*`) in this repo, automatically detect text vs binary files (`text=auto`), and use
+# LF as your end-of-line setting for all text files (`eol=lf`), even on Windows.
 * text=auto eol=lf
 
 

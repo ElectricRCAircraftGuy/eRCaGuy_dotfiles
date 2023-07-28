@@ -11,6 +11,6 @@
 # 1. SEE ALSO MY NOTES ON `core.autocrlf` and `core.eol`
 #    HERE!: "eRCaGuy_dotfiles/home/.gitconfig"
 
-# In all files (`*`), automatically detect text vs binary files (`text=auto`), and use LF as your
-# end-of-line setting for all text files (`eol=lf`)
+# In all files (`*`) in this repo, automatically detect text vs binary files (`text=auto`), and use
+# LF as your end-of-line setting for all text files (`eol=lf`), even on Windows.
 * text=auto eol=lf
