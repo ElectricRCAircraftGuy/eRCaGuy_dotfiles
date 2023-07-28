@@ -126,10 +126,6 @@
     "python.formatting.provider": "none",
     "window.zoomLevel": 1,
     "settingsSync.ignoredSettings": [
-        "editor.fontSize",
-        // Note: `"window.zoomLevel"` is already *not* synced by default! So, to force it to sync,
-        // add `"-window.zoomLevel"` as an entry here instead, to subtract it from the ignored
-        // settings.
-        // "-window.zoomLevel"
+        "editor.fontSize"
     ],
 }
