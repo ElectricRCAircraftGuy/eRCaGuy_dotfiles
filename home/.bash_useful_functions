@@ -99,3 +99,10 @@ hex2xxdhex() {
 }
 alias gs_hex2xxdhex="hex2xxdhex"
 
+find_illegal_windows_chars() {
+    # Find all files and folders with any of these Windows-illegal characters in
+    # their name:  \ : * ? " < > |
+    # - See my answer here: https://stackoverflow.com/a/76794738/4561887
+    find . -name '*[\\:\*?\"<\>|]*'
+}
+alias gs_find_illegal_windows_chars='find_illegal_windows_chars'
