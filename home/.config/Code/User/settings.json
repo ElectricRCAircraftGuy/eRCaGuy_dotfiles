@@ -128,4 +128,10 @@
     "settingsSync.ignoredSettings": [
         "editor.fontSize"
     ],
+
+    // Do not trim trailing whitespace in Markdown files.
+    // See: https://stackoverflow.com/a/51935030/4561887
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false
+    }
 }
