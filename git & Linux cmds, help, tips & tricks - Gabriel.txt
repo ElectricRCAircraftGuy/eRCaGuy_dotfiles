@@ -4124,6 +4124,8 @@ NB: if using Python, you can use the `socket` library instead!: https://docs.pyt
 Examples: 
     1. Official examples: https://docs.python.org/3/library/socket.html#example
     1. [my own example code] https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/python/socket_talk_to_ethernet_device.py
+*****+ See my full tutorial here too for general netcat commands!: "General netcat (`nc`) usage instructions, including setting the IP address to bind to when receiving, or to send to when sending" - https://serverfault.com/a/1140509/357116
+<=============
 - - - - - 
 Python `socket` example (see my link just above):
     ```python
@@ -4156,6 +4158,8 @@ Netcat and socat
 - `socat` is an alternative to netcat (`nc`). See:
     1. https://unix.stackexchange.com/a/457685/114401
     1. https://packages.debian.org/stretch/socat
+- *****+ General netcat commands, how-to, examples, usage, tutorial: see my answer here: https://serverfault.com/a/1140509/357116
+<=============
 
 nc
     (From `man nc` or `man netcat`): "The nc (or netcat) utility is used for just about anything under the sun involving TCP, UDP, or UNIX-domain sockets."
@@ -4165,11 +4169,14 @@ nc -h
     netcat help menu
 netcat -h
     netcat help menu
-nc -u -l 127.0.0.1 -p 30000
+nc -u -l 127.0.0.1 30000
+nc -lu 127.0.0.1 30000
+nc -lu -s 127.0.0.1 -p 30000
     <======= VERY USEFUL NETCAT UDP SERVER LISTENING FOR DATA FROM CLIENT =========
     Set up a UDP (`-u`) listener (`-l`) to the loopback interface (IP `127.0.0.1`, AKA: LOCALHOST) on port (`-p`) 30000. 
     Note: I arbitrarily chose port 30000. 
     For a list of common TCP and UDP ports, see Wikipedia here: https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers.
+    - See these commands above in my tutorial here: "General netcat (`nc`) usage instructions, including setting the IP address to bind to when receiving, or to send to when sending" - https://serverfault.com/a/1140509/357116
 nc -u 127.0.0.1 30000
     <======= VERY USEFUL NETCAT UDP CLIENT SENDING TO SERVER =========
     Set up a UDP (`-u`) sender (the default, apparently) to the loopback interface (IP `127.0.0.1`, AKA: LOCALHOST) on port (`-p`) 30000. 
@@ -4186,6 +4193,16 @@ nc -u 127.0.0.1 30000 < filename.bin
 nc -w 1 -u 127.0.0.1 30000 < filename.bin
     <======= SEND A BINARY FILE OVER UDP VIA NETCAT! ========
     Same as above, except also with a timeout ('w'ait period) of 1 second, to return from netcat that amount of time after sending.
+
+- - - 
+Netcat "traditional" style: 
+See here for "netcat-openbsd" vs "netcat-traditional": https://serverfault.com/a/512337/357116
+- - - 
+nc -lu -p 30000
+    Listen (`-l`) to UDP packets (`-u`) on port 30000 on INADDR_ANY (any interface), since `-s IP_addr` is not specified.
+nc -lu -s 127.0.0.1 -p 30000  <===
+    Same as above, but specify to bind to and listen to source (`-s`) IP address 127.0.0.1 (localhost) as well.
+
 socat udp:127.0.0.1:30000 - < filename.bin
     <========= SEND A BINARY FILE OVER UDP VIA SOCAT! ==========
     VERY SIMILAR TO NETCAT ABOVE, except perhaps more-reliable and consistent since apparently there are many netcat implementations but only one socat implementation maybe?
@@ -4202,9 +4219,16 @@ printf '%s' 'my command msg' | timeout 0.2 nc 192.168.0.1 9999
 EXERCISE:
 ---------
 1. In one terminal, open up a UDP listener:
-        nc -u -l 127.0.0.1 -p 30000
+    - See here for "netcat-openbsd" vs "netcat-traditional": https://serverfault.com/a/512337/357116
+        nc -u -l 127.0.0.1 -p 30000             # netcat-openbsd listener (`-l`)
+        nc -lu -p 30000                         # netcat-openbsd listener (`-l`) bound to and 
+                                                #   listening on INADDR_ANY (any interface) [I think]
+        nc -lu -s 127.0.0.1 -p 30000            # netcat-traditional listener (`-l`)
 1. In another terminal, open up a UDP sender:
-        nc -u 127.0.0.1 30000
+        nc -u 127.0.0.1 30000                   # netcat-openbsd sender
+        nc -u 0 30000                           # netcat-openbsd sender, sending to INADDR_ANY (any interface, 
+                                                #   as specified by IP address 0) [I think]
+        ########### doesn't work! #######nc -u -s 127.0.0.1 -p 30000             # netcat-traditional sender
 1. In the sender's terminal, type "hello" and press Enter. You'll see it show up in the listener's terminal! 
 1. In the receiver's terminal, type "world" and press Enter. You'll see it show up in the sender's terminal! Notice the communication is 2-way! Either side can send now!
 1. Type more data to send from either side, as desired. 
