@@ -67,6 +67,15 @@ ANSI_END="m"        # end of an ANSI formatting sequence
 # `ANSI_END` withOUT any formatting codes in between!
 ANSI_OFF="${ANSI_START}${ANSI_END}"
 
+# Get the short git hash, appended with the word `dirty`, if `git status` is
+# dirty.
+# See my answer here: https://stackoverflow.com/a/76856090/4561887
+gs_git_get_short_hash_dirty() {
+    test -z "$(git status --porcelain)" \
+        && echo "$(git rev-parse --short HEAD)" \
+        || echo "$(git rev-parse --short HEAD) (dirty)"
+}
+
 # Get the git branch and hash.
 # - Edit Prompt String 1 (PS1) variable to show 1) the shell level and 2) the currently-checked-out
 #   git branch whenever you are inside any directory containing a local git repository.
@@ -81,7 +90,7 @@ gs_git_show_branch_and_hash() {
     git_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
 
     # See: https://stackoverflow.com/a/5694416/4561887
-    git_short_hash="$(git rev-parse --short HEAD 2>/dev/null)"
+    git_short_hash="$(gs_git_get_short_hash_dirty 2>/dev/null)"
 
     if [ -n "$git_branch" ] || [ -n "$git_short_hash" ]; then
         # branch_info="Branch: ${F}${git_branch}${f}  Hash: ${F}${git_short_hash}${f}"
@@ -91,7 +100,7 @@ gs_git_show_branch_and_hash() {
 }
 gs_git_show_branch_and_hash_no_formatting() {
     git_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
-    git_short_hash="$(git rev-parse --short HEAD 2>/dev/null)"
+    git_short_hash="$(gs_git_get_short_hash_dirty 2>/dev/null)"
 
     if [ -n "$git_branch" ] || [ -n "$git_short_hash" ]; then
         branch_info="${git_branch} ${git_short_hash}"
