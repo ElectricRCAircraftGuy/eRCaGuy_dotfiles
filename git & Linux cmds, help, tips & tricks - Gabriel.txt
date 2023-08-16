@@ -5544,6 +5544,7 @@ watch -n 1 'head -n 2 log_file.log; tail -n 10 log_file.log'
 == CAN Bus and CAN Networking: ==
 
 TODO: need to add this information in here so I don't forget it.
+[CANbus]
 
 
 == USB, serial, devices, etc.: ==
@@ -5725,6 +5726,14 @@ grep -rn '' /sys/class/tty/ttyUSB0/*
     Keywords: grep read all files and folders at once; grep all dir contents; grep all file contents; grep all files in a dir; dir grep everything; folder grep all files at once
 
 
+== GPS devices: ==
+
+sudo apt install gpsd-tools
+    Install `gpsmon`. 
+gpsmon
+    Monitor a GPS device connected to your Linux system (via serial maybe??--not sure).
+
+
 == `head` and `tail`: ==
 - Use `head` to output the first part of files
 - Use `tail` to output the last part of files
@@ -5757,6 +5766,7 @@ Ex:
 
 For a full `awk` program example, see the "eRCaGuy_dotfiles/useful_scripts/git-diffn.sh" program, which is written almost entirely in awk!
 
+
 == Limit CPU usage: ==
 [throttle cpu usage]
 Limit CPU usage of a process in Linux: https://linoxide.com/linux-how-to/limit-cpu-usage-processes-linux/; ex:
@@ -5780,6 +5790,7 @@ This is very useful to limit your CPU usage being used by Bazel, for instance, w
     cpulimit -p <pid> -l 500 # limit your bazel build to 62.5% max CPU usage on an 8-core machine <=====
 
 Leave the `cpulimit` process running as long as you want this limiting effect in place. You don't need to restart it each time you begin a new bazel build, as the bazel build server continues running in the background even after a build completes.
+
 
 == Set process priority: ==
 An ALTERNATIVE TO (OR PARTNER TECHNIQUE to use in conjunction with) the `cpulimit` command above:
@@ -5818,6 +5829,7 @@ chrt -p 12345
             pid 1433's current scheduling policy: SCHED_RR
             pid 1433's current scheduling priority: 1
 
+
 == Mosh: ==
 An ssh-replacement program for better connections over wifi, cellular, and long-distance links. It is free software (GNU GPLv3)!
 It can decrease response time by a factor of 30~50 on lossy networks (see Wikipedia article below)! Ex: 16.8 seconds response time --> 0.33 seconds, or 5.9 --> 0.19 sec.
@@ -5825,6 +5837,7 @@ It can decrease response time by a factor of 30~50 on lossy networks (see Wikipe
 References:
 1. https://mosh.org/#getting
 2. https://en.wikipedia.org/wiki/Mosh_(software)
+
 
 == Find files and replace text in files: ==
 [find and replace, text replacement in files]
@@ -5920,10 +5933,12 @@ See also the 4 References for sed just above, underneath "PUTTING IT ALL TOGETHE
 Basic usage:
 sed -E 's/regexp_search/replacement_str/g' my_file.txt = in my_file.txt, do a 'g'lobal 's'tring replacement, replacing all matches of regular expression regexp_search with "replacement_str".
 
+
 == wc: ==
 wc = 'w'ord 'c'ount
 
 find | wc -l = count and return the number of 'l'ines returned by find, which corresponds to the number of files and folders in a directory and its sub-directories.
+
 
 == tr: ==
 tr = 'tr'anslate or delete characters
@@ -5945,6 +5960,7 @@ echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc && . ~/.bashrc
 cat /proc/<process_ID>/sched = show some profiling/scheduler stats for this process ID (PID) on Linux, including how many threads it has!
 ls /proc/<process_ID>/task/ = list the threads in this process!
 ls /proc/*/task = list the threads in all multi-threaded processes!
+
 
 == ==
 
