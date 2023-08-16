@@ -13,6 +13,13 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 1. https://github.com/Microsoft/WSL - official, Microsoft-supported *issues-reporting* site for WSL
 1. https://learn.microsoft.com/en-us/windows/wsl/basic-commands - Basic commands for WSL
 1. https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview - Ubuntu's version of WSL installation instructions
+1. [Google search for "wsl connect network interfaces"](https://www.google.com/search?q=wsl+connect+network+interfaces&oq=wsl+connect+network+interfaces&aqs=chrome..69i57.4359j0j7&sourceid=chrome&ie=UTF-8)
+    1. https://learn.microsoft.com/en-us/windows/wsl/networking - Accessing network applications with WSL
+
+        Port forwarding from Windows to WSL Linux:
+        ```bash
+        netsh interface portproxy add v4tov4 listenport=<yourPortToForward> listenaddress=0.0.0.0 connectport=<yourPortToConnectToInWSL> connectaddress=(wsl hostname -I)
+        ```
 
 
 # Installation & setup
@@ -23,6 +30,16 @@ _Tested in Windows 10 Pro, Version 22H2, build 19045.3208._
 ## Install WSL
 
 See mostly: https://learn.microsoft.com/en-us/windows/wsl/install
+
+
+See: https://github.com/microsoft/WSL/issues/9420#issuecomment-1620249197 //////////
+Open command prompt as admin. Run: 
+
+```bash
+netsh winsock reset
+# restart the computer
+```
+
 
 Open a _cmd prompt_ as your _regular domain user_, *not* as a local administrator, and run the following. You will get some popup windows at some point requesting an admin username and password. Simply type in your admin username and password when requested. 
 
@@ -104,3 +121,92 @@ Your Windows `C:\` drive is found in WSL Linux at `/mnt/c`. See here for details
 ## Run Linux GUI apps in WSL
 
 See mostly: https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps
+
+> You will need to be on Windows 10 Build 19044+ or Windows 11 to access this feature.
+
+1. First, identify your video card:
+
+    In Windows, press Ctrl + Alt + Delete --> click on "Task Manager" --> "Performance" tab --> click on the "GPU 0" entry in the left column. At the top-right, above the graphs, you'll see the name of your GPU. Ex: "Intel(R) Iris(R) Xe Graphics". 
+
+    Choose your link for "Intel", "AMD", or "NVIDIA" GPU driver here: https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps#prerequisites
+
+    ...and install that driver in Windows. In my case, I need to choose the "Intel" link, and then download and install the recommended driver.
+
+1. In a normal, *non*-admin *command prompt*, run the following. Type in an admin username and password in any popup windows requesting it:
+
+    ```bash
+    wsl --update
+    ```
+
+    If you see this: 
+
+    > The most recent version of Windows Subsystem for Linux is already installed.
+
+    ...then you already have this GUI feature in WSL, and you are done! 
+
+    If you see something else, and it upgrades WSL, then you must shutdown WSL and start it up again. 
+
+    First, in a regular command prompt, run:
+    ```bash
+    wsl --shutdown
+    ```
+
+    Once it finishes, re-open "Ubuntu" from your start menu. 
+
+    You can now install and run GUI applications from the Linux terminal, and they will open up and work like normal.
+
+
+## Other setup
+
+#### Install & configure Windows Terminal
+
+Install it from here: https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701
+
+Open it. Click the down arrow at the top --> select "Ubuntu" to open up WSL. You can also choose Power Shell, Command Prompt, etc. 
+
+Features:
+- Ctrl + Shift + T = open up a new tab
+- Ctrl + Shift + 4 = open up an Ubuntu WSL tab
+- etc--click the down arrow at the top to see more
+- Ctrl + Shift + W = close the current tab
+
+Change your settings: 
+1. Click the dropdown arrow at the top --> Settings. Left-hand pane settings:
+    1. Click "Startup" in the left-hand pane. Change:
+        1. "Default profile" to "Ubuntu"
+        1. "Default terminal application" to "Windows Terminal"
+        1. "When Terminal starts" to "Open windows from a previous session"
+    1. "Profiles" --> "Ubuntu"
+        1. "Appearance" --> Font size --> change from 12 to 10. 
+    1. "Actions"
+        1. "Next tab" --> set to Ctrl + PgDown --> click the checkmark to save this setting.
+        1. "Previous tab" --> set to Ctrl + PgUp --> click the checkmark to save this setting.
+        1. Reference: https://georgik.rocks/how-to-switch-tabs-in-windows-terminal/
+1. Click "Save" at the bottom. Click the "X" in the top-right of this "Settings" tab to close it. 
+
+#### Add minimize, maximize, and close buttons to all GUI windows opened in WSL
+
+Run this:
+```bash
+gsettings set org.gnome.desktop.wm.preferences button-layout ":minimize,maximize,close"
+```
+See:
+1. https://askubuntu.com/a/1443935/327339
+    1. My comment: https://askubuntu.com/questions/1443927/maximize-and-restore-button-not-visible-in-wsl-gui-window#comment2594499_1443935
+1. This excellent answer: https://askubuntu.com/a/651349/327339
+
+#### Open the Windows firewall on the "Public network" to allow the WSL Linux system to ping/talk to Windows
+
+//////
+https://superuser.com/a/1752574/425838
+
+
+#### Install commonly-needed tools
+
+```bash
+
+```
+
+
+
+
