@@ -51,22 +51,22 @@
     "editor.tokenColorCustomizations": {
         "[Monokai]": {
             "textMateRules": [
-                // {
-                //     "name": "Docstrings (including Python docstrings)",
-                //     "scope": [
-                //         // For Python multi-line docstrings / block comments!
-                //         // "string.quoted.docstring.multi.python",
-                //         "string.quoted.docstring",
-                //     ],
-                //     "settings": {
-                //         // "fontStyle": "italic",
+                {
+                    "name": "Docstrings (including Python docstrings)",
+                    "scope": [
+                        // For Python multi-line docstrings / block comments!
+                        // "string.quoted.docstring.multi.python",
+                        "string.quoted.docstring",
+                    ],
+                    "settings": {
+                        // "fontStyle": "italic",
 
-                //         // Ex: to color docstrings like strings in Monokai
-                //         "foreground": "#E6DB74",
-                //         // Ex: to color docstrings like comments in Monokai
-                //         // "foreground": "#88846F",
-                //     }
-                // },
+                        // Ex: to color docstrings like strings in Monokai
+                        // "foreground": "#E6DB74",
+                        // Ex: to color docstrings like comments in Monokai
+                        "foreground": "#88846F",
+                    }
+                },
                 {
                     "name": "Doxygen variable names",
                     // This works! YOU **MUST** put the wider scope FIRST, and then the narrower
