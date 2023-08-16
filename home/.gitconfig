@@ -46,6 +46,13 @@
     # convert back to CRLF, or to anything for that matter, on checkout; ie: it will just stay as
     # LF on checkout, if it is already LF.
     # [my recommended settings for Linux, Mac, *and* Windows!] <========
+    # Set these with:
+    #
+    #       # set global git settings to standardize line endings to LF instead
+    #       # of CRLF
+    #       git config --global core.autocrlf input
+    #       git config --global core.eol lf
+    #
     autocrlf = input  # FOR LINUX OR MACOS, OR FOR WINDOWS too, where you want to use LF anyway
     eol = lf
     #
