@@ -56,117 +56,15 @@ See also: https://programmingwithjim.wordpress.com/2020/09/08/installing-python-
 Get it here: https://gitforwindows.org/. After installing it, you can use the Git Bash terminal, which is a Linux-like terminal in Windows.
 
 
-## 3. Enable the Linux-like `python3` executable (called in Python scripts via hash-bangs) in Windows:
+## 3. Add `python` and `python3` aliases and executables to allow full, Linux-like Python usage in Git Bash
 
-1. Create a `~/.bashrc` file in Windows, and put this into the bottom of it:
+The aliases call `winpty` to prevent freezing/hanging when running interactively inside the Git Bash terminal, and the `python3` executable wrapper enables Linux-style hash-bangs to run your Python scripts directly as executables. 
 
-    ```bash
-    # set PATH so it includes user's private bin if it exists
-    if [ -d "$HOME/bin" ] ; then
-        PATH="$HOME/bin:$PATH"
-    fi
-    ```
-
-1. Add a `~/bin/python3` executable:
-
-    ```bash
-    # create the `~/bin` dir
-    mkdir -p ~/bin
-
-    # Create `~/bin/python3` and open it in VSCode for editing
-    # - This assumes you have already installed MS VSCode, *and* closed and
-    #   reopened all Git Bash terminals, prior to running this command.
-    code ~/bin/python3
-    ```
-
-    Place this into it:
-    ```bash
-    #!/usr/bin/env bash
-
-    python "$@"
-    ```
-
-    Save and close the file. 
-
-    ```bash
-    # Ensure it is executable:
-    chmod +x ~/bin/python3
-    
-    # Re-source your ~/.bashrc file
-    . ~/.bashrc
-    
-    # Test to ensure your new `python3` Bash wrapper executable now works
-    python3 --version
-    ```
-
-## 4. If running `python` or `python3` in an interactive terminal causes it to freeze, or hang forever...
-
-If you try to run `python` or `python3` interactively in Git Bash, but it just hangs forever, but `python` otherwise works fine in the Command Prompt or Power Shell, then it means you have a small incompatibility with Git Bash. [Read more about that here](https://stackoverflow.com/a/48200434/4561887). To fix it, you need to call `python` through `winpty`, like this: `winpty python`, for proper interactive use in the Git Bash terminal. 
-
-So, make this automatic by adding `alias python='winpty python'` and `alias python3='winpty python'` to the bottom of your `~/.bashrc` file by running these commands:
-```bash
-# Add these alias entries to your ~/.bashrc file
-# These commands create these entries in the bottom of `~/.bashrc`:
-#       
-#       alias python='winpty python'
-#       alias python3='winpty python'
-#
-# NB: it is *not* a mistake that both aliases point to `python`. That is how it
-# is supposed to be!
-echo -e "\n" >> ~/.bashrc
-echo "alias python='winpty python'" >> ~/.bashrc
-echo "alias python3='winpty python'" >> ~/.bashrc
-
-# verify these entries are there now
-cat ~/.bashrc
-
-# re-source your ~/.bashrc file to bring in this change
-. ~/.bashrc
-
-# show that you can now see these `python` and `python3` aliases in your list of active aliases
-alias
-
-# test it to ensure an interactive Python 3 session works now even when called
-# inside the Git Bash terminal
-python   # then type `exit()` to exit
-python3  # then type `exit()` to exit
-```
-
-Now, exactly _how_ this works is a little bit tricky, so let me explain: 
-- alias////////// - used in terminal
-- executable////////// - used otherwise, including by the hashbang
-///////////// make this an answer online here: https://stackoverflow.com/q/32597209/4561887 - for those coming from Linux and really struggling with this pain-in-a-butt called Windows. Man, Windows is a pain in the butt. In some ways it is *sooooo* much harder to use than Linux. This is one of those ways!
-//////////
-```bash
-python
-python3
-./hello_world.py
-```
+See my full answer here for setup and details: [Python doesn't work in Git Bash (it just hangs or freezes forever); and getting Linux hash-bangs to work in Windows](https://stackoverflow.com/a/76918262/4561887).
 
 References:
+1. My answer: https://stackoverflow.com/a/76918262/4561887
 1. The `winpty` alias solution: https://stackoverflow.com/a/36530750/4561887
 1. What `winpty` is, and why you need it: https://stackoverflow.com/a/48200434/4561887
 1. My own prior knowledge and trial and error.
 
-
-# Obsolete notes
-
-<!--
-
-**Fix the `python3` alias above so it works too:**
-
-Your `python3` alias may still not work interactively in the Git Bash terminal, however. To fix it, we need to do a few more things. You may see this error when you try running `python3`, for instance: 
-
-> `winpty: error: cannot start '"C:/Program Files/WindowsApps/Microsoft.DesktopAppInstaller_1.20.1881.0_x64__8wekyb3d8bbwe/AppInstallerPythonRedirector.exe"': Access is denied. (error 0x5)`
-
-Fix that by following these instructions here: https://stackoverflow.com/a/70514804/4561887. In short, press the <kbd>Windows</kbd> key and search for "Manage app execution aliases". Check *off* the sliders for the `python.exe` and `python3.exe` entries, as shown here: 
-
-[![image](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/assets/6842199/54d6dfa2-2e0d-4a9c-aea1-0de41c5c36ce)](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/assets/6842199/54d6dfa2-2e0d-4a9c-aea1-0de41c5c36ce)
-
-Now, if you run `python3`, you may get this error instead: 
-
-> `winpty: error: cannot start 'python3': Not found in PATH`
-
-We can fix that by adding `~/bin` to our Windows `Path` **environment variables** as follows: right-click on the Windows start menu icon -> System -> click the blue "Advanced system settings" link either on the far right if the window is large, or at the bottom if the window is small -> click the "Advanced" tab -> "Environment Variables..." -> select the `Path` "User variables" entry near the top -> click "Edit..." -> click "New" -> type in `%USERPROFILE%\bin` into the new entry box -> click "OK" -> click "OK" again to close the "Environment Variables" window -> click "OK" again to close the "System Properties" window. Now, close and re-open all of your Git Bash terminals. 
-
--->
