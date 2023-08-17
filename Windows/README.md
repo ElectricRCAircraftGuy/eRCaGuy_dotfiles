@@ -53,7 +53,7 @@ See also: https://programmingwithjim.wordpress.com/2020/09/08/installing-python-
 
 ## 2. Install Git for Windows
 
-After doing so, you can use the Git Bash terminal, which is a Linux-like terminal in Windows.
+Get it here: https://gitforwindows.org/. After installing it, you can use the Git Bash terminal, which is a Linux-like terminal in Windows.
 
 
 ## 3. Enable the Linux-like `python3` executable (called in Python scripts via hash-bangs) in Windows:
@@ -101,9 +101,9 @@ After doing so, you can use the Git Bash terminal, which is a Linux-like termina
 
 ## 4. If running `python` or `python3` in an interactive terminal causes it to freeze, or hang forever...
 
-If you try to run `python` or `python3` interactively in Git Bash, but it just hangs forever, but `python` otherwise works fine in the Command Prompt or Power Shell, then it means you have a small incompatibility with Git Bash. To fix it, you need to call `python` through `winpty`, like this: `winpty python`, for proper interactive use in the Git Bash terminal. 
+If you try to run `python` or `python3` interactively in Git Bash, but it just hangs forever, but `python` otherwise works fine in the Command Prompt or Power Shell, then it means you have a small incompatibility with Git Bash. [Read more about that here](https://stackoverflow.com/a/48200434/4561887). To fix it, you need to call `python` through `winpty`, like this: `winpty python`, for proper interactive use in the Git Bash terminal. 
 
-So, make this automatic by adding `alias python='winpty python.exe'` and `alias python3='winpty python'` to the bottom of your `~/.bashrc` file by running these commands:
+So, make this automatic by adding `alias python='winpty python'` and `alias python3='winpty python'` to the bottom of your `~/.bashrc` file by running these commands:
 ```bash
 # Add these alias entries to your ~/.bashrc file
 # These commands create these entries in the bottom of `~/.bashrc`:
@@ -123,13 +123,13 @@ cat ~/.bashrc
 # re-source your ~/.bashrc file to bring in this change
 . ~/.bashrc
 
-# show that you can now see this `python` alias in your list of active aliases
+# show that you can now see these `python` and `python3` aliases in your list of active aliases
 alias
 
 # test it to ensure an interactive Python 3 session works now even when called
 # inside the Git Bash terminal
-python
-python3
+python   # then type `exit()` to exit
+python3  # then type `exit()` to exit
 ```
 
 Now, exactly _how_ this works is a little bit tricky, so let me explain: 
