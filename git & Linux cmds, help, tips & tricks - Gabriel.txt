@@ -4014,6 +4014,7 @@ man ip address
     See the "man" (manual) pages for the `ip address` cmd.
 ip address
     show all configured network interfaces and their IP addresses & network interface info; NB: I don't really understand this command yet, but it looks useful, and seems to show a bunch of the same information as `ifconfig`.
+    - UPDATE Aug. 2023: this command is better than `ifconfig`, because it shows **multiple IP addresses** per interface, if you have manually assigned multiple IP addresses and Subnet masks to a given hardware (or software) interface adapter!
 ip addres = same as above
 ip addre = same as above
 ip addr = same as above
@@ -5731,7 +5732,11 @@ grep -rn '' /sys/class/tty/ttyUSB0/*
 sudo apt install gpsd-tools
     Install `gpsmon`. 
 gpsmon
-    Monitor a GPS device connected to your Linux system (via serial maybe??--not sure).
+    Monitor a GPS device connected to your Linux system--ex: via serial, such as via serial maybe??--not sure).
+sudo apt install gpsd
+    Install `gpsd` daemon, `ppscheck`, etc.
+ppscheck /dev/ttyS0
+    See if a PPS (pulse per second) time-sync signal is coming in from a GPS over the serial device connected to Linux pseudo-file `/dev/ttyS0`. 
 
 
 == `head` and `tail`: ==
