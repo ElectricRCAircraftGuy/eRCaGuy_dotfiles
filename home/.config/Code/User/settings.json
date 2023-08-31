@@ -124,7 +124,6 @@
         "editor.defaultFormatter": "ms-python.autopep8"
     },
     "python.formatting.provider": "none",
-    "window.zoomLevel": 1,
     "settingsSync.ignoredSettings": [
         "editor.fontSize"
     ],
@@ -133,5 +132,6 @@
     // See: https://stackoverflow.com/a/51935030/4561887
     "[markdown]": {
         "files.trimTrailingWhitespace": false
-    }
+    },
+    "window.zoomLevel": 1
 }
