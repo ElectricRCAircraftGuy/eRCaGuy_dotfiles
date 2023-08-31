@@ -92,9 +92,15 @@ gs_git_show_branch_and_hash() {
     # See: https://stackoverflow.com/a/5694416/4561887
     git_short_hash="$(gs_git_get_short_hash_dirty 2>/dev/null)"
 
-    if [ -n "$git_branch" ] || [ -n "$git_short_hash" ]; then
+    # See: https://stackoverflow.com/a/33733020/4561887
+    git_tag="$(git tag --points-at HEAD 2>/dev/null)"
+    if [ -n "$git_tag" ]; then
+        git_tag="tag: $git_tag"
+    fi
+
+    if [ -n "$git_branch" ] || [ -n "$git_short_hash" ] || [ -n "$git_tag" ]; then
         # branch_info="Branch: ${F}${git_branch}${f}  Hash: ${F}${git_short_hash}${f}"
-        branch_info="${F}${git_branch}${f} ${F}${git_short_hash}${f}"
+        branch_info="${F}${git_branch}${f}  ${F}${git_short_hash}${f}  ${F}${git_tag}${f}"
         echo -e "$branch_info"  # NB: DON'T FORGET THE `-e` here to escape the color codes!
     fi
 }
@@ -102,8 +108,13 @@ gs_git_show_branch_and_hash_no_formatting() {
     git_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
     git_short_hash="$(gs_git_get_short_hash_dirty 2>/dev/null)"
 
-    if [ -n "$git_branch" ] || [ -n "$git_short_hash" ]; then
-        branch_info="${git_branch} ${git_short_hash}"
+    git_tag="$(git tag --points-at HEAD 2>/dev/null)"
+    if [ -n "$git_tag" ]; then
+        git_tag="tag: $git_tag"
+    fi
+
+    if [ -n "$git_branch" ] || [ -n "$git_short_hash" ] || [ -n "$git_tag" ]; then
+        branch_info="${git_branch}  ${git_short_hash}  ${git_tag}"
         echo "$branch_info"
     fi
 }
