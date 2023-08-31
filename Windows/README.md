@@ -55,6 +55,10 @@ See also: https://programmingwithjim.wordpress.com/2020/09/08/installing-python-
 
 Get it here: https://gitforwindows.org/. After installing it, you can use the Git Bash terminal, which is a Linux-like terminal in Windows.
 
+See especially my installation instructions, screenshots, and notes here: 
+1. [Adding Git-Bash to the new Windows Terminal](https://stackoverflow.com/a/76950661/4561887)
+1. [Installing Git For Windows](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/issues/26#issuecomment-1687481094)
+
 
 ## 3. Add `python` and `python3` aliases and executables to allow full, Linux-like Python usage in Git Bash
 
