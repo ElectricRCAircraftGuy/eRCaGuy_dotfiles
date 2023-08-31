@@ -101,8 +101,8 @@ gs_git_show_branch_and_hash() {
     git_tag="$(git tag --points-at HEAD 2>/dev/null)"
     if [ -n "$git_tag" ]; then
         git_tag="tag: $git_tag"
-        # Replace all newlines with spaces; see: https://stackoverflow.com/a/39198829/4561887
-        git_tag="${git_tag/$'\n'/, tag: }"
+        # Replace all newlines with spaces; see: https://unix.stackexchange.com/a/26798/114401
+        git_tag="$(echo "$git_tag" | sed ':a;N;$!ba;s/\n/, tag: /g')"
     fi
 
     if [ -n "$git_branch" ] || [ -n "$git_short_hash" ] || [ -n "$git_tag" ]; then
@@ -122,7 +122,7 @@ gs_git_show_branch_and_hash_no_formatting() {
     git_tag="$(git tag --points-at HEAD 2>/dev/null)"
     if [ -n "$git_tag" ]; then
         git_tag="tag: $git_tag"
-        git_tag="${git_tag/$'\n'/, tag: }"
+        git_tag="$(echo "$git_tag" | sed ':a;N;$!ba;s/\n/, tag: /g')"
     fi
 
     if [ -n "$git_branch" ] || [ -n "$git_short_hash" ] || [ -n "$git_tag" ]; then
