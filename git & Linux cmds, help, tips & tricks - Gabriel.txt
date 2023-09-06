@@ -5580,7 +5580,7 @@ watch -n 1 'head -n 2 log_file.log; tail -n 10 log_file.log'
 == CAN Bus and CAN Networking: ==
 
 TODO: need to add this information in here so I don't forget it.
-[CANbus]
+[CANbus; can: ==; can devices: ==]
 
 
 == USB, serial, devices, etc.: ==
@@ -5772,6 +5772,31 @@ sudo apt install gpsd
     Install `gpsd` daemon, `ppscheck`, etc.
 ppscheck /dev/ttyS0
     See if a PPS (pulse per second) time-sync signal is coming in from a GPS over the serial device connected to Linux pseudo-file `/dev/ttyS0`. 
+cpgs
+    <===== LOOKS VERY USEFUL =======
+    A terminal version of `xgps` (see below). 
+    [Another GPS monitoring tool; useful to **see the GPS altitude**, for instance, which is either in MSL or HAE (Height Above Ellipsoid)--not sure which]
+    See `man cgps`. 
+    Simple clients for `gpsd` include:
+    - `cgps`
+    - `gegps`
+    - `gps`
+    - `lcdgps`
+    From `man cgps`:
+    > cgps is a client resembling xgps, but without the pictorial satellite display and able to run on a serial terminal or terminal emulator.
+sudo apt install gpsd-clients
+    Install gpsd clients, such as `xgps`, `gegps`, etc.
+xgps
+    <===== LOOKS VERY USEFUL =======
+    A GUI version (X-window-based maybe?) of `cgps`. 
+gegps
+    <===== LOOKS VERY USEFUL =======
+    GS: a "Google Earth GPS" tool, I believe. [I'm not sure how it works or how to set it up yet]
+    From `man gegps`: 
+    > By default, clients collect data from all compatible devices on localhost, using the default GPSD port 2947.
+lcdgps
+    From `man lcdgps`, `man gegps`, `man cgps`, etc.:
+    > A client that passes gpsd data to lcdproc, turning your car computer into a very expensive and nearly feature-free GPS receiver. Currently assumes a 4x40 LCD and writes data formatted to fit that size screen. Also displays 4- or 6-character Maidenhead grid square output.
 
 
 == `head` and `tail`: ==
