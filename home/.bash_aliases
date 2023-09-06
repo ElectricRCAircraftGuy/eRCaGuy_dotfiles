@@ -89,7 +89,7 @@ gs_git_show_branch_and_hash() {
 
     git_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
     # See: https://stackoverflow.com/a/16925062/4561887
-    if [ "$(git rev-parse --is-inside-work-tree)" = "true" ] && [ -z "$git_branch" ]; then
+    if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && [ -z "$git_branch" ]; then
         # similar to what `git status` shows when the HEAD is detached
         git_branch="(HEAD detached at)"
     fi
@@ -113,7 +113,7 @@ gs_git_show_branch_and_hash() {
 }
 gs_git_show_branch_and_hash_no_formatting() {
     git_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
-    if [ "$(git rev-parse --is-inside-work-tree)" = "true" ] && [ -z "$git_branch" ]; then
+    if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && [ -z "$git_branch" ]; then
         git_branch="(HEAD detached at)"
     fi
 
