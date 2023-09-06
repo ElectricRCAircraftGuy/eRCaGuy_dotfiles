@@ -238,6 +238,12 @@ That should be a comic.
 "Every chance you get, eliminate a template. If you can write _clean_ code without using a template, do so. Simplicity is better."
     - Gabriel Staples, 22 Oct. 2020
 
+C++'s syntax alone is, unfortunately, a never-ending story [C++'s syntax is nuts!]: 
+    "C++ is completely nuts."
+        - Gabriel Staples, 15 May 2020. See here: https://stackoverflow.com/questions/47002799/what-does-the-ampersand-at-the-end-of-member-function-signature-mean/47003980?noredirect=1#comment109357350_47003980
+    "After having used C++ since the late 80's, I still feel the same way [that "C++ is completely nuts"]. As more and more corner-case niceties are added to the endless string of value-types, deductions, ranges, views, chronos, etc.. it feels a lot more like Python than it does C++. Don't get me wrong, I'm not saying additional features and capabilities are a bad thing, there is someone out there that will use the feature, but to say you can remain current without continually re-learning C++ is just that -- nuts. The language seems to have fragmented into an ever increasing number of specialized subcomponents."
+        - David C. Rankin, 3 Sept. 2023, experienced software developer, engineer, lawyer, and open-source advocate. See here: https://stackoverflow.com/questions/47002799/what-does-the-ampersand-at-the-end-of-member-function-signature-mean/47003980?noredirect=1#comment135796477_47003980
+
 I frequently tell people:
 > If the syntax of C is like Spanish, the syntax of C++ is like Spanish + English + French + Italian + Portuguese + German.
 > 
@@ -249,7 +255,7 @@ I frequently tell people:
 
 23 Oct. 2020:
 
-Note: the above quote does NOT mean: "don't use templates". If you have a function that truly needs to work for many data types, that is a good use for a template, so _use a template!_ BUT, if you can simply reduce your plethora of types and go back to a little more simplicity, something more like _modern_ C (1), between old-school C and modern "go-nuts" C++, you are better off. It seems to me the simplicity will pay off dividends in the long run, enabling you ultimately to have fewer hurdles for new developers to contribute, faster progress for the whole team, and safer code because it is understandable and more likely to be correct and do what you want it to do. 
+Note: the above quote above (and repeated just below) about eliminating templates does NOT mean: "don't use templates". If you have a function that truly needs to work for many data types, that is a good use for a template, so _use a template!_ BUT, if you can simply reduce your plethora of types and go back to a little more simplicity, something more like _modern_ C (1), between old-school C and modern "go-nuts" C++, you are better off. It seems to me the simplicity will pay off dividends in the long run, enabling you ultimately to have fewer hurdles for new developers to contribute, faster progress for the whole team, and safer code because it is understandable and more likely to be correct and do what you want it to do. 
 
 This is my hypothesis. I am still testing it, but right now, that's what I recommend: "every chance you get, eliminate a template."
 
