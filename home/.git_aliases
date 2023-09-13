@@ -217,7 +217,7 @@ gs_git_commit_r() {
         echo "DEFAULT_MIN_MINUTES = $DEFAULT_MIN_MINUTES"
         echo "DEFAULT_MAX_MINUTES = $DEFAULT_MAX_MINUTES"
         echo "---------"
-        echo 'DATE="$(date +"%a %b %-d %H:%M:%S %Y %z")'
+        echo 'DATE="$(date +"%a %b %-d %H:%M:%S %Y %z")"'
         echo "---"
         echo "DATE=\"$DATE\""
         echo 'GIT_COMMITTER_DATE="$DATE" git commit --date "$DATE"'
