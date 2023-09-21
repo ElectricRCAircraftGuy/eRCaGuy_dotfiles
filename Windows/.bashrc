@@ -41,8 +41,26 @@ fi
 alias make="'/c/Program Files/Microchip/MPLABX/v6.15/gnuBins/GnuWin32/bin/make.exe'"
 alias prjMakefilesGenerator="'/c/Program Files/Microchip/MPLABX/v6.15/mplab_platform/bin/prjMakefilesGenerator.bat'"
 
-# set PATH so it includes user's private bin if it exists
+# Add `ncat`, `nmap`, and `nping` to your executable PATH
+# See:
+# 1. https://nmap.org/
+# 1. https://nmap.org/ncat/
+if [ -d "/c/Program Files (x86)/Nmap" ] ; then
+    PATH="/c/Program Files (x86)/Nmap:$PATH"
+fi
+
+# Set PATH so it includes user's private bin if it exists.
+# - NB: have this be your *last* path you add, so that it is the first thing in the PATH variable
+#   and thus takes precedence over any other executables with the same name
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
+# Make `gdu` easily executable.
+# - `gdu` is a high speed, cross-platform `ncdu` replacement, written in Go, which runs in Windows,
+#   Mac, and Linux.
+# See:
+# 1. https://github.com/dundee/gdu
+# 1. My issue and comments here where I mention creating this alias:
+#    https://github.com/dundee/gdu/issues/279
+alias gdu="gdu_windows_amd64.exe"
