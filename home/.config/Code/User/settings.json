@@ -137,5 +137,11 @@
     "[markdown]": {
         "files.trimTrailingWhitespace": false
     },
-    "window.zoomLevel": 1
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": true,
+        "markdown": true,
+        "scminput": false, // GS: files that are used as input for source control management (SCM) systems, such as Git I suspect
+    },
+    "window.zoomLevel": 1,
 }
