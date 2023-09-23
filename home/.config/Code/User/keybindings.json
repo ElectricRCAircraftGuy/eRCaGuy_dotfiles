@@ -6,6 +6,9 @@
 // Putting a `-` minus sign in front of the command string will *disable* that command.
 // - See here under the section "Removing a specific key binding rule":
 //   https://code.visualstudio.com/docs/getstarted/keybindings#_removing-a-specific-key-binding-rule
+//
+// See also:
+// 1. My answer on zooming in and out in VSCode: https://stackoverflow.com/a/76519384/4561887
 [
     {
         "key": "alt+left",
