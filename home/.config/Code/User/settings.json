@@ -35,6 +35,10 @@
         100,
         120,
     ],
+    // "rewrap.wrappingColumn": 80,
+    "rewrap.wrappingColumn": 100,
+    // "rewrap.wrappingColumn": 120,
+
     // My favorite color theme is
     // "workbench.colorTheme": "Monokai",
     "workbench.colorTheme": "Monokai",
