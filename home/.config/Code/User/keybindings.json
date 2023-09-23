@@ -1,6 +1,11 @@
 // This file, or a symlink to it, should be placed into the "~/.config/Code/User" dir.
-
+//
 // Place your key bindings in this file to override the defaults
+//
+// GS:
+// Putting a `-` minus sign in front of the command string will *disable* that command.
+// - See here under the section "Removing a specific key binding rule":
+//   https://code.visualstudio.com/docs/getstarted/keybindings#_removing-a-specific-key-binding-rule
 [
     {
         "key": "alt+left",
@@ -17,5 +22,14 @@
     {
         "key": "ctrl+shift+-",
         "command": "-workbench.action.navigateForward"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "workbench.action.zoomReset",
+        // "when": "true" // GS: always enabled; update: not needed
+    },
+    {
+        "key": "ctrl+numpad0",
+        "command": "-workbench.action.zoomReset"
     }
 ]
