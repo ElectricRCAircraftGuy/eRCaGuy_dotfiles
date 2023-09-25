@@ -144,8 +144,8 @@
         // GS: files that are used as input for source control management (SCM) systems, such as Git I suspect
         "scminput": false,
     },
-    "window.zoomLevel": 1,
     "cSpell.ignoreWords": [
         "elif"
     ],
+    "window.zoomLevel": 1,
 }
