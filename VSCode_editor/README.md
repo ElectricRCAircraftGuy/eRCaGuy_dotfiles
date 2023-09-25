@@ -5,7 +5,19 @@ The `.vscode` dir should be placed at the root of your workspace (ie: the folder
 The `settings.json` and `keybindings.json` files should be copy-pasted into this dir: `~/.config/Code/User/`.
 
 
+## See especially
+
+1. **Installation instructions of my VSCode settings files and extensions: [../home/.config/Code/README.md](../home/.config/Code/README.md)**
+
+
+## See also
+
+1. (private for now) [Microsoft Visual Studio Code (MS VSCode) IDE and Editor Setup & Info](https://docs.google.com/document/d/1agYnaN8FYjmitqgNzA7MhLbA0oifkYTQn_axLCTFxAg/edit)
+
+
 ## Common VSCode Extensions/Plugins I like to install
+
+**Update Sept. 2023: see my "see especially" file just above instead.**
 
 See [.vscode/extensions.json](.vscode/extensions.json) for a list of recommendations. Place the `.vscode` folder into the root of your VSCode workspace. Then, in VSCode, go to the Extensions tab and search for "@recommended". This will search this file for the recommendations therein and bring them all up under the "WORKSPACE RECOMMENDATIONS" search results section. Click the little tiny cloud-looking icon to the right of that heading to "Install Workspace Recommended Extensions" automatically for you!
 
