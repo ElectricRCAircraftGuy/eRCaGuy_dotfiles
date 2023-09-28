@@ -31,12 +31,16 @@
     "editor.snippetSuggestions": "top",
     "editor.fontSize": 12,
     "editor.rulers": [
-        // 80,
+        80,
         100,
         120,
     ],
+    // GS: see also this info about pressing Alt + Q multiple times to wrap to
+    // different columns:
+    // https://github.com/stkb/Rewrap/issues/383#issuecomment-1738115865
+    //
     // "rewrap.wrappingColumn": 80,
-    "rewrap.wrappingColumn": 100,
+    // "rewrap.wrappingColumn": 100,
     // "rewrap.wrappingColumn": 120,
 
     // My favorite color theme is
