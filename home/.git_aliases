@@ -19,7 +19,7 @@
 # fancy bash trickery. See my ans:
 # https://stackoverflow.com/questions/28109520/how-to-cope-with-spaces-in-file-names-when-iterating-results-from-git-diff-nam/62853776#62853776
 gs_git_list_files_changed() {
-    files="$(git diff --name-only "$1")"
+    files="$(command git diff --name-only "$1")"
     echo "These are the changed files:"
     echo "$files"
     # Now optionally create a new function from this and do something with these files here if you
@@ -100,7 +100,7 @@ gs_git_branch_hash_bak() {
 
     DATE=`date +%Y%m%d-%H%Mhrs-%Ssec`
     BRANCH="$(gs_git_show_branch_and_hash_no_formatting)"
-    REPO_ROOT="$(git rev-parse --show-toplevel)"
+    REPO_ROOT="$(command git rev-parse --show-toplevel)"
     REPO=$(basename "$REPO_ROOT") # repository name
     # Replace any spaces in the repository name with underscores
     # See: https://stackoverflow.com/questions/19661267/replace-spaces-with-underscores-via-bash/19661428#19661428
@@ -120,7 +120,7 @@ gs_git_branch_hash_bak() {
     echo -e "current branch name & short hash = \"$BRANCH\"" >> $FILE
     echo -e "user-added phrase / notes        = \"$user_added_phrase\"" >> $FILE
     echo -e "\n=== \`git branch -vv\` ===\n" >> $FILE
-    git branch -vv >> $FILE
+    command git branch -vv >> $FILE
     echo "Done!"
 }
 #
@@ -147,10 +147,10 @@ gs_git_branch_hash_bak_up1() {
 
     # 1st, try to grab the outer repo root path, if this project is a subrepo. This obtains an empty
     # string if this is NOT a subrepo.
-    BASE_REPO_ROOT="$(git rev-parse --show-superproject-working-tree)" || return $RETURN_CODE_ERROR
+    BASE_REPO_ROOT="$(command git rev-parse --show-superproject-working-tree)" || return $RETURN_CODE_ERROR
     if [ -z "$BASE_REPO_ROOT" ]; then
         # If not in a subrepo, then try to grab the root of the regular repo.
-        BASE_REPO_ROOT="$(git rev-parse --show-toplevel)" || return $RETURN_CODE_ERROR
+        BASE_REPO_ROOT="$(command git rev-parse --show-toplevel)" || return $RETURN_CODE_ERROR
         echo "You are NOT in a subrepo. BASE_REPO_ROOT=$BASE_REPO_ROOT"  # debugging
     else
         echo "You ARE in a subrepo. BASE_REPO_ROOT=$BASE_REPO_ROOT"  # debugging
@@ -168,7 +168,7 @@ gs_git_log_get_last_commit_date() {
     # get the committer date; see this A to my Q: https://stackoverflow.com/a/71385517/4561887
     # Use `"%ad"` for Author Date, or `"%cd"` for Commit Date (aka: Committer Date).
     # author_date="$(git log -1 --format="%ad" "$@")"
-    committer_date="$(git log -1 --format="%cd" "$@")"
+    committer_date="$(command git log -1 --format="%cd" "$@")"
 
     # Now strip off the last space-separated word in order to throw away the time zone portion
     # of the date
@@ -292,7 +292,7 @@ gs_git_commit_r() {
     #    https://stackoverflow.com/q/71384830/4561887
     # 1. How can one change the timestamp of an old commit in Git?:
     #    https://stackoverflow.com/a/9701130/4561887
-    GIT_COMMITTER_DATE="$new_date" git commit --date "$new_date"
+    GIT_COMMITTER_DATE="$new_date" command git commit --date "$new_date"
     last_date="$new_date"
 }
 alias git_commit_r="gs_git_commit_r"

@@ -71,9 +71,9 @@ ANSI_OFF="${ANSI_START}${ANSI_END}"
 # dirty.
 # See my answer here: https://stackoverflow.com/a/76856090/4561887
 gs_git_get_short_hash_dirty() {
-    test -z "$(git status --porcelain)" \
-        && echo "$(git rev-parse --short HEAD)" \
-        || echo "$(git rev-parse --short HEAD) (dirty)"
+    test -z "$(command git status --porcelain)" \
+        && echo "$(command git rev-parse --short HEAD)" \
+        || echo "$(command git rev-parse --short HEAD) (dirty)"
 }
 
 # Get the git branch and hash.
@@ -87,9 +87,9 @@ gs_git_show_branch_and_hash() {
     # format off
     f="${ANSI_OFF}"
 
-    git_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
+    git_branch="$(command git symbolic-ref -q --short HEAD 2>/dev/null)"
     # See: https://stackoverflow.com/a/16925062/4561887
-    if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && [ -z "$git_branch" ]; then
+    if [ "$(command git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && [ -z "$git_branch" ]; then
         # similar to what `git status` shows when the HEAD is detached
         git_branch="(HEAD detached at)"
     fi
@@ -98,7 +98,7 @@ gs_git_show_branch_and_hash() {
     git_short_hash="$(gs_git_get_short_hash_dirty 2>/dev/null)"
 
     # See: https://stackoverflow.com/a/33733020/4561887
-    git_tag="$(git tag --points-at HEAD 2>/dev/null)"
+    git_tag="$(command git tag --points-at HEAD 2>/dev/null)"
     if [ -n "$git_tag" ]; then
         git_tag="tag: $git_tag"
         # Replace all newlines with spaces; see: https://unix.stackexchange.com/a/26798/114401
@@ -112,14 +112,14 @@ gs_git_show_branch_and_hash() {
     fi
 }
 gs_git_show_branch_and_hash_no_formatting() {
-    git_branch="$(git symbolic-ref -q --short HEAD 2>/dev/null)"
-    if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && [ -z "$git_branch" ]; then
+    git_branch="$(command git symbolic-ref -q --short HEAD 2>/dev/null)"
+    if [ "$(command git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && [ -z "$git_branch" ]; then
         git_branch="(HEAD detached at)"
     fi
 
     git_short_hash="$(gs_git_get_short_hash_dirty 2>/dev/null)"
 
-    git_tag="$(git tag --points-at HEAD 2>/dev/null)"
+    git_tag="$(command git tag --points-at HEAD 2>/dev/null)"
     if [ -n "$git_tag" ]; then
         git_tag="tag: $git_tag"
         git_tag="$(echo "$git_tag" | sed ':a;N;$!ba;s/\n/, tag: /g')"
@@ -850,7 +850,7 @@ alias gs_diff_dir="diff_dir"
 alias gs_vpn_openconnect-sso='openconnect-sso \
     --server "${VPN_SERVER_ADDRESS}/${VPN_SAML_GROUP}" --user "${VPN_USER}"'
 # Custom configuration to solve some problems while using `openconnect-sso` in Ubuntu 22.04.
-# See my comment & instructions: 
+# See my comment & instructions:
 # https://github.com/vlaci/openconnect-sso/issues/81#issuecomment-1363355533
 export QTWEBENGINE_DISABLE_SANDBOX=1
 export OPENSSL_CONF=~/.my_ssl.conf
