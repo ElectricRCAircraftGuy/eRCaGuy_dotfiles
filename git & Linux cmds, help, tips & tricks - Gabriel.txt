@@ -4583,6 +4583,28 @@ References:
     1. *****+ [my answer, presenting my `fix_broken_symlinks` tool] https://unix.stackexchange.com/a/732315/114401
 
 
+ln -sir path/to/some/file/or/dir .
+    <==========
+    Create a symlink to that location in the current directory.
+ln -i path/to/some/file/or/dir .
+    <==========
+    Create a **hard** link to that location in the current directory.
+    Read about hard links here: https://www.cbtnuggets.com/blog/certifications/open-source/linux-hard-links-versus-soft-links-explained
+
+[keywords: check verify hard links; hard link inodes; how to tell if files are hard links to the same underlying inode file storage]
+
+ls -li path/to/file/or/dir
+    See the inode ('i'node) of the file. Hard links have the same inode as each other. The inode is what points to the underlying memory storage (on the disk) for the file.
+    Source: Bing Chat: prompt: "In linux, how do I tell at the command line if a link is a symlink or hard link?"
+ll -i path/to/file/or/dir
+    <==========
+    Similar to above.
+    Source: Bing Chat: prompt: "In linux, how do I tell at the command line if a link is a symlink or hard link?"
+stat path/to/file/or/dir
+    <==========
+    Stat the file (ask for its 'stat'us). This will also show the inode number and the number of hard "Links" to this inode number. A "Links" value > 1 indicates it is a shared hard link, and more hard link files point to this same inode number too.
+    Source: Bing Chat: prompt: "In linux, how do I tell at the command line if a link is a symlink or hard link?"
+
 - - -
 NB: 
 1. Use `-v` for verbose output, to show the new symlinks and where they point. VERY USEFUL FOR DEBUGGING!
