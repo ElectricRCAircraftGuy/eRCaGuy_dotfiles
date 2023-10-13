@@ -155,6 +155,11 @@ if [ -f "$SCRIPT_DIRECTORY/.git_aliases" ]; then
     . "$SCRIPT_DIRECTORY/.git_aliases"
 fi
 
+# Import this ".git_custom_hooks" file, if it exists.
+if [ -f "$SCRIPT_DIRECTORY/.git_custom_hooks" ]; then
+    . "$SCRIPT_DIRECTORY/.git_custom_hooks"
+fi
+
 # Import this ".bash_useful_functions" utilities file, if it exists.
 if [ -f "$SCRIPT_DIRECTORY/.bash_useful_functions" ]; then
     . "$SCRIPT_DIRECTORY/.bash_useful_functions"

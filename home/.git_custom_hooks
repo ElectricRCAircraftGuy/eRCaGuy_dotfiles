@@ -1,0 +1,176 @@
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# Most git hooks are stored inside the `.git/hooks` directory for a given repository. If you can
+# use those, do. See here: https://git-scm.com/docs/githooks
+#
+# BUT, it might be useful to place custom git hooks into this file instead under perhaps a few
+# circumstances:
+# 1. You want to use the same git hook for many different repositories, and you don't want to
+#    have to copy it into each one.
+# 2. You want to easily share the same hooks with different users on different computers.
+# 3. [MOST COMMON] Git doesn't allow you to create the hook you want (ex: a pre-git-status hook).
+#    So, you manually create it here.
+#
+# References:
+# 1. *****+ git status hook: https://stackoverflow.com/a/41848040/4561887
+# 1. https://git-scm.com/docs/githooks - official git hook documentation.
+# 1.
+#
+
+# (all `git` cmds)
+pre_git_hook()
+{
+    # echo "=== Running pre_git_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+post_git_hook()
+{
+    # echo "=== Running post_git_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+
+# status
+pre_git_status_hook()
+{
+    # echo "=== Running pre_git_status_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+post_git_status_hook()
+{
+    # echo "=== Running post_git_status_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+
+# commit
+pre_git_commit_hook()
+{
+    # echo "=== Running pre_git_commit_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+post_git_commit_hook()
+{
+    # echo "=== Running post_git_commit_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+
+# push
+pre_git_push_hook()
+{
+    # echo "=== Running pre_git_push_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+post_git_push_hook()
+{
+    # echo "=== Running post_git_push_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+
+# pull
+pre_git_pull_hook()
+{
+    # echo "=== Running pre_git_pull_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+post_git_pull_hook()
+{
+    # echo "=== Running post_git_pull_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+
+
+# Outer-most git hook wrapper function
+git()
+{
+    echo "=== Running custom git() wrapper function. ==="  # debugging
+
+    # Note: if no argument is passed in, this just sets cmd to an empty string
+    cmd="$1"
+    # echo "cmd = $cmd"  # debugging
+
+    # Pre-hooks
+    pre_git_hook
+    if [ "$cmd" = "status" ]; then
+        pre_git_status_hook
+    elif [ "$cmd" = "commit" ]; then
+        pre_git_commit_hook
+    elif [ "$cmd" = "push" ]; then
+        pre_git_push_hook
+    elif [ "$cmd" = "pull" ]; then
+        pre_git_pull_hook
+    fi
+
+    # Run the actual git command; the `command` built-in is used to force the
+    # real `git` command to get called here, to prevent infinite recursion.
+    command git "$@"
+    return_val="$?"
+
+    # Post-hooks
+    if [ "$cmd" = "status" ]; then
+        post_git_status_hook
+    elif [ "$cmd" = "commit" ]; then
+        post_git_commit_hook
+    elif [ "$cmd" = "push" ]; then
+        post_git_push_hook
+    elif [ "$cmd" = "pull" ]; then
+        post_git_pull_hook
+    fi
+    post_git_hook
+
+    # Be sure to return the return value of the actual git command, not the
+    # return value of this function nor our hooks.
+    return "$return_val"
+}
+
+
+
+# Example runs, with most debugging lines NOT commented out:
+
+
+# eRCaGuy_dotfiles$ git status
+# Running custom git() wrapper function.
+# === Running pre_git_hook() function. ===
+# === Running pre_git_status_hook() function. ===
+# On branch master
+# Your branch is up to date with 'origin/master'.
+#
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git restore <file>..." to discard changes in working directory)
+# 	modified:   home/.bash_aliases
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+# 	home/.git_custom_hooks
+#
+# no changes added to commit (use "git add" and/or "git commit -a")
+# === Running post_git_status_hook() function. ===
+# === Running post_git_hook() function. ===
+
+
+# eRCaGuy_dotfiles$ git push
+# Running custom git() wrapper function.
+# === Running pre_git_hook() function. ===
+# === Running pre_git_push_hook() function. ===
+# Everything up-to-date
+# === Running post_git_push_hook() function. ===
+# === Running post_git_hook() function. ===
