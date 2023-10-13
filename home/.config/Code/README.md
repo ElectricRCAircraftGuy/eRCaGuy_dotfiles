@@ -8,14 +8,37 @@ For more details, and instructions, see: [eRCaGuy_dotfiles/VSCode_editor](../../
 ## Installation instructions of these VSCode settings files
 
 ```bash
-# Option 1 (what I do, to keep my dotfiles up to date): symlink the settings files
-# - create a symlink to my settings files in my dotfiles repo
+# OPTION 1: (what I do, to keep my dotfiles up to date): **hard**link the settings files in this
+# repo to the settings files where VSCode keeps them. 
+# - NB: prior to ~12 Oct. 2023, I used to use symlinks, but I switched to hardlinks because trial
+#   and error tells me that the latest version of VSCode (v1.83.0) now overwrites symlinked setting
+#   files in the "~/.config/Code/User/" dir every time you change your settings in the VSCode GUI.
+#   This is irritating. This means it wipes out my symlinks, and replaces them with new, regular
+#   files which are not in my dotfiles repo, so I lose my git tracking of the settings. Hard links
+#   solve this problem. Read about them here:
+#   https://www.cbtnuggets.com/blog/certifications/open-source/linux-hard-links-versus-soft-links-explained
+#
+# Make the settings files in this repo become **hard** links to the main VSCode settings files in my
+# home dir. 
+# - Note: take care not to point a hard link to a symlink in this case, or you will still have the
+#   same problem. The VSCode settings files in the home dir must be actual files, or possibly hard
+#   links, but NOT symlinks.
 cd path/to/eRCaGuy_dotfiles/home/.config/Code/User
-ln -si "$(pwd)/keybindings.json" ~/.config/Code/User/
-ln -si "$(pwd)/settings.json" ~/.config/Code/User/
+ln -i ~/.config/Code/User/keybindings.json .
+ln -i ~/.config/Code/User/settings.json .
+# Ensure it worked:
+# 1. `stat` should show the status of the files as now having a "Links" value of 2. 
+#    This indicates that 2 hard links now share the same inode number, indicating that the hard link
+#    creation was successful.
+stat *.json
+# 2. `ls -li` should show the same inode number for both files, indicating that the hard link
+#    creation was successful.
+ls -li *.json
+ls -li ~/.config/Code/User/*.json
 
-# Option 2 (what you should do, to fully customize your settings): copy the symlink files
-# - copy the settings files from my dotfiles repo so you can fully edit and customize them
+# OPTION 2: (what you should do, to fully customize your settings): copy the files
+# - copy the settings files from my dotfiles repo to your home dir so you can fully edit and
+#   customize them
 cd path/to/eRCaGuy_dotfiles/home/.config/Code/User
 cp -i "$(pwd)/keybindings.json" ~/.config/Code/User/
 cp -i "$(pwd)/settings.json" ~/.config/Code/User/
