@@ -28,6 +28,7 @@
     "files.trimTrailingWhitespace": true,
     "editor.wordWrap": "on",
     "editor.formatOnPaste": true,
+    // "editor.formatOnSave": false,  // https://stackoverflow.com/a/68217301/4561887
     "editor.snippetSuggestions": "top",
     "editor.fontSize": 12,
     "editor.rulers": [
