@@ -34,13 +34,38 @@ post_git_hook()
           # once you add your own code
 }
 
-# status
+# Only copy `source` to `dest` if the contents of the files do NOT already match.
+copy_if_files_dont_match()
+{
+    source="$1"
+    dest="$2"
+
+    if ! cmp -s "$source" "$dest"; then
+        # the files are different, so copy the source to the dest
+        echo "--- Copying \"$source\" to \"$dest\" ---"
+        cp -a "$source" "$dest"
+    fi
+}
+
+# This silly pre-hook (automatically called by `git status`, `git diff`, and
+# `git difftool`) is required because of this bug in VSCode here:
+# https://github.com/microsoft/vscode/issues/195539. Remove it once they fix it! <===========
+copy_vscode_settings_files_into_my_repo()
+{
+    # echo "ERCAGUY_DOTFILES_ROOT_DIR = $ERCAGUY_DOTFILES_ROOT_DIR" # debugging
+
+    # manually back up the VSCode settings files into my repo, but **only if they differ!**
+    copy_if_files_dont_match ~/.config/Code/User/settings.json \
+        "$ERCAGUY_DOTFILES_ROOT_DIR/home/.config/Code/User/settings.json"
+    copy_if_files_dont_match ~/.config/Code/User/keybindings.json \
+        "$ERCAGUY_DOTFILES_ROOT_DIR/home/.config/Code/User/keybindings.json"
+}
+
+# git status
 pre_git_status_hook()
 {
     # echo "=== Running pre_git_status_hook() function. ==="  # debugging
-    # do stuff
-    true  # do nothing (bash functions can't be empty); delete this line
-          # once you add your own code
+    copy_vscode_settings_files_into_my_repo
 }
 post_git_status_hook()
 {
@@ -50,7 +75,7 @@ post_git_status_hook()
           # once you add your own code
 }
 
-# commit
+# git commit
 pre_git_commit_hook()
 {
     # echo "=== Running pre_git_commit_hook() function. ==="  # debugging
@@ -66,7 +91,7 @@ post_git_commit_hook()
           # once you add your own code
 }
 
-# push
+# git push
 pre_git_push_hook()
 {
     # echo "=== Running pre_git_push_hook() function. ==="  # debugging
@@ -82,7 +107,7 @@ post_git_push_hook()
           # once you add your own code
 }
 
-# pull
+# git pull
 pre_git_pull_hook()
 {
     # echo "=== Running pre_git_pull_hook() function. ==="  # debugging
@@ -96,6 +121,32 @@ post_git_pull_hook()
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
+}
+
+# git diff
+pre_git_diff_hook()
+{
+    # echo "=== Running pre_git_diff_hook() function. ==="  # debugging
+    copy_vscode_settings_files_into_my_repo
+}
+post_git_diff_hook()
+{
+    # echo "=== Running post_git_diff_hook() function. ==="  # debugging
+    # do stuff
+    true  # do nothing (bash functions can't be empty); delete this line
+          # once you add your own code
+}
+
+# git difftool
+pre_git_difftool_hook()
+{
+    # echo "=== Running pre_git_difftool_hook() function. ==="  # debugging
+    pre_git_diff_hook
+}
+post_git_difftool_hook()
+{
+    # echo "=== Running post_git_difftool_hook() function. ==="  # debugging
+    post_git_diff_hook
 }
 
 
@@ -121,6 +172,10 @@ git()
         pre_git_push_hook
     elif [[ "$cmd" == "pull" ]]; then
         pre_git_pull_hook
+    elif [[ "$cmd" == "diff" ]]; then
+        pre_git_diff_hook
+    elif [[ "$cmd" == "difftool" ]]; then
+        pre_git_difftool_hook
     fi
 
     # Run the actual git command; the `command` built-in is used to force the
@@ -137,6 +192,10 @@ git()
         post_git_push_hook
     elif [[ "$cmd" == "pull" ]]; then
         post_git_pull_hook
+    elif [[ "$cmd" == "diff" ]]; then
+        post_git_diff_hook
+    elif [[ "$cmd" == "difftool" ]]; then
+        post_git_difftool_hook
     fi
     post_git_hook
 
