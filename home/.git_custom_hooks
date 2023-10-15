@@ -8,6 +8,7 @@
 # 1. You want to use the same git hook for many different repositories, and you don't want to
 #    have to copy it into each one.
 # 2. You want to easily share the same hooks with different users on different computers.
+#    So, you just put this file into a shared tools repository and everyone uses it.
 # 3. [MOST COMMON] Git doesn't allow you to create the hook you want (ex: a pre-git-status hook).
 #    So, you manually create it here.
 #
@@ -109,13 +110,16 @@ git()
 
     # Pre-hooks
     pre_git_hook
-    if [ "$cmd" = "status" ]; then
+    # Note: in Bash if statements, `[[ ]]` is recommended over `[ ]` because
+    # `[[ ]]` is faster. See my answer here:
+    # https://stackoverflow.com/a/77291070/4561887
+    if [[ "$cmd" == "status" ]]; then
         pre_git_status_hook
-    elif [ "$cmd" = "commit" ]; then
+    elif [[ "$cmd" == "commit" ]]; then
         pre_git_commit_hook
-    elif [ "$cmd" = "push" ]; then
+    elif [[ "$cmd" == "push" ]]; then
         pre_git_push_hook
-    elif [ "$cmd" = "pull" ]; then
+    elif [[ "$cmd" == "pull" ]]; then
         pre_git_pull_hook
     fi
 
@@ -125,13 +129,13 @@ git()
     return_val="$?"
 
     # Post-hooks
-    if [ "$cmd" = "status" ]; then
+    if [[ "$cmd" == "status" ]]; then
         post_git_status_hook
-    elif [ "$cmd" = "commit" ]; then
+    elif [[ "$cmd" == "commit" ]]; then
         post_git_commit_hook
-    elif [ "$cmd" = "push" ]; then
+    elif [[ "$cmd" == "push" ]]; then
         post_git_push_hook
-    elif [ "$cmd" = "pull" ]; then
+    elif [[ "$cmd" == "pull" ]]; then
         post_git_pull_hook
     fi
     post_git_hook
