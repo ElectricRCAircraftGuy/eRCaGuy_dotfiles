@@ -17,7 +17,7 @@ The `settings.json` and `keybindings.json` files should be copy-pasted into this
 
 ## Common VSCode Extensions/Plugins I like to install
 
-**_Update Sept. 2023: see my "see especially" file just above instead._**
+### [Update Sept. 2023: see my "see especially" file just above instead.]
 
 See [.vscode/extensions/extensions.json](.vscode/extensions/extensions.json) for a list of recommendations. Place the `.vscode` folder into the root of your VSCode workspace. Then, in VSCode, go to the Extensions tab and search for "@recommended". This will search this file for the recommendations therein and bring them all up under the "WORKSPACE RECOMMENDATIONS" search results section. Click the little tiny cloud-looking icon to the right of that heading to "Install Workspace Recommended Extensions" automatically for you!
 
