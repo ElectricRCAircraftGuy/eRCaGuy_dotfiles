@@ -7,7 +7,7 @@ The `settings.json` and `keybindings.json` files should be copy-pasted into this
 
 ## See especially
 
-1. **Installation instructions of my VSCode settings files and extensions: [../home/.config/Code/README.md](../home/.config/Code/README.md)**
+1. **Installation instructions of my VSCode settings files and extensions: [../home/.config/Code/User/README.md](../home/.config/Code/User/README.md)**
 
 
 ## See also
@@ -17,9 +17,9 @@ The `settings.json` and `keybindings.json` files should be copy-pasted into this
 
 ## Common VSCode Extensions/Plugins I like to install
 
-**Update Sept. 2023: see my "see especially" file just above instead.**
+**_Update Sept. 2023: see my "see especially" file just above instead._**
 
-See [.vscode/extensions.json](.vscode/extensions.json) for a list of recommendations. Place the `.vscode` folder into the root of your VSCode workspace. Then, in VSCode, go to the Extensions tab and search for "@recommended". This will search this file for the recommendations therein and bring them all up under the "WORKSPACE RECOMMENDATIONS" search results section. Click the little tiny cloud-looking icon to the right of that heading to "Install Workspace Recommended Extensions" automatically for you!
+See [.vscode/extensions/extensions.json](.vscode/extensions/extensions.json) for a list of recommendations. Place the `.vscode` folder into the root of your VSCode workspace. Then, in VSCode, go to the Extensions tab and search for "@recommended". This will search this file for the recommendations therein and bring them all up under the "WORKSPACE RECOMMENDATIONS" search results section. Click the little tiny cloud-looking icon to the right of that heading to "Install Workspace Recommended Extensions" automatically for you!
 
 References:  
 1. https://tattoocoder.com/recommending-vscode-extensions-within-your-open-source-projects/
