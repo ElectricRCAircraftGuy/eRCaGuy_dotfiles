@@ -64,7 +64,7 @@ copy_vscode_settings_files_into_my_repo()
 # git status
 pre_git_status_hook()
 {
-    # echo "=== Running pre_git_status_hook() function. ==="  # debugging
+    echo "=== Running pre_git_status_hook() function. ==="  # debugging
     copy_vscode_settings_files_into_my_repo
 }
 post_git_status_hook()
@@ -126,7 +126,7 @@ post_git_pull_hook()
 # git diff
 pre_git_diff_hook()
 {
-    # echo "=== Running pre_git_diff_hook() function. ==="  # debugging
+    echo "=== Running pre_git_diff_hook() function. ==="  # debugging
     copy_vscode_settings_files_into_my_repo
 }
 post_git_diff_hook()
@@ -153,7 +153,7 @@ post_git_difftool_hook()
 # Outer-most git hook wrapper function
 git()
 {
-    echo "=== Running custom git() wrapper function. ==="  # debugging
+    # echo "=== Running custom git() wrapper function. ==="  # debugging
 
     # Note: if no argument is passed in, this just sets cmd to an empty string
     cmd="$1"
