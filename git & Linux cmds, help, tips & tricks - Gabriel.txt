@@ -3351,9 +3351,10 @@ git log main                    # sanity check: ensure it's the same commit hash
 ====================================================================================================
 = cron jobs: =
 ====================================================================================================
-[cronjobs, crono, chrono, crontab -l, crontab -e]
+[chrono/chronjobs <-- (misspelled), cronjobs, crono, chrono, crontab -l, crontab -e]
 
 See: "eRCaGuy_dotfiles/useful_scripts/cronjobs/README.md" for commands, setup, format, examples, etc.
+Online link: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/useful_scripts/cronjobs
 
 
 ====================================================================================================
