@@ -46,5 +46,14 @@
     {
         "key": "ctrl+shift+0",
         "command": "editor.action.fontZoomReset"
+    },
+    {
+        "key": "ctrl+shift+v",
+        "command": "-markdown.showPreview",
+        "when": "!notebookEditorFocused && editorLangId == 'markdown'"
+    },
+    {
+        "key": "ctrl+shift+v",
+        "command": "editor.action.clipboardPasteAction"
     }
 ]

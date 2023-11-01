@@ -152,5 +152,6 @@
     "cSpell.ignoreWords": [
         "elif"
     ],
+    "security.workspace.trust.untrustedFiles": "open",
     "window.zoomLevel": 1,
 }
