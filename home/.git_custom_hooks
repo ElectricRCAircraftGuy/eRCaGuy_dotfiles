@@ -206,7 +206,7 @@ git()
 
 
 
-# Example runs, with most debugging lines NOT commented out:
+# Example runs, with most debugging lines NOT commented out in the code above:
 
 
 # eRCaGuy_dotfiles$ git status
