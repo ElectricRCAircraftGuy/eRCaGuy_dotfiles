@@ -64,6 +64,18 @@ OPTIONS
     -h, -?
         Print help menu
 
+EXAMPLE USAGES:
+    $SCRIPT_NAME -h
+        Print help menu.
+    $SCRIPT_NAME HEAD~
+        Start running 'git difftool' on the commit starting at HEAD~ (one before HEAD).
+    $SCRIPT_NAME HEAD~2
+        Start running 'git difftool' on the commit starting at HEAD~2 (two before HEAD).
+    $SCRIPT_NAME abcdefg
+        Start running 'git difftool' on commit hash abcdefg.
+    $SCRIPT_NAME my_branch
+        Start running 'git difftool' on the commit at the tip of branch 'my_branch'.
+
 This program is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 by Gabriel Staples.
 "
