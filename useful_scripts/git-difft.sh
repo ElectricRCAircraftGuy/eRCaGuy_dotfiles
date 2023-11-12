@@ -147,7 +147,7 @@ main() {
 
         echo -e "\n----------------------------------------"
         printf "%s\n" "Running 'git difftool $commit~..$commit'. Run this to pick back up here:" \
-            "$SCRIPT_NAME $commit~"
+            "$SCRIPT_NAME $commit"
         echo      "----------------------------------------"
 
         # Capture Ctrl + C so we can break out of `git difftool`, but NOT necessarily out of the
