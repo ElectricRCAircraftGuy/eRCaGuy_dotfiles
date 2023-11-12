@@ -35,6 +35,8 @@
 #
 # 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/argument_parsing__3_advanced__gen_prog_template.sh
 #    - a very advanced, general Bash program example.
+# 1. GitHub Copilot helped me with the algorithm in `main()`.
+# 1.
 #
 
 RETURN_CODE_SUCCESS=0
