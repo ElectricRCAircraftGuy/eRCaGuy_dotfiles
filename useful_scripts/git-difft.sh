@@ -103,6 +103,23 @@ parse_args() {
     STARTING_COMMIT="$1"
 }
 
+handle_ctrl_c() {
+    # Unset the Ctrl + C trap
+    trap - SIGINT
+
+    echo -e "\nCtrl + C captured! Exit out of the whole program? (y/N)"
+    echo    "[Press n or Enter to continue on with the next commit]"
+    read -r -n 1 answer
+    echo ""
+
+    if [ "$answer" = "y" ] || [ "$answer" = "Y" ]; then
+        echo "Exiting out of the whole program!"
+        exit $RETURN_CODE_SUCCESS
+    else
+        echo "Continuing on with the next commit..."
+    fi
+}
+
 main() {
     # Get a list of all commit hashes
     commits=$(git log --pretty=format:"%h" $STARTING_COMMIT)
@@ -119,9 +136,24 @@ main() {
     for commit in $commits; do
         echo -e "========================================================"
         echo -e "#$i ($i commits prior to HEAD): Analyzing commit: $commit:"
-        git log --oneline -1 $commit
+        echo -e "========================================================"
 
-        printf "\n%s\n" "Running 'git difftool $commit~..$commit'"
+        # For a 1-line commit message
+        # git log --oneline -1 $commit
+
+        # For the whole commit message
+        # TODO: make this an option in the future, with the `--oneline` version above being default.
+        git log -1 $commit
+
+        echo -e "\n----------------------------------------"
+        printf "%s\n" "Running 'git difftool $commit~..$commit'. Run this to pick back up here:" \
+            "$SCRIPT_NAME $commit~"
+        echo      "----------------------------------------"
+
+        # Capture Ctrl + C so we can break out of `git difftool`, but NOT necessarily out of the
+        # whole program at this time!
+        trap 'handle_ctrl_c' SIGINT
+
         git difftool $commit~..$commit
 
         echo ""
