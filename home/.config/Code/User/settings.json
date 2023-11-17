@@ -137,11 +137,15 @@
         "editor.fontSize"
     ],
 
-    // Do not trim trailing whitespace in Markdown files.
+    // Do not trim trailing whitespace in Markdown or txt files.
     // See: https://stackoverflow.com/a/51935030/4561887
     "[markdown]": {
         "files.trimTrailingWhitespace": false
     },
+    "[plaintext]": {
+        "files.trimTrailingWhitespace": false
+    },
+
     "github.copilot.enable": {
         "*": true,
         "plaintext": true,
