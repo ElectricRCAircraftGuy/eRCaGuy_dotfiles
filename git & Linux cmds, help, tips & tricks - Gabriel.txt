@@ -4324,6 +4324,13 @@ sleep 0.5; done
     See also this answer about `trap` in Bash: https://serverfault.com/a/160961/357116
     <======= EXCELLENT! =======
 
+Note: for other power supplies, such as the PowerUSB devices here (https://pwrusb.com/collections/all), do this instead. 
+See: eRCaGuy_dotfiles/useful_scripts/power_supply_PowerUSB_Windows_cycle_power.sh
+---
+PwrUsbCmd="/c/Program Files (x86)/PowerUSB/PwrUsbCmd.exe"
+"$PwrUsbCmd" 0 0 0  # outlet1 outlet2 outlet3  OFF
+"$PwrUsbCmd" 1 1 1  # outlet1 outlet2 outlet3  ON
+
 tcpdump resources:
 1. Google search for "how to use tcpdump": https://www.google.com/search?q=how+to+use+tcpdump&oq=how+to+use+tcpdump&aqs=chrome..69i57j69i65.3038j0j7&sourceid=chrome&ie=UTF-8
 1. *****+++ [MOST EXCELLENT TCPDUMP GETTING-STARTED TUTORIAL!] tcpdump tutorial and examples: https://opensource.com/article/18/10/introduction-tcpdump
