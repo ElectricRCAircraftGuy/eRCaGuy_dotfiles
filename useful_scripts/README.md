@@ -4,6 +4,11 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 # See also
 
 1. [../useful_startup_programs.md](../useful_startup_programs.md)
+1. [power_supply_README.md](power_supply_README.md) - Remote-controllable power supplies, and commands and scripts to control them
+1. [README_git-diffn.md](README_git-diffn.md) - `git diffn`
+1. [README_git-sync_repo_from_pc1_to_pc2.md](README_git-sync_repo_from_pc1_to_pc2.md) - `sync_git_repo_from_pc1_to_pc2.sh`
+    1. [sync_git_repo_from_pc1_to_pc2--notes.md](sync_git_repo_from_pc1_to_pc2--notes.md) - my scratch notes
+1. [README_ros_readbagfile.md](README_ros_readbagfile.md) - `ros_readbagfile`
 
 
 # eRCaGuy_dotfiles/useful_scripts
