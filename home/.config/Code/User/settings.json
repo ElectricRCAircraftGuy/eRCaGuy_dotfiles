@@ -26,6 +26,9 @@
     "editor.mouseWheelScrollSensitivity": 1,
     "editor.tabSize": 4,
     "files.trimTrailingWhitespace": true,
+    // When working in legacy code, I may not want to disrupt with distracting whitespace changes in
+    // the `git diff` / PR. So, uncomment this temporarily for that work.
+    // "files.trimTrailingWhitespace": false,
     "editor.wordWrap": "on",
     "editor.formatOnPaste": false,
     // "editor.formatOnSave": false,  // https://stackoverflow.com/a/68217301/4561887
@@ -60,6 +63,10 @@
     "editor.tokenColorCustomizations": {
         "[Monokai]": {
             "textMateRules": [
+                // =================================================================================
+                // Python docstrings
+                // - make them look like regular Python comments
+                // =================================================================================
                 {
                     "name": "Docstrings (including Python docstrings)",
                     "scope": [
@@ -101,7 +108,40 @@
                         "foreground": "#7C8E9C",
                     }
                 },
-
+                // =================================================================================
+                // C and C++ doxygen comments
+                // - make them darker / more subdued
+                // =================================================================================
+                {
+                    "name": "@brief, @details, etc.",
+                    "scope": [
+                        "storage.type.class.doxygen.c",
+                    ],
+                    "settings": {
+                        // "foreground": "#66D9EF",  // default value; see: https://www.colorhexa.com/66d9ef
+                        "foreground": "#107f95",
+                    }
+                },
+                {
+                    "name": "[in], [out], [in,out], etc.",
+                    "scope": [
+                        "keyword.other.parameter.direction",
+                    ],
+                    "settings": {
+                        // "foreground": "#F92672",  // default value
+                        "foreground": "#f1075b",
+                    }
+                },
+                {
+                    "name": "Doxygen variable names",
+                    "scope": [
+                        "variable.parameter.c",
+                    ],
+                    "settings": {
+                        // "foreground": "#FD971F"  // default value
+                        "foreground": "#b86402",
+                    },
+                },
             ]
         }
     },
