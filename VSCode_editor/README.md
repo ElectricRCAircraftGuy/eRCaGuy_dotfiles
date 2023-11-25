@@ -1,3 +1,5 @@
+**This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles**
+
 This is for the [Microsoft Visual Studio Code (MS VSCode)](https://code.visualstudio.com/) text editor/IDE. 
 
 The `.vscode` dir should be placed at the root of your workspace (ie: the folder you intend to open up via **File --> Open Folder**). You also have a user-level `~/.vscode` dir.
