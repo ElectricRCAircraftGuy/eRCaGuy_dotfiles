@@ -22,7 +22,14 @@
     tool = meld
 [core]
     # Make the Sublime Text editor your git commit editor
-    editor = subl --project ~/.git_editor.sublime-project --wait
+    # See my answer here: https://stackoverflow.com/a/48212377/4561887
+    # editor = subl --project ~/.git_editor.sublime-project --wait
+
+    # Make MS VSCode your git commit editor
+    # See here: https://stackoverflow.com/a/36644561/4561887
+    editor = code --wait
+    # OR: to always open a new window too
+    # editor = code --wait --new-window
 
     # Or for the `micro` editor (https://github.com/zyedidia/micro)
     # - See: https://askubuntu.com/a/1388854/327339
