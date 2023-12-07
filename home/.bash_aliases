@@ -866,3 +866,21 @@ export OPENSSL_CONF=~/.my_ssl.conf
 if [ -f ~/.bash_completion/alacritty ]; then
     . ~/.bash_completion/alacritty
 fi
+
+# Add Cmake binary executables to our PATH.
+# - This includes the Cmake GUI tool, `cmake-gui`, for instance.
+# - All tools included are:
+#
+#       ccmake
+#       cmake
+#       cmake-gui
+#       cpack
+#       ctest
+#
+# - Download the latest version of Cmake here: https://cmake.org/download/. The .sh
+#   Linux x86_64 installer works well.
+# - Update this `DIR` path as necessary!
+DIR="$HOME/Downloads/Install_Files/CMake/cmake-3.28.0-rc5-linux-x86_64/bin"
+if [ -d "$DIR" ] ; then
+    PATH="$DIR:$PATH"
+fi
