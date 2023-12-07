@@ -25,6 +25,7 @@
     "files.insertFinalNewline": true,
     "editor.mouseWheelScrollSensitivity": 1,
     "editor.tabSize": 4,
+    // "editor.insertSpaces": true,
     "files.trimTrailingWhitespace": true,
     // When working in legacy code, I may not want to disrupt with distracting whitespace changes in
     // the `git diff` / PR. So, uncomment this temporarily for that work.
