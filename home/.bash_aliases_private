@@ -78,7 +78,7 @@ TERMINAL="terminator"  # my preference since you can right-click and go to
 #      detailed answer here for more examples: https://stackoverflow.com/a/65878993/4561887
 # - For 2D arrays in Bash, see my answer here: https://stackoverflow.com/a/77677059/4561887
 TERMINAL_TABS_NUM_COLS="2"
-TERMINAL_TABS = (
+TERMINAL_TABS=(
     # Tab title           Tab command
     # -----------         ------------
     'git'                 "cd \"$HOME/GS/dev\""

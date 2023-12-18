@@ -500,6 +500,7 @@ fi
 
 #--------------------------- CUSTOM TERMINAL TABS & TITLES (END) -----------------------------------
 
+
 # Auto-start the ssh agent and add necessary keys once per reboot.
 #
 # This is recommended to be added to your ~/.bash_aliases (preferred) or ~/.bashrc file on any
