@@ -50,11 +50,12 @@
 # DEFAULT_TERMINAL_TITLE='Current Directory is "$PWD"'
 # DEFAULT_TERMINAL_TITLE='Date and time of last cmd is "$(date)"'
 
+
 # ------------- CONFIGURATION FOR `gs_open_default_tabs` Bash function (START) ---------------------
-# You may configure up to 10 terminal tabs to be rapidly opened whenever you run
+
+# You may configure any number of terminal tabs to be rapidly opened whenever you run
 # `gs_open_default_tabs`. Each tab can be given a static or dynamic title, as well as a command to
-# run when the tab is opened. If you need more than 10 you will need to edit the code for the
-# function inside `.bash_aliases`.
+# run when the tab is opened.
 
 # See my answer here for additional reference:
 # https://askubuntu.com/questions/315408/open-terminal-with-multiple-tabs-and-execute-application/1026563#1026563
