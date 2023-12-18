@@ -79,24 +79,40 @@ TERMINAL="terminator"  # my preference since you can right-click and go to
 # - For 2D arrays in Bash, see my answer here: https://stackoverflow.com/a/77677059/4561887
 TERMINAL_TABS_NUM_COLS="2"
 TERMINAL_TABS=(
-    # Tab title           Tab command
-    # -----------         ------------
-    'git'                 "cd \"$HOME/GS/dev\""
-    'bazel'               "cd \"$HOME/GS/dev\""
-    'Python'              "cd \"$HOME/GS/dev\""
-    'foo repo'            "cd \"$HOME/GS/dev/foo\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-    'foo repo'            "cd \"$HOME/GS/dev/foo\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-    'bar repo'            "cd \"$HOME/GS/dev/bar\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-    'bar repo'            "cd \"$HOME/GS/dev/bar\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-    'picocom'             "cd \"$HOME/GS/dev\"; echo -e \"\nConnected USB devices:\"; dmesg | grep -i ttyusb; echo -e \"\n===== Probably use picocom for a serial connection here =====\n\""
-    'ssh1'                "cd \"$HOME/GS/dev\"; ll"
-    'ssh2'                "cd \"$HOME/GS/dev\"; ll"
-    'ssh3'                "cd \"$HOME/GS/dev\"; ll"
-    'ssh4'                "cd \"$HOME/GS/dev\"; ll"
-    'VPN'                 "cd \"$HOME/GS/dev\"; echo -e \"\n===== run \x27gs_vpn_openconnect-sso\x27 to connect to the VPN, or just \x27openconnect-sso\x27 for subsequent connections. See my answer: https://superuser.com/a/1753172/425838 =====\n\""
-    'other'               "cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    # -----------           ------------
+    # Tab title             Tab command
+    # -----------           ------------
 
-    # others (uncomment to use)
+    # MY DEFAULT TABS I LIKE
+    'Python'                "cd \"$HOME/GS/dev\""
+    'eRCaGuy_dotfiles'      "cd \"$HOME/GS/dev/eRCaGuy_dotfiles\""
+    'eRCaGuy_hello_world'   "cd \"$HOME/GS/dev/eRCaGuy_hello_world\""
+    '.github.io'            "cd \"$HOME/GS/dev/ElectricRCAircraftGuy.github.io\""
+    'eRCaGuy_Engineering'   "cd \"$HOME/GS/dev/eRCaGuy_Engineering\""
+    'trade_me'              "cd \"$HOME/GS/dev/trade_me\""
+    'ssh1'                  "cd \"$HOME/GS/dev\""
+    'ssh2'                  "cd \"$HOME/GS/dev\""
+    'ssh3'                  "cd \"$HOME/GS/dev\""
+    'picocom'               "cd \"$HOME/GS/dev\"; echo -e \"\nConnected USB devices (\x27dmesg | grep -i ttyusb\x27):\"; dmesg | grep -i ttyusb; echo -e \"\n===== Use picocom to connect to any boards over serial here. =====\n\nSee: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_apps/serial_terminals_README.md#picocom\n\""
+    'VPN'                   "cd \"$HOME/GS/dev\"; echo -e \"\n===== run \x27gs_vpn_openconnect-sso\x27 to connect to the VPN, or just \x27openconnect-sso\x27 for subsequent connections. See my answer here: https://superuser.com/a/1753172/425838 =====\n\nFor a WatchGuard VPN instead, see my answer here: https://serverfault.com/a/1132673/357116\n\""
+
+    # MORE EXAMPLES
+    # 'git'                 "cd \"$HOME/GS/dev\""
+    # 'bazel'               "cd \"$HOME/GS/dev\""
+    # 'Python'              "cd \"$HOME/GS/dev\""
+    # 'foo repo'            "cd \"$HOME/GS/dev/foo\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    # 'foo repo'            "cd \"$HOME/GS/dev/foo\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    # 'bar repo'            "cd \"$HOME/GS/dev/bar\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    # 'bar repo'            "cd \"$HOME/GS/dev/bar\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    # 'picocom'             "cd \"$HOME/GS/dev\"; echo -e \"\nConnected USB devices:\"; dmesg | grep -i ttyusb; echo -e \"\n===== Probably use picocom for a serial connection here =====\n\""
+    # 'ssh1'                "cd \"$HOME/GS/dev\"; ll"
+    # 'ssh2'                "cd \"$HOME/GS/dev\"; ll"
+    # 'ssh3'                "cd \"$HOME/GS/dev\"; ll"
+    # 'ssh4'                "cd \"$HOME/GS/dev\"; ll"
+    # 'VPN'                 "cd \"$HOME/GS/dev\"; echo -e \"\n===== run \x27gs_vpn_openconnect-sso\x27 to connect to the VPN, or just \x27openconnect-sso\x27 for subsequent connections. See my answer: https://superuser.com/a/1753172/425838 =====\n\""
+    # 'other'               "cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+
+    # OTHERS, INCL. DYNAMIC TITLES VIA "$(date)", "$(pwd)", ETC. (UNCOMMENT TO USE)
     # 'other2'                                        "cd \"$HOME/temp\""
     # 'dynamic title: last cmd time: "$(date)"'       "cd \"$HOME/some directory with spaces\"; ls"
     # 'dynamic title (change your dir) "$(pwd)"'      "cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
