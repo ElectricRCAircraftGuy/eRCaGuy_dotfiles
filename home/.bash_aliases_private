@@ -65,61 +65,47 @@ TERMINAL="terminator"  # my preference since you can right-click and go to
                        # "Split Horizontally" or "Split Vertically"
 # TERMINAL="gnome-terminal"  # the default that comes with Ubuntu 18.04, 20.04, etc.
 
-# Uncomment a tab title OR tab command below to configure this tab to open. You may configure
-# just a title, just a command, or both.
-
-# TODO: make the tab titles and commands below into bash arrays instead of using
-# this clunky technique I'm doing manually with numbers in the variable names.
-
-# 1. Tab TITLES
-TERMINAL_TAB_TITLE_01='git'
-TERMINAL_TAB_TITLE_02='bazel'
-TERMINAL_TAB_TITLE_03='Python'
-TERMINAL_TAB_TITLE_04='foo repo'
-TERMINAL_TAB_TITLE_05='foo repo'
-TERMINAL_TAB_TITLE_06='bar repo'
-TERMINAL_TAB_TITLE_07='bar repo'
-TERMINAL_TAB_TITLE_08='ssh1'
-TERMINAL_TAB_TITLE_09='picocom'
-TERMINAL_TAB_TITLE_10='ssh2'
-TERMINAL_TAB_TITLE_11='ssh3'
-TERMINAL_TAB_TITLE_12='ssh4'
-TERMINAL_TAB_TITLE_13='VPN'
-TERMINAL_TAB_TITLE_14='other'
-# TERMINAL_TAB_TITLE_08='other2'
-# TERMINAL_TAB_TITLE_09='dynamic title: last cmd time: "$(date)"'
-# TERMINAL_TAB_TITLE_10='dynamic title (change your dir) "$(pwd)"'
-
-# 2. Tab COMMANDS
-# Notes:
+# Specify terminal tabs to open with the specified title and command.
+# - You may configure just a title, just a command, or both. Use an empty string for one or the
+#   other to leave it unconfigured.
+# 1. Tab titles
+#   1. You may use static titles, OR dynamic titles which automatically change. See some examples of
+#     dynamic titles at the end of the examples below.
+# 2. Tab commands
 #   1. You must use quotes, as shown in the examples below, around any paths with spaces in
 #      the path.
 #   2. Escape apostrophes in `echo -e` with `\x27`, as shown in the examples below. See also my
-#      detailed answer here for more examples:
-#      https://stackoverflow.com/questions/1250079/how-to-escape-single-quotes-within-single-quoted-strings/65878993#65878993
+#      detailed answer here for more examples: https://stackoverflow.com/a/65878993/4561887
+# - For 2D arrays in Bash, see my answer here: https://stackoverflow.com/a/77677059/4561887
+TERMINAL_TABS_NUM_COLS="2"
+TERMINAL_TABS = (
+    # Tab title           Tab command
+    # -----------         ------------
+    'git'                 "cd \"$HOME/GS/dev\""
+    'bazel'               "cd \"$HOME/GS/dev\""
+    'Python'              "cd \"$HOME/GS/dev\""
+    'foo repo'            "cd \"$HOME/GS/dev/foo\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    'foo repo'            "cd \"$HOME/GS/dev/foo\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    'bar repo'            "cd \"$HOME/GS/dev/bar\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    'bar repo'            "cd \"$HOME/GS/dev/bar\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    'picocom'             "cd \"$HOME/GS/dev\"; echo -e \"\nConnected USB devices:\"; dmesg | grep -i ttyusb; echo -e \"\n===== Probably use picocom for a serial connection here =====\n\""
+    'ssh1'                "cd \"$HOME/GS/dev\"; ll"
+    'ssh2'                "cd \"$HOME/GS/dev\"; ll"
+    'ssh3'                "cd \"$HOME/GS/dev\"; ll"
+    'ssh4'                "cd \"$HOME/GS/dev\"; ll"
+    'VPN'                 "cd \"$HOME/GS/dev\"; echo -e \"\n===== run \x27gs_vpn_openconnect-sso\x27 to connect to the VPN, or just \x27openconnect-sso\x27 for subsequent connections. See my answer: https://superuser.com/a/1753172/425838 =====\n\""
+    'other'               "cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
 
-TERMINAL_TAB_CMD_01="cd \"$HOME/GS/dev\""
-TERMINAL_TAB_CMD_02="cd \"$HOME/GS/dev\""
-TERMINAL_TAB_CMD_03="cd \"$HOME/GS/dev\""
-TERMINAL_TAB_CMD_04="cd \"$HOME/GS/dev/foo\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-TERMINAL_TAB_CMD_05="cd \"$HOME/GS/dev/foo\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-TERMINAL_TAB_CMD_06="cd \"$HOME/GS/dev/bar\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-TERMINAL_TAB_CMD_07="cd \"$HOME/GS/dev/bar\"; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-TERMINAL_TAB_CMD_08="cd \"$HOME/GS/dev\"; ll"
-TERMINAL_TAB_CMD_09="cd \"$HOME/GS/dev\"; echo -e \"\nConnected USB devices:\"; dmesg | grep -i ttyusb; echo -e \"\n===== Probably use picocom for a serial connection here =====\n\""
-TERMINAL_TAB_CMD_10="cd \"$HOME/GS/dev\"; ll"
-TERMINAL_TAB_CMD_11="cd \"$HOME/GS/dev\"; ll"
-TERMINAL_TAB_CMD_12="cd \"$HOME/GS/dev\"; ll"
-TERMINAL_TAB_CMD_13="cd \"$HOME/GS/dev\"; echo -e \"\n===== run \x27gs_vpn_openconnect-sso\x27 to connect to the VPN, or just \x27openconnect-sso\x27 for subsequent connections. See my answer: https://superuser.com/a/1753172/425838 =====\n\""
-TERMINAL_TAB_CMD_14="cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
-# TERMINAL_TAB_CMD_08="cd \"$HOME/temp\""
-# TERMINAL_TAB_CMD_09="cd \"$HOME/some directory with spaces\"; ls"
-# TERMINAL_TAB_CMD_10="cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+    # others (uncomment to use)
+    # 'other2'                                        "cd \"$HOME/temp\""
+    # 'dynamic title: last cmd time: "$(date)"'       "cd \"$HOME/some directory with spaces\"; ls"
+    # 'dynamic title (change your dir) "$(pwd)"'      "cd \"$HOME/GS/dev\"; ls; echo -e \"\n===== Let\x27s get ready to code! =====\n\""
+)
 
 # ------------- CONFIGURATION FOR `gs_open_default_tabs` Bash function (END) -----------------------
 
 
-# UPDATE THESE FOR YOU! See .bash_aliases for detailed notes.
+# UPDATE THESE SSH ALIASES FOR YOURSELF! See .bash_aliases for detailed notes.
 
 # alias gs_ssh="ssh -X -o \"ServerAliveInterval 60\" username@domain_name"
 # alias gs_ssh_dropbear=""
