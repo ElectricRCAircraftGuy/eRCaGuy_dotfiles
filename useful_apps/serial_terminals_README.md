@@ -10,7 +10,8 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 1. [Serial terminal programs](#serial-terminal-programs)
 1. [`picocom`](#picocom)
     1. [Background](#background)
-    1. [Installation](#installation)
+    1. [Linux Installation](#linux-installation)
+    1. [Windows Installation](#windows-installation)
     1. [General Usage](#general-usage)
 1. [Scripting the sending and receiving of commands over serial](#scripting-the-sending-and-receiving-of-commands-over-serial)
 1. [Transferring files over serial](#transferring-files-over-serial)
@@ -61,8 +62,8 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
         1. PDF: [picocom.1.pdf](https://github.com/npat-efault/picocom/blob/master/picocom.1.pdf)
 
 
-<a id="installation"></a>
-## Installation
+<a id="linux-installation"></a>
+## Linux Installation [tested and works]
 
 1. First, add yourself to the `dialout` group so you can access serial devices without using `sudo` or being root. See my instructions here: [../arduino/README.md](../arduino/README.md).
     ```bash
@@ -157,6 +158,47 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
     picocom -h | head -n 1
     # 2. See just the version line from the man pages
     man picocom | tail -n 1
+    ```
+
+
+<a id="windows-installation"></a>
+## Windows Installation [WIP; not yet functional]
+
+1. Install and configure MSYS2 per my instructions here: [Installing & setting up MSYS2 from scratch, including adding all 7 profiles to Windows Terminal](https://stackoverflow.com/a/77407282/4561887).
+
+1. Install and configure Git Bash. 
+
+1. Open Windows Terminal. Open two terminals: 
+    1. Git Bash, for `git` commands. 
+    1. MSYS2: ucrt64, for building.
+
+1. In the Git Bash terminal, clone the repo:
+    ```bash
+    # cd to wherever you'd like to download the program
+    cd ~/GS/dev
+    git clone https://github.com/npat-efault/picocom.git
+    ```
+
+1. In the MSYS2 terminal:
+    ```bash
+    # Update MSYS2
+    pacman -Suy
+
+    # Install dependencies
+    pacman -S msys2-runtime-devel
+
+    # build
+    cd ~/GS/dev/picocom
+    time make
+    ###### fails :(
+
+    # $ time make
+    # cc -Wall -g -DVERSION_STR=\"3.2a\" -DTTY_Q_SZ=0 -DHIGH_BAUD -DUSE_FLOCK -DHISTFILE=\".picocom_history\" -DLINENOISE -o linenoise-1.0/linenoise.o -c linenoise-1.0/linenoise.c
+    # linenoise-1.0/linenoise.c:108:10: fatal error: termios.h: No such file or directory
+    #   108 | #include <termios.h>
+    #       |          ^~~~~~~~~~~
+    # compilation terminated.
+    # make: *** [Makefile:65: linenoise-1.0/linenoise.o] Error 1
     ```
 
 
