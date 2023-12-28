@@ -4236,6 +4236,14 @@ nc -l 0 30000
     Listen for UDP packets being sent to IP address 0, or `INADDR_ANY`, which means "any interface host IP address". 
     See my full answer and tutorial here: https://serverfault.com/a/1140509/357116
 
+---
+WIP: ncat continual forwarding relay
+---
+while true; do ncat -l -u 5053 --sh-exec "ncat -u someserver.server.com 5053"; done
+    UDP relay: listen on port 5053, and forward all incoming UDP packets to someserver.server.com on port 5053
+while true; do ncat -l 5053 --sh-exec "ncat someserver.server.com 5053"; done
+    TCP relay: listen on port 5053, and forward all incoming TCP packets to someserver.server.com on port 5053
+
 socat udp:127.0.0.1:30000 - < filename.bin
     <========= SEND A BINARY FILE OVER UDP VIA SOCAT! ==========
     VERY SIMILAR TO NETCAT ABOVE, except perhaps more-reliable and consistent since apparently there are many netcat implementations but only one socat implementation maybe?
