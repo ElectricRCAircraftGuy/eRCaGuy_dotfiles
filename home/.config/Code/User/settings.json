@@ -199,4 +199,7 @@
     ],
     "security.workspace.trust.untrustedFiles": "open",
     "window.zoomLevel": 1,
+    "cSpell.userWords": [
+        "microcontroller"
+    ],
 }
