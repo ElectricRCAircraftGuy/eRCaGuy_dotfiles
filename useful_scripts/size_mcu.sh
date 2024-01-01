@@ -403,8 +403,8 @@ print_size_info() {
         # add extra specing for alignment with the SRAM info below, only if
         # the RAM info is also provided
         if [[ ! -z "$RAM_BYTES" ]]; then
-            flash_percent_info+="                                   "
-            flash_percent_info+="              "
+            flash_percent_info+=". . . . . . . . . . . . . . . . . ."
+            flash_percent_info+=" . . . . . .  "
         fi
         flash_percent_info+="Max is $FLASH_BYTES bytes"
     fi
@@ -437,7 +437,7 @@ print_size_info() {
     sram="$(printf "%7d" "$sram")"
 
     # Print it out
-    echo "FLASH used                    = $flash bytes$flash_percent_info"
+    echo "FLASH used . . . . . . . . .  = $flash bytes$flash_percent_info"
     echo "SRAM used by global variables = $sram bytes$sram_percent_info"
 }
 
