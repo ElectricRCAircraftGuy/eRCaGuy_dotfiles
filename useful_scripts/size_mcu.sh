@@ -465,6 +465,7 @@ fi
 # - See my answer: https://stackoverflow.com/a/70662116/4561887
 if [ "$__name__" = "__main__" ]; then
     parse_args "$@"
-    time main "$@"
+    # time main "$@"
+    main "$@"
     exit $RETURN_CODE_SUCCESS
 fi
