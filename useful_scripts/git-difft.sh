@@ -87,7 +87,7 @@ print_help() {
 }
 
 # Print all arguments, for debugging.
-debugging_print_args() {
+debugging_print_all_args() {
     # echo "$1"  # debugging
 
     i=0
@@ -98,7 +98,7 @@ debugging_print_args() {
 }
 
 parse_args() {
-    # debugging_print_args "$@"  # debugging
+    # debugging_print_all_args "$@"  # debugging
 
     if [ "$1" = "-h" ] || [ "$1" = "-?" ]; then
         print_help
@@ -130,7 +130,7 @@ main() {
     commits=$(git log --pretty=format:"%h" $STARTING_COMMIT)
     if [ $? -ne 0 ]; then
         echo "ERROR: 'git log' command failed!"
-        debugging_print_args "$@"
+        debugging_print_all_args "$@"
         echo ""
         print_help
         exit $RETURN_CODE_ERROR
