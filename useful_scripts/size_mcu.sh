@@ -418,9 +418,15 @@ print_size_info() {
         # format to 7 digits
         FLASH_BYTES="$(printf "%7d" "$FLASH_BYTES")"
 
-        flash_percent_info="($flash_used_percent%). Remaining is $flash_remaining_bytes bytes "
-        flash_percent_info+="($flash_remaining_percent%).                          "
-        flash_percent_info+="                        Max is $FLASH_BYTES bytes."
+        flash_percent_info=" ($flash_used_percent%). Remaining is $flash_remaining_bytes bytes"
+        flash_percent_info+=" ($flash_remaining_percent%). "
+        # add extra specing for alignment with the SRAM info below, only if
+        # the RAM info is also provided
+        if [[ ! -z "$RAM_BYTES" ]]; then
+            flash_percent_info+="                                   "
+            flash_percent_info+="              "
+        fi
+        flash_percent_info+="Max is $FLASH_BYTES bytes"
     fi
 
     if [[ ! -z "$RAM_BYTES" ]]; then
@@ -438,18 +444,21 @@ print_size_info() {
         # format to 7 digits
         RAM_BYTES="$(printf "%7d" "$RAM_BYTES")"
 
-        sram_percent_info="($sram_used_percent%). Remaining is $sram_remaining_bytes bytes "
-        sram_percent_info+="($sram_remaining_percent%) for local (stack) variables or RTOS "
-        sram_percent_info+="stack & heap. Max is $RAM_BYTES bytes."
+        sram_percent_info=" ($sram_used_percent%). Remaining is $sram_remaining_bytes bytes"
+        sram_percent_info+=" ($sram_remaining_percent%) for local (stack) variables or RTOS "
+        sram_percent_info+="stack & heap. Max is $RAM_BYTES bytes"
     fi
+
+    flash_percent_info+="."
+    sram_percent_info+="."
 
     # format the bytes to 7 digits
     flash="$(printf "%7d" "$flash")"
     sram="$(printf "%7d" "$sram")"
 
     # Print it out
-    echo "FLASH used                    = $flash bytes $flash_percent_info"
-    echo "SRAM used by global variables = $sram bytes $sram_percent_info"
+    echo "FLASH used                    = $flash bytes$flash_percent_info"
+    echo "SRAM used by global variables = $sram bytes$sram_percent_info"
 }
 
 main() {
