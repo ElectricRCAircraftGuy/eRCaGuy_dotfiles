@@ -86,10 +86,15 @@ print_help() {
     echo "$HELP_STR" | less -RFX
 }
 
+# Print all arguments, for debugging.
 debugging_print_args() {
-    echo "arg1 = $1"
-    echo "arg2 = $2"
-    echo "arg3 = $3"
+    # echo "$1"  # debugging
+
+    i=0
+    for arg in "$@"; do
+        ((i++))
+        echo "arg${i} = $arg"
+    done
 }
 
 parse_args() {
