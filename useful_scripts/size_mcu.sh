@@ -182,26 +182,6 @@ debugging_print_all_args() {
     done
 }
 
-##############
-# parse_args() {
-#     # debugging_print_all_args "$@"  # debugging
-
-#     if [ "$1" = "-h" ] || [ "$1" = "-?" ]; then
-#         print_help
-#         exit $RETURN_CODE_SUCCESS
-#     fi
-
-#     if [ "$#" -ne 2 ]; then
-#         echo "ERROR: incorrect number of arguments!"
-#         echo "See '$SCRIPT_NAME -h' for more info."
-#         debugging_print_all_args "$@"
-#         exit $RETURN_CODE_ERROR
-#     fi
-
-#     SIZE_EXE="$1"
-#     ELF_FILE="$2"
-# }
-
 parse_args() {
     # For advanced argument parsing help and demo, see:
     # 1. https://stackoverflow.com/a/14203146/4561887
