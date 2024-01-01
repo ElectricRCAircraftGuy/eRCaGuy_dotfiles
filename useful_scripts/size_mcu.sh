@@ -33,7 +33,7 @@
 
 # REFERENCES:
 #
-# 1. My answer: https://electronics.stackexchange.com/a/598163/26234
+# 1. *****+ My answer: https://electronics.stackexchange.com/a/598163/26234
 # 1. My repo where you can compile some sample PIC32 project .elf files, such as in this project:
 #    `harmony_projects/firmware/harmony_test1.X`:
 #    https://github.com/ElectricRCAircraftGuy/eRCaGuy_MPLABX
