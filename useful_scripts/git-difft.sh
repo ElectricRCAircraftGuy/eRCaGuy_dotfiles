@@ -90,6 +90,7 @@ print_help() {
 debugging_print_all_args() {
     # echo "$1"  # debugging
 
+    echo "All args:"
     i=0
     for arg in "$@"; do
         ((i++))
