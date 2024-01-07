@@ -15,11 +15,11 @@
 #       sudo apt update
 #       sudo apt install imwheel
 # 2. Read & follow the instructions at the link below. Edit the two numbers at the top-right of each
-# configuration block below to set the mouse scroll speed. 
+# configuration block below to set the mouse scroll speed.
 #	(PREFERRED) Symlink the file into the home dir:
 #		cd path/to/here
 #		ln -si "${PWD}/.imwheelrc" ~
-#	OR, copy this file to ~/.imwheelrc so you can edit it without affecting 
+#	OR, copy this file to ~/.imwheelrc so you can edit it without affecting
 #   this repo:
 #       cp -i .imwheelrc ~
 
@@ -114,9 +114,12 @@ Shift_L,   Up,   Shift_L|Button4
 Shift_L,   Down, Shift_L|Button5
 
 # For VSCode (Microsoft Visual Studio Code)
+# - Use also the `"editor.mouseWheelScrollSensitivity": 3,` type setting in your
+#   `~/.config/Code/User/settings.json` file. It adjusts the mouse scroll wheel
+#   speed in MS VSCode too!
 "code"
-None,      Up,   Button4, 3
-None,      Down, Button5, 3
+None,      Up,   Button4, 1
+None,      Down, Button5, 1
 Control_L, Up,   Control_L|Button4
 Control_L, Down, Control_L|Button5
 Shift_L,   Up,   Shift_L|Button4

@@ -23,7 +23,12 @@
         "**/.vs": true
     },
     "files.insertFinalNewline": true,
-    "editor.mouseWheelScrollSensitivity": 1,
+    // "editor.mouseWheelScrollSensitivity": 1,  // for Linux
+    // "editor.mouseWheelScrollSensitivity": 3,  // for Windows
+    // For Linux *and* Windows! NB: `~/.imwheelrc` affects this on Linux too! I've adjusted the
+    // `~/.imwheelrc` file on Linux down from 3 to 1 so that I can use the same setting here in
+    // both Windows **and** Linux, now!
+    "editor.mouseWheelScrollSensitivity": 3,
     "editor.tabSize": 4,
     // "editor.insertSpaces": true,
     "files.trimTrailingWhitespace": true,
@@ -198,8 +203,8 @@
         "elif"
     ],
     "security.workspace.trust.untrustedFiles": "open",
-    "window.zoomLevel": 1,
     "cSpell.userWords": [
         "microcontroller"
     ],
+    "window.zoomLevel": 1,
 }
