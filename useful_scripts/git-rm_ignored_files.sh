@@ -53,13 +53,38 @@
 RETURN_CODE_SUCCESS=0
 RETURN_CODE_ERROR=1
 
+# From my answer: https://stackoverflow.com/a/76856090/4561887
+# Get a short commit hash, and see whether `git status` is clean or dirty.
+# Example outputs:
+# 1. Not in a git repo: `(not a git repo)`
+# 2. In a repo which has a "dirty" `git status`: `72361c8-dirty`
+#   - Note that "dirty" means there are pending uncommitted changes.
+# 3. In a repo which has a "clean" `git status`: `72361c8`
+git_get_short_hash() {
+    # See: https://stackoverflow.com/a/16925062/4561887
+    is_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
+
+    if [ "$is_git_repo" != "true" ]; then
+        echo "(not a git repo)"
+        return $RETURN_CODE_SUCCESS
+    fi
+
+    # See my answer here: https://stackoverflow.com/a/76856090/4561887
+    test -z "$(git status --porcelain)" \
+        && echo "$(git rev-parse --short HEAD)" \
+        || echo "$(git rev-parse --short HEAD)-dirty"
+}
+
+
+# Note: `repo_dir` will contain the full path to the repo root dir.
 # See: https://stackoverflow.com/a/957978/4561887
-if ! REPO_DIR="$(git rev-parse --show-toplevel)"; then
+if ! repo_dir="$(git rev-parse --show-toplevel)"; then
     echo "Error: you are not in a git repository."
     exit $RETURN_CODE_ERROR
 fi
+repo_name="$(basename "$repo_dir")"
 
-cd "$REPO_DIR" || exit $RETURN_CODE_ERROR
+cd "$repo_dir" || exit $RETURN_CODE_ERROR
 
 echo "Removing all of these files and folders that are in .gitignore files in this repo:"
 echo "== LIST START ==="
@@ -68,10 +93,31 @@ echo "== LIST END ==="
 
 echo "Note that the list above may be empty if there is nothing to do."
 read -rp "Would you like to continue and remove all items in the list above [y/N]?
-(Use Enter or N to cancel & exit). " user_continue
+(Use Enter or N to cancel & exit).
+Note that your '.vscode/' folder will be backed up and restored. " user_continue
 if [[ "$user_continue" = [Yy] || "$user_continue" == [Yy][Ee][Ss] ]]; then
+    # 1. back up your .vscode folder, if it exists
+    back_up_dir="false"
+    if [ -e .vscode ]; then
+        back_up_dir="true"
+
+        # See: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/blob/263e9404b36e14869e41c69c051ad74476651e63/pdf2searchablepdf.sh#L305
+        timestamp="$(date '+%Y%m%d-%H%M%S.%N')"
+        git_short_hash="$(git_get_short_hash)"
+        backup_dir="/tmp/.vscode.bak.$timestamp.REPO_$repo_name.COMMIT_$git_short_hash"
+        echo "Moving your '.vscode' folder to '$backup_dir'."
+        mv .vscode "$backup_dir"
+    fi
+
+    # 2. actually delete the files
     echo "Running 'git clean -Xdf'"
     git clean -Xdf
+
+    # 3. restore your .vscode folder, if it existed
+    if [ "$back_up_dir" = "true" ]; then
+        echo "Restoring your '.vscode' folder from '$backup_dir' to '.vscode'."
+        cp -a "$backup_dir" .vscode
+    fi
 else
     echo "Aborting."
 fi
