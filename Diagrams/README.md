@@ -10,6 +10,7 @@ I will put links to Google Docs drawings and other UML or UML-like diagrams I ma
 <summary><b>(click to expand)</b></summary>
 <!-- MarkdownTOC -->
 
+1. [Diagramming tools](#diagramming-tools)
 1. [Folder with all of my Google Drive Templates or Diagrams](#folder-with-all-of-my-google-drive-templates-or-diagrams)
     1. [Instructions for use](#instructions-for-use)
     1. [Tips, Limitations/Weird Behaviors, and Work-arounds](#tips-limitationsweird-behaviors-and-work-arounds)
@@ -17,6 +18,27 @@ I will put links to Google Docs drawings and other UML or UML-like diagrams I ma
 
 <!-- /MarkdownTOC -->
 </details>
+
+
+<a id="diagramming-tools"></a>
+# Diagramming tools
+
+1. [Best for professional] Update Jan. 2024: use **Draw.io** instead! - VERY powerful, even in the fully free version!
+    1. https://draw.io --> https://app.diagrams.net/
+    1. https://www.drawio.com/
+    1. https://www.drawio.com/example-diagrams
+    1. https://github.com/jgraph/drawio/wiki/Getting-Support
+    1. How do they make money?
+        1. Chat with Bing CoPilot: https://sl.bing.net/iJn4D8lfwn6
+        1. https://drawio-app.com/pricing/
+        1. https://www.drawio.com/about
+    1. https://github.com/jgraph
+1. LucidChart - very expensive; and very limited in the free version: https://www.lucidchart.com/pages
+1. Excellent for ASCII drawings in code comments and markdown documents: 
+    1. [Best for ASCII] https://asciiflow.com/#/
+    1. https://www.ascii-draw.com/
+
+---
 
 
 <a id="folder-with-all-of-my-google-drive-templates-or-diagrams"></a>
