@@ -204,7 +204,8 @@
     ],
     "security.workspace.trust.untrustedFiles": "open",
     "cSpell.userWords": [
-        "microcontroller"
+        "microcontroller",
+        "microcontrollers"
     ],
     "window.zoomLevel": 1,
 }
