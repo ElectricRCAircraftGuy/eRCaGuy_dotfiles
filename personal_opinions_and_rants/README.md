@@ -1,4 +1,7 @@
-# Personal Opinions & Rants (newest on BOTTOM)
+This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+
+# Personal Opinions & Rants (newest on _top_)
 
 By Gabriel Staples  
 Started 26 Apr. 2020
@@ -6,6 +9,14 @@ Started 26 Apr. 2020
 Sometimes I feel strongly about something and want to voice my opinion. Other times I feel frustrated and want to vent something. Until I get the time to get my new personal GitHub pages website (which I plan on using to replace [www.ElectricRCAircraftGuy.com](https://www.electricrcaircraftguy.com/) for professional content eventually as well) up and running and ready to go how I want it, I'm going to use this folder and readme as a location to voice my opinions, concerns, and rants, while having Stack Overflow remain a place for me to post my canonical answers and professional content (leaving the rants out). This way I can hopefully keep my Stack Overflow answers strictly helpful and more fact-based, or, where necessary, based on more well-thought-out and well-justified opinions. 
 
 _Note the date format used below is (YYYYMMDD-HHMMhrs)._
+
+
+# Other rant pages
+
+1. [Git LFS](git_lfs.md) - why I am so anti-Git LFS (it's sloooooooooow, by its nature)
+
+---
+
 
 # Rant #1 (20200426-1233hrs): MIN and MAX in C: my anti-overly-abstracted-C++ rant/aside
 
@@ -30,5 +41,6 @@ So it is with C++ vs C. C++ is MONSTROUSLY HUGE!--SO HUGE AND COMPLICATED IN FAC
 [RANT END]
 
 ---
+
 
 
