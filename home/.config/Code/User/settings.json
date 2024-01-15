@@ -208,4 +208,5 @@
         "microcontrollers"
     ],
     "window.zoomLevel": 1,
+    "explorer.excludeGitIgnore": true,
 }
