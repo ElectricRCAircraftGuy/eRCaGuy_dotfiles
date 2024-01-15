@@ -18,9 +18,11 @@ Why?
     Yeah...I'm shocked too. That's totally nuts.
 
 
-# The following was originally at the top of my answer here: https://stackoverflow.com/revisions/72610495/19. 
+# The following was originally at the top of my answer here:
 
-[What is the difference between `git lfs fetch`, `git lfs fetch --all`, and `git lfs pull`?](https://stackoverflow.com/a/72610495/4561887). 
+Answer with this content: https://stackoverflow.com/revisions/72610495/19. 
+
+Answer as it is now: [What is the difference between `git lfs fetch`, `git lfs fetch --all`, and `git lfs pull`?](https://stackoverflow.com/a/72610495/4561887). 
 
 ---
 
