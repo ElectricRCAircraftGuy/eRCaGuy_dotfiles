@@ -208,5 +208,5 @@
         "microcontrollers"
     ],
     "window.zoomLevel": 1,
-    "explorer.excludeGitIgnore": true,
+    "explorer.excludeGitIgnore": true, // ignore entries in the .gitignore file
 }
