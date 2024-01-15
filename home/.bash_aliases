@@ -745,3 +745,14 @@ DIR="$HOME/Downloads/Install_Files/CMake/cmake-3.28.0-rc5-linux-x86_64/bin"
 if [ -d "$DIR" ] ; then
     PATH="$DIR:$PATH"
 fi
+
+# Bring in my magical alarm_timer.sh script, which I use to set a timer to go off in a certain
+# number of minutes, and then play a sound and pop up a notification when the timer goes off.
+# See: 
+# 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/alarm_lib.sh
+FILE="$DEV_ROOT_DIR/eRCaGuy_hello_world/bash/alarm_lib.sh"
+if [ -f "$FILE" ]; then
+    # get access to the `alarm_timer` func
+    . "$FILE"
+    alias gs_alarm_timer="alarm_timer"
+fi
