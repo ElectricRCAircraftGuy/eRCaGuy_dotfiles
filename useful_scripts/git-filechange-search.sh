@@ -15,6 +15,7 @@
 #       cd /path/to/here
 #       mkdir -p ~/bin
 #       ln -si "${PWD}/git-filechange-search.sh" ~/bin/gs_git-filechange-search
+#       ln -si "${PWD}/git-filechange-search.sh" ~/bin/git-filechange-search
 # 2. Now you can use the `gs_git-filechange-search` command directly anywhere you like.
 
 # References:
