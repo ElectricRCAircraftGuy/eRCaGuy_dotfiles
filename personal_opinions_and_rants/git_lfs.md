@@ -18,6 +18,14 @@ Why?
     Yeah...I'm shocked too. That's totally nuts.
 
 
+# Spoiler alert!
+
+Additional reading:
+
+1. My Q&A: [How does git LFS track and store binary data more efficiently than git? [spoiler: it _doesn't_]](https://stackoverflow.com/a/76567696/4561887)
+1. My question, and lousy-workaround not-an-answer answer: [How to resume `git lfs post-checkout` hook after failed `git checkout`](https://stackoverflow.com/q/68552775/4561887) - spoiler: my `git lfs checkout` kept failing at 97% complete while downloading 27 GB in 3 hours due to not enough disk space.
+
+
 # The following was originally at the top of my answer here:
 
 Answer with this content: https://stackoverflow.com/revisions/72610495/19. 
