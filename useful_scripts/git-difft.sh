@@ -39,7 +39,7 @@
 # 1. "eRCaGuy_hello_world/bash/argument_parsing__3_advanced__gen_prog_template.sh" - for help 
 #    parsing arguments. See:
 #    https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/argument_parsing__3_advanced__gen_prog_template.sh
-# 1. 
+# 1. ***** I've posted about `git difft` here: https://stackoverflow.com/a/74965393/4561887
 #
 
 RETURN_CODE_SUCCESS=0
