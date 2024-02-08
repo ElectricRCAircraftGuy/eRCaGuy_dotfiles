@@ -756,3 +756,9 @@ if [ -f "$FILE" ]; then
     . "$FILE"
     alias gs_alarm_timer="alarm_timer"
 fi
+
+# Add doxygen binaries to the PATH
+DIR="$HOME/Downloads/Install_Files/Doxygen/doxygen-1.10.0/bin"
+if [ -d "$DIR" ] ; then
+    PATH="$DIR:$PATH"
+fi
