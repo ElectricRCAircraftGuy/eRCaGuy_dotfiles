@@ -205,8 +205,9 @@
     "security.workspace.trust.untrustedFiles": "open",
     "cSpell.userWords": [
         "microcontroller",
-        "microcontrollers"
+        "microcontrollers",
+        "unshown"
     ],
-    "window.zoomLevel": 1,
     "explorer.excludeGitIgnore": true, // ignore entries in the .gitignore file
+    "window.zoomLevel": 1, 
 }
