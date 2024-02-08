@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+# This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
+
+# GS
+# Feb. 2024
+
+# Description:
+#
+# Generate Doxygen documentation for a C or C++ project, store repo info. into a special readme next
+# to the doxygen output, and open the index.html Doxygen output webpage in the Google Chrome web
+# browser.
+
 # See: https://stackoverflow.com/a/60157372/4561887
 FULL_PATH_TO_SCRIPT="$(realpath "${BASH_SOURCE[-1]}")"
 SCRIPT_DIRECTORY="$(dirname "$FULL_PATH_TO_SCRIPT")"
