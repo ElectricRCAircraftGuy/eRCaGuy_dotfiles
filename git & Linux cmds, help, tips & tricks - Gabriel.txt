@@ -6615,7 +6615,7 @@ time tar --gzip -cf myarchive.tar.gz path/to/my/dir
 tar -xf path/to/file.tar.xz  
     <====== EXTRACT ========
     <============ MOST COMMON EXTRACTION/DECOMPRESSION USAGE =============
-    Extract (`-x`) this file (`-f path/to/file`). Works with any file compression type (ex: .tar, .tar.gz, .tar.xz, etc.) since GNU tar automatically tries to identify the compression type!
+    Extract (`-x`) this file (`-f path/to/file`). Works with any file compression type (ex: .tar, .tar.gz, .tar.xz, etc.) since GNU tar automatically tries to identify the compression type! [Extract .tar.gz; unzip .tar.gz] 
     See: https://askubuntu.com/a/107976/327339
     See also:
         - `binwalk`--search this document for that! <========
