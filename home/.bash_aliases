@@ -742,7 +742,7 @@ fi
 #   Linux x86_64 installer works well.
 # - Update this `DIR` path as necessary!
 DIR="$HOME/Downloads/Install_Files/CMake/cmake-3.28.0-rc5-linux-x86_64/bin"
-if [ -d "$DIR" ] ; then
+if [ -d "$DIR" ]; then
     PATH="$DIR:$PATH"
 fi
 
@@ -759,6 +759,6 @@ fi
 
 # Add doxygen binaries to the PATH
 DIR="$HOME/Downloads/Install_Files/Doxygen/doxygen-1.10.0/bin"
-if [ -d "$DIR" ] ; then
+if [ -d "$DIR" ]; then
     PATH="$DIR:$PATH"
 fi

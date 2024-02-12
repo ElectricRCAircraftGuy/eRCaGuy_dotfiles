@@ -183,7 +183,7 @@ fi
 #   1. https://stackoverflow.com/a/3402176/4561887
 #   1. https://stackoverflow.com/a/3402196/4561887
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/GS/dev/eRCaGuy_hello_world/python/libraries" ] ; then
+if [ -d "$HOME/GS/dev/eRCaGuy_hello_world/python/libraries" ]; then
     # See: https://stackoverflow.com/a/3402176/4561887
     # prepend our new path to the front of the `PYTHONPATH`, so that it takes priority
     export PYTHONPATH="$HOME/GS/dev/eRCaGuy_hello_world/python/libraries:$PYTHONPATH"
@@ -209,12 +209,12 @@ fi
 
 # Added by eRCaGuy_hello_world for importing Python libraries:
 # https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world
-if [ -d "$HOME/libs_python/libraries" ] ; then
+if [ -d "$HOME/libs_python/libraries" ]; then
     export PYTHONPATH="$HOME/libs_python/libraries:$PYTHONPATH"
 fi
 
 # Added by eRCaGuy_hello_world for importing Bash libraries:
 # https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world
-if [ -d "$HOME/libs_bash/libraries" ] ; then
+if [ -d "$HOME/libs_bash/libraries" ]; then
     export BASHLIBS="$HOME/libs_bash/libraries"
 fi
