@@ -3,6 +3,16 @@
 # Doxygen installation and setup
 
 
+## Description of files
+
+1. `Doxyfile_CUSTOMIZED` - my doxygen configuration file with my recommended settings after going through the "Setup and usage" section below.
+1. `Doxyfile_DEFAULT` - the default doxyfile created by running `doxygen -g Doxyfile`.
+1. `Doxyfile_run_doxygen.sh` - A script to:
+    1. automatically generate Doxygen documentation for a C or C++ project
+    1. store repo info. into a special readme at path `"$OUTPUT_DIRECTORY/doxygen_info_README.md"`, next to the doxygen output, and 
+    1. open the `index.html` Doxygen output webpage in the Google Chrome web browser.
+
+
 ## Chat with GitHub Copilot
 
 ElectricRCAircraftGuy: how do I run `doxygen` in a repo?
