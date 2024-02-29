@@ -338,8 +338,8 @@ print_size_info() {
 
         text=$(echo "$data" | awk '{print $1}')
         rodata=$(echo "$data" | awk '{print $2}')
-        data=$(echo "$data" | awk '{print $3}')
         bss=$(echo "$data" | awk '{print $4}')
+        data=$(echo "$data" | awk '{print $3}')
 
         flash=$(($text + $rodata + $data))
         sram=$(($bss + $data))
@@ -361,8 +361,8 @@ print_size_info() {
         fi
 
         text=$(echo "$data" | awk '{print $1}')
-        data=$(echo "$data" | awk '{print $2}')
         bss=$(echo "$data" | awk '{print $3}')
+        data=$(echo "$data" | awk '{print $2}')
 
         flash=$(($text + $data))
         sram=$(($bss + $data))
