@@ -44,7 +44,7 @@
 RETURN_CODE_SUCCESS=0
 RETURN_CODE_ERROR=1
 
-VERSION="0.1.0"
+VERSION="0.3.0"
 AUTHOR="Gabriel Staples"
 
 DEBUG_PRINTS_ON="false"  # "true" or "false"; can also be passed in as an option: `-d` or `--debug`
@@ -303,22 +303,24 @@ print_size_info() {
         exit $RETURN_CODE_ERROR
     fi
 
-    line1="$(echo "$size_info" | head -n 1)"
-    line2="$(echo "$size_info" | head -n 2 | tail -n 1)"
+    echo -e "size_info = '$SIZE_EXE $ELF_FILE' = \n\n$size_info\n"
 
-    header="$line1"
-    data="$line2"
+    row1="$(echo "$size_info" | head -n 1)"
+    row2="$(echo "$size_info" | head -n 2 | tail -n 1)"
 
-    col1_heading="$(echo "$header" | awk '{print $1}')"
-    col2_heading="$(echo "$header" | awk '{print $2}')"
-    col3_heading="$(echo "$header" | awk '{print $3}')"
-    col4_heading="$(echo "$header" | awk '{print $4}')"
-    col5_heading="$(echo "$header" | awk '{print $5}')"
-    col6_heading="$(echo "$header" | awk '{print $6}')"
-    col7_heading="$(echo "$header" | awk '{print $7}')"
+    header_row="$row1"
+    data_row="$row2"
+
+    col1_heading="$(echo "$header_row" | awk '{print $1}')"
+    col2_heading="$(echo "$header_row" | awk '{print $2}')"
+    col3_heading="$(echo "$header_row" | awk '{print $3}')"
+    col4_heading="$(echo "$header_row" | awk '{print $4}')"
+    col5_heading="$(echo "$header_row" | awk '{print $5}')"
+    col6_heading="$(echo "$header_row" | awk '{print $6}')"
+    col7_heading="$(echo "$header_row" | awk '{print $7}')"
 
     # distinguish between the new and old compiler formats by looking at just the column 2 heading
-    col2_heading="$(echo "$header" | awk '{print $2}')"
+    col2_heading="$(echo "$header_row" | awk '{print $2}')"
     if [[ "$col2_heading" == "rodata" ]]; then
         # old format
 
@@ -336,13 +338,16 @@ print_size_info() {
             exit $RETURN_CODE_ERROR
         fi
 
-        text=$(echo "$data" | awk '{print $1}')
-        rodata=$(echo "$data" | awk '{print $2}')
-        bss=$(echo "$data" | awk '{print $4}')
-        data=$(echo "$data" | awk '{print $3}')
+        text=$(echo "$data_row" | awk '{print $1}')
+        rodata=$(echo "$data_row" | awk '{print $2}')
+        data=$(echo "$data_row" | awk '{print $3}')
+        bss=$(echo "$data_row" | awk '{print $4}')
 
         flash=$(($text + $rodata + $data))
         sram=$(($bss + $data))
+
+        echo "FLASH used = text + rodata + data"
+        echo "SRAM  used = bss  + data"
 
     elif [[ "$col2_heading" == "data" ]]; then
         # new format
@@ -360,12 +365,15 @@ print_size_info() {
             exit $RETURN_CODE_ERROR
         fi
 
-        text=$(echo "$data" | awk '{print $1}')
-        bss=$(echo "$data" | awk '{print $3}')
-        data=$(echo "$data" | awk '{print $2}')
+        text=$(echo "$data_row" | awk '{print $1}')
+        data=$(echo "$data_row" | awk '{print $2}')
+        bss=$(echo "$data_row" | awk '{print $3}')
 
         flash=$(($text + $data))
         sram=$(($bss + $data))
+
+        echo "FLASH used = text + data"
+        echo "SRAM  used = bss  + data"
 
     else
         echo "ERROR 3: unrecognized 'size' format!"
@@ -373,8 +381,6 @@ print_size_info() {
         echo "Exiting..."
         exit $RETURN_CODE_ERROR
     fi
-
-    echo -e "size_info = '$SIZE_EXE $ELF_FILE' = \n\n$size_info\n"
 
     # Calculate percentages of flash and RAM used, if the user specified the flash and RAM sizes of
     # their chip. For an example of the Arduino output as a comparison/model, see the screenshot
@@ -403,8 +409,7 @@ print_size_info() {
         # add extra specing for alignment with the SRAM info below, only if
         # the RAM info is also provided
         if [[ ! -z "$RAM_BYTES" ]]; then
-            flash_percent_info+=". . . . . . . . . . . . . . . . . ."
-            flash_percent_info+=" . . . . . .  "
+            flash_percent_info+=". . . . . . . . . . . . . . "
         fi
         flash_percent_info+="Max is $FLASH_BYTES bytes"
     fi
@@ -425,8 +430,8 @@ print_size_info() {
         RAM_BYTES="$(printf "%7d" "$RAM_BYTES")"
 
         sram_percent_info=" ($sram_used_percent%). Remaining is $sram_remaining_bytes bytes"
-        sram_percent_info+=" ($sram_remaining_percent%) for local (stack) variables or RTOS "
-        sram_percent_info+="stack & heap. Max is $RAM_BYTES bytes"
+        sram_percent_info+=" ($sram_remaining_percent%) for local (stack) variables. "
+        sram_percent_info+="Max is $RAM_BYTES bytes"
     fi
 
     flash_percent_info+="."
@@ -437,8 +442,10 @@ print_size_info() {
     sram="$(printf "%7d" "$sram")"
 
     # Print it out
+    echo "---"
     echo "FLASH used . . . . . . . . .  = $flash bytes$flash_percent_info"
     echo "SRAM used by global variables = $sram bytes$sram_percent_info"
+    echo ""
 }
 
 main() {
