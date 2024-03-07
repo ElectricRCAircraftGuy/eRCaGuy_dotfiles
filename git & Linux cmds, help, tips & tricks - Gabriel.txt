@@ -3859,6 +3859,28 @@ objdump -h /bin/ls
 
 
 ====================================================================================================
+= Binary and ELF file analyzer: =
+====================================================================================================
+
+[.map files, .elf files, .bin files, etc.]
+
+UPDATE: SEE MY NOTES HERE INSTEAD: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_apps/analyzing_binary_files_README.md
+
+Research:
+1. Google search for "elf file memory analyzer": https://www.google.com/search?q=elf+file+memory+analyzer&oq=elf+file+memory+analyzer&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTI0Mzg5ajBqNKgCALACAA&sourceid=chrome&ie=UTF-8
+
+1. https://github.com/jedrzejboczar/elf-size-analyze
+    ```bash
+    # Install 
+    pip3 install elf-size-analyze
+
+    # Example usage for Microchip PIC32 mcu to analyze RAM (`-R`) usage
+    elf-size-analyze -t xc32- -HaR path/to/Autopilot.X.production.elf
+    ```
+1. https://github.com/google/bloaty - Google's Bloaty McBloatface.
+
+
+====================================================================================================
 = Cellular & Networking: =
 ====================================================================================================
 - incl. VPN
