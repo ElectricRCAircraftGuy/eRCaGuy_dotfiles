@@ -238,7 +238,8 @@ gs_git_commit_r() {
     random_seconds="$(random "$min_seconds" "$max_seconds")"
     ret_code="$?"
     if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
-        echo -e "\n>> ERROR: 'random' failed. It may not be installed. Install it from" \
+        echo -e "\n>> ERROR: 'random' failed with ret_code $ret_code. It may not" \
+            "be installed. Install it from" \
             "\"eRCaGuy_dotfiles/useful_scripts/random.sh\". <<"
         return $RETURN_CODE_ERROR
     fi
