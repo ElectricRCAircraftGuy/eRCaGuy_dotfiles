@@ -172,11 +172,13 @@ gs_git_log_get_last_commit_date() {
 
     # Now strip off the last space-separated word in order to throw away the time zone portion
     # of the date
-    str_array=($committer_date)
-    str_array_len="${#str_array[@]}"
-    str_array_len_minus_one=$((str_array_len - 1))
+    # str_array=($committer_date)
+    # str_array_len="${#str_array[@]}"
+    # str_array_len_minus_one=$((str_array_len - 1))
+    # committer_date="${str_array[@]:0:$str_array_len_minus_one}"
 
-    committer_date="${str_array[@]:0:$str_array_len_minus_one}"
+    # Better way to strip the time zone off the end of the date
+    committer_date="${committer_date% *}"
 
     echo "$committer_date"
 }
