@@ -6140,6 +6140,19 @@ binwalk --dd='.*' path/to/file.bin
     TODO: study what the `--dd='.*'` part above means!
     NB: use this cmd in conjunction with the Gnome "Archive Manager" GUI (`file-roller`) to extract contents and .data, .rdata. .reloc, .text, etc. sections from a Windows .exe files, as well as resources like bitmaps (images), icons, version numbers, etc.! <========== VERY USEFUL! Extract contents from a Windows .exe file ==========
 
+[address to line; address 2 line; find address of exception handler in C or Cpp C++ source code]
+
+addr2line -e path/to/binary 0xabcdef
+    Map address 0xabcdef in binary file /path/to/binary to a line number in the source code which generated this binary file.
+    See: 
+    ```
+    man addr2line 
+    addr2line -h
+    ```
+addr2line path/to/my_binary.elf 0xabcdef
+    Map address 0xabcdef in binary file /path/to/my_binary.elf to a line number in the source code which generated this binary file.
+    See just above. 
+
 [Mount/remount/unmount/umount filesystem or file image; mount remount]
 > If no part of your filesystem is writable by default, then you may need to unmount it and remount it as read-writable (rw) first, as shown below. ... When done, you can mount it back as read-only (ro) as shown here:
 See my answer: https://serverfault.com/a/1105451/357116
