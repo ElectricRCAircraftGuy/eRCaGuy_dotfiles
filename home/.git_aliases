@@ -177,6 +177,7 @@ gs_git_log_get_last_commit_date() {
     str_array_len_minus_one=$((str_array_len - 1))
 
     committer_date="${str_array[@]:0:$str_array_len_minus_one}"
+
     echo "$committer_date"
 }
 
@@ -203,48 +204,26 @@ gs_git_commit_r() {
     local RETURN_CODE_SUCCESS=0
     local RETURN_CODE_ERROR=1
 
-    DEFAULT_MIN_MINUTES="2"
+    DEFAULT_MIN_MINUTES="3"
     DEFAULT_MAX_MINUTES="20"
 
-    # help menu
-    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-        DATE="$(date +"%a %b %-d %H:%M:%S %Y %z")"
-        echo "Git commit range: run 'git commit' with a random time and date stamp."
-        echo "Usage:  gs_git_commit_r [<min_minutes> <max_minutes>]"
-        echo "Run 'git log --pretty=fuller' to see 'git log' with both **author** AND" \
-             "**commit** dates!"
-        echo "---------"
-        echo "DEFAULT_MIN_MINUTES = $DEFAULT_MIN_MINUTES"
-        echo "DEFAULT_MAX_MINUTES = $DEFAULT_MAX_MINUTES"
-        echo "---------"
-        echo 'DATE="$(date +"%a %b %-d %H:%M:%S %Y %z")"'
-        echo "---"
-        echo "DATE=\"$DATE\""
-        echo 'GIT_COMMITTER_DATE="$DATE" git commit --date "$DATE"'
-        echo 'GIT_COMMITTER_DATE="$DATE" git commit --amend'
-        echo "---"
-        echo "last_date=\"$last_date\""
-        echo 'GIT_COMMITTER_DATE="$last_date" git commit --date "$last_date"'
-        echo 'GIT_COMMITTER_DATE="$last_date" git commit --amend'
-
-        return 0
-    fi
-
     # 'gs_git_commit'
-    if [ $# -eq 0 ]; then
+    if [ "$#" -eq "0" ]; then
         # set defaults
         min_minutes="$DEFAULT_MIN_MINUTES"
         max_minutes="$DEFAULT_MAX_MINUTES"
-    elif [ $# -eq 1 ]; then
+    elif [ "$#" -eq "1" ] && [ "$1" != "-h" ] && [ "$1" != "--help" ]; then
         echo "ERROR: incorrect number of arguments (you must pass 0 or 2 args; see '--help' menu)."
         return 1
     # 'gs_git_commit min_minutes max_minutes'
-    elif [ $# -eq 2 ]; then
+    elif [ "$#" -eq "2" ]; then
         min_minutes="$1"
         max_minutes="$2"
     else
-        echo "ERROR: too many arguments."
-        return 1
+        if [ "$1" != "-h" ] && [ "$1" != "--help" ]; then
+            echo "ERROR: too many arguments."
+            return 1
+        fi
     fi
 
 
@@ -265,25 +244,97 @@ gs_git_commit_r() {
     fi
 
     random_minutes="$(bc <<< "scale=2; $random_seconds/$SECONDS_PER_MINUTE")"
-    last_commit_date="$(gs_git_log_get_last_commit_date)"
+    last_commit_date_in_repo="$(gs_git_log_get_last_commit_date)"
+    
+    last_commit_date_in_tmp_dir="$last_commit_date_in_repo"
+    if [ -f "/tmp/llccdd" ]; then
+        last_commit_date_in_tmp_dir="$(cat "/tmp/llccdd")"
+    fi
+
+    # debugging
+    # echo "last_commit_date_in_repo    = $last_commit_date_in_repo"
+    # echo "last_commit_date_in_tmp_dir = $last_commit_date_in_tmp_dir"
+
+    # Convert dates to Unix timestamps
+    last_commit_date_in_repo_sec="$(date -d "$last_commit_date_in_repo" +%s)"
+    last_commit_date_in_tmp_dir_sec="$(date -d "$last_commit_date_in_tmp_dir" +%s)"
+    
+    # Get the most recent date
+    if [ "$last_commit_date_in_repo_sec" -ge "$last_commit_date_in_tmp_dir_sec" ]; then
+        last_commit_date="$last_commit_date_in_repo"
+    else
+        last_commit_date="$last_commit_date_in_tmp_dir"
+    fi
+
     new_date="$(date +"%a %b %-d %H:%M:%S %Y %z" -d "$last_commit_date + $random_seconds seconds")"
 
     # debug prints
     echo "DEBUG PRINTS:"
-    echo "  min_minutes       = $min_minutes"
-    echo "  max_minutes       = $max_minutes"
-    echo "  range_minutes     = $range_minutes"
+    echo "  min_minutes                    = $min_minutes"
+    echo "  max_minutes                    = $max_minutes"
+    echo "  range_minutes                  = $range_minutes"
     echo "  ---"
-    echo "  min_seconds       = $min_seconds"
-    echo "  max_seconds       = $max_seconds"
-    echo "  range_seconds     = $range_seconds"
+    echo "  min_seconds                    = $min_seconds"
+    echo "  max_seconds                    = $max_seconds"
+    echo "  range_seconds                  = $range_seconds"
     echo "  ==="
-    echo "  random_seconds    = $random_seconds"
-    echo "  random_minutes    = $random_minutes"
+    echo "  last_commit_date_in_repo       = \"$last_commit_date_in_repo\""
+    echo "  last_commit_date_in_tmp_dir    = \"$last_commit_date_in_tmp_dir\""
+    echo "  last_commit_date (more recent) = \"$last_commit_date\""
+    echo "  random_seconds                 = $random_seconds"
+    echo "  random_minutes                 = $random_minutes"
+    echo "  new_date                       = \"$new_date\""
     echo ""
-    echo "  last_commit_date  = $last_commit_date"
-    echo "  new_date          = $new_date"
-    echo ""
+
+    # help menu / dry-run
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        echo "$last_commit_date" > "/tmp/llccdd"
+        # Update the temporary file
+        
+        echo "=========="
+        echo "HELP MENU:"
+        echo "=========="
+        echo "Git commit range: run 'git commit' with a random time and date stamp."
+        echo "Usage:  gs_git_commit_r [<min_minutes> <max_minutes>]"
+        echo "Run 'git log --pretty=fuller' to see 'git log' with both **author** AND" \
+             "**commit** dates!"
+        echo "---------"
+        echo "DEFAULT_MIN_MINUTES = $DEFAULT_MIN_MINUTES"
+        echo "DEFAULT_MAX_MINUTES = $DEFAULT_MAX_MINUTES"
+        echo "---------"
+        echo "last_commit_date_in_repo       = \"$last_commit_date_in_repo\""
+        echo "last_commit_date_in_tmp_dir    = \"$last_commit_date_in_tmp_dir\""
+        echo "last_commit_date (more recent) = \"$last_commit_date\""
+        echo "random_seconds                 = $random_seconds"
+        echo "random_minutes                 = $random_minutes"
+        echo "new_date                       = \"$new_date\""
+        echo "---"
+        echo 'date_now="$(date +"%a %b %-d %H:%M:%S %Y %z")"'
+        date_now="$(date +"%a %b %-d %H:%M:%S %Y %z")"
+        echo "date_now=\"$date_now\""
+        echo "date_now                       = \"$date_now\""
+        echo "---------"
+        echo "Date now:"
+        echo "date_now                       = \"$date_now\""
+        echo 'GIT_COMMITTER_DATE="$date_now" git commit --date "$date_now"'
+        echo 'GIT_COMMITTER_DATE="$date_now" git commit --amend'
+        echo "gcr -h"
+        echo "---"
+        echo "Last commit date in repo:"
+        echo "last_commit_date_in_repo       = \"$last_commit_date_in_repo\""
+        echo 'GIT_COMMITTER_DATE="$last_commit_date_in_repo" git commit --date "$last_commit_date_in_repo"'
+        echo 'GIT_COMMITTER_DATE="$last_commit_date_in_repo" git commit --amend'
+        echo "gcr -h"
+        echo "---"
+        echo "New date:"
+        echo "new_date                       = \"$new_date\""
+        echo 'GIT_COMMITTER_DATE="$new_date" git commit --date "$new_date"'
+        echo 'GIT_COMMITTER_DATE="$new_date" git commit --amend'
+        echo "gcr -h"
+        echo "---"
+
+        return 0
+    fi
 
     # NB: The `--date` option sets the **author** date stamp, and the variable `GIT_COMMITTER_DATE`
     # sets the **committer** date stamp.
@@ -293,7 +344,19 @@ gs_git_commit_r() {
     # 1. How can one change the timestamp of an old commit in Git?:
     #    https://stackoverflow.com/a/9701130/4561887
     GIT_COMMITTER_DATE="$new_date" command git commit --date "$new_date"
-    last_date="$new_date"
+    ret_code="$?"
+    # echo "ret_code = $ret_code"  # debugging
+    if [ "$ret_code" -ne "$RETURN_CODE_SUCCESS" ]; then
+        echo "$last_commit_date" > "/tmp/llccdd"
+        echo -e "\n>> ERROR: 'git commit' failed with ret_code $ret_code. <<"
+        return $RETURN_CODE_ERROR
+    fi
+
+    last_commit_date="$new_date"
+    # Strip the time zone off the end of the date
+    last_commit_date="${last_commit_date% *}"
+    # Save the most recent date to a file for next time
+    echo "$last_commit_date" > "/tmp/llccdd"
 }
 alias git_commit_r="gs_git_commit_r"
 alias gcr="gs_git_commit_r"
