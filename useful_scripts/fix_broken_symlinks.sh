@@ -7,7 +7,8 @@
 
 # DESCRIPTION:
 #
-# Recursively find all **absolute** symlinks in a directory and replace them with **relative** ones.
+# Recursively find all broken **absolute** symlinks in a directory and replace them with
+# **relative** ones.
 #
 # This is particularly useful when you want to share a directory with someone else when that
 # directory contains symlinks. If they are absolute symlinks, they will break on the next person's
@@ -37,6 +38,10 @@
 # https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/argument_parsing__3_advanced__gen_prog_template.sh
 # 1. ***** See my answer with this script used in it, here:
 #    https://unix.stackexchange.com/a/732315/114401
+
+# SEE ALSO
+# 1. MY ANSWER: Unix & Linux: Convert absolute symlink to relative symlink with simple Linux command
+#    - https://unix.stackexchange.com/a/774298/114401
 
 # TODO list:
 # 1. [x] highlight "FINAL" links in bold blue if they are different from their "FIXED" links.
@@ -179,11 +184,16 @@ https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/git%20%26%
 
     symlinks -rsv .
 
-3. To **manually** replace any absolute symlink with a relative symlink, do the following. This is
+4. To **manually** replace any absolute symlink with a relative symlink, do the following. This is
 also the best 'ln' command in my opinion when creating a brand new symlink:
 
     # NB: **All** of these options are important, and what I want. See 'man ln' for what each does.
     ln -svnri target_path symlink_path
+
+5. To **automatically** replace all functional absolute symlinks with relative symlinks, use the
+following command:
+
+    symlinks -cr .
 
 
 This program is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
