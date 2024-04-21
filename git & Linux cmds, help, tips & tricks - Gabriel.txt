@@ -4684,6 +4684,9 @@ rm path/to/symlink
     Pretty much the same as above, except more obvious to the world what it's really doing.
     See also: What is the difference between 'rm' and 'unlink'? - https://unix.stackexchange.com/q/151951/114401
 
+---
+See also my answer here!: Unix & Linux: All about symlinks: creating, listing, converting from absolute to relative, etc. - https://unix.stackexchange.com/a/774298/114401 <====
+---
 sudo add-apt-repository universe && sudo apt update && sudo apt install symlinks
     Install the `symlinks` utility in Ubuntu. 
     See: https://www.makeuseof.com/how-to-find-and-fix-broken-symlinks-in-linux/
