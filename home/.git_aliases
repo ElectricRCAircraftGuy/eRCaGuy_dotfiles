@@ -312,25 +312,22 @@ gs_git_commit_r() {
         echo "random_minutes                 = $random_minutes"
         echo "new_date                       = \"$new_date\""
         echo "---"
+        echo "Date now:"
         echo 'date_now="$(date +"%a %b %-d %H:%M:%S %Y %z")"'
         date_now="$(date +"%a %b %-d %H:%M:%S %Y %z")"
         echo "date_now=\"$date_now\""
-        echo "date_now                       = \"$date_now\""
-        echo "---------"
-        echo "Date now:"
-        echo "date_now                       = \"$date_now\""
         echo 'GIT_COMMITTER_DATE="$date_now" git commit --date "$date_now"'
         echo 'GIT_COMMITTER_DATE="$date_now" git commit --amend'
         echo "gcr -h"
         echo "---"
         echo "Last commit date in repo:"
-        echo "last_commit_date_in_repo       = \"$last_commit_date_in_repo\""
+        echo "last_commit_date_in_repo=\"$last_commit_date_in_repo\""
         echo 'GIT_COMMITTER_DATE="$last_commit_date_in_repo" git commit --date "$last_commit_date_in_repo"'
         echo 'GIT_COMMITTER_DATE="$last_commit_date_in_repo" git commit --amend'
         echo "gcr -h"
         echo "---"
         echo "New date:"
-        echo "new_date                       = \"$new_date\""
+        echo "new_date=\"$new_date\""
         echo 'GIT_COMMITTER_DATE="$new_date" git commit --date "$new_date"'
         echo 'GIT_COMMITTER_DATE="$new_date" git commit --amend'
         echo "gcr -h"
