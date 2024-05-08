@@ -120,6 +120,32 @@ print_version() {
     echo "$VERSION_LONG_STR"
 }
 
+# A function to do echo-style debug prints only if `DEBUG_PRINTS_ON` is set to "true".
+# - From: "eRCaGuy_hello_world/bash/argument_parsing__3_advanced__gen_prog_template.sh"
+echo_debug() {
+    if [ "$DEBUG_PRINTS_ON" = "true" ]; then
+        printf "%s" "DEBUG: "
+        echo "$@"
+    fi
+}
+
+# - From: "eRCaGuy_hello_world/bash/argument_parsing__3_advanced__gen_prog_template.sh"
+echo_error() {
+    printf "%s" "ERROR: "
+    echo "$@"
+}
+
+# A function to do printf-style debug prints only if `DEBUG_PRINTS_ON` is set to "true".
+# - From: "eRCaGuy_hello_world/bash/argument_parsing__3_advanced__gen_prog_template.sh"
+printf_debug() {
+    if [ "$DEBUG_PRINTS_ON" = "true" ]; then
+        printf "%s" "DEBUG: "
+        # See: https://github.com/koalaman/shellcheck/wiki/SC2059
+        # shellcheck disable=SC2059
+        printf "$@"
+    fi
+}
+
 # Print all arguments, for debugging.
 debugging_print_all_args() {
     # echo "$1"  # debugging
