@@ -5027,6 +5027,10 @@ find . -type f -size +100k -printf '%s\t%p\n' | awk '{printf("%13.6f kiB ", $1/(
     Same as the "SORT BY NAME" one a couple examples above, except then pipe to `grep -v '.*\.pdf$'` to exclude all files ending in .pdf, so that I can figure out which *NON*-PDF files are > 100 kiB in size!
     See also my answer: https://unix.stackexchange.com/a/731663/114401
 
+find . -type f | awk 'length($0) > 200'
+    Find long paths > 200 chars. Ex: to find paths too long for Windows's 256 char or so file path limit!
+    Source: Microsoft Copilot (was Bing Chat): https://sl.bing.net/hzNxvgWMluS
+
 chown
     Change the owner of files and directories. 
 
