@@ -61,7 +61,9 @@ DOXYGEN_VERSION="$(doxygen --version)"
 DOT_VERSION="$(dot -V 2>&1)"  
 OPERATING_SYSTEM=""
 
-# See: https://stackoverflow.com/a/8597411/4561887
+# See: 
+# 1. My answer with this code: https://stackoverflow.com/a/78480875/4561887
+# 2. Main answer: https://stackoverflow.com/a/8597411/4561887
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     OPERATING_SYSTEM="Linux: $(lsb_release -d | cut -f2-)"
 elif [[ "$OSTYPE" == "msys" ]]; then 
