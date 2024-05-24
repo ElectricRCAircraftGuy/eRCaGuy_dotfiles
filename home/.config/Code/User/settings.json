@@ -210,4 +210,6 @@
     ],
     "explorer.excludeGitIgnore": true, // ignore entries in the .gitignore file
     "window.zoomLevel": 1, 
+    "editor.inlayHints.enabled": "offUnlessPressed",
+    "github.copilot.editor.enableAutoCompletions": true,
 }
