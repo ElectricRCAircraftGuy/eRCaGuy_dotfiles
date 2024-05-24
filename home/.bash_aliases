@@ -45,6 +45,9 @@ alias gs_cd_to_dev="cd \"$DEV_ROOT_DIR\""
 # echo "SCRIPT_FILENAME = $SCRIPT_FILENAME"  # debugging
 # echo "ERCAGUY_DOTFILES_ROOT_DIR = $ERCAGUY_DOTFILES_ROOT_DIR"  # debugging
 
+
+# -----------------setting custom PS1 prompt string START ----------------
+
 # ANSI color codes, formatting, or highlighting
 # See:
 # 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/ansi_color_codes.sh
@@ -144,11 +147,53 @@ gs_git_show_branch_and_hash_no_formatting() {
 #   default-Ubuntu-18-installation prompt!
 # - has color, like a default Ubuntu 18 installation does too!
 #
-# Comment this line out to NOT show the git branch! NB: don't forget the `\` to escape the `$`!
-PS1="\$(gs_git_show_branch_and_hash)\n$PS1"
+# Back up the `PS1` prompt 1 string for the user in case they want to revert to it later.
+# - This is especially important on Git Bash on Windows, where resetting the terminal does **not**
+#   reset the PS1 string back to default like it does on Linux. 
+if [ -z "$PS1_BAK" ]; then
+    PS1_BAK="$PS1"
+fi
+#
+# Allow the user to quickly reset the PS1 prompt string back to the system default if they want to.
+# - Again, this is especially useful on Git Bash on Windows.
+reset_ps1_to_system_default() {
+    PS1="$PS1_BAK"
+}
+alias gs_reset_ps1_to_system_default="reset_ps1_to_system_default"
+#
+#
+# Comment this block out to NOT show the git branch!
+# New: 
+# - Note: on Windows, you **must** use the backtick-style command substitution, as the `$()` style
+#   does NOT work in the PS1 prompt string in Git Bash on Windows! See my answer: 
+#   https://stackoverflow.com/a/78520260/4561887
+# See my answer: https://stackoverflow.com/a/78480875/4561887
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # OS is Linux
+    # NB: don't forget the `\` to escape the `$`!
+    PS1="\$(gs_git_show_branch_and_hash)\n$PS1_BAK"
+elif [[ "$OSTYPE" == "msys" ]]; then 
+    # OS is Windows using Git Bash
+    
+    # Default PS1 prompt string on Windows Git Bash. 
+    # - Note: I found this by manually running `echo $PS1_BAK` in the Git Bash terminal. Let's store
+    #   it into `PS1_DEFAULT` for reference.
+    PS1_DEFAULT='\[\033]0;$TITLEPREFIX:$PWD\007\]\n\[\033[32m\]\u@\h \[\033[35m\]$MSYSTEM \[\033[33m\]\w\[\033[36m\]`__git_ps1`\[\033[0m\]\n$'
+    # Customize the PS1 script ourselves. 
+    # - Don't include the call to `__git_ps1` since that's redundant with our custom, and
+    #   more-thorough, `gs_git_show_branch_and_hash` function. 
+    # - Also, delete the newline before the `$` prompt char, and add a space after it to make it 
+    #   look just like the terminal prompt on Linux! 
+    PS1='\[\033]0;$TITLEPREFIX:$PWD\007\]\n\[\033[32m\]\u@\h \[\033[35m\]$MSYSTEM \[\033[33m\]\w\[\033[36m\]\[\033[0m\]$ '
+    PS1='`gs_git_show_branch_and_hash`'"$PS1"
+fi
+#
 # Comment this line out to NOT show shell level!
 # PS1='\$SHLVL'":$SHLVL  $PS1"  # double space between items
 PS1='\$SHLVL'":$SHLVL $PS1"  # single space between items
+
+# -----------------setting custom PS1 prompt string END ----------------
+
 
 # Import this ".git_aliases" file, if it exists.
 if [ -f "$SCRIPT_DIRECTORY/.git_aliases" ]; then
