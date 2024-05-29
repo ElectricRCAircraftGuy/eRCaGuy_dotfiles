@@ -12,13 +12,14 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 ```bash
 # [General form] Add a static ARP entry to the ARP table (mapping an IP address to a MAC 
-# address) in Windows
+# address) in Windows:
 # - Run in Git Bash or Cmd Prompt as admin!
 netsh interface ipv4 add neighbors "<Windows Interface Name>" "192.168.10.20" "<MAC ADDRESS>"
 
 # Get the "Windows Interface Name" from the "Name" column in the output of this:
 netsh interface ipv4 show interfaces
 
+# Add a static ARP entry to the ARP table (mapping an IP address to a MAC address) in Windows: 
 # Example: 
 # Run in Git Bash as admin!
 #                               Interface Name   IP        Physical MAC Address
