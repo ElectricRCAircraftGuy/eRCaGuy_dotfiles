@@ -101,8 +101,19 @@ Words of wisdom:
 
 
 ====================================================================================================
+= Fun facts: =
+====================================================================================================
+
+A collapsing electromagnetic field when you rapidly turn off a switch to DC power causes an inductance-induced voltage spike akin to a water hammer in your pipes causing an inertia-induced pressure spike when you rapidly turn off the water. 
+    - Gabriel Staples, 13 June 2024
+
+
+====================================================================================================
 = Quotes: =
 ====================================================================================================
+
+"Anyone can take anything from you, except your honor and integrity. Only *you* can give that away."
+    - Matthew Snider, US Army Special Forces, quoting his grand-dad, 13 June 2024
 
 "Yes is yes. Maybe is yes. And a no is just a delayed yes."
     <=== a perspective I need to have more in life, to keep me calm and help me carry on.
