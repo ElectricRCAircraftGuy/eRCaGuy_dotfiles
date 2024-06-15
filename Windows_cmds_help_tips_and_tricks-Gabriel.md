@@ -5,7 +5,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 
 ==========================================================================================  
-# Windows networking:
+# Windows networking
 ==========================================================================================  
 
 ## Adding a static ARP entry to the ARP table in Windows
