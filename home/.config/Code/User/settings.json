@@ -42,6 +42,7 @@
     "editor.fontSize": 12,
     "editor.rulers": [
         // 80,
+        // 84,
         100,
         120,
     ],
@@ -209,7 +210,11 @@
         "unshown"
     ],
     "explorer.excludeGitIgnore": true, // ignore entries in the .gitignore file
-    "window.zoomLevel": 1, 
+    "window.zoomLevel": 1,
     "editor.inlayHints.enabled": "offUnlessPressed",
     "github.copilot.editor.enableAutoCompletions": true,
+    "files.associations": {
+        "*.stm": "html"
+    },
+    
 }
