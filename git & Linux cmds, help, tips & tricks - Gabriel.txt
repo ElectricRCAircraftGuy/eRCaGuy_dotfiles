@@ -3964,6 +3964,17 @@ ifconfig
 iwconfig
     <===== REALLY USEFUL =======
     list all wireless network interfaces (see more on this cmd below)
+nmcli
+    <=====
+    Show a network summary, kind of like `ifconfig`. 
+    Network manager command-line interface?
+    See this comment to me where I found out about it: https://unix.stackexchange.com/questions/344974/how-can-i-make-changes-to-the-network-routing-metric-permanently/349356?noredirect=1#comment1495324_349356
+nmcli device show 
+    Show all network **devices**. 
+    This command is shown at the bottom of the output from just `nmcli`. 
+nmcli connection show 
+    Show all network **connections**. 
+    This command is shown at the bottom of the output from just `nmcli`.
 sudo ifconfig INTERFACE_NAME up
     turn network interface INTERFACE_NAME on; ex:
 sudo ifconfig wlan0 up
