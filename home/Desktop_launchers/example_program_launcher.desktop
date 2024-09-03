@@ -23,11 +23,15 @@
 #   https://stackoverflow.com/questions/8980464/how-do-i-access-an-environment-variable-in-a-desktop-files-exec-line
 
 [Desktop Entry]
-Name=Arduino 1.8.5
-Name[en_US]=launch_example_program.desktop
+Name=Example Program Launcher
 Comment=
-Exec=/home/gabriel/Downloads/Install_Files/Arduino/arduino-1.8.5/arduino
-Icon=/home/gabriel/Downloads/Install_Files/Arduino/arduino-1.8.5/lib/arduino.png
+# For the usage of the `$HOME` environment variable here, 
+# see: https://askubuntu.com/a/139198/327339
+Exec=bash -c "$HOME/Downloads/example_program.sh"
+# The icon is from here, for example:
+# "/usr/share/icons/gnome/256x256/apps/preferences-system-sharing.png"
+# See my README.
+Icon=preferences-system-sharing
 Terminal=false
 Type=Application
 StartupNotify=true
