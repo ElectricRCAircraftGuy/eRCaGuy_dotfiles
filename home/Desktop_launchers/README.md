@@ -1,8 +1,10 @@
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+
 # Readme & Install Info.
 
 There are 2 ways to install these \*.desktop files, as described below.
+
 
 ## 1. (Recommended--is a little easier) Automated Install/Uninstall of Desktop Files:
 
@@ -17,6 +19,7 @@ Uninstall desktop file `new_launcher.desktop`:
 ```bash
 eRCaGuy_dotfiles/Desktop_launchers/desktop_file_uninstall.sh new_launcher.desktop
 ```
+
 
 ## 2. (Works just fine too) Manual Install/Uninstall of Desktop Files:
 
@@ -60,6 +63,7 @@ See my answer here also: https://askubuntu.com/questions/64222/how-can-i-create-
     sudo rm /usr/share/applications/new_launcher.desktop
     ```
 
+
 # Icon locations (see also my notes about icons in the manual instructions above):
 
 On Ubuntu systems, apparently desktop file icons can be found in the following places. See:
@@ -76,8 +80,27 @@ $HOME/.local/share/icons
 /usr/share/pixmaps
 ```
 
-Example, the following setting for `Icon` in a .desktop file is valid, since the icon named `terminal` is found in one of the above locations:
+Example:
+
+An excellent place to search for application icons is `/usr/share/icons/gnome/256x256/apps`. 
+
+The following setting for `Icon` in a .desktop file is valid, since the icon named `terminal` is found in one of the above locations:
 
 ```bash
 Icon=terminal
 ```
+
+You can find the potential location of this `terminal` icon like this:
+```bash
+find \
+    $HOME/.icons \
+    $HOME/.local/share/icons \
+    /usr/local/share/icons \
+    /usr/share/icons \
+    /usr/share/pixmaps \
+    -iname "terminal.*"
+```
+
+One of the output locations in the results from the find command just above is `/usr/share/icons/gnome/256x256/apps/terminal.png`. 
+
+Search that `/usr/share/icons/gnome/256x256/apps` directory for more application icons.
