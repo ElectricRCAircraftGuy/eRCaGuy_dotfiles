@@ -214,7 +214,8 @@
     "editor.inlayHints.enabled": "offUnlessPressed",
     "github.copilot.editor.enableAutoCompletions": true,
     "files.associations": {
-        "*.stm": "html"
+        "*.stm": "html",
+        "*.desktop": "shellscript"
     },
-    
+    // "C_Cpp.intelliSenseEngine": "disabled",
 }
