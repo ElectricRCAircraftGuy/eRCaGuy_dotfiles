@@ -65,6 +65,16 @@ Note: other types of knowledge-sharing and guiding include:
 Words of wisdom:
 ----------------
 
+"When men carry bound energy, it makes women [or people in general] feel unsafe."
+    - Raj Narayanan - https://www.linkedin.com/in/raj920/ 
+    GS Context: stuffing down energy like anger, resentment, pain, hurt, etc., can lead to volcano-like explosions, negativity, negative energy or sentiment, etc. This is what we call "bound energy". If we just get with our emotions every day, instead, and experience them at no one and nothing, we can instead free that energy and be a safe space for others.
+
+"When are things going to turn around?
+Answer: When you're fully there. That's the only answer I can give you. 
+When you're committed to being there, and you're fully there." 
+    - Raj Narayanan - https://www.linkedin.com/in/raj920/ 
+    GS: in other words, when we have done the work and have done **our part**, **then** we will be ready to embrace the positive changes that are coming.
+
 1. *****+ "Numbers are important, but don’t let them define your choices. Don’t use money to cut back on things you love just because they're "expensive." Use money to actualize your vision for how you want to live your life."
     - Dexter Zhuang (https://www.linkedin.com/in/dexter-zhuang/)
       https://www.linkedin.com/posts/dexter-zhuang_in-2019-i-left-my-cushy-san-francisco-tech-activity-7061146444270858241-OS0M/
@@ -3975,6 +3985,13 @@ nmcli device show
 nmcli connection show 
     Show all network **connections**. 
     This command is shown at the bottom of the output from just `nmcli`.
+nmcli device wifi list
+    <===== REALLY USEFUL =======
+    List all available wifi networks, including their SSIDs and scanned signal strengths / "bars". 
+ls /etc/NetworkManager/system-connections/
+    See all network connections stored on your system! Note: each of these files is readable by root only, and contains passwords/pre-shared keys too! 
+    Editing these files directly **is** allowed. Run `sudo systemctl restart NetworkManager` after editing them to apply changes. 
+    See my full answer here on how to edit these files to force a connection over 2.4GHz or 5GHz, for example: https://askubuntu.com/a/1524752/327339.
 sudo ifconfig INTERFACE_NAME up
     turn network interface INTERFACE_NAME on; ex:
 sudo ifconfig wlan0 up
