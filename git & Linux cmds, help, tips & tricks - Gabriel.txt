@@ -259,6 +259,10 @@ That should be a comic.
 "Every chance you get, eliminate a template. If you can write _clean_ code without using a template, do so. Simplicity is better."
     - Gabriel Staples, 22 Oct. 2020
 
+My jab against C++ developers [a little "tongue in cheek", but also true]:
+- A C developer prides himself in using a programming language to produce a desired outcome. 
+- A C++ developer prides himself in producing the world's most complicated language **as** the desired outcome.
+
 C++'s syntax alone is, unfortunately, a never-ending story [C++'s syntax is nuts!]: 
     "C++ is completely nuts."
         - Gabriel Staples, 15 May 2020. See here: https://stackoverflow.com/questions/47002799/what-does-the-ampersand-at-the-end-of-member-function-signature-mean/47003980?noredirect=1#comment109357350_47003980
