@@ -12,6 +12,7 @@ Gabriel Staples
 ## Also very useful:
 1. My [eRCaGuy_hello_world](https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world) repo.
 1. [useful_startup_programs.md](useful_startup_programs.md)
+1. [README_git_submodules.md](README_git_submodules.md) - how to use git submodules
 
 
 # Table of Contents
