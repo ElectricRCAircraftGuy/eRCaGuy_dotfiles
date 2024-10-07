@@ -17,7 +17,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 1. A `git submodule` is git's official way to have a repo within a repo. 
 1. From this point forward, follow every `git clone`, `git pull`, or `git checkout` with `git submodule update --init --recursive`, which you run inside the outer repo.
-    1. The clone, pull, and checkout commands update the *pointers* to the submodules' commit hashes, without actually updating anything on your disk, while the `git submodule update --init --recursive` command updates the *contents* of the submodules on your disk to match the commit hashes that the pointers are pointing to.
+    1. The clone, pull, and checkout commands update the *pointers* to the submodules' commit hashes, without actually updating anything on your disk, while the `git submodule update --init --recursive` command updates the *contents* of the submodule directories on your disk to match the *contents* of each submodule's repository at each commit hash that the submodule pointers are pointing to.
 1. `cd` into a submodule directory within your repo to work within that sub-repo. Submodules are just normal repos. They show up as regular folders within your outer repo, but their files get stored in their own repo on the remote server.
 1. The outer repo stores a **pointer** to a specific commit hash in the inner repo. The outer repo doesn't actually store the inner repo's files on its remote server. 
 1. Once you've updated a submodule, `cd` back up into your outer repo and run `git add my_submodule` and then `git commit` to commit and push your changes to the outer repo to point to the new commit hash of the inner repo/submodule.
