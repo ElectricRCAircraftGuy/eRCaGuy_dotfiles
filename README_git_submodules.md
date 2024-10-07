@@ -45,14 +45,20 @@ git submodule update --init --recursive
 
 That's it! Follow every `git clone`, `git pull`, or `git checkout` with `git submodule update --init --recursive`, like this: 
 ```bash
+# 1. clone the outer rep and update submodule pointers
 git clone path/to/some_repo
 cd some_repo
+# 2. update the filesystem (submodule dirs) to match those pointers
 git submodule update --init --recursive
 
+# 1. update the outer repo and submodule pointers
 git pull
+# 2. update the filesystem (submodule dirs) to match those pointers
 git submodule update --init --recursive
 
+# 1. check out a branch and its submodule pointers
 git checkout some_branch
+# 2. update the filesystem (submodule dirs) to match those pointers
 git submodule update --init --recursive
 ```
 
