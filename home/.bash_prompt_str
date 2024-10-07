@@ -39,11 +39,12 @@ gs_git_get_short_hash_dirty() {
 #   git branch whenever you are inside any directory containing a local git repository.
 # - See: [my ans]
 #   https://stackoverflow.com/questions/4511407/how-do-i-know-if-im-running-a-nested-shell/57665918#57665918
-gs_git_show_branch_and_hash() {
-    # format on
-    F="${ANSI_START}${ANSI_INV}${ANSI_END}"
-    # format off
-    f="${ANSI_OFF}"
+
+# Print non-ANSI-formatted branch info, storing the results in global variables for later use.
+gs_git_show_branch_and_hash_no_formatting() {
+    # See my comment: 
+    # https://stackoverflow.com/questions/15715825/how-do-you-get-the-git-repositorys-name-in-some-git-repository#comment137449876_15716016
+    git_repo="$(basename "$(git rev-parse --show-toplevel 2>/dev/null)")"
 
     git_branch="$(command git symbolic-ref -q --short HEAD 2>/dev/null)"
     # See: https://stackoverflow.com/a/16925062/4561887
@@ -59,36 +60,31 @@ gs_git_show_branch_and_hash() {
     git_tag="$(command git tag --points-at HEAD 2>/dev/null)"
     if [ -n "$git_tag" ]; then
         git_tag="tag: $git_tag"
-        # Replace all newlines with spaces; see: https://unix.stackexchange.com/a/26798/114401
+        # Replace all newlines between tags at this commit with spaces
+        # - See: https://unix.stackexchange.com/a/26798/114401
         git_tag="$(echo "$git_tag" | sed ':a;N;$!ba;s/\n/, tag: /g')"
     fi
 
-    if [ -n "$git_branch" ] || [ -n "$git_short_hash" ] || [ -n "$git_tag" ]; then
-        # branch_info="Branch: ${F}${git_branch}${f}  Hash: ${F}${git_short_hash}${f}"
-        branch_info="${F}${git_branch}${f}  ${F}${git_short_hash}${f}  ${F}${git_tag}${f}"
-        echo -e "$branch_info"  # NB: DON'T FORGET THE `-e` here to escape the color codes!
-    fi
-}
-gs_git_show_branch_and_hash_no_formatting() {
-    git_branch="$(command git symbolic-ref -q --short HEAD 2>/dev/null)"
-    if [ "$(command git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && [ -z "$git_branch" ]; then
-        git_branch="(HEAD detached at)"
-    fi
-
-    git_short_hash="$(gs_git_get_short_hash_dirty 2>/dev/null)"
-
-    git_tag="$(command git tag --points-at HEAD 2>/dev/null)"
-    if [ -n "$git_tag" ]; then
-        git_tag="tag: $git_tag"
-        git_tag="$(echo "$git_tag" | sed ':a;N;$!ba;s/\n/, tag: /g')"
-    fi
-
-    if [ -n "$git_branch" ] || [ -n "$git_short_hash" ] || [ -n "$git_tag" ]; then
-        branch_info="${git_branch}  ${git_short_hash}  ${git_tag}"
+    if [ -n "$git_repo" ] || [ -n "$git_branch" ] || [ -n "$git_short_hash" ] || [ -n "$git_tag" ]; then
+        branch_info="${git_repo}  ${git_branch}  ${git_short_hash}  ${git_tag}"
         echo "$branch_info"
     fi
 }
-#
+
+gs_git_show_branch_and_hash() {
+    # format on
+    F="${ANSI_START}${ANSI_INV}${ANSI_END}"
+    # format off
+    f="${ANSI_OFF}"
+
+    gs_git_show_branch_and_hash_no_formatting > /dev/null
+
+    if [ -n "$git_repo" ] || [ -n "$git_branch" ] || [ -n "$git_short_hash" ] || [ -n "$git_tag" ]; then
+        branch_info="${F}${git_repo}${f}  ${F}${git_branch}${f}  ${F}${git_short_hash}${f}  ${F}${git_tag}${f}"
+        echo -e "$branch_info"  # NB: DON'T FORGET THE `-e` here to escape the color codes!
+    fi
+}
+
 # OLD:
 # - shows shell level, git branch (if in a dir with one), and `hostname present_dir $ ` only,
 #   rather than username too
