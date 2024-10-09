@@ -18,17 +18,22 @@
 # 1.
 #
 
+# echo to stderr instead of stdout
+echo_stderr() {
+    echo "$@" 1>&2
+}
+
 # (all `git` cmds)
 pre_git_hook()
 {
-    # echo "=== Running pre_git_hook() function. ==="  # debugging
+    # echo_stderr "=== Running pre_git_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
 }
 post_git_hook()
 {
-    # echo "=== Running post_git_hook() function. ==="  # debugging
+    # echo_stderr "=== Running post_git_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
@@ -42,7 +47,7 @@ copy_if_files_dont_match()
 
     if ! cmp -s "$source" "$dest"; then
         # the files are different, so copy the source to the dest
-        echo "--- Copying \"$source\" to \"$dest\" ---"
+        echo_stderr "--- Copying \"$source\" to \"$dest\" ---"
         cp -a "$source" "$dest"
     fi
 }
@@ -52,7 +57,7 @@ copy_if_files_dont_match()
 # https://github.com/microsoft/vscode/issues/195539. Remove it once they fix it! <===========
 copy_vscode_settings_files_into_my_repo()
 {
-    # echo "ERCAGUY_DOTFILES_ROOT_DIR = $ERCAGUY_DOTFILES_ROOT_DIR" # debugging
+    # echo_stderr "ERCAGUY_DOTFILES_ROOT_DIR = $ERCAGUY_DOTFILES_ROOT_DIR" # debugging
 
     # manually back up the VSCode settings files into my repo, but **only if they differ!**
     copy_if_files_dont_match ~/.config/Code/User/settings.json \
@@ -64,12 +69,12 @@ copy_vscode_settings_files_into_my_repo()
 # git status
 pre_git_status_hook()
 {
-    echo "=== Running pre_git_status_hook() function. ==="  # debugging
+    echo_stderr "=== Running pre_git_status_hook() function. ==="  # debugging
     copy_vscode_settings_files_into_my_repo
 }
 post_git_status_hook()
 {
-    # echo "=== Running post_git_status_hook() function. ==="  # debugging
+    # echo_stderr "=== Running post_git_status_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
@@ -78,14 +83,14 @@ post_git_status_hook()
 # git commit
 pre_git_commit_hook()
 {
-    # echo "=== Running pre_git_commit_hook() function. ==="  # debugging
+    # echo_stderr "=== Running pre_git_commit_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
 }
 post_git_commit_hook()
 {
-    # echo "=== Running post_git_commit_hook() function. ==="  # debugging
+    # echo_stderr "=== Running post_git_commit_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
@@ -94,14 +99,14 @@ post_git_commit_hook()
 # git push
 pre_git_push_hook()
 {
-    # echo "=== Running pre_git_push_hook() function. ==="  # debugging
+    # echo_stderr "=== Running pre_git_push_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
 }
 post_git_push_hook()
 {
-    # echo "=== Running post_git_push_hook() function. ==="  # debugging
+    # echo_stderr "=== Running post_git_push_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
@@ -110,14 +115,14 @@ post_git_push_hook()
 # git pull
 pre_git_pull_hook()
 {
-    # echo "=== Running pre_git_pull_hook() function. ==="  # debugging
+    # echo_stderr "=== Running pre_git_pull_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
 }
 post_git_pull_hook()
 {
-    # echo "=== Running post_git_pull_hook() function. ==="  # debugging
+    # echo_stderr "=== Running post_git_pull_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
@@ -126,12 +131,12 @@ post_git_pull_hook()
 # git diff
 pre_git_diff_hook()
 {
-    echo "=== Running pre_git_diff_hook() function. ==="  # debugging
+    echo_stderr "=== Running pre_git_diff_hook() function. ==="  # debugging
     copy_vscode_settings_files_into_my_repo
 }
 post_git_diff_hook()
 {
-    # echo "=== Running post_git_diff_hook() function. ==="  # debugging
+    # echo_stderr "=== Running post_git_diff_hook() function. ==="  # debugging
     # do stuff
     true  # do nothing (bash functions can't be empty); delete this line
           # once you add your own code
@@ -140,12 +145,12 @@ post_git_diff_hook()
 # git difftool
 pre_git_difftool_hook()
 {
-    # echo "=== Running pre_git_difftool_hook() function. ==="  # debugging
+    # echo_stderr "=== Running pre_git_difftool_hook() function. ==="  # debugging
     pre_git_diff_hook
 }
 post_git_difftool_hook()
 {
-    # echo "=== Running post_git_difftool_hook() function. ==="  # debugging
+    # echo_stderr "=== Running post_git_difftool_hook() function. ==="  # debugging
     post_git_diff_hook
 }
 
@@ -153,11 +158,11 @@ post_git_difftool_hook()
 # Outer-most git hook wrapper function
 git()
 {
-    # echo "=== Running custom git() wrapper function. ==="  # debugging
+    # echo_stderr "=== Running custom git() wrapper function. ==="  # debugging
 
     # Note: if no argument is passed in, this just sets cmd to an empty string
     cmd="$1"
-    # echo "cmd = $cmd"  # debugging
+    # echo_stderr "cmd = $cmd"  # debugging
 
     # Pre-hooks
     pre_git_hook
