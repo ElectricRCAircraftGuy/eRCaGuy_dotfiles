@@ -23,10 +23,10 @@ agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
 if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
     echo "Starting ssh-agent and adding your private keys."
     agent_start
-    ssh-add
+    ssh-add ~/.ssh/id_*[!.pub]
 elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
     echo "Adding your private keys to ssh-agent."
-    ssh-add
+    ssh-add ~/.ssh/id_*[!.pub]
 fi
 
 unset env

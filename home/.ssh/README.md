@@ -289,7 +289,7 @@ ssh-add -l > /dev/null
 if [ "$?" -ne "0" ]; then
     echo "No ssh keys have been added to your 'ssh-agent' since the last" \
          "reboot. Adding default keys now."
-    ssh-add
+    ssh-add ~/.ssh/id_*[!.pub]
 fi
 ```
 
