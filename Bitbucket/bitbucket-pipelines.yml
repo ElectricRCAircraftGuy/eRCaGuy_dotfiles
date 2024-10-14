@@ -1,0 +1,52 @@
+# GS
+# Oct. 2024
+#
+# Example bitbucket-pipelines.yml file. 
+#
+# NOT TESTED
+#
+# Parallelizing jobs in Bitbucket Pipelines:
+# Per GitHub Copilot: 
+#
+# > Summary
+# > 1. Use the parallel keyword in your bitbucket-pipelines.yml file to define steps that can run
+# >    concurrently.
+# > 1. Ensure your self-hosted runner has sufficient resources and is configured to handle multiple
+# >    concurrent jobs.
+# > 1. Consider running multiple instances of the self-hosted runner to increase capacity for
+# >    concurrent builds.
+#
+# Follow-up question I asked:
+# > How can I configure multiple instances of a self-hosted runner?
+# See its response!
+#
+
+pipelines:
+  default:
+    - parallel:
+        - step:
+            name: Build
+            runs-on:
+              - self-hosted
+              - windows
+            script:
+              - echo "Running build step"
+              - ./build.sh
+
+        - step:
+            name: Test
+            runs-on:
+              - self-hosted
+              - windows
+            script:
+              - echo "Running test step"
+              - ./test.sh
+
+        - step:
+            name: Lint
+            runs-on:
+              - self-hosted
+              - windows
+            script:
+              - echo "Running lint step"
+              - ./lint.sh
