@@ -5,6 +5,9 @@
 #
 # NOT TESTED
 #
+# NB: per GitHub Copilot, Windows **Powershell** is the default shell used to run the "script"
+# commands below!
+#
 # Parallelizing jobs in Bitbucket Pipelines:
 # Per GitHub Copilot: 
 #
@@ -50,3 +53,40 @@ pipelines:
             script:
               - echo "Running lint step"
               - ./lint.sh
+
+  # GS: this is a vetted and tested example of a custom pipeline that can be triggered from 
+  # https://bitbucket.org/my_organization/my_repo/pipelines
+  custom:
+    - build_this_branch:
+      - variables:
+        # NB: This passes the `Release` environment variable to the pipeline's script commands
+        # below, as set by the user when they trigger the pipeline via the web UI at the URL above. 
+        - name: Release  
+          default: False
+          description: "Set to true to also copy the output to '\\\\my_network_dir\\build_output'."
+          allowed-values:
+            - True
+            - False
+      - parallel:
+        - step:
+            name: "Format, Test, and Build"
+            runs-on:
+              - build
+              - self-hosted
+              - windows
+            script:
+              - echo "Running format, test, and build step"
+              - echo "pwd = $(pwd)"
+              - git submodule update --init --recursive
+              # NB: the default shell used on a Windows Bitbucket pipeline runner to run the
+              # "script" commands below is Windows Powershell, so this is the required syntax to run
+              # a Bash script on Windows using the Git Bash shell that comes with Git for Windows.
+              # - Possible Bash shells to use include:
+              #   1. "C:\Program Files\Git\bin\bash.exe"
+              #   2. "C:\Program Files\Git\usr\bin\bash.exe" - best, perhaps?
+              #   3. "C:\Program Files\Git\usr\bin\sh.exe"
+              #   4. "C:\Program Files\Git\git-bash.exe" - opens a new Git Bash window since it is
+              #      intended to be an interactive GUI terminal Window to interface with a user.
+              - "& 'C:/Program Files/Git/usr/bin/bash.exe' ./format.sh"
+              - "& 'C:/Program Files/Git/usr/bin/bash.exe' ./test.sh"
+              - "& 'C:/Program Files/Git/usr/bin/bash.exe' ./build.sh"
