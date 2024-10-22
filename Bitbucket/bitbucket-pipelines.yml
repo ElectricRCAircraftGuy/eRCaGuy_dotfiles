@@ -3,7 +3,7 @@
 #
 # Example bitbucket-pipelines.yml file. 
 #
-# NOT TESTED
+# THIS FILE HAS NOT YET BEEN DIRECTLY TESTED
 #
 # NB: per GitHub Copilot, Windows **Powershell** is the default shell used to run the "script"
 # commands below!
@@ -54,39 +54,87 @@ pipelines:
               - echo "Running lint step"
               - ./lint.sh
 
-  # GS: this is a vetted and tested example of a custom pipeline that can be triggered from 
-  # https://bitbucket.org/my_organization/my_repo/pipelines
+  # Previously tested and vetted. 
+  pull-requests:
+    # This branch match pattern matches **all branches**. This means it will be applied to
+    # all `git commit`s to any branch which has an open PR.
+    '**':
+      - step: &format-test-build
+          name: "Format, Test, and Build"
+          clone:
+            enabled: true
+            depth: 2  # just clone the last 2 commits
+          runs-on:
+            - build
+            - self-hosted
+            - windows
+          # NB: All commands here run in Windows Powershell on the host Windows runner.
+          # - The directory being run in is the root of the freshly-cloned repository so long as
+          #   `clone.enabled: true` is set above. 
+          script:
+            - echo "Running format, test, and build step"
+            - echo "pwd = $(pwd)"
+            - git submodule update --init --recursive
+            - echo "HOME = $HOME"
+            - echo "env:PATH BEFORE = $env:PATH"  # print Windows PATH beforehand
+            # Add Git Bash to PATH. 
+            # - It will be in "C:\Program Files\Git" if it was installed as an administrator
+            # - Or in "$HOME\AppData\Local\Programs\Git" if it was installed as a user.
+            # - We put these paths BEFORE the existing PATH to ensure our desired version of
+            #   `bash.exe` is found first.
+            - $env:PATH = "$HOME\AppData\Local\Programs\Git\bin;$env:PATH"
+            - $env:PATH = "C:\Program Files\Git\bin;$env:PATH"
+            - echo "env:PATH AFTER = $env:PATH"  # print Windows PATH afterwards
+            # See which executable of `bash` we are actually using. See `help gcm` and `help fl`
+            # for more information on these commands.
+            - gcm bash | fl
+
+            # NB: each of the Bash scripts below must have the following at the top of them:
+            # ```
+            # # set -eu  # (Optional) use this to exit immediately if any cmd in the script fails.
+            # 
+            # # (Required!) force Bitbucket Pipelines to respect the exit status of the last 
+            # # command in a pipeline when the Bash script exits with a failure (non-zero) 
+            # # exit code. 
+            # set -o pipefail
+            # ```
+            - bash "./build_utils/build_scripts/format.sh"
+            - bash "./build_utils/build_scripts/test.sh"
+            - bash "./build_utils/build_scripts/build.sh"
+
+            # Alternative ways to call bash scripts inside Windows PowerShell, if you know the path
+            # to bash.exe directly:
+            #
+            # NB: the default shell used on a Windows Bitbucket pipeline runner to run the
+            # "script" commands below is Windows Powershell, so this is the required syntax to run
+            # a Bash script on Windows using the Git Bash shell that comes with Git for Windows.
+            # - Possible Bash shells to use include:
+            #   1. "C:\Program Files\Git\bin\bash.exe" - BEST!
+            #   2. "C:\Program Files\Git\usr\bin\bash.exe"
+            #   3. "C:\Program Files\Git\usr\bin\sh.exe"
+            #   4. "C:\Program Files\Git\git-bash.exe" - not recommended since it opens a new 
+            #      Git Bash window since it is intended to be an interactive GUI terminal 
+            #      Window to interface with a user.
+            #
+            # ```
+            # - "& 'C:/Program Files/Git/bin/bash.exe' ./build_utils/build_scripts/format.sh"
+            # - "& 'C:/Program Files/Git/bin/bash.exe' ./build_utils/build_scripts/test.sh"
+            # - "& 'C:/Program Files/Git/bin/bash.exe' ./build_utils/build_scripts/build.sh"
+            # ```
+  
+  # GS: this is a previously vetted and tested example of a custom pipeline that can be triggered
+  # from https://bitbucket.org/my_organization/my_repo/pipelines
   custom:
-    - build_this_branch:
+    build_this_branch:
       - variables:
         # NB: This passes the `Release` environment variable to the pipeline's script commands
         # below, as set by the user when they trigger the pipeline via the web UI at the URL above. 
-        - name: Release  
+        - name: Release
           default: False
-          description: "Set to true to also copy the output to '\\\\my_network_dir\\build_output'."
+          description: "Set to true to also zip up the output to '\\\\my_network_dir\\build_output'."
           allowed-values:
             - True
             - False
-      - parallel:
-        - step:
-            name: "Format, Test, and Build"
-            runs-on:
-              - build
-              - self-hosted
-              - windows
-            script:
-              - echo "Running format, test, and build step"
-              - echo "pwd = $(pwd)"
-              - git submodule update --init --recursive
-              # NB: the default shell used on a Windows Bitbucket pipeline runner to run the
-              # "script" commands below is Windows Powershell, so this is the required syntax to run
-              # a Bash script on Windows using the Git Bash shell that comes with Git for Windows.
-              # - Possible Bash shells to use include:
-              #   1. "C:\Program Files\Git\bin\bash.exe"
-              #   2. "C:\Program Files\Git\usr\bin\bash.exe" - best, perhaps?
-              #   3. "C:\Program Files\Git\usr\bin\sh.exe"
-              #   4. "C:\Program Files\Git\git-bash.exe" - opens a new Git Bash window since it is
-              #      intended to be an interactive GUI terminal Window to interface with a user.
-              - "& 'C:/Program Files/Git/usr/bin/bash.exe' ./format.sh"
-              - "& 'C:/Program Files/Git/usr/bin/bash.exe' ./test.sh"
-              - "& 'C:/Program Files/Git/usr/bin/bash.exe' ./build.sh"
+      - step: *format-test-build
+
+
