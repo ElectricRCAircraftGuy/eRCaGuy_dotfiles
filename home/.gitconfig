@@ -90,6 +90,10 @@
     # 1. [my answer] https://stackoverflow.com/a/71150235/4561887
     add-commit = !git add -A && git commit
 
+    # See my guide:
+    # https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/README_git_submodules.md#aliases
+    sub = submodule update --init --recursive
+
 # For 'git blametool'. See: "eRCaGuy_dotfiles/useful_scripts/git-blametool.sh".
 # Example:
 # - Create an entry below with: `git config --global blametool.editor subl`
