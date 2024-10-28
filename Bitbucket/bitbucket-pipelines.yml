@@ -56,8 +56,14 @@ pipelines:
 
   # Previously tested and vetted. 
   pull-requests:
-    # This branch match pattern matches **all branches**. This means it will be applied to
-    # all `git commit`s to any branch which has an open PR.
+    # This branch pattern matches branch 'main'. This means it will be applied to all `git commit`s
+    # to any open PRs which are set to merge into branch 'main'.
+    'main':
+      - step: *format-test-build
+
+    # This branch match pattern matches **all branches**. 
+    # - ie: This step will run on all commits to any branches which have an open PR set to merge
+    #   into branch '**' (any branch). 
     '**':
       - step: &format-test-build
           name: "Format, Test, and Build"
