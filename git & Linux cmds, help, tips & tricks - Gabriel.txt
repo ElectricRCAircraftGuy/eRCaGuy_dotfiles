@@ -2806,7 +2806,7 @@ PROS AND CONS LIST OF EACH STYLE OF "REBASE":
     1. CONS:
         1. Similar to `git rebase`, you may end up having to resolve the same conflict once per commit unless you squash first.
         1. The process requires creating a **new branch** and cherry-picking your changes onto it, rather than just **working on the branch you already had**. 
-        1. When done, you have to push to remote and set your "upstream" branch again for this new branch you created. Setting upstream can be a little confusing and is annoying to have to do each time you "rebase" when you use this style. 
+        1. When done, you have to push to remote and set your "upstream" branch again for this new branch you created. Setting upstream can be a little confusing and is annoying to have to do each time you "rebase" when you use this style.
 
 
 -------------------------------------------------------------
@@ -2954,6 +2954,18 @@ git cherry-pick commit_start^..commit_end
     alternative form of the above line--does the exact same thing
 git cherry-pick commit1 commit2 commit3
     cherry-pick these commits (up to any number--add as many commit hashes as you want!) onto the current branch; NOT the same as using commit1..commit2, which selects a **range** of commits from 1 commit after commit1, through commit2!
+
+git for-each-ref --sort=-committerdate --format='%(committerdate:iso8601) %(refname:short)' refs/remotes/origin/release/* | head -n 1
+    See which remote branch named `release/*` was most recently updated. 
+    This is useful to see which release branch is the active one being worked on so you can know which branch to fork off of and merge your next feature into.
+    - I learned this by asking GitHub Copilot AI: 
+        > git find the branch that is named `origin/release/*` and that has the most recent commits
+git for-each-ref --sort=-committerdate --format='%(committerdate:iso8601) %(refname:short)' refs/remotes/origin/release/*
+    <======
+    Same as above, but show the entire sorted list in order of most-recently-updated on top to least-recently-updated on bottom.
+    - I learned this by asking GitHub Copilot AI: 
+        > git find the branch that is named `origin/release/*` and that has the most recent commits
+    [find recently updated branch commit]
 
 == `git tag`: ==
 
