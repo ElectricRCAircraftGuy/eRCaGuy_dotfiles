@@ -128,12 +128,15 @@ git commit
 
 Removing a submodule from a repo ([see here](https://stackoverflow.com/a/1260982/4561887)):
 ```bash
-git rm path/to/submodule
+git rm path/to/my_submodule
 git commit
+# delete the submodule metadata directory too
+rm -rf .git/modules/my_submodule
 
 # Example
 git rm ripgrep_replace
 git commit
+rm -rf .git/modules/ripgrep_replace
 ```
 
 
