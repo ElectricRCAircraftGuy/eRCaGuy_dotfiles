@@ -190,7 +190,20 @@ The above command adds the following alias to your `~/.gitconfig` file:
 	sub = submodule update --init --recursive
 ```
 
-Now, you can just run `git sub` instead of `git submodule update --init --recursive`. 
+**Now, you can just run `git sub` instead of `git submodule update --init --recursive`.**
+
+Read out the alias to verify it by running `git config alias.sub`. You will see: 
+```
+submodule update --init --recursive
+```
+
+Or, even better, add `--show-origin` to see which config file the alias is stored in: `git config --show-origin alias.sub`.
+
+Example run and output:
+```bash
+$ git config --show-origin alias.sub
+file:/home/gabriel/.gitconfig	submodule update --init --recursive
+```
 
 
 # References and going further
