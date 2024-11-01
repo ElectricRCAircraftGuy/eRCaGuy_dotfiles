@@ -177,7 +177,7 @@ Install the above magic into your terminal. This works on any OS, including Wind
 
 # Aliases
 
-If `git submodule update --init --recursive` is too long for you, you can create an alias for it. Here's how:
+If `git submodule update --init --recursive` is too long for you, you can create a git alias for it so you can just run `git sub` instead. Here's how:
 
 ```bash
 git config --global alias.sub 'submodule update --init --recursive'
@@ -190,7 +190,7 @@ The above command adds the following alias to your `~/.gitconfig` file:
 	sub = submodule update --init --recursive
 ```
 
-**Now, you can just run `git sub` instead of `git submodule update --init --recursive`.**
+_Now, you can just run `git sub` instead of `git submodule update --init --recursive`._
 
 Read out the alias to verify it by running `git config alias.sub`. You will see: 
 ```
