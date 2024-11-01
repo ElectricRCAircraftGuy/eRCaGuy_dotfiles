@@ -6,6 +6,7 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 # See also
 
+1. <https://gabrielstaples.com/git-submodule-guide/>
 1. My [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo: 
     1. [README.md](README.md)
     1. [README.md: "_Git submodules and Git LFS:_ how to clone this repo and all git submodules and git lfs files"](README.md#how-to-clone-whole-repo)
