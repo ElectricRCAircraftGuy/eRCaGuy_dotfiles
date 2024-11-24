@@ -172,7 +172,10 @@ fi
 # GS: Automatically added by installing the Rust programming language:
 # https://www.rust-lang.org/tools/install
 # via `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
-. "$HOME/.cargo/env"
+# - I then wrapped it in this `if` statement to only source the file if it exists.
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+fi
 
 # GS: update the Python path to include the **root** dir of any custom modules you have written or
 # downloaded! This way you can import those modules using the names starting in the root of those
@@ -217,4 +220,13 @@ fi
 # https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world
 if [ -d "$HOME/libs_bash/libraries" ]; then
     export BASHLIBS="$HOME/libs_bash/libraries"
+fi
+
+# Install Ruby Gems to ~/gems
+if [ -d "$HOME/gems" ]; then
+    # GS: these lines were automatically added by installing Jekyll by following the instructions
+    # here: https://jekyllrb.com/docs/installation/ubuntu/. 
+    # - I then wrapped them inside this `if` statement to only run them if the directory exists.
+    export GEM_HOME="$HOME/gems"
+    export PATH="$HOME/gems/bin:$PATH"
 fi
