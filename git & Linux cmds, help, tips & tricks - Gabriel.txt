@@ -4997,6 +4997,10 @@ terminator = *****a terminal program to EASILY allow 4 terminals (2x2) or even 1
 
 == ==
 
+stty cols 80
+    Set the terminal width to 80 columns. 
+    From my prompt to GitHub Copilot: 
+        > set the width of my terminal to 80 chars
 env
     Display the current "environment", including all shell environment variables and what they are currently set to!
     Note: this is the same executable called for running script when you do a hashbang of `#!/usr/bin/env bash` at the top of your bash sript!
