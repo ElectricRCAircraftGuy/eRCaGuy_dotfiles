@@ -87,6 +87,11 @@ Here is how to generate a new ssh public/private key combo and copy your public 
 # A. (BEST) Use the ed25519 type because it is the most secure as of the year 2021 (prior to ed25519
 # being created, `rsa` was the most secure)
 ssh-keygen -t ed25519 -C "your_email@example.com"
+#
+# same as above, but manually specify the output file path
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -C "your_email@example.com"
+#
+#
 # B. (OK if the ed25519 type is not supported) From the GitHub link above: "Note: If you are using a
 # legacy system [GS note: or lightweight implementation, such as the Dropbear ssh server] that
 # doesn't support the Ed25519 algorithm, use:"
@@ -181,6 +186,9 @@ _If you have any problems with the instructions below, leave a comment or open a
     ```bash
     # generate a public/private ssh key pair
     ssh-keygen -t ed25519 -C "your_email@example.com"
+    
+    # same as above, but manually specify the output file path
+    ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -C "your_email@example.com"
 
     # Ensure the ssh-agent is running (this starts the `ssh-agent`)
     eval "$(ssh-agent -s)"
