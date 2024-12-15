@@ -106,4 +106,22 @@ That's the gist of it. For more info, look inside the `PowerUSB-Basic-UserManual
 
 There are a bunch of other commands, as shown in the help menu above too.
 
-Also look at [`power_supply_PowerUSB_Windows_cycle_power.sh`](power_supply_PowerUSB_Windows_cycle_power.sh). 
+Also look at [`power_supply_PowerUSB_Windows_cycle_power.sh`](power_supply_PowerUSB_Windows_cycle_power.sh).
+
+
+## 3. Digital Loggers, Inc. (DLI) Web Power Switch Pro
+
+Purchase: 
+1. $189: https://dlidirect.com/products/new-pro-switch
+1. $189 on Amazon: https://amzn.to/4gBBnoe
+
+REST API to remotely control it: https://www.digital-loggers.com/rest.html
+
+Use `curl` on Linux, or via Git Bash on Windows, to control it via a bash shell script.
+
+
+The Amazon listing above says: 
+
+> Secure web server with SSL, SSH, HTTPS, SNMP, REST API, MODBUS
+
+So, you may be able to use `ssh` commands to control it too, in addition to the REST API. Not sure. I'll need to investigate more later. 
