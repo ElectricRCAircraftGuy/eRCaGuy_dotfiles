@@ -5708,6 +5708,34 @@ watch -n 1 'head -n 2 log_file.log; tail -n 10 log_file.log'
 TODO: need to add this information in here so I don't forget it.
 [CANbus; can: ==; can devices: ==]
 
+--- WIP NOTES start: --- 
+
+Online and free dbc editors​
+
+CANdb++ https://www.vector.com/int/en/download/candb-31-sp5/​
+
+CSS Electronics https://www.csselectronics.com/pages/dbc-editor-can-bus-database
+
+sudo apt install can-utils 
+
+cantools - Python library for parsing and generating CAN messages
+candump - dump raw CAN bus data
+cangen - generate CAN bus data
+canplayer - replay CAN bus data
+
+Install cantools: 
+pip3 install cantools
+
+https://github.com/linux-can/can-utils
+https://github.com/cantools/cantools
+
+canopen - CANopen protocol stack for Linux, is a collection of software packages for Linux SocketCAN that implement the CANopen higher-layer protocol according to the CiA 301 and CiA 302 standards [per GitHub Copilot].
+
+CANopen = higher-layer protocol for CAN bus, used in industrial automation, medical equipment, etc.
+ARINC825 = avionics standard for CAN bus
+
+--- WIP NOTES end: --- 
+
 
 == USB, serial, devices, etc.: ==
 [usb serial devices]
