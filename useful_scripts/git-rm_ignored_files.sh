@@ -53,74 +53,104 @@
 RETURN_CODE_SUCCESS=0
 RETURN_CODE_ERROR=1
 
-# From my answer: https://stackoverflow.com/a/76856090/4561887
-# Get a short commit hash, and see whether `git status` is clean or dirty.
-# Example outputs:
-# 1. Not in a git repo: `(not a git repo)`
-# 2. In a repo which has a "dirty" `git status`: `72361c8-dirty`
-#   - Note that "dirty" means there are pending uncommitted changes.
-# 3. In a repo which has a "clean" `git status`: `72361c8`
-git_get_short_hash() {
-    # See: https://stackoverflow.com/a/16925062/4561887
-    is_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
 
-    if [ "$is_git_repo" != "true" ]; then
-        echo "(not a git repo)"
-        return $RETURN_CODE_SUCCESS
-    fi
+# List of folders to not delete
+DIRS_TO_RESTORE=(
+    ".vscode"
+    "build"
+)
 
-    # See my answer here: https://stackoverflow.com/a/76856090/4561887
-    test -z "$(git status --porcelain)" \
-        && echo "$(git rev-parse --short HEAD)" \
-        || echo "$(git rev-parse --short HEAD)-dirty"
+# Echo a regular bash array. 
+echo_array() {
+    local -n array_reference="$1"
+    for element in "${array_reference[@]}"; {
+        echo "  $element"
+    }
 }
 
+git_rm_ignored_files() {
+    # Note: `repo_dir` will contain the full path to the repo root dir.
+    # See: https://stackoverflow.com/a/957978/4561887
+    if ! repo_dir="$(git rev-parse --show-toplevel)"; then
+        echo "Error: you are not in a git repository."
+        exit $RETURN_CODE_ERROR
+    fi
+    repo_name="$(basename "$repo_dir")"
 
-# Note: `repo_dir` will contain the full path to the repo root dir.
-# See: https://stackoverflow.com/a/957978/4561887
-if ! repo_dir="$(git rev-parse --show-toplevel)"; then
-    echo "Error: you are not in a git repository."
-    exit $RETURN_CODE_ERROR
-fi
-repo_name="$(basename "$repo_dir")"
+    cd "$repo_dir" || exit $RETURN_CODE_ERROR
 
-cd "$repo_dir" || exit $RETURN_CODE_ERROR
+    echo "Removing all of these files and folders that are in .gitignore files in this repo:"
+    echo "== LIST START ==="
+    git clean -Xdn
+    echo "== LIST END ==="
+    echo "Note that the list above may be empty if there is nothing to do."
 
-echo "Removing all of these files and folders that are in .gitignore files in this repo:"
-echo "== LIST START ==="
-git clean -Xdn
-echo "== LIST END ==="
+    echo "NB: the following directories will be BACKED UP AND RESTORED, and therefore NOT deleted,"\
+        "even if present in the list above:"
+    echo_array DIRS_TO_RESTORE
 
-echo "Note that the list above may be empty if there is nothing to do."
-read -rp "Would you like to continue and remove all items in the list above [y/N]?
-(Use Enter or N to cancel & exit).
-Note that your '.vscode/' folder will be backed up and restored. " user_continue
-if [[ "$user_continue" = [Yy] || "$user_continue" == [Yy][Ee][Ss] ]]; then
-    # 1. back up your .vscode folder, if it exists
-    back_up_dir="false"
-    if [ -e .vscode ]; then
-        back_up_dir="true"
+    echo "Would you like to continue and remove all items in the list above,"\
+         "except for those which will be backed up and restored [y/N]?"
+    read -rp "(Use Enter or N to cancel & exit)." user_continue
+    echo ""
+    if [[ "$user_continue" = [Yy] || "$user_continue" == [Yy][Ee][Ss] ]]; then
+        # 1. Back up the dirs to restore, if they exist
+        backup_dir="None"
+        for dir in "${DIRS_TO_RESTORE[@]}"; do
+            if [ -e "$dir" ]; then
+                if [ "$backup_dir" = "None" ]; then
+                    echo "Backing up your folders to restore:"
+                    backup_dir="$(mktemp -d)"
+                fi
+                target_path="$backup_dir/$dir"
+                echo "  Moving your '$dir' folder to '$target_path'."
+                mv "$dir" "$backup_dir"
+            fi
+        done
+        
+        # 2. actually delete the files
+        echo "Running 'git clean -Xdf', removing all of these files and folders that are in"\
+            ".gitignore files in this repo:"
+        git clean -Xdf
+        echo "Done running 'git clean -Xdf'."
 
-        # See: https://github.com/ElectricRCAircraftGuy/PDF2SearchablePDF/blob/263e9404b36e14869e41c69c051ad74476651e63/pdf2searchablepdf.sh#L305
-        timestamp="$(date '+%Y%m%d-%H%M%S.%N')"
-        git_short_hash="$(git_get_short_hash)"
-        backup_dir="/tmp/.vscode.bak.$timestamp.REPO_$repo_name.COMMIT_$git_short_hash"
-        echo "Moving your '.vscode' folder to '$backup_dir'."
-        mv .vscode "$backup_dir"
+        # 3. restore your backed-up dirs
+        if [ "$backup_dir" != "None" ]; then
+            echo "Restoring your backed-up folders:"
+            for dir in "${DIRS_TO_RESTORE[@]}"; do
+                from_path="$backup_dir/$dir"
+                if [ -e "$from_path" ]; then
+                    echo "  Restoring your '$dir' folder from '$from_path' to '$dir'."
+                    mv "$from_path" "$dir"
+                fi
+            done
+        fi
+    else
+        echo "Aborting."
     fi
 
-    # 2. actually delete the files
-    echo "Running 'git clean -Xdf'"
-    git clean -Xdf
+    echo "Done."
+}
 
-    # 3. restore your .vscode folder, if it existed
-    if [ "$back_up_dir" = "true" ]; then
-        echo "Restoring your '.vscode' folder from '$backup_dir' to '.vscode'."
-        cp -a "$backup_dir" .vscode
-    fi
+main() {
+    git_rm_ignored_files
+    exit $RETURN_CODE_SUCCESS
+}
+
+# Determine if the script is being sourced or executed (run).
+# See:
+# 1. "eRCaGuy_hello_world/bash/if__name__==__main___check_if_sourced_or_executed_best.sh"
+# 1. My answer: https://stackoverflow.com/a/70662116/4561887
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+    # This script is being run.
+    __name__="__main__"
 else
-    echo "Aborting."
+    # This script is being sourced.
+    __name__="__source__"
 fi
 
-echo "Done."
-exit $RETURN_CODE_SUCCESS
+# Only run `main` if this script is being **run**, NOT sourced (imported).
+# - See my answer: https://stackoverflow.com/a/70662116/4561887
+if [ "$__name__" = "__main__" ]; then
+    main "$@"
+fi
