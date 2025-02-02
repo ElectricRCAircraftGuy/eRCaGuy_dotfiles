@@ -6070,6 +6070,15 @@ which <some_executable>
 locate <some_name>
     find all files with "some_name" in their path or filename, searching EVERYWHERE, starting at the root dir (/)! Note: to search just in the current dir and below, use `find` instead:
         find | grep <some_name>
+
+    Install it with `sudo apt install plocate`. See: https://askubuntu.com/a/1482305/327339
+
+sudo updatedb
+    Update the `locate` database. 
+    From GitHub Copilot: 
+    > This is required to find new files which have been added to your system since the last time the database was updated. This command is typically run automatically by a cron job on your system, so you may not need to run it manually very often.
+    See: https://askubuntu.com/a/215509/327339
+
 3)
 find
     recursively find and print the relative path to all files and directories in the current directory and below
