@@ -169,6 +169,12 @@ gs_git_log_get_last_commit_date() {
     # Use `"%ad"` for Author Date, or `"%cd"` for Commit Date (aka: Committer Date).
     # author_date="$(git log -1 --format="%ad" "$@")"
     committer_date="$(command git log -1 --format="%cd" "$@")"
+    if [ "$?" -ne "0" ]; then
+        # Error: there are no commits yet in this repo. 
+        # > fatal: your current branch 'main' does not have any commits yet
+        echo ""  # pass out an empty string to indicate no commits yet
+        return 1
+    fi
 
     # Now strip off the last space-separated word in order to throw away the time zone portion
     # of the date
@@ -209,12 +215,11 @@ gs_git_commit_r() {
     DEFAULT_MIN_MINUTES="3"
     DEFAULT_MAX_MINUTES="20"
 
-    # 'gs_git_commit'
-    if [ "$#" -eq "0" ]; then
-        # set defaults
-        min_minutes="$DEFAULT_MIN_MINUTES"
-        max_minutes="$DEFAULT_MAX_MINUTES"
-    elif [ "$#" -eq "1" ] && [ "$1" != "-h" ] && [ "$1" != "--help" ]; then
+    # set defaults
+    min_minutes="$DEFAULT_MIN_MINUTES"
+    max_minutes="$DEFAULT_MAX_MINUTES"
+
+    if [ "$#" -eq "1" ] && [ "$1" != "-h" ] && [ "$1" != "--help" ]; then
         echo "ERROR: incorrect number of arguments (you must pass 0 or 2 args; see '--help' menu)."
         return 1
     # 'gs_git_commit min_minutes max_minutes'
@@ -247,8 +252,8 @@ gs_git_commit_r() {
     fi
 
     random_minutes="$(bc <<< "scale=2; $random_seconds/$SECONDS_PER_MINUTE")"
+
     last_commit_date_in_repo="$(gs_git_log_get_last_commit_date)"
-    
     last_commit_date_in_tmp_dir="$last_commit_date_in_repo"
     if [ -f "/tmp/llccdd" ]; then
         last_commit_date_in_tmp_dir="$(cat "/tmp/llccdd")"
@@ -261,7 +266,23 @@ gs_git_commit_r() {
     # Convert dates to Unix timestamps
     last_commit_date_in_repo_sec="$(date -d "$last_commit_date_in_repo" +%s)"
     last_commit_date_in_tmp_dir_sec="$(date -d "$last_commit_date_in_tmp_dir" +%s)"
+
+    # debugging
+    # echo "last_commit_date_in_repo_sec = \"$last_commit_date_in_repo_sec\""
+    # echo "last_commit_date_in_tmp_dir_sec = \"$last_commit_date_in_tmp_dir_sec\""
+
+    # Handle the edge case where you're in an initialized but empty git repo
+    # with no commits yet. In this case, the `last_commit_date_in_repo` will be
+    # an empty string. So, force the math to come out right in the next check
+    # where we compare the two dates.
+    if [ -z "$last_commit_date_in_repo" ]; then
+        last_commit_date_in_repo_sec="0"
+    fi
     
+    # debugging
+    # echo "last_commit_date_in_repo_sec = \"$last_commit_date_in_repo_sec\""
+    # echo "last_commit_date_in_tmp_dir_sec = \"$last_commit_date_in_tmp_dir_sec\""
+
     # Get the most recent date
     if [ "$last_commit_date_in_repo_sec" -ge "$last_commit_date_in_tmp_dir_sec" ]; then
         last_commit_date="$last_commit_date_in_repo"
