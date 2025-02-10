@@ -227,7 +227,7 @@ gs_git_commit_r() {
         min_minutes="$1"
         max_minutes="$2"
     else
-        if [ "$1" != "-h" ] && [ "$1" != "--help" ]; then
+        if [ "$#" -gt "0" ] && [ "$1" != "-h" ] && [ "$1" != "--help" ]; then
             echo "ERROR: too many arguments."
             return 1
         fi
