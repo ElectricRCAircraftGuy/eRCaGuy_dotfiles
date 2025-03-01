@@ -4,6 +4,15 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 # Bitbucket runners, pipelines, CI/CD, etc.
 
 
+### Update Feb. 2025: see my answer here!: `bitbucket-pipelines.yml` file example: [Advanced Bitbucket Pipelines configuration file example...](https://stackoverflow.com/a/79476795/4561887)
+
+> ...for Windows, relying extensively on [YAML anchors and aliases](https://support.atlassian.com/bitbucket-cloud/docs/yaml-anchors/), custom key:value entries, and common commands to be shared across many `script` entries in many `step`s. 
+> 
+> This also demonstrates how to run Bash scripts inside Windows PowerShell, how to run Linux-compatible Bash scripts on Windows build servers, and how to run many steps _in parallel_ if your self-hosted build server has multiple pipeline runners that can operate in parallel, or _in series_ if you have only one pipeline runner.
+> 
+> This would be good to use as a template for all future `bitbucket-pipelines.yml` files you create, for both Windows and Linux build servers and Bitbucket runners.
+
+
 # References
 
 1. https://support.atlassian.com/bitbucket-cloud/docs/set-up-runners-for-windows/
