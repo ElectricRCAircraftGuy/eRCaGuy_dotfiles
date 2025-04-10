@@ -31,6 +31,10 @@ gs_fzf_git_and_linux_cmds_doc
 References:
 1. *****+++ Primary reference: https://hbr.org/2019/08/great-mentors-focus-on-the-whole-person-not-just-their-career
 
+"I'm only as smart as those willing to help me."
+- Gabriel "Confucius" Staples, 17 Mar. 2025
+- My post on LinkedIn: https://www.linkedin.com/posts/gabriel-staples_when-we-help-each-other-we-win-together-activity-7307553301464563712-V3Xk
+
 "Great Mentors Focus on the Whole Person, Not Just Their Career"
     https://hbr.org/2019/08/great-mentors-focus-on-the-whole-person-not-just-their-career
 
@@ -64,6 +68,17 @@ Note: other types of knowledge-sharing and guiding include:
 ----------------
 Words of wisdom:
 ----------------
+
+"Great minds talk about ideas, average minds talk about events, and shallow minds talk about people."
+    - Eleanor Roosevelt
+    - Example reference: https://www.brainyquote.com/quotes/eleanor_roosevelt_385439
+    - I first saw this in an HR presentation at work at Edge Autonomy.
+    - Key takeaway: don't gossip about people. Talk about ideas instead.
+        - Talk **to** each other, instead of **about** each other!
+    - How to handle gossip: 
+        - Address it directly with the lead perpetrator. 
+        - If you have an issue with any coworker, discuss that issue with THAT PERSON DIRECTLY. 
+        - You may also go to your supervisor, or to HR, confidentially. 
 
 "When men carry bound energy, it makes women [or people in general] feel unsafe."
     - Raj Narayanan - https://www.linkedin.com/in/raj920/ 
