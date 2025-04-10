@@ -3,14 +3,10 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 # References
 
+1. **See my full demo project here!:** https://github.com/ElectricRCAircraftGuy/eRCaGuy_Linux_Windows_CMake_Sockets_MSYS2
 1. https://cmake.org/
 1. Tutorial: https://cmake.org/cmake/help/latest/guide/tutorial/index.html
 1. My "CMake" section in my answer here: https://stackoverflow.com/a/79203485/4561887
-
-
-# See my full demo project here!
-
-https://github.com/ElectricRCAircraftGuy/eRCaGuy_Linux_Windows_CMake_Sockets_MSYS2
 
 
 # CMake tutorial
