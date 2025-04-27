@@ -68,9 +68,33 @@ cmake -G "Unix Makefiles" ..
 cmake -G "Ninja" ..
     # Force CMake to to generate Ninja build files for a Ninja-based build system.
 
+cmake --help | less -RFX
+    # Show help for CMake, the cross-platform build system generator.
+
+cmake -S . -B build
+    # <====== BEST! ========
+    # Specify the source (`-S .`) and build output (`-B build`) directories. 
+    # This is equivalent to running `cmake ..` from the `build` directory.
+    # See: https://google.github.io/googletest/quickstart-cmake.html
+
+
+ctest --test-dir build
+    # Run the tests in the `build` directory. This is equivalent to running 
+    # `ctest` from the `build` directory as though you had done 
+    # `cd build && ctest && cd ..` instead.
+    # Added in CMake 3.20. 
+    # See: https://cmake.org/cmake/help/latest/manual/ctest.1.html#cmdoption-ctest-test-dir
+
+ctest --test-dir build --output-on-failure
+    # <====== BEST! ========
+    # Run the tests in the `build` directory and show the stdout and stderr 
+    # output of any failed tests, if any fail.
 
 ctest
     # Test the project
+
+ctest --help | less -RFX
+    # Show help for ctest, the CMake test runner.
 
 ctest --output-on-failure               # Show stdout/stderr output of failed tests
     # <=======
