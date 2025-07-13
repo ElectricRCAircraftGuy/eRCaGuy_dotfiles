@@ -1840,6 +1840,15 @@ print (*my_ptr).value
     same as above; this is also valid C/C++ syntax
 print *my_ptr
     print the entire contents of this pointer! (not so easy to do in C or C++)
+
+
+# Pretty printing a `uint8_t *` array as a struct:
+<===== vv VERY USEFUL! vv ======
+set print pretty on
+print *(MyStruct*)data
+print /u ((MyStruct*)data)->my_member.my_submember
+    The `/u` option prints the value or array as an unsigned integer or array of unsigned integers.
+
 ----------------
 PRINT ARRAYS:
 See my own ans: https://stackoverflow.com/questions/14502236/how-to-view-a-pointer-like-an-array-in-gdb/64055978#64055978
@@ -1992,6 +2001,7 @@ f
 print
 p var_name
     Pretty-print variable var_name. Can be used on structs, classes, other objects, etc. Its output looks really nice.
+
 
 ==================================
 == gdb & lldb examples & notes: ==
