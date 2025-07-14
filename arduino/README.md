@@ -280,6 +280,12 @@ These attempted solution steps are in the order of *least intrusive* first, to *
 1. https://stackoverflow.com/q/70123431/4561887
 
 
+#### 6. See also
+
+1. Where I first posted this in my [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo: [arduino/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/arduino).
+1. My corresponding answer on Unix & Linux Stack Exchange: [Unable to use USB dongle based on USB-serial converter chip](https://unix.stackexchange.com/q/670636/114401)
+
+
 ---
 
 DONE!
