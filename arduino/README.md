@@ -94,7 +94,7 @@ _Last tested in Ubuntu 22.04 LTS with Arduino IDE 2.3.6._
 
 #### 1. Problem
 
-You plug in a Chinese CH340/CH341 USB to serial adapter (UART) and it does not show up as a serial port in the Arduino IDE, or you get an error like this when trying to upload to a board:
+You plug in a Chinese CH340/CH341 USB to serial adapter (UART) and it does not show up as a serial port in the Arduino IDE, or you get an error like this when trying to upload to a board, because the Arduino IDE cannot find the serial port to use and you have accidentally selected the wrong port:
 
 ```
 avrdude: stk500_recv(): programmer is not responding
@@ -104,11 +104,12 @@ avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
 #### 2. Diagnosis
 
 1. The CH340/CH341 UART doesn't show up as a `/dev/ttyUSB*` device:
+    Run this: 
     ```bash
     ls /dev/ttyUSB*
     ```
 
-    The output should be `/dev/ttyUSB0`, but you see this instead:
+    The output should be `/dev/ttyUSB0` or similar, but you see this instead:
     ```
     $ ls /dev/ttyUSB*
     ls: cannot access '/dev/ttyUSB*': No such file or directory
@@ -119,12 +120,13 @@ avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
     lsusb | grep -i CH340
     ```
 
-    The output shows a line like this, indicating that the CH340/CH341 USB to serial adapter is in fact connected and "working", even though it is not showing up as a serial port you can use:
+    The output shows a line like this, indicating that the CH340/CH341 USB to serial adapter *is* in fact connected and "working", even though it is not showing up as a serial port you can use:
     ```
     Bus 003 Device 009: ID 1a86:7523 QinHeng Electronics CH340 serial converter
     ```
 
 1. The device gets taken over by the `brltty` service, as shown by `dmesg -w` when you unplug it and plug it back in: 
+    Run this: 
     ```bash
     sudo dmesg -w
     ```
@@ -153,7 +155,50 @@ avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
 
 #### 3. Solution
 
-1. **Disable the `brltty` service**: This service is taking over the CH340/CH341 UART device, so we need to stop it and disable it from starting up again.
+These attempted solution steps are in the order of *least intrusive* first, to *most intrusive* last:
+
+1. **Edit the `brltty` udev rules file to ignore the CH340/CH341 device.**
+
+    First, find the rules file:
+    ```bash
+    locate *brltty*.rules
+    ```
+
+    You should see something like this, which is the path to the .rules file:
+    ```
+    /usr/lib/udev/rules.d/85-brltty.rules
+    ```
+
+    Copy the file to the `/etc/udev/rules.d` directory so that an overriding copy of it can be edited without affecting the original file, which is managed by the package manager:
+    ```bash
+    sudo cp -i /usr/lib/udev/rules.d/85-brltty.rules /etc/udev/rules.d/85-brltty.rules
+    ```
+
+    Now, edit this new file with `sudo`. Here, `subl` is the Sublime Text editor, but you can use any text editor you like, such as `nano` or `vim`:
+    ```bash
+    sudo subl /etc/udev/rules.d/85-brltty.rules
+    ```
+
+    Search for the line that contains `1a86:7523` (the ID for the CH340/CH341, as shown in the output of `lsusb | grep -i CH340`) and comment it out by adding a `#` at the beginning of the line. Save and close the file.
+
+    Then, reload the udev rules:
+    ```bash
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
+    ```
+
+    Now, unplug the CH340/CH341 USB to serial adapter and plug it back in.
+
+    Run `ls/dev/ttyUSB*` again to see if it shows up now:
+    ```bash
+    ls /dev/ttyUSB*
+    ```
+
+    If it does, then you are done with the "Soluton" section! Skip down to the "Verify the fix" section below to verify that it works. You can now open the Arduino IDE and select the serial port under Tools --> Port, then upload code to your board. 
+
+    This "fix", however, did *not* work for me, so I continued on to the next step below.
+
+1. **Disable the `brltty` braille device service**: This service is taking over the CH340/CH341 UART device, so we need to stop it and disable it from starting up again.
 
     ```bash
     # Stop the brltty service for this session:
@@ -173,34 +218,7 @@ avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
                 http://brltty.com/
     ```
 
-    This *did* work for me (meaning: the "Verify the fix" section below then passed for me), so I could stop there. 
-
-1. If that doesn't work (ie: you've done the above, and the "Verify the fix" section below fails), then you may need to edit the `brltty` udev rules file to ignore the CH340/CH341 device. 
-
-    First, find the rules file:
-    ```bash
-    locate *brltty*.rules
-    ```
-
-    You should see something like this:
-    ```
-    /usr/lib/udev/rules.d/85-brltty.rules
-    ```
-
-    Now, edit this file with `sudo`:
-    ```bash
-    sudo subl /usr/lib/udev/rules.d/85-brltty.rules
-    ```
-
-    Search for the line that contains `1a86:7523` (the ID for the CH340/CH341, as shown in the output of `lsusb | grep -i CH340`) and comment it out by adding a `#` at the beginning of the line. Save and close the file.
-
-    Then, reload the udev rules:
-    ```bash
-    sudo udevadm control --reload-rules
-    sudo udevadm trigger
-    ```
-
-    This did *not* work for me, but the step above did instead. 
+    This *did* work for me (meaning: the "Verify the fix" section below then passed for me), so I could stop wth the "Soluton" section here. 
 
 1. If you still have problems, just uninstall `brltty` entirely:
     ```bash
@@ -211,7 +229,7 @@ avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
 
 #### 4. Verify the fix
 
-1. Now, plug in the CH340/CH341 USB to serial adapter again and check if it shows up as a `/dev/ttyUSB*` device:
+1. Plug in the CH340/CH341 USB to serial adapter again and check if it shows up as a `/dev/ttyUSB*` device:
 
     ```bash
     ls /dev/ttyUSB*
@@ -247,16 +265,17 @@ avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
 
 1. Finally, open the Arduino IDE and ensure it shows up in the list of serial ports in the menu under Tools --> Port after selecting an Arduino board. 
 
-    Then, upload code to the board via this port.
+    Upload code to the board via this port.
 
 #### 5. References
 
-1. Chat with the Grok AI: [non-public link]: https://grok.com/chat/a785ffbb-f8a7-4555-84ad-5efeac573264
+1. Chat with the Grok AI: [non-public link for my own reference]: https://grok.com/chat/a785ffbb-f8a7-4555-84ad-5efeac573264
 1. [Google search for "linux ch340 uart not working"](https://www.google.com/search?q=linux+ch340+uart+not+working&oq=linux+ch340+uart+not+working&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTEwNTQ0ajBqN6gCCLACAQ&sourceid=chrome&ie=UTF-8)
 1. [Google search for "linux arduino ch340 brltty"](https://www.google.com/search?q=linux+arduino+ch340+brltty&oq=linux+arduino+ch340+brltty&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDUzOTBqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8)
 1. https://forum.arduino.cc/t/port-not-showing-up-ch340-in-ubuntu-solution/1176862
 1. https://github.com/arduino/help-center-content/issues/155
 1. \*\*\*\*\* [Unix Linux Stack Exchange: Unable to use USB dongle based on USB-serial converter chip](https://unix.stackexchange.com/a/680547/114401)
+    1. [My comment below it, because it did not work for me](https://unix.stackexchange.com/questions/670636/unable-to-use-usb-dongle-based-on-usb-serial-converter-chip/680547#comment1533955_680547)
 1. https://bbs.archlinux.org/viewtopic.php?id=269975
 1. https://stackoverflow.com/q/70123431/4561887
 
