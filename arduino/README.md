@@ -114,16 +114,15 @@ avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
     ls: cannot access '/dev/ttyUSB*': No such file or directory
     ``` 
 
-1. You can't find the device with `lsusb` either:
+1. You *can* find the device with `lsusb`, however:
     ```bash
     lsusb | grep -i CH340
     ```
 
-    The output should show a line like this:
+    The output shows a line like this, indicating that the CH340/CH341 USB to serial adapter is in fact connected and "working", even though it is not showing up as a serial port you can use:
     ```
     Bus 003 Device 009: ID 1a86:7523 QinHeng Electronics CH340 serial converter
     ```
-    But you see nothing instead.
 
 1. The device gets taken over by the `brltty` service, as shown by `dmesg -w` when you unplug it and plug it back in: 
     ```bash
@@ -135,21 +134,21 @@ avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
     [386262.432251] usb 3-1.2: USB disconnect, device number 78
     ```
 
-    ...and like this when you plug it back in. Notice the part I marked with `<=== 1` where the CH341 UART got connected to `/dev/ttyUSB0`, and the parts I marked with `<=== 2` where it was then disconnected and taken over by `brltty`:
+    ...and like this when you plug it back in. Notice the parts I marked with `<=== 1` where the CH341 UART got connected to `/dev/ttyUSB0`, and the parts I marked with `<=== 2` where it was then disconnected and taken over by `brltty`:
     ```
     [386228.874324] usb 3-1.2: new full-speed USB device number 78 using xhci_hcd
     [386229.015489] usb 3-1.2: New USB device found, idVendor=1a86, idProduct=7523, bcdDevice= 2.54
     [386229.015505] usb 3-1.2: New USB device strings: Mfr=0, Product=2, SerialNumber=0
     [386229.015509] usb 3-1.2: Product: USB2.0-Serial
     [386229.024959] ch341 3-1.2:1.0: ch341-uart converter detected
-    [386229.026487] usb 3-1.2: ch341-uart converter now attached to ttyUSB0
-    [386229.555197] usb 3-1.2: usbfs: interface 0 claimed by ch341 while 'brltty' sets config #1
-    [386229.556470] ch341-uart ttyUSB0: ch341-uart converter now disconnected from ttyUSB0      <=== 1
-    [386229.556518] ch341 3-1.2:1.0: device disconnected                                        <=== 2
+    [386229.026487] usb 3-1.2: ch341-uart converter now attached to ttyUSB0                      <=== 1
+    [386229.555197] usb 3-1.2: usbfs: interface 0 claimed by ch341 while 'brltty' sets config #1 <=== 2
+    [386229.556470] ch341-uart ttyUSB0: ch341-uart converter now disconnected from ttyUSB0       <=== 1
+    [386229.556518] ch341 3-1.2:1.0: device disconnected                                         <=== 2
     [386229.589971] input: BRLTTY 6.4 Linux Screen Driver Keyboard as /devices/virtual/input/input64 <=== 2
-    [386229.592985] usb 3-1.2: usbfs: interface 0 claimed by usbfs while 'brltty' sets config #1
-    [386234.592285] usb 3-1.2: usbfs: interface 0 claimed by usbfs while 'brltty' sets config #1
-    [386239.592687] usb 3-1.2: usbfs: interface 0 claimed by usbfs while 'brltty' sets config #1
+    [386229.592985] usb 3-1.2: usbfs: interface 0 claimed by usbfs while 'brltty' sets config #1 <=== 2
+    [386234.592285] usb 3-1.2: usbfs: interface 0 claimed by usbfs while 'brltty' sets config #1 <=== 2
+    [386239.592687] usb 3-1.2: usbfs: interface 0 claimed by usbfs while 'brltty' sets config #1 <=== 2
     ```
 
 #### 3. Solution
