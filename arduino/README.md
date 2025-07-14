@@ -4,11 +4,11 @@
 # Arduino Readme
 
 
-## See also
+# See also
 1. [serial_terminals_README.md](../useful_apps/serial_terminals_README.md)
 
 
-## Download & Install:
+# Download & Install:
 
 Download the Arduino IDE here: https://www.arduino.cc/en/Main/Software
 
@@ -17,7 +17,7 @@ More recent versions of the IDE include a Linux Install script, `install.sh`, an
 FOR OFFICIAL HELP FROM ARDUINO ON USING IT ON LINUX, read this article here: https://www.arduino.cc/en/guide/linux.
 
 
-## 1. Problem uploading to board / need to add user to dialout group [<== DO THIS!]:
+# 1. Problem uploading to board / need to add user to dialout group [<== DO THIS!]:
 
 **If you get this error when uploading:**
 
@@ -56,7 +56,7 @@ Problem uploading to board.  See http://www.arduino.cc/en/Guide/Troubleshooting#
     This shows which groups your username is a part of. You should now see `dialout` as one of the groups printed. If so, uploading to boards should work now.
 
 
-## 2. USBasp: add udev rule to allow the "dialout" group to use this programmer
+# 2. USBasp: add udev rule to allow the "dialout" group to use this programmer
 
 **References:**
 
@@ -86,13 +86,14 @@ Problem uploading to board.  See http://www.arduino.cc/en/Guide/Troubleshooting#
     **SO LONG AS YOU ALREADY ADDED YOURSELF TO THE "dialout" group as described above**, you should now be able to burn bootloaders or program chips from the Arduino IDE with this programmer! Go burn a bootloader to make sure it works.
 
 
-## 3. Chinese CH340/CH341 USB to serial adapter (UART) not working on Linux...
+# 3. Chinese CH340/CH341 USB to serial adapter (UART) not working on Linux...
 
 ...due to the `brltty` (Braille serial device) service taking it over.
 
 _Last tested in Ubuntu 22.04 LTS with Arduino IDE 2.3.6._
 
-#### 1. Problem
+
+## 1. Problem
 
 You plug in a Chinese CH340/CH341 USB to serial adapter (UART) and it does not show up as a serial port in the Arduino IDE, or you get an error like this when trying to upload to a board, because the Arduino IDE cannot find the serial port to use and you have accidentally selected the wrong port:
 
@@ -101,7 +102,8 @@ avrdude: stk500_recv(): programmer is not responding
 avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
 ```
 
-#### 2. Diagnosis
+
+## 2. Diagnosis
 
 1. The CH340/CH341 UART doesn't show up as a `/dev/ttyUSB*` device:
     Run this: 
@@ -153,7 +155,8 @@ avrdude: stk500_getsync() attempt 1 of 10: not in sync: resp=0x00
     [386239.592687] usb 3-1.2: usbfs: interface 0 claimed by usbfs while 'brltty' sets config #1 <=== 2
     ```
 
-#### 3. Solution
+
+## 3. Solution
 
 These attempted solution steps are in the order of *least intrusive* first, to *most intrusive* last:
 
@@ -227,7 +230,8 @@ These attempted solution steps are in the order of *least intrusive* first, to *
 
     This will remove the `brltty` service and all its associated files, which should allow the CH340/CH341 UART to work normally again.
 
-#### 4. Verify the fix
+
+## 4. Verify the fix
 
 1. Plug in the CH340/CH341 USB to serial adapter again and check if it shows up as a `/dev/ttyUSB*` device:
 
@@ -267,7 +271,8 @@ These attempted solution steps are in the order of *least intrusive* first, to *
 
     Upload code to the board via this port.
 
-#### 5. References
+
+## 5. References
 
 1. Chat with the Grok AI: [non-public link for my own reference]: https://grok.com/chat/a785ffbb-f8a7-4555-84ad-5efeac573264
 1. [Google search for "linux ch340 uart not working"](https://www.google.com/search?q=linux+ch340+uart+not+working&oq=linux+ch340+uart+not+working&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTEwNTQ0ajBqN6gCCLACAQ&sourceid=chrome&ie=UTF-8)
@@ -280,7 +285,7 @@ These attempted solution steps are in the order of *least intrusive* first, to *
 1. https://stackoverflow.com/q/70123431/4561887
 
 
-#### 6. See also
+## 6. See also
 
 1. Where I first posted this in my [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo: [arduino/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/arduino).
 1. My corresponding answer on Unix & Linux Stack Exchange: [Unable to use USB dongle based on USB-serial converter chip](https://unix.stackexchange.com/q/670636/114401)
