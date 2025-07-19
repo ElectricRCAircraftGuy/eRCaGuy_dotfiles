@@ -221,7 +221,7 @@ These attempted solution steps are in the order of *least intrusive* first, to *
                 http://brltty.com/
     ```
 
-    This *did* work for me (meaning: the "Verify the fix" section below then passed for me), so I could stop wth the "Soluton" section here. 
+    This *did* work for me (meaning: the "Verify the fix" section below then passed for me), so I could stop with the "Soluton" section here. 
 
 1. If you still have problems, just uninstall `brltty` entirely:
     ```bash
@@ -288,7 +288,12 @@ These attempted solution steps are in the order of *least intrusive* first, to *
 ## 6. See also
 
 1. Where I first posted this in my [eRCaGuy_dotfiles](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles) repo: [arduino/README.md](https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/tree/master/arduino).
-1. My corresponding answer on Unix & Linux Stack Exchange: [Unable to use USB dongle based on USB-serial converter chip](https://unix.stackexchange.com/q/670636/114401)
+1. My corresponding answer on Unix & Linux Stack Exchange: [Unable to use USB dongle based on USB-serial converter chip](https://unix.stackexchange.com/a/797940/114401)
+
+
+## 7. Going further
+
+The lead maintainer of `brltty` [says here](https://github.com/arduino/arduino-ide/issues/1788#issuecomment-1366065819) that the problem is mitigated in `brltty --version` 6.5 and later. My version that ships with Ubuntu 22.04 is 6.4. 
 
 
 ---
