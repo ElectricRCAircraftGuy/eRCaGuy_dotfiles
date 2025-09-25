@@ -538,11 +538,25 @@ sha256sum_dir_() {
         echo "ERROR: too few arguments."
         return_code="$RETURN_CODE_ERROR"
     fi
+
     # Print help string if requested
     if [ "$#" -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
         # Help string
         echo "Obtain a sha256sum of all files in a directory."
         echo "Usage:  ${FUNCNAME[0]} [-h|--help] <dir>"
+        echo "My preferred 1-line usage command to verify file integrity and tampering"
+        echo "  of directory 'my_dir':"
+        echo '```
+echo "$(date)" > sha256sum.txt \
+    && sha256sum_dir my_dir >> sha256sum.txt \
+    && printf "%s" "$all_hashes_str" > sha256sums.txt \
+    && echo "" \
+    && cat sha256sum.txt \
+    && echo -e "\nConfirming sha256sum of sha256sums.txt..." \
+    && sha256sum sha256sums.txt \
+    && echo "Done!"
+```'
+
         return "$return_code"
     fi
 
