@@ -532,7 +532,7 @@ alias gs_vault_login='vault login -method=okta username=$USER; gs_gcloud_get_new
 # 1. my answer with this function: https://stackoverflow.com/a/72073333/4561887
 # 1. my answer about using `find` to find all non-directory files:
 #    https://stackoverflow.com/a/72070772/4561887
-sha256sum_dir() {
+sha256sum_dir_() {
     return_code="$RETURN_CODE_SUCCESS"
     if [ "$#" -eq 0 ]; then
         echo "ERROR: too few arguments."
@@ -548,23 +548,54 @@ sha256sum_dir() {
 
     starting_dir="$(pwd)"
     target_dir="$1"
-    cd "$target_dir"
+    cd "$target_dir" || return "$RETURN_CODE_ERROR"
 
-    # See my answer: https://stackoverflow.com/a/72070772/4561887
-    filenames="$(find . -not -type d | sort -V)"
+    # Get filenames and directories, sorted
+    # - See my answer: https://stackoverflow.com/a/72070772/4561887
+    filenames="$(find . | sort -V)"
     IFS=$'\n' read -r -d '' -a filenames_array <<< "$filenames"
-    time all_hashes_str="$(sha256sum "${filenames_array[@]}")"
+
+    # Initialize output string
+    # Example output:
+    #               b19f7892b6a69efedf8183a64bdd42b889dfee4538128546a1b9844801e19d3e        31488 ./my_dir/my_fle.txt
+    all_hashes_str="sha256sum                                                          size (bytes) path"$'\n'
+    all_hashes_str+="---------------------------------------------------------------- -------------- ----------------------------------------"$'\n'
+
+    # Process each entry in the array
+    for filename in "${filenames_array[@]}"; do
+        if [ -d "$filename" ]; then
+            # For directories, use "DIR" for SHA256; note: sha256 sum is 64 chars long
+            sha256="DIR$(printf '%*s' 61)"
+            # Get directory size in bytes (recursive)
+            size="$(du -sb "$filename" | cut -f1)"
+        else
+            # Calculate SHA256 sum for files
+            sha256="$(sha256sum "$filename" | cut -d" " -f1)"
+            # Get filename size in bytes
+            size="$(stat --format %s "$filename")"
+        fi
+        # Append formatted output to all_hashes_str
+        all_hashes_str+="$(printf "%-64s %14d %s\n" "$sha256" "$size" "$filename")"
+        all_hashes_str+=$'\n'  # Ensure newline is preserved
+    done
+
     cd "$starting_dir"
 
     echo ""
     echo "Note: you may now call:"
-    echo "1. 'printf \"%s\n\" \"\$all_hashes_str\"' to view the individual" \
+    echo "1. 'printf \"%s\" \"\$all_hashes_str\"' to view the individual" \
          "hashes of each file in the dir. Or:"
     echo "2. 'printf \"%s\" \"\$all_hashes_str\" | sha256sum' to see that" \
          "the hash of that output is what we are using as the final hash" \
          "for the entire dir."
     echo ""
+
     printf "%s" "$all_hashes_str" | sha256sum | awk '{ print $1 }'
+
+    return "$?"
+}
+sha256sum_dir() {
+    time sha256sum_dir_ "$@"
     return "$?"
 }
 # Note: I prefix this with my initials to find my custom functions easier
