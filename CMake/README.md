@@ -122,6 +122,9 @@ ctest -VV -D Experimental
     # 1. https://cmake.org/cmake/help/latest/guide/tutorial/Adding%20Support%20for%20a%20Testing%20Dashboard.html
     # 1. https://cmake.org/cmake/help/latest/module/CTest.html#module:CTest - "Configure a project for testing with CTest/CDash"
 
+ctest --preset release -R MyTestName.Subname -V
+    # Run only the tests matching the specified name and subname (via regex `-R` expression `MyTesName.Subname`) in release mode (`--preset release`), and show all output (`-V`) from all tests even if they pass.
+
 
 cpack
     # <=======
