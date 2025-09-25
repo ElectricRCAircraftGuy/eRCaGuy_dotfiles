@@ -575,8 +575,25 @@ echo "$(date)" > sha256sum.txt \
     all_hashes_str="sha256sum                                                          size (bytes) path"$'\n'
     all_hashes_str+="---------------------------------------------------------------- -------------- ----------------------------------------"$'\n'
 
+    # Get total count for progress tracking
+    total_files="${#filenames_array[@]}"
+    current_file=0
+    last_reported_percent=-1
+
+    echo "Processing $total_files files and directories..."
+
     # Process each entry in the array
     for filename in "${filenames_array[@]}"; do
+        # Update progress counter
+        ((current_file++))
+        
+        # Calculate and report progress every 5%
+        current_percent=$(( (current_file * 100) / total_files ))
+        if [ $((current_percent % 5)) -eq 0 ] && [ $current_percent -ne $last_reported_percent ]; then
+            printf "%3d%%: %4d/%4d\n" "$current_percent" "$current_file" "$total_files"
+            last_reported_percent=$current_percent
+        fi
+
         if [ -d "$filename" ]; then
             # For directories, use "DIR" for SHA256; note: sha256 sum is 64 chars long
             sha256="DIR$(printf '%*s' 61)"
