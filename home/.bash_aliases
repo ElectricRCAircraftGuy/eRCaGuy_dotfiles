@@ -579,6 +579,9 @@ echo "$(date)" > sha256sum.txt \
     total_files="${#filenames_array[@]}"
     current_file=0
     last_reported_percent=-1
+    
+    # Track folders with trailing dots to avoid duplicate warnings
+    declare -A warned_folders
 
     echo "Processing $total_files files and directories..."
 
@@ -586,12 +589,34 @@ echo "$(date)" > sha256sum.txt \
     for filename in "${filenames_array[@]}"; do
         # Update progress counter
         ((current_file++))
-        
+
         # Calculate and report progress every 5%
         current_percent=$(( (current_file * 100) / total_files ))
         if [ $((current_percent % 5)) -eq 0 ] && [ $current_percent -ne $last_reported_percent ]; then
             printf "%3d%%: %4d/%4d\n" "$current_percent" "$current_file" "$total_files"
             last_reported_percent=$current_percent
+        fi
+
+        # Check for trailing dots in directory names and warn user
+        # Exclude special directories "." (current dir) and ".." (parent dir)
+        if [ -d "$filename" ] && [[ "$filename" =~ \.+/?$ ]] && [[ "$filename" != "." ]] && [[ "$filename" != ".." ]]; then
+            # Extract just the directory name (remove path components and trailing slashes)
+            dir_basename="$(basename "$filename")"
+            # Also check that the basename isn't just "." or ".."
+            if [ "$dir_basename" != "." ] && [ "$dir_basename" != ".." ]; then
+                # Check if we haven't already warned about this specific folder name
+                if [ -z "${warned_folders[$dir_basename]}" ]; then
+                    echo ""
+                    echo "WARNING: Found directory with trailing dot(s): '$filename'"
+                    echo "         Windows automatically removes trailing dots from folder names."
+                    echo "         This will cause hash differences between Linux and Windows."
+                    echo "         Recommendation: Manually remove trailing dot(s) from the folder"
+                    echo "         name."
+                    echo ""
+                    # Mark this folder name as warned
+                    warned_folders[$dir_basename]=1
+                fi
+            fi
         fi
 
         if [ -d "$filename" ]; then
