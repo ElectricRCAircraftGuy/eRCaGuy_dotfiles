@@ -580,8 +580,13 @@ echo "$(date)" > sha256sum.txt \
         if [ -d "$filename" ]; then
             # For directories, use "DIR" for SHA256; note: sha256 sum is 64 chars long
             sha256="DIR$(printf '%*s' 61)"
-            # Get directory size in bytes (recursive)
-            size="$(du -sb "$filename" | cut -f1)"
+            # Get directory size in bytes (recursive) - sum of all file sizes only
+            # - Sum the sizes of all files in the dir recursively, manually. 
+            # - Do NOT use `size="$(du -sb "$filename" | cut -f1)"`, because it produces different
+            #   dir sizes on Windows vs Linux due to how directories are handled on the two 
+            #   different systems. 
+            # - The `sum+0` part ensures that if there are no files, we get a size of 0.
+            size="$(find "$filename" -type f -exec stat --format %s {} \; 2>/dev/null | awk '{sum += $1} END {print sum+0}')"
         else
             # Calculate SHA256 sum for files
             sha256="$(sha256sum "$filename" | cut -d" " -f1)"
