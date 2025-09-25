@@ -7431,6 +7431,51 @@ C++ example debug/info prints in ROS:
 
 
 ====================================================================================================
+= Audacity: =
+====================================================================================================
+
+See my answer: https://askubuntu.com/a/1554258/327339
+
+1. Install from Snap store via Ubuntu Software center. 
+1. Give it access to removable drives and other resources it needs: 
+    ```bash
+    sudo snap connect audacity:removable-media
+    sudo snap connect audacity:alsa
+    sudo snap connect audacity:pulseaudio
+    sudo snap connect audacity:jack1
+
+    # Check connections
+    snap connections audacity
+    ```
+1. Restart computer. 
+1. Now you can access external disks via `/media/my_username/`. 
+1. Press Windows key --> search for "Audacity", choose the snap one (the icon on the most-right maybe). Use it. 
+
+...Ugh...still doesn't work: no audio playback in Audacity. 
+
+>>> WORKS!: <<<
+SEE MY ANSWER HERE NOW!: https://askubuntu.com/a/1554258/327339
+
+Try this instead: 
+https://ubuntuhandbook.org/index.php/2023/04/ubuntu-ppa-for-audacity/
+```bash
+sudo add-apt-repository ppa:ubuntuhandbook1/audacity
+sudo apt remove libwxbase3.2-1 libwxgtk3.2-1
+sudo apt update
+sudo apt install audacity
+
+# check installed version
+dpkg -l | grep audacity
+```
+
+To clean up and amplify audio: 
+1. Ctrl + A to select all, then --> Effect --> Volume and Compression --> Loudness Normalization...
+    - Use the defalt settings 
+2. Then: Effect --> Volume and Compression --> Amplify...
+    - Click to allow clipping. Amplify by 2~10 dB for a decent result. 
+
+
+====================================================================================================
 = Scratch Work/Work in Progress (WIP): =
 ====================================================================================================
 
