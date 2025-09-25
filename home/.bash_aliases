@@ -592,7 +592,8 @@ echo "$(date)" > sha256sum.txt \
 
         # Calculate and report progress every 5%
         current_percent=$(( (current_file * 100) / total_files ))
-        if [ $((current_percent % 5)) -eq 0 ] && [ $current_percent -ne $last_reported_percent ]; then
+        PRINT_EVERY_N_PERCENT=2
+        if [ $((current_percent % PRINT_EVERY_N_PERCENT)) -eq 0 ] && [ $current_percent -ne $last_reported_percent ]; then
             printf "%3d%%: %4d/%4d\n" "$current_percent" "$current_file" "$total_files" >&2
             last_reported_percent=$current_percent
         fi
