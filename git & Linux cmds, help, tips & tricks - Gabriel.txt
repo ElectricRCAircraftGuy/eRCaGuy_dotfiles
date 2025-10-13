@@ -4941,6 +4941,95 @@ dexec [--help]
     See: https://github.com/docker-exec/dexec
 
 
+# ----------------------------------------------------
+# Docker installation instructions (for Linux, and Windows 11 via WSL)
+# ----------------------------------------------------
+
+References: 
+
+1. Docker Engine and Docker Compose:
+    1. [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+    1. [Linux post-installation steps for Docker Engine](https://docs.docker.com/engine/install/linux-postinstall/)
+1. https://docs.docker.com/get-started/
+1. https://hub.docker.com/
+
+In short: 
+
+```bash
+# Uninstall conflicting older versions of Docker
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+# Add Docker's official GPG key
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add Docker repository to Apt sources
+echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install the latest version of Docker Engine
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Add user to docker group (to avoid requiring `sudo` for docker commands)
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+# IMPORTANT: Log out and log back in or restart the machine
+
+# Test Docker installation
+docker run --rm hello-world
+```
+
+Done! You have now successfully installed and started Docker Engine.
+
+### Other Docker checks and commands
+
+Checks:
+
+```bash
+# The Docker service starts automatically after installation. To verify that Docker is running, run
+# the following command which shows the status of the Docker service:
+# - If running, the first few lines will show the following:
+#   
+#   ● docker.service - Docker Application Container Engine
+#        Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+#        Active: active (running) since Tue 2025-09-30 16:45:24 MST; 51s ago
+#   
+systemctl status docker  # Press `q` to exit the status output
+
+# Verify that the installation is successful by running the hello-world image:
+# - This command downloads a test image and runs it in a container. When the container runs, 
+#   it prints a confirmation message and exits.
+docker run --rm hello-world
+
+# Try an Ubuntu bash terminal in Docker
+docker run -it --rm ubuntu bash
+# Type `exit` to exit the container when done
+```
+
+Misc. commands: 
+
+```bash
+# See docker images
+docker images
+
+# See docker containers (instances of images)
+docker ps -a
+
+# See only running containers
+docker ps
+
+# See the reclaimable space if you delete unused images and containers
+docker system df
+```
+
+
 ====================================================================================================
 = Partitions and File Systems: =
 ====================================================================================================
