@@ -37,14 +37,13 @@
     // "files.trimTrailingWhitespace": false,
     "editor.wordWrap": "on",
     "editor.formatOnPaste": false,
-    // "editor.formatOnSave": false,  // https://stackoverflow.com/a/68217301/4561887
+    "editor.formatOnSave": false,  // https://stackoverflow.com/a/68217301/4561887
     "editor.snippetSuggestions": "top",
     "editor.fontSize": 12,
     "editor.rulers": [
         // 80,
-        // 84,
         100,
-        120,
+        120
     ],
     // GS: see also this info about pressing Alt + Q multiple times to wrap to
     // different columns:
@@ -209,13 +208,42 @@
         "microcontrollers",
         "unshown"
     ],
-    "explorer.excludeGitIgnore": true, // ignore entries in the .gitignore file
+    "explorer.excludeGitIgnore": true,
     "window.zoomLevel": 1,
     "editor.inlayHints.enabled": "offUnlessPressed",
+    "clangd.path": "c:\\Users\\gstaples\\AppData\\Roaming\\Code\\User\\globalStorage\\llvm-vs-code-extensions.vscode-clangd\\install\\18.1.3\\clangd_18.1.3\\bin\\clangd.exe",
     "github.copilot.editor.enableAutoCompletions": true,
     "files.associations": {
         "*.stm": "html",
-        "*.desktop": "shellscript"
+        "*.desktop": "shellscript",
+        "*.toml": "shellscript",
+        "*.list": "shellscript"
     },
+    "workbench.editor.enablePreview": false,
+    "notebook.editorOptionsCustomizations": {
+        "editor.tabSize": 4,
+        "editor.indentSize": 4,
+        "editor.insertSpaces": true
+    },
+    "terminal.integrated.commandsToSkipShell": [
+        "matlab.interrupt"
+    ],
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "markdown-toc.orderedList": true,
+    "markdown-toc.insertAnchor": true,
+    "markdown.extension.orderedList.marker": "one",
+    "C_Cpp.default.compileCommands": [
+        "${workspaceFolder}/compile_commands.json",
+    ],
+    "chat.agent.maxRequests": 100,
+    "plantuml.render": "Local",
+    "editor.largeFileOptimizations": false,
+    "workbench.editorAssociations": {
+        "git-rebase-todo": "default"
+    },
+    "markdown.extension.orderedList.autoRenumber": false,
+    "markdown.extension.list.indentationSize": "inherit",
+    "MATLAB.showFeatureNotAvailableError": false,
+    "editor.minimap.enabled": false,
     // "C_Cpp.intelliSenseEngine": "disabled",
 }

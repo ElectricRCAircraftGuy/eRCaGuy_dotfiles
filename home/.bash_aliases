@@ -579,7 +579,7 @@ echo "$(date)" > sha256sum.txt \
     total_files="${#filenames_array[@]}"
     current_file=0
     last_reported_percent=-1
-    
+
     # Track folders with trailing dots to avoid duplicate warnings
     declare -A warned_folders
 
@@ -624,10 +624,10 @@ echo "$(date)" > sha256sum.txt \
             # For directories, use "DIR" for SHA256; note: sha256 sum is 64 chars long
             sha256="DIR$(printf '%*s' 61)"
             # Get directory size in bytes (recursive) - sum of all file sizes only
-            # - Sum the sizes of all files in the dir recursively, manually. 
+            # - Sum the sizes of all files in the dir recursively, manually.
             # - Do NOT use `size="$(du -sb "$filename" | cut -f1)"`, because it produces different
-            #   dir sizes on Windows vs Linux due to how directories are handled on the two 
-            #   different systems. 
+            #   dir sizes on Windows vs Linux due to how directories are handled on the two
+            #   different systems.
             # - The `sum+0` part ensures that if there are no files, we get a size of 0.
             size="$(find "$filename" -type f -exec stat --format %s {} \; 2>/dev/null | awk '{sum += $1} END {print sum+0}')"
         else
@@ -742,7 +742,7 @@ fi
 
 # Bring in my magical alarm_timer.sh script, which I use to set a timer to go off in a certain
 # number of minutes, and then play a sound and pop up a notification when the timer goes off.
-# See: 
+# See:
 # 1. https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/blob/master/bash/alarm_lib.sh
 FILE="$DEV_ROOT_DIR/eRCaGuy_hello_world/bash/alarm_lib.sh"
 if [ -f "$FILE" ]; then
@@ -752,7 +752,7 @@ if [ -f "$FILE" ]; then
 fi
 
 # Add doxygen binaries to the PATH
-DIR="$HOME/Downloads/Install_Files/Doxygen/doxygen-1.10.0/bin"
+DIR="$HOME/Downloads/Install_Files/Doxygen/doxygen-1.16.1/bin"
 if [ -d "$DIR" ]; then
     PATH="$DIR:$PATH"
 fi
