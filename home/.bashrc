@@ -225,8 +225,14 @@ fi
 # Install Ruby Gems to ~/gems
 if [ -d "$HOME/gems" ]; then
     # GS: these lines were automatically added by installing Jekyll by following the instructions
-    # here: https://jekyllrb.com/docs/installation/ubuntu/. 
+    # here: https://jekyllrb.com/docs/installation/ubuntu/.
     # - I then wrapped them inside this `if` statement to only run them if the directory exists.
     export GEM_HOME="$HOME/gems"
     export PATH="$HOME/gems/bin:$PATH"
 fi
+
+# Go lang setup; see: https://go.dev/doc/install
+if [ -d "/usr/local/go/bin" ]; then
+    export PATH=$PATH:/usr/local/go/bin
+fi
+

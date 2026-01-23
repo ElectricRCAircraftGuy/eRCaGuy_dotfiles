@@ -50,6 +50,14 @@ if [ -f ~/.git_branch_prefixes ]; then
     . ~/.git_branch_prefixes
 fi
 
+# Print which prefixes are being ignored.
+# Note: the `printf "'%s', "` adds single quotes and comma-space to each element, then
+# `sed 's/, $//'`` removes the trailing comma and space from the last element. In sed, `, $`
+# means "comma, space, end of line". Having nothing between the final two `//` means to replace
+# that with "nothing".
+echo "Ignoring branch names with prefixes: $(printf "'%s', " "${IGNORED_PREFIXES[@]}" \
+    | sed 's/, $//')"
+
 # debug prints:
 # echo "len = ${#IGNORED_PREFIXES[@]}" # debugging
 # echo "IGNORED_PREFIXES = ${IGNORED_PREFIXES[@]}" # debugging

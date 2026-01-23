@@ -246,4 +246,6 @@
     "MATLAB.showFeatureNotAvailableError": false,
     "editor.minimap.enabled": false,
     // "C_Cpp.intelliSenseEngine": "disabled",
+
+    "go.useLanguageServer": true
 }
