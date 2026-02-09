@@ -1,0 +1,2 @@
+Original file name:
+%%%%Link to language agnostic - Prefer composition over inheritance_ - Stack Overflow.desktop

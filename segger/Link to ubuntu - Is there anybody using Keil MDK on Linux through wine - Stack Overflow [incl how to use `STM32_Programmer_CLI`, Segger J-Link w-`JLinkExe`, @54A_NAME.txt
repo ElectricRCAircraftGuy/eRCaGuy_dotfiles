@@ -1,0 +1,2 @@
+Original file name:
+Link to ubuntu - Is there anybody using Keil MDK on Linux through wine - Stack Overflow [incl how to use `STM32_Programmer_CLI`, Segger J-Link w-`JLinkExe`, & Segger 'CommandFile's].desktop

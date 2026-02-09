@@ -1,0 +1,2 @@
+Original file name:
+Link to How to configure Nemo's right-click _Open in Terminal_ to launch _gnome-terminal_ - Unix & Linux Stack Exchange%%%%%++ [adding ''Open in Terminator'' to right-click menu].desktop
