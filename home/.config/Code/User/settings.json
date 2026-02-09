@@ -211,7 +211,7 @@
     "explorer.excludeGitIgnore": true,
     "window.zoomLevel": 1,
     "editor.inlayHints.enabled": "offUnlessPressed",
-    "clangd.path": "c:\\Users\\gstaples\\AppData\\Roaming\\Code\\User\\globalStorage\\llvm-vs-code-extensions.vscode-clangd\\install\\18.1.3\\clangd_18.1.3\\bin\\clangd.exe",
+    "clangd.path": "/home/gabrielstaples/.config/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/21.1.8/clangd_21.1.8/bin/clangd",
     "github.copilot.editor.enableAutoCompletions": true,
     "files.associations": {
         "*.stm": "html",
@@ -247,5 +247,16 @@
     "editor.minimap.enabled": false,
     // "C_Cpp.intelliSenseEngine": "disabled",
 
-    "go.useLanguageServer": true
+    "go.useLanguageServer": true,
+
+    // C++ IntelliSense configuration
+    // Use clangd for much faster navigation with compile_commands.json
+    // "C_Cpp.intelliSenseEngine": "disabled",
+
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}",
+        "--background-index",
+        "--header-insertion=never",
+        "--completion-style=detailed"
+    ]
 }
