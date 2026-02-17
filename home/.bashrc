@@ -154,6 +154,14 @@ fi
 #   begin with "# GS"
 # ==================================================================================================
 
+# GS: update the terminal PS1 prompt string to show if we are in a Docker container or not, by
+# checking for the presence of the `/.dockerenv` file, which is automatically created by Docker in
+# the root dir of the container when it is run.
+if [ -f "/.dockerenv" ]; then
+    # We are in a Docker container, so add "DOCKER" to the PS1 prompt string.
+    PS1="[DOCKER] $PS1"
+fi
+
 # Bash aliases and functions below will override any by the same name in both the ".bash_aliases"
 # and ".bash_aliases_private" files. I recommend you edit the ".bash_aliases_private" file instead.
 # See the "eRCaGuy_dotfiles/home/README.md" file, with full instructions, here:
