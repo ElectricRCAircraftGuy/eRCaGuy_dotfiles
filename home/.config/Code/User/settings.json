@@ -258,5 +258,6 @@
         "--background-index",
         "--header-insertion=never",
         "--completion-style=detailed"
-    ]
+    ],
+    "go.toolsManagement.autoUpdate": true
 }

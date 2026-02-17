@@ -756,3 +756,6 @@ DIR="$HOME/Downloads/Install_Files/Doxygen/doxygen-1.16.1/bin"
 if [ -d "$DIR" ]; then
     PATH="$DIR:$PATH"
 fi
+
+alias gs_sensors="sensors | grep -iE \"^core|fan|^in|^curr\""
+alias gs_sensors_watch="watch -n 1 'sensors | grep -iE \"^core|fan|^in|^curr\"'"
