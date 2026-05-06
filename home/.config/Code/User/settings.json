@@ -217,7 +217,9 @@
         "*.stm": "html",
         "*.desktop": "shellscript",
         "*.toml": "shellscript",
-        "*.list": "shellscript"
+        "*.list": "shellscript",
+        ".bash_aliases_private": "shellscript",
+        ".imwheelrc": "shellscript"
     },
     "workbench.editor.enablePreview": false,
     "notebook.editorOptionsCustomizations": {
@@ -233,7 +235,7 @@
     "markdown-toc.insertAnchor": true,
     "markdown.extension.orderedList.marker": "one",
     "C_Cpp.default.compileCommands": [
-        "${workspaceFolder}/compile_commands.json",
+        "${workspaceFolder}/compile_commands.json"
     ],
     "chat.agent.maxRequests": 100,
     "plantuml.render": "Local",
@@ -259,5 +261,13 @@
         "--header-insertion=never",
         "--completion-style=detailed"
     ],
-    "go.toolsManagement.autoUpdate": true
+    "go.toolsManagement.autoUpdate": true,
+    "security.allowedUNCHosts": [
+        "wsl.localhost"
+    ],
+    "cmake.showConfigureWithDebuggerNotification": false,
+    "clangd.detectExtensionConflicts": false,
+    "chat.tools.terminal.autoApprove": {
+        "command": true
+    }
 }
