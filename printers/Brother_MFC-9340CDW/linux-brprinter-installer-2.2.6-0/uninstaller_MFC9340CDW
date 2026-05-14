@@ -1,0 +1,29 @@
+#!  /bin/bash
+#RM_SELINUX_RULE=enable
+#
+#  PRNL=mfc9340cdwlpr-1.1.2-1a.i386.deb
+#  PRNC=mfc9340cdwcupswrapper-1.1.4-0a.i386.deb
+#  PRNP=
+#  SCAN=brscan4-0.4.11-1.amd64.deb
+#  SKEY=brscan-skey-0.3.4-0.amd64.deb
+#
+if ! [ -f /etc/init.d/cupsys ];then
+ DUMMYCUPSYS=1
+ ln -s /bin/true  /etc/init.d/cupsys
+fi
+if ! [ -f /etc/init.d/cups ];then
+ DUMMYCUPS=1
+ ln -s /bin/true  /etc/init.d/cups
+fi
+if ! [ -f /etc/init.d/lpd ];then
+ DUMMYLPD=1
+ ln -s /bin/true  /etc/init.d/lpd
+fi
+if ! [ -f /etc/init.d/lprng ];then
+ DUMMYLPRNG=1
+ ln -s /bin/true  /etc/init.d/lprng
+fi
+dpkg  -x mfc9340cdwcupswrapper-1.1.4-0.i386.deb /
+dpkg  -P    mfc9340cdwcupswrapper:i386
+dpkg  -x mfc9340cdwlpr-1.1.2-1.i386.deb /
+dpkg  -P    mfc9340cdwlpr:i386
