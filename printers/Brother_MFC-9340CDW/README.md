@@ -8,7 +8,7 @@ May 2026
 
 #### Summary
 
-1. "Driverless" drivers: make the printer convert a file to printer code. The printer takes about **2 minutes per page** to print. 
+1. "Driverless" drivers: make the printer convert a file to printer code. The printer takes about **2 minutes per page** to print since it has _tiny RAM_ and a _slow processor_. 
 1. Brother drivers: make the computer convert a file to printer code, and then send it to the printer. The printer takes about **10 seconds per page** to print.
 
 #### Details
