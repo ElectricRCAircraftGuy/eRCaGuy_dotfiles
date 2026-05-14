@@ -4,7 +4,7 @@ GS
 May 2026
 
 
-## General printer and driver notes
+## Background info: general printer and driver notes
 
 Any "driverless" driver that Ubuntu automatically installs via the "Add Printer..." setting option shown in the screenshot below is going to print _really really slow__ on this printer. The reason is that "driverless" drivers send over the full file, ex: as a PDF, to the printer, and then the printer has to download, process, and print the file itself. This printer has a very small RAM and slow processor, making this burden take about **2 minutes per page**. It works, but is SLOW.
 
@@ -91,7 +91,7 @@ Screenshot of this IP from the printers network settings menus:
 
 Driver installation is now done. 
 
-Set the new printer as default: 
+**Set the new printer as default:**
 
 Press the <kbd>Windows</kbd> key -> type "Printers" -> click it from the settings menu that pops up -> click the gear icon next to the new `MFC9340CDW` printer that shows up -> check the box for "User Printer by Default." 
 
