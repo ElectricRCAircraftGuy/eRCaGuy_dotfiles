@@ -6,6 +6,13 @@ May 2026
 
 ## Background info: general printer and driver notes
 
+#### Summary
+
+1. "Driverless" drivers: make the printer convert a file to printer code. The printer takes about **2 minutes per page** to print. 
+1. Brother drivers: make the computer convert a file to printer code, and then send it to the printer. The printer takes about **10 seconds per page** to print.
+
+#### Details
+
 Any "driverless" driver that Ubuntu automatically installs via the "Add Printer..." setting option shown in the screenshot below is going to print _really really slow__ on this printer. The reason is that "driverless" drivers send over the full file, ex: as a PDF, to the printer, and then the printer has to download, process, and print the file itself. This printer has a very small RAM and slow processor, making this burden take about **2 minutes per page**. It works, but is SLOW.
 
 Using the Brother driver, on the other hand, converts the file to a printer-friendly format on the computer, and then sends it to the printer, which can print it much faster. With the Brother driver, it takes about **10 seconds per page**. So it's worth installing the Brother driver for this printer if you want to print at a reasonable speed.
