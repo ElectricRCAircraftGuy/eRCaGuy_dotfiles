@@ -5,7 +5,28 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
 
 There are a variety of power supplies that can be controlled remotely. They might be controlled over Ethernet, serial, WiFi, or USB, for example. You could then remote into a machine via ssh, NoMachine, RDP (or Remmina), etc., and control the power supply from there.
 
-Here are two that I've used:
+## General reminder: how to send TCP or UDP commands in Bash
+```bash
+# -------
+# 1. TCP
+# -------
+
+printf '%s' 'output ch1,off' | timeout 0.2 nc 192.168.0.1 5025 
+# OR
+printf '%s' 'output ch1,off' > /dev/udp/192.168.0.1/5025
+
+# -------
+# 2. UDP
+# -------
+
+printf '%s' 'output ch1,off' | timeout 0.2 nc -u 192.168.0.1 5025 
+# OR
+printf '%s' 'output ch1,off' > /dev/udp/192.168.0.1/5025
+```
+
+---
+
+Here are some remote-controlled power suppplies that I've used:
 
 
 ## 1. Teledyne LeCroy T3PS3000 

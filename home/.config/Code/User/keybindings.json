@@ -55,5 +55,19 @@
     {
         "key": "ctrl+shift+v",
         "command": "editor.action.clipboardPasteAction"
+    },
+    // GS: word count shortcut: find/count all words in selection
+    {
+        "key": "ctrl+alt+w",
+        "command": "editor.actions.findWithArgs",
+        "when": "editorHasSelection && editorTextFocus",
+        "args":
+        {
+            "searchString": "\\b\\w+\\b",
+            "isRegex": true,
+            "isCaseSensitive": false,
+            "matchWholeWord": false,
+            "findInSelection": true
+        }
     }
 ]
