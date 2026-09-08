@@ -10,7 +10,6 @@ There are a variety of power supplies that can be controlled remotely. They migh
 # -------
 # 1. TCP
 # -------
-
 printf '%s' 'output ch1,off' | timeout 0.2 nc 192.168.0.1 5025 
 # OR
 printf '%s' 'output ch1,off' > /dev/udp/192.168.0.1/5025
@@ -18,7 +17,6 @@ printf '%s' 'output ch1,off' > /dev/udp/192.168.0.1/5025
 # -------
 # 2. UDP
 # -------
-
 printf '%s' 'output ch1,off' | timeout 0.2 nc -u 192.168.0.1 5025 
 # OR
 printf '%s' 'output ch1,off' > /dev/udp/192.168.0.1/5025
