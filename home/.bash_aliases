@@ -759,3 +759,15 @@ fi
 
 alias gs_sensors="sensors | grep -iE \"^core|fan|^in|^curr\""
 alias gs_sensors_watch="watch -n 1 'sensors | grep -iE \"^core|fan|^in|^curr\"'"
+
+# Load lazydocker, showing ALL projects.
+# - Load lazydocker in a dir where it does NOT have any docker compose project files, so that
+#   lazydocker will show ALL projects, instead of directory-specific ones based on your current dir.
+# - NB: use parenthesis `()` here instead of curly braces `{}` so that the change of directory runs
+#   in a subshell and does not affect the current shell's working directory.
+lazydocker_all() (
+    cd /tmp || exit 1
+    command lazydocker
+)
+# Make an alias beginning with my initials too so I can find my custom aliases and functions easily.
+alias gs_lazydocker_all="lazydocker_all"
