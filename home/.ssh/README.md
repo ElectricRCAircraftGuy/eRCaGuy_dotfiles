@@ -1,6 +1,6 @@
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
-For Docker, WSL, or ZScaler setup instead, see: https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/tree/master/docker.
+_For Docker, WSL, or ZScaler setup instead, see: https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/tree/master/docker._
 
 
 # Table of Contents
