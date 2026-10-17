@@ -1,16 +1,19 @@
 This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles
 
+For Docker, WSL, or ZScaler setup instead, see: https://github.com/ElectricRCAircraftGuy/eRCaGuy_hello_world/tree/master/docker.
+
 
 # Table of Contents
 <details>
 <summary><b>(click to expand)</b></summary>
 <!-- MarkdownTOC autoanchor="true" autolink="true" style="ordered" -->
 
+1. [Table of Contents](#table-of-contents)
 1. [1. `ssh` key generation, setup, and configuration notes:](#1-ssh-key-generation-setup-and-configuration-notes)
     1. [References:](#references)
     1. [See also:](#see-also)
-    1. [Example of files you may have in your `~/.ssh` dir](#example-of-files-you-may-have-in-your-~ssh-dir)
-    1. [Public/Private ssh generation and copying to your server's `~/.ssh/authorized_keys` file](#publicprivate-ssh-generation-and-copying-to-your-servers-~sshauthorized_keys-file)
+    1. [Example of files you may have in your `~/.ssh` dir](#example-of-files-you-may-have-in-your-ssh-dir)
+    1. [Public/Private ssh generation and copying to your server's `~/.ssh/authorized_keys` file](#publicprivate-ssh-generation-and-copying-to-your-servers-sshauthorized_keys-file)
     1. [How to configure ssh keys to easily push to / pull from GitHub](#how-to-configure-ssh-keys-to-easily-push-to--pull-from-github)
         1. [References:](#references-1)
         1. [Summary:](#summary)
@@ -23,8 +26,8 @@ This file is part of eRCaGuy_dotfiles: https://github.com/ElectricRCAircraftGuy/
         1. [Command:](#command)
         1. [Alias \[1/2: USE THIS WHEN YOUR TARGET DEVICE HAS `bash`\]:](#alias-12-use-this-when-your-target-device-has-bash)
         1. [Alternatively, here is how to apply Ubuntu's settings for ALL users who log into the `root` username on the target device](#alternatively-here-is-how-to-apply-ubuntus-settings-for-all-users-who-log-into-the-root-username-on-the-target-device)
-    1. [2.2. When your target Linux device does NOT have the `bash` shell, and you must use the `busybox` `ash` \(preferred\) or `sh` shell instead](#22-when-your-target-linux-device-does-not-have-the-bash-shell-and-you-must-use-the-busybox-ash-preferred-or-sh-shell-instead)
-        1. [Here are some basic, dumbed-down `~/.profile` and `~/.bashrc` configuration files you can use for your target embedded Linux device if you like:](#here-are-some-basic-dumbed-down-~profile-and-~bashrc-configuration-files-you-can-use-for-your-target-embedded-linux-device-if-you-like)
+    1. [2.2. When your target Linux device does NOT have the `bash` shell, and you must use the `busybox` `ash` (preferred) or `sh` shell instead](#22-when-your-target-linux-device-does-not-have-the-bash-shell-and-you-must-use-the-busybox-ash-preferred-or-sh-shell-instead)
+        1. [Here are some basic, dumbed-down `~/.profile` and `~/.bashrc` configuration files you can use for your target embedded Linux device if you like:](#here-are-some-basic-dumbed-down-profile-and-bashrc-configuration-files-you-can-use-for-your-target-embedded-linux-device-if-you-like)
         1. [Command:](#command-1)
         1. [Alias \[2/2: USE THIS WHEN YOUR TARGET DEVICE DOES _NOT_ HAVE `bash`, SO YOU _MUST_ USE `ash`\]:](#alias-22-use-this-when-your-target-device-does-not-have-bash-so-you-must-use-ash)
 1. [3. Dropbear setup and notes to remotely decrypt a LUKS-encrypted hard drive](#3-dropbear-setup-and-notes-to-remotely-decrypt-a-luks-encrypted-hard-drive)
