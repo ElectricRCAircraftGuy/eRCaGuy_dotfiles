@@ -249,3 +249,11 @@ fi
 export PATH="$HOME/.grok/bin:$PATH"
 [[ -r "$HOME/.grok/completions/bash/grok.bash" ]] && source "$HOME/.grok/completions/bash/grok.bash"
 # <<< grok installer <<<
+
+# Deno setup: if it has been installed, then source its environment file to add its bin dir
+# to our path.
+# Installation and main URL: https://deno.com/
+# Install: `curl -fsSL https://deno.land/install.sh | sh`
+if [ -f "$HOME/.deno/env" ]; then
+    . "$HOME/.deno/env"
+fi
